@@ -1,3 +1,28 @@
 baseURL = 'http://example.org/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Things UtsavBalar does'
+theme = 'hello-friend-ng'
+
+[params]
+homeSubtitle = "Welcome to the chaotic cosmos of the mind of Utsav Balar"
+disableReadOtherPosts = false
+enableSharingButtons = true
+enableGlobalLanguageMenu = true
+description = "Things UtsavBalar does"
+keywords = "homepage, blog"
+images = [""]
+
+[taxonomies]
+category = "blog"
+tag      = "tags"
+series   = "series"
+
+[languages]
+[languages.en.params.logo]
+path = "/img/logo.svg"
+alt = "Logo was supposed to be here"
+
+[[menu.main]]
+identifier = "blog"
+name       = "Blog"
+url        = "/posts"
