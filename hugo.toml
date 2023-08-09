@@ -7,7 +7,6 @@ theme = 'hello-friend-ng'
 homeSubtitle = "Welcome to the chaotic cosmos of the mind of Utsav Balar"
 disableReadOtherPosts = false
 enableSharingButtons = true
-enableGlobalLanguageMenu = true
 description = "Things UtsavBalar does"
 keywords = "homepage, blog"
 images = [""]
@@ -28,16 +27,23 @@ url  = "https://github.com/utsavbalar1231"
 name = "telegram"
 url  = "https://t.me/utsavthecunt"
 
-[taxonomies]
-category = "blog"
-tag      = "tags"
-series   = "series"
-
 [params.portrait]
 path = "/img/logo.jpg"
 alt = "Logo was supposed to be here"
 
+[taxonomies]
+category = "categories"
+tag      = "tags"
+series   = "series"
+
+[menu]
+
 [[menu.main]]
 identifier = "blogs"
 name       = "Blogs"
-url        = "/posts"
+url        = "/blogs"
+
+[[menu.main]]
+identifier = "quotes"
+name       = "Quotes"
+url        = "/quotes"
