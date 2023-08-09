@@ -37,6 +37,10 @@ tag      = "tags"
 series   = "series"
 
 [menu]
+[[menu.main]]
+identifier = "about"
+name       = "About"
+url        = "/about"
 
 [[menu.main]]
 identifier = "blogs"
