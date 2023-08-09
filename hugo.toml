@@ -1,7 +1,22 @@
 baseURL = 'http://example.org/'
 languageCode = 'en-us'
-title = 'Things UtsavBalar does'
+title = 'Things UtsavBalar does and likes'
 theme = 'hello-friend-ng'
+
+[languages]
+[languages.en]
+title = "Things UtsavBalar does and likes"
+keywords = ""
+copyright = 'CC BY-NC 4.0'
+readOtherPosts = "Read other posts"
+
+footerLeft = "Made with &#10084;"
+footerRight = "Theme by Djordje Atlialp"
+
+[languages.en.params.logo]
+logoMark = ">"
+logoText = "UtsavBalar"
+logoHomeLink = "/"
 
 [params]
 homeSubtitle = "Welcome to the chaotic cosmos of the mind of Utsav Balar"
