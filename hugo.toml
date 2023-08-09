@@ -12,17 +12,32 @@ description = "Things UtsavBalar does"
 keywords = "homepage, blog"
 images = [""]
 
+[[params.social]]
+name = "twitter"
+url  = "https://twitter.com/utsavthecunt"
+
+[[params.social]]
+name = "email"
+url  = "mailto:utsavbalar1231@gmail.com"
+
+[[params.social]]
+name = "github"
+url  = "https://github.com/utsavbalar1231"
+
+[[params.social]]
+name = "telegram"
+url  = "https://t.me/utsavthecunt"
+
 [taxonomies]
 category = "blog"
 tag      = "tags"
 series   = "series"
 
-[languages]
-[languages.en.params.logo]
-path = "/img/logo.svg"
+[params.portrait]
+path = "/img/logo.jpg"
 alt = "Logo was supposed to be here"
 
 [[menu.main]]
-identifier = "blog"
-name       = "Blog"
+identifier = "blogs"
+name       = "Blogs"
 url        = "/posts"
