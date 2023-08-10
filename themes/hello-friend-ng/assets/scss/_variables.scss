@@ -1,24 +1,24 @@
 @charset "UTF-8";
 
 /* Light theme color */
-$light-background: #fbf1c7;
-$light-background-secondary: #f2e5bc;
-$light-background-header: #fbf1c7;
-$light-color: #3c3836;
-$light-color-variant: #1d2021;
-$light-color-secondary: #3c3836;
+$light-background: #f9f5d7;
+$light-background-secondary: #f5edca;
+$light-background-header: #f9f5d7;
+$light-color: #654735;
+$light-color-variant: #4f3829;
+$light-color-secondary: #4f3829;
 $light-border-color: #7c6f64;
 $light-table-color: #7c6f64;
 
 /* Dark theme colors */
-$dark-background: #1d2021;
-$dark-background-secondary: #282828;
-$dark-background-header: #1d2021;
+$dark-background: #141617;
+$dark-background-secondary: #1d2021;
+$dark-background-header: #141617;
 $dark-color: #a89984;
-$dark-color-variant: #fbf1c7;
-$dark-color-secondary: #ebdbb2;
-$dark-border-color: #3c3836;
-$dark-table-color: #3c3836;
+$dark-color-variant: #ddc7a1;
+$dark-color-secondary: #d4be98;
+$dark-border-color: #32302f;
+$dark-table-color: #32302f;
 
 $media-size-phone: "(max-width: 684px)";
 $media-size-tablet: "(max-width: 900px)";
