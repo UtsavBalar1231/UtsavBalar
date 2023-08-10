@@ -14,8 +14,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Roboto",
-    "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: FiraCode, -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI",
+    Helvetica, Arial, sans-serif;
   font-display: auto;
   font-size: 1rem;
   line-height: 1.54;
@@ -47,12 +47,12 @@ body {
     color: $light-color;
   }
 
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     background-color: $dark-background;
     color: $dark-color;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     background-color: $light-background;
     color: $light-color;
   }
@@ -189,7 +189,9 @@ figure {
   }
 }
 
-em, i, strong {
+em,
+i,
+strong {
   // Default
   color: $light-color-variant;
 
@@ -201,11 +203,11 @@ em, i, strong {
     color: $light-color-variant;
   }
 
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     color: white;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     color: black;
   }
 }
@@ -229,21 +231,21 @@ code {
     background: $light-background-secondary;
   }
 
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     background: $dark-background-secondary;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     background: $light-background-secondary;
   }
 }
 
 pre {
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     background-color: $dark-background-secondary;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     background-color: $light-background-secondary;
   }
 
@@ -263,28 +265,28 @@ pre {
     padding: 0;
     font-size: inherit;
     // Default
-    color: #ccc;
+    color: #a89984;
 
     @media (prefers-color-scheme: dark) {
       color: inherit;
     }
-  
+
     @media (prefers-color-scheme: light) {
-      color: #ccc;
+      color: #a89984;
     }
-  
-    [data-theme=dark] & {
+
+    [data-theme="dark"] & {
       color: inherit;
     }
-  
-    [data-theme=light] & {
-      color: #ccc;
+
+    [data-theme="light"] & {
+      color: #a89984;
     }
   }
 }
 
 blockquote {
-  border-left: 3px solid #3eb0ef;
+  border-left: 3px solid #7daea3;
   margin: 40px;
   padding: 10px 20px;
 
@@ -362,11 +364,11 @@ hr {
     background: $light-border-color;
   }
 
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     background: $dark-border-color;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     background: $light-border-color;
   }
 }
@@ -402,12 +404,12 @@ hr {
 }
 
 .screen-reader-text:focus {
-  background-color: #f1f1f1;
+  background-color: #ddc7a1;
   border-radius: 3px;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
   clip: auto !important;
   clip-path: none;
-  color: #21759b;
+  color: #7daea3;
   display: block;
   font-size: 14px;
   font-size: 0.875rem;
