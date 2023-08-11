@@ -8,3 +8,15 @@ tags: ["quotes"]
 > "Dreams shed light on the dim places where reason itself has yet to voyage." - **Carl Jung**
 
 > "Those who have everything, more will be given. Those who have nothing, everything will be taken away." - **Bible (Matthew 13:12)**
+
+> "History is just a madhouse
+>
+> it's turned over all the stones
+>
+> and its very careful reading
+>
+> leaves you little that's unknown." - **Dr. Jordan Peterson**
+
+## Bits from Books
+
+Check out [bitsfrombooks.md]({{< ref "/bitsfrombooks" >}} "Bits from books") for some random bits from books I've read.
