@@ -31,6 +31,18 @@ tags: ["quotes"]
 
 ---
 
+> If you are distressed by anything external, the pain is not due to the thing itself, but to your estimate of it; and this you have the power to revoke at any moment. - **Marcus Aurelius**
+
+---
+
+> Me, I'm dishonest, and you can always trust a dishonest man to be dishonest. Honestly, it's the honest ones you have to watch out for. - **Captain Jack Sparrow**
+
+---
+
+> I think everybody should get rich and famous and do everything they ever dreamed of so they can see that it's not the answer. - **Jim Carrey**
+
+---
+
 ## Bits from Books
 
 Check out [bitsfrombooks.md]({{< ref "/bitsfrombooks" >}} "Bits from books") for some random bits from books I've read.
