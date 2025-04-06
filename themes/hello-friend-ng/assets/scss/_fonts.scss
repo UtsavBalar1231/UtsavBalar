@@ -1,40 +1,183 @@
+/* Base FiraCodeNerdFont */
 @font-face {
-  font-family: 'FiraCode';
-  font-style:  normal;
+  font-family: "FiraCode";
+  font-style: normal;
   font-display: auto;
   font-weight: 200;
-  src: url("../fonts/FiraCode-Light.woff2") format("woff2"),
-       url("../fonts/FiraCode-Light.woff") format("woff");
+  src:
+    url("../static/fonts/FiraCodeNerdFont-Light.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-Light.woff") format("woff");
 }
+
 @font-face {
-  font-family: 'FiraCode';
-  font-style:  normal;
+  font-family: "FiraCode";
+  font-style: normal;
   font-display: auto;
   font-weight: 400;
-  src: url("../fonts/FiraCode-Regular.woff2") format("woff2"),
-       url("../fonts/FiraCode-Regular.woff") format("woff");
+  src:
+    url("../static/fonts/FiraCodeNerdFont-Regular.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-Regular.woff") format("woff");
 }
+
 @font-face {
-  font-family: 'FiraCode';
-  font-style:  normal;
+  font-family: "FiraCode";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 500;
+  src:
+    url("../static/fonts/FiraCodeNerdFont-Retina.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-Retina.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode";
+  font-style: normal;
   font-display: auto;
   font-weight: 600;
-  src: url("../fonts/FiraCode-Medium.woff2") format("woff2"),
-       url("../fonts/FiraCode-Medium.woff") format("woff");
+  src:
+    url("../static/fonts/FiraCodeNerd FiraCodeNerdFont-Medium.woff2")
+      format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-Medium.woff") format("woff");
 }
+
 @font-face {
-  font-family: 'FiraCode';
-  font-style:  normal;
+  font-family: "FiraCode";
+  font-style: normal;
   font-display: auto;
   font-weight: 700;
-  src: url("../fonts/FiraCode-SemiBold.woff2") format("woff2"),
-       url("../fonts/FiraCode-SemiBold.woff") format("woff");
+  src:
+    url("../static/fonts/FiraCodeNerdFont-SemiBold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-SemiBold.woff") format("woff");
 }
+
 @font-face {
-  font-family: 'FiraCode';
-  font-style:  normal;
+  font-family: "FiraCode";
+  font-style: normal;
   font-display: auto;
   font-weight: 800;
-  src: url("../fonts/FiraCode-Bold.woff2") format("woff2"),
-       url("../fonts/FiraCode-Bold.woff") format("woff");
+  src:
+    url("../static/fonts/FiraCodeNerdFont-Bold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFont-Bold.woff") format("woff");
+}
+
+/* FiraCodeNerdFont Mono */
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 200;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-Light.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 400;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-Regular.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 500;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-Retina.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-Retina.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 600;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-Medium.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 700;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-SemiBold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-SemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Mono";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 800;
+  src:
+    url("../static/fonts/FiraCodeNerdFontMono-Bold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontMono-Bold.woff") format("woff");
+}
+
+/* FiraCodeNerdFont Propo */
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 200;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-Light.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 400;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-Regular.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 500;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-Retina.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-Retina.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 600;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-Medium.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 700;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-SemiBold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-SemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "FiraCode Propo";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 800;
+  src:
+    url("../static/fonts/FiraCodeNerdFontPropo-Bold.woff2") format("woff2"),
+    url("../static/fonts/FiraCodeNerdFontPropo-Bold.woff") format("woff");
 }
