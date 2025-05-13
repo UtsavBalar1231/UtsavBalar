@@ -31,11 +31,11 @@
 // Default theme (dark) is defined in :root
 
 // Gruvbox Dark
-[data-theme="gruvbox-dark"] {
-  --color-bg-primary: #282828;
-  --color-bg-secondary: #32302f;
-  --color-text-primary: #ebdbb2;
-  --color-text-secondary: #a89984;
+[data-theme="gruvbox-dark-hard"] {
+  --color-bg-primary: #1d2021;
+  --color-bg-secondary: #282828;
+  --color-text-primary: #fbf1c7;
+  --color-text-secondary: #d5c4a1;
   --color-accent-primary: #b8bb26;
   --color-accent-secondary: #98971a;
   --color-border: #504945;
@@ -43,22 +43,34 @@
 }
 
 // Gruvbox Light
-[data-theme="gruvbox-light"] {
-  --color-bg-primary: #fbf1c7;
-  --color-bg-secondary: #f2e5bc;
+[data-theme="gruvbox-light-hard"] {
+  --color-bg-primary: #f9f5d7;
+  --color-bg-secondary: #fbf1c7;
   --color-text-primary: #3c3836;
   --color-text-secondary: #504945;
-  --color-accent-primary: #98971a;
+  --color-accent-primary: #b57614;
   --color-accent-secondary: #79740e;
   --color-border: #d5c4a1;
   --color-border-rgb: 213, 196, 161;
 }
 
-// Catppuccin
+// Ayu Dark
+[data-theme="ayu-dark"] {
+  --color-bg-primary: #0f1419;
+  --color-bg-secondary: #1c252c;
+  --color-text-primary: #e6e1cf;
+  --color-text-secondary: #b3b1ad;
+  --color-accent-primary: #ffb454;
+  --color-accent-secondary: #ff8f40;
+  --color-border: #3e4b59;
+  --color-border-rgb: 62, 75, 89;
+}
+
+// Catppuccin Mocha
 [data-theme="catppuccin"] {
   --color-bg-primary: #1e1e2e;
   --color-bg-secondary: #302d41;
-  --color-text-primary: #d9e0ee;
+  --color-text-primary: #cdd6f4;
   --color-text-secondary: #a6adc8;
   --color-accent-primary: #f5c2e7;
   --color-accent-secondary: #cba6f7;
@@ -66,16 +78,100 @@
   --color-border-rgb: 110, 108, 126;
 }
 
-// Everforest
-[data-theme="everforest"] {
+// Catppuccin Frappé
+[data-theme="catppuccin-frappe"] {
+  --color-bg-primary: #303446;
+  --color-bg-secondary: #414559;
+  --color-text-primary: #c6d0f5;
+  --color-text-secondary: #a5adce;
+  --color-accent-primary: #f4b8e4;
+  --color-accent-secondary: #ca9ee6;
+  --color-border: #737994;
+  --color-border-rgb: 115, 121, 148;
+}
+
+// Catppuccin Latte
+[data-theme="catppuccin-latte"] {
+  --color-bg-primary: #eff1f5;
+  --color-bg-secondary: #e6e9ef;
+  --color-text-primary: #4c4f69;
+  --color-text-secondary: #8c8fa1;
+  --color-accent-primary: #8839ef;
+  --color-accent-secondary: #d20f39;
+  --color-border: #ccd0da;
+  --color-border-rgb: 204, 208, 218;
+}
+
+// Catppuccin Macchiato
+[data-theme="catppuccin-macchiato"] {
+  --color-bg-primary: #24273a;
+  --color-bg-secondary: #363a4f;
+  --color-text-primary: #cad3f5;
+  --color-text-secondary: #a5adcb;
+  --color-accent-primary: #f5bde6;
+  --color-accent-secondary: #c6a0f6;
+  --color-border: #6e738d;
+  --color-border-rgb: 110, 115, 141;
+}
+
+// Dracula
+[data-theme="dracula"] {
+  --color-bg-primary: #282a36;
+  --color-bg-secondary: #343746;
+  --color-text-primary: #f8f8f2;
+  --color-text-secondary: #abb2bf;
+  --color-accent-primary: #ff79c6;
+  --color-accent-secondary: #bd93f9;
+  --color-border: #44475a;
+  --color-border-rgb: 68, 71, 90;
+}
+
+// Everforest Dark
+[data-theme="everforest-dark"] {
   --color-bg-primary: #2b3339;
   --color-bg-secondary: #323c41;
   --color-text-primary: #d3c6aa;
   --color-text-secondary: #a7c080;
-  --color-accent-primary: #dbbc7f;
-  --color-accent-secondary: #e69875;
+  --color-accent-primary: #e67e80;
+  --color-accent-secondary: #dbbc7f;
   --color-border: #4f5b58;
   --color-border-rgb: 79, 91, 88;
+}
+
+// Everforest Light
+[data-theme="everforest-light"] {
+  --color-bg-primary: #f3ead3;
+  --color-bg-secondary: #eee8d5;
+  --color-text-primary: #5c6a72;
+  --color-text-secondary: #829181;
+  --color-accent-primary: #d65d0e;
+  --color-accent-secondary: #e69875;
+  --color-border: #d4d1ab;
+  --color-border-rgb: 212, 209, 171;
+}
+
+// Kanagawa Dragon
+[data-theme="kanagawa-dragon"] {
+  --color-bg-primary: #181616;
+  --color-bg-secondary: #1f1f1f;
+  --color-text-primary: #dcd7ba;
+  --color-text-secondary: #c8c093;
+  --color-accent-primary: #ff5d62;
+  --color-accent-secondary: #ffa066;
+  --color-border: #43434f;
+  --color-border-rgb: 67, 67, 79;
+}
+
+// Material Theme Darker
+[data-theme="material-theme-darker"] {
+  --color-bg-primary: #212121;
+  --color-bg-secondary: #303030;
+  --color-text-primary: #eeffff;
+  --color-text-secondary: #b2ccd6;
+  --color-accent-primary: #c792ea;
+  --color-accent-secondary: #f78c6c;
+  --color-border: #414141;
+  --color-border-rgb: 65, 65, 65;
 }
 
 // Nord
@@ -90,8 +186,8 @@
   --color-border-rgb: 76, 86, 106;
 }
 
-// OneDark
-[data-theme="onedark"] {
+// OneDark Pro
+[data-theme="one-dark-pro"] {
   --color-bg-primary: #282c34;
   --color-bg-secondary: #21252b;
   --color-text-primary: #abb2bf;
@@ -100,4 +196,28 @@
   --color-accent-secondary: #c678dd;
   --color-border: #3e4451;
   --color-border-rgb: 62, 68, 81;
+}
+
+// Rosé Pine
+[data-theme="rose-pine"] {
+  --color-bg-primary: #191724;
+  --color-bg-secondary: #1f1d2e;
+  --color-text-primary: #e0def4;
+  --color-text-secondary: #c4a7e7;
+  --color-accent-primary: #ebbcba;
+  --color-accent-secondary: #f6c177;
+  --color-border: #3a3458;
+  --color-border-rgb: 58, 52, 88;
+}
+
+// Tokyo Night
+[data-theme="tokyo-night"] {
+  --color-bg-primary: #1a1b26;
+  --color-bg-secondary: #24283b;
+  --color-text-primary: #a9b1d6;
+  --color-text-secondary: #7982a9;
+  --color-accent-primary: #7aa2f7;
+  --color-accent-secondary: #bb9af7;
+  --color-border: #414868;
+  --color-border-rgb: 65, 72, 104;
 } 

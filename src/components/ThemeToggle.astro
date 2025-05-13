@@ -1,5 +1,15 @@
 ---
-import { themes } from './ThemeManager.astro';
+import { themes } from "./ThemeManager.astro";
+
+// Group themes by type
+const themeGroups = {
+  "Dark Themes": themes.filter(
+    (t) => !t.value.includes("light") && !t.value.includes("latte"),
+  ),
+  "Light Themes": themes.filter(
+    (t) => t.value.includes("light") || t.value.includes("latte"),
+  ),
+};
 ---
 
 <div class="theme-toggle relative">
@@ -8,37 +18,31 @@ import { themes } from './ThemeManager.astro';
     class="flex items-center justify-center w-10 h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-3 theme-toggle-btn"
     title="Change theme"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="12" cy="12" r="5"></circle>
-      <path
-        d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
-      ></path>
-    </svg>
+    <span class="material-symbols-rounded icon-sm">
+      palette
+    </span>
   </button>
 
   <div
     id="theme-dropdown"
-    class="absolute right-0 bottom-12 mt-2 py-2 w-56 rounded-md border shadow-lg hidden z-20 theme-dropdown"
+    class="absolute right-0 bottom-12 mt-2 py-2 w-64 rounded-md border shadow-lg hidden z-20 theme-dropdown max-h-96 overflow-y-auto"
   >
     {
-      themes.map((theme) => (
-        <button
-          class="theme-option block w-full text-left px-4 py-2 text-sm"
-          data-theme={theme.value}
-        >
-          <span class={`theme-dot theme-dot-${theme.value}`} />
-          {theme.label}
-        </button>
+      Object.entries(themeGroups).map(([groupName, groupThemes]) => (
+        <div>
+          <div class="px-4 py-1 text-xs text-primary font-bold uppercase border-b border-gray-600 mb-1">
+            {groupName}
+          </div>
+          {groupThemes.map((theme) => (
+            <button
+              class="theme-option block w-full text-left px-4 py-2 text-sm flex items-center hover:bg-opacity-20"
+              data-theme={theme.value}
+            >
+              <span class={`theme-dot theme-dot-${theme.value}`} />
+              {theme.label}
+            </button>
+          ))}
+        </div>
       ))
     }
   </div>
@@ -50,22 +54,38 @@ import { themes } from './ThemeManager.astro';
     color: var(--text-primary);
     border-color: var(--border-color);
   }
-  
+
   .theme-toggle-btn:hover {
     background-color: var(--accent-primary);
+    color: var(--bg-primary);
   }
-  
+
   .theme-dropdown {
     background-color: var(--bg-primary);
     border-color: var(--border-color);
   }
-  
+
   .theme-option:hover {
     background-color: var(--bg-secondary);
   }
-  
+
   .theme-option.active {
     background-color: var(--bg-secondary);
+  }
+
+  /* Scrollbar styling for theme dropdown */
+  .theme-dropdown::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .theme-dropdown::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 3px;
+  }
+
+  .theme-dropdown::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
   }
 </style>
 
@@ -76,7 +96,8 @@ import { themes } from './ThemeManager.astro';
     const themeOptions = document.querySelectorAll(".theme-option");
 
     // Get current theme
-    const getCurrentTheme = (): string => localStorage.getItem("theme") || "default";
+    const getCurrentTheme = (): string =>
+      localStorage.getItem("theme") || "default";
 
     // Set theme
     const setTheme = (theme: string): void => {
@@ -87,7 +108,7 @@ import { themes } from './ThemeManager.astro';
       themeOptions.forEach((option) => {
         option.classList.toggle(
           "active",
-          option.getAttribute("data-theme") === theme
+          option.getAttribute("data-theme") === theme,
         );
       });
     };
@@ -99,13 +120,27 @@ import { themes } from './ThemeManager.astro';
     if (themeToggle && themeDropdown) {
       themeToggle.addEventListener("click", () => {
         themeDropdown.classList.toggle("hidden");
+
+        // Scroll to active theme in dropdown
+        const activeTheme = getCurrentTheme();
+        const activeOption = document.querySelector(
+          `.theme-option[data-theme="${activeTheme}"]`,
+        );
+        if (activeOption && !themeDropdown.classList.contains("hidden")) {
+          setTimeout(() => {
+            activeOption.scrollIntoView({
+              block: "center",
+              behavior: "smooth",
+            });
+          }, 100);
+        }
       });
 
       // Close dropdown when clicking outside
       document.addEventListener("click", (e) => {
         if (
           e.target instanceof Node &&
-          themeToggle && 
+          themeToggle &&
           themeDropdown &&
           !themeToggle.contains(e.target) &&
           !themeDropdown.contains(e.target)

@@ -80,6 +80,22 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
       crossorigin
     />
 
+    <!-- Google Material Symbols -->
+    <link 
+      rel="stylesheet" 
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" 
+    />
+    <link 
+      rel="stylesheet" 
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" 
+    />
+
+    <!-- Initialize Prism.js -->
+    <script is:inline>
+      window.Prism = window.Prism || {};
+      Prism.manual = true;
+    </script>
+
     <!-- Crawler & Robots -->
     <meta
       name="robots"
@@ -181,6 +197,11 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     <script>
       // Enhance smooth scrolling behavior with Vim keybindings
       document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Prism for any code blocks on the page
+        if (typeof Prism !== 'undefined') {
+          (Prism as any).highlightAll();
+        }
+        
         // Track last G key press time for double-key commands
         let lastGKeyPress = 0;
         

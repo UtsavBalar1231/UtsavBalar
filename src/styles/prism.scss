@@ -1,0 +1,189 @@
+/**
+ * Prism.js theme styles
+ * This file contains theme styles for Prism syntax highlighting
+ * integrated with our CSS variable theme system
+ */
+
+/* Base styles for code blocks */
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: "AdwaitaMono", Monaco, Consolas, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+  border-radius: 0.25rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: 0.1em 0.3em;
+  border-radius: 0.3em;
+  white-space: normal;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Line numbers */
+.line-numbers .line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  font-size: 100%;
+  left: -3.8em;
+  width: 3em; /* works for line-numbers below 1000 lines */
+  letter-spacing: -1px;
+  border-right: 1px solid var(--border-color);
+  user-select: none;
+}
+
+.line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+}
+
+.line-numbers-rows > span:before {
+  content: counter(linenumber);
+  color: var(--text-secondary);
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+}
+
+/* Token colors for all themes */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--text-secondary);
+}
+
+.token.punctuation {
+  color: var(--text-primary);
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: var(--accent-primary);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: var(--accent-secondary);
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: var(--text-primary);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--accent-primary);
+}
+
+.token.function,
+.token.class-name {
+  color: var(--accent-secondary);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--accent-primary);
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+/* For line highlight */
+.line-highlight {
+  background: rgba(var(--border-color-rgb), 0.2);
+  background: linear-gradient(to right, rgba(var(--border-color-rgb), 0.2) 70%, rgba(var(--border-color-rgb), 0));
+}
+
+/* Make copied button from Astro more theme-compatible */
+button.copy-code {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+button.copy-code:hover {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+/* Code titles (filename above code blocks) */
+.code-title {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: -0.5rem;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+}
+
+/* For numbered lines */
+pre.astro-code {
+  counter-reset: line;
+}
+
+pre.astro-code code .line {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+pre.astro-code code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  padding-right: 0.5rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  text-align: right;
+  width: 1.5rem;
+} 
