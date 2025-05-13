@@ -45,7 +45,7 @@ import ContentProjects from "../components/ContentProjects.astro";
           <!-- End: Tab bar -->
 
           <!-- Start: Tab content -->
-          <div class="p-6 flex-grow overflow-y-auto bg-black no-scrollbar">
+          <div class="p-6 flex-grow overflow-y-auto bg-black no-scrollbar tab-content-container">
             <!-- Start: About content -->
             <div id="content1" class="tab-content">
               <ContentCode />
@@ -84,6 +84,27 @@ import ContentProjects from "../components/ContentProjects.astro";
     >
   </div>
 </Layout>
+
+<script>
+  // Enhance smooth scrolling for tab transitions
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabRadios = document.querySelectorAll('.tab-radio');
+    const tabContentContainer = document.querySelector('.tab-content-container');
+    
+    // Reset scroll position when switching tabs
+    tabRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (tabContentContainer) {
+          // Smoothly scroll to top when switching tabs
+          tabContentContainer.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  });
+</script>
 
 <style is:global>
   /* Hide the radio buttons */
@@ -125,9 +146,21 @@ import ContentProjects from "../components/ContentProjects.astro";
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    overscroll-behavior: none; /* Disable overscroll/bounce effect */
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+    
+    /* Add scroll momentum and physics feel */
+    -webkit-overflow-scrolling: touch; /* For iOS devices */
   }
 
   .no-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+  
+  /* Handle all scrollable areas that aren't using the no-scrollbar class */
+  [class*="overflow-"]:not(.no-scrollbar) {
+    overscroll-behavior: none;
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+    -webkit-overflow-scrolling: touch; /* For iOS devices */
   }
 </style>

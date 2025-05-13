@@ -1,6 +1,21 @@
 /* Import theme definitions */
 @use 'theme';
 
+/* Scrolling Variables */
+:root {
+  --scroll-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); /* Smooth easing function */
+  --scroll-transition-duration: 400ms; /* Duration of scroll animations */
+}
+
+/* Scrolling utilities */
+.scroll-margin-top {
+  scroll-margin-top: 2rem;
+}
+
+.scroll-padding {
+  scroll-padding-top: 2rem;
+}
+
 /* Font Face Declarations */
 @font-face {
   font-family: "AdwaitaMono";
@@ -130,11 +145,16 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: "AdwaitaMono", monospace;
+  overscroll-behavior: none; /* Disable overscroll/bounce effect */
+  -webkit-overflow-scrolling: touch; /* For iOS devices */
 }
 
 html {
   transition: all 0.3s ease-in-out;
   font-family: "AdwaitaMono", monospace;
+  overscroll-behavior: none; /* Disable overscroll/bounce effect */
+  scroll-behavior: smooth; /* Enable smooth scrolling */
+  scrollbar-gutter: stable; /* Prevent layout shift when scrollbar appears */
 }
 
 // Theme dot styles
