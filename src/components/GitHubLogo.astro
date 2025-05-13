@@ -6,7 +6,7 @@ const { username = "UtsavBalar1231", size = 128 } = Astro.props;
 const initials = username
   .split(/[^a-zA-Z0-9]+/) // Split by non-alphanumeric characters
   .filter(Boolean) // Remove empty strings
-  .map((word) => word[0]?.toUpperCase() || "") // Get first character of each word
+  .map((word: string) => word[0]?.toUpperCase() || "") // Get first character of each word
   .slice(0, 2) // Get at most 2 characters
   .join(""); // Join them
 ---

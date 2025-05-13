@@ -14,7 +14,7 @@ let renderedContent = "";
 try {
   if (isMarkdown) {
     // Use marked to render markdown content
-    renderedContent = marked.parse(content);
+    renderedContent = await marked.parse(content);
   }
 } catch (error) {
   console.error("Error rendering markdown content:", error);

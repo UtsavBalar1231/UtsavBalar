@@ -2,8 +2,10 @@
 // MDXContent.astro - Component for rendering MDX content from content collections
 import { getCollection, getEntry } from "astro:content";
 
+type CollectionName = "about" | "projects";
+
 interface Props {
-  collection: string;
+  collection: CollectionName;
   slug?: string;
   class?: string;
 }
