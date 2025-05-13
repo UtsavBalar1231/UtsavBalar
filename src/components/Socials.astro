@@ -41,7 +41,7 @@ const socials: Social[] = [
         target="_blank"
         title={social.title}
         rel="noopener noreferrer"
-        class="flex items-center justify-center w-10 h-10 rounded-3xl bg-black text-gray-100 transition-all duration-150 border-2 border-gray-600 hover:bg-primary hover:-translate-y-0.5 p-3"
+        class="social-link flex items-center justify-center w-10 h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-3"
       >
         <SocialIcon icon={social.icon} />
       </a>
@@ -52,3 +52,15 @@ const socials: Social[] = [
   <ThemeToggle />
 </div>
 <!-- End: Social Links -->
+
+<style>
+  .social-link {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+  }
+  
+  .social-link:hover {
+    background-color: var(--accent-primary);
+  }
+</style>

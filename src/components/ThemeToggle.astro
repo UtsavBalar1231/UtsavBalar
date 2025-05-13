@@ -1,20 +1,11 @@
 ---
-// Theme options array with name and display name
-const themes = [
-  { value: "default", label: "Default (Dark)" },
-  { value: "gruvbox-dark", label: "Gruvbox Dark" },
-  { value: "gruvbox-light", label: "Gruvbox Light" },
-  { value: "catppuccin", label: "Catppuccin" },
-  { value: "everforest", label: "Everforest" },
-  { value: "nord", label: "Nord" },
-  { value: "onedark", label: "OneDark" },
-];
+import { themes } from './ThemeManager.astro';
 ---
 
 <div class="theme-toggle relative">
   <button
     id="theme-toggle-btn"
-    class="flex items-center justify-center w-10 h-10 rounded-3xl bg-black text-gray-100 transition-all duration-150 border-2 border-gray-600 hover:bg-primary hover:-translate-y-0.5 p-3"
+    class="flex items-center justify-center w-10 h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-3 theme-toggle-btn"
     title="Change theme"
   >
     <svg
@@ -37,12 +28,12 @@ const themes = [
 
   <div
     id="theme-dropdown"
-    class="absolute right-0 bottom-12 mt-2 py-2 w-56 rounded-md border border-gray-600 bg-black shadow-lg hidden z-20"
+    class="absolute right-0 bottom-12 mt-2 py-2 w-56 rounded-md border shadow-lg hidden z-20 theme-dropdown"
   >
     {
       themes.map((theme) => (
         <button
-          class={`theme-option block w-full text-left px-4 py-2 text-sm hover:bg-gray-700`}
+          class="theme-option block w-full text-left px-4 py-2 text-sm"
           data-theme={theme.value}
         >
           <span class={`theme-dot theme-dot-${theme.value}`} />
@@ -53,6 +44,31 @@ const themes = [
   </div>
 </div>
 
+<style>
+  .theme-toggle-btn {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+  }
+  
+  .theme-toggle-btn:hover {
+    background-color: var(--accent-primary);
+  }
+  
+  .theme-dropdown {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+  
+  .theme-option:hover {
+    background-color: var(--bg-secondary);
+  }
+  
+  .theme-option.active {
+    background-color: var(--bg-secondary);
+  }
+</style>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("theme-toggle-btn");
@@ -60,18 +76,18 @@ const themes = [
     const themeOptions = document.querySelectorAll(".theme-option");
 
     // Get current theme
-    const getCurrentTheme = () => localStorage.getItem("theme") || "default";
+    const getCurrentTheme = (): string => localStorage.getItem("theme") || "default";
 
     // Set theme
-    const setTheme = (theme) => {
+    const setTheme = (theme: string): void => {
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
 
       // Update active theme display
       themeOptions.forEach((option) => {
         option.classList.toggle(
-          "bg-gray-700",
-          option.getAttribute("data-theme") === theme,
+          "active",
+          option.getAttribute("data-theme") === theme
         );
       });
     };
@@ -79,27 +95,34 @@ const themes = [
     // Initialize active theme
     setTheme(getCurrentTheme());
 
-    // Show/hide theme dropdown
-    themeToggle.addEventListener("click", () => {
-      themeDropdown.classList.toggle("hidden");
-    });
+    // Show/hide theme dropdown - with null checks
+    if (themeToggle && themeDropdown) {
+      themeToggle.addEventListener("click", () => {
+        themeDropdown.classList.toggle("hidden");
+      });
 
-    // Close dropdown when clicking outside
-    document.addEventListener("click", (e) => {
-      if (
-        !themeToggle.contains(e.target) &&
-        !themeDropdown.contains(e.target)
-      ) {
-        themeDropdown.classList.add("hidden");
-      }
-    });
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          e.target instanceof Node &&
+          themeToggle && 
+          themeDropdown &&
+          !themeToggle.contains(e.target) &&
+          !themeDropdown.contains(e.target)
+        ) {
+          themeDropdown.classList.add("hidden");
+        }
+      });
+    }
 
     // Theme option selection
     themeOptions.forEach((option) => {
       option.addEventListener("click", () => {
         const newTheme = option.getAttribute("data-theme");
-        setTheme(newTheme);
-        themeDropdown.classList.add("hidden");
+        if (newTheme && themeDropdown) {
+          setTheme(newTheme);
+          themeDropdown.classList.add("hidden");
+        }
       });
     });
   });

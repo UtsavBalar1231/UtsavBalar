@@ -1,0 +1,103 @@
+// Theme System
+// This file centralizes all theme definitions using CSS variables
+
+// Base theme properties - these are common across themes 
+// and will be customized for each theme variant
+:root {
+  // Core colors
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #121212;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a0a0a0;
+  --color-accent-primary: #3b82f6;
+  --color-accent-secondary: #2563eb;
+  --color-border: #4b5563;
+  --color-border-rgb: 75, 85, 99;
+
+  // Functional color mapping
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --accent-primary: var(--color-accent-primary);
+  --accent-secondary: var(--color-accent-secondary);
+  --border-color: var(--color-border);
+  --border-color-rgb: var(--color-border-rgb);
+}
+
+// Theme Definitions
+// Each theme overrides only the core color variables
+
+// Default theme (dark) is defined in :root
+
+// Gruvbox Dark
+[data-theme="gruvbox-dark"] {
+  --color-bg-primary: #282828;
+  --color-bg-secondary: #32302f;
+  --color-text-primary: #ebdbb2;
+  --color-text-secondary: #a89984;
+  --color-accent-primary: #b8bb26;
+  --color-accent-secondary: #98971a;
+  --color-border: #504945;
+  --color-border-rgb: 80, 73, 69;
+}
+
+// Gruvbox Light
+[data-theme="gruvbox-light"] {
+  --color-bg-primary: #fbf1c7;
+  --color-bg-secondary: #f2e5bc;
+  --color-text-primary: #3c3836;
+  --color-text-secondary: #504945;
+  --color-accent-primary: #98971a;
+  --color-accent-secondary: #79740e;
+  --color-border: #d5c4a1;
+  --color-border-rgb: 213, 196, 161;
+}
+
+// Catppuccin
+[data-theme="catppuccin"] {
+  --color-bg-primary: #1e1e2e;
+  --color-bg-secondary: #302d41;
+  --color-text-primary: #d9e0ee;
+  --color-text-secondary: #a6adc8;
+  --color-accent-primary: #f5c2e7;
+  --color-accent-secondary: #cba6f7;
+  --color-border: #6e6c7e;
+  --color-border-rgb: 110, 108, 126;
+}
+
+// Everforest
+[data-theme="everforest"] {
+  --color-bg-primary: #2b3339;
+  --color-bg-secondary: #323c41;
+  --color-text-primary: #d3c6aa;
+  --color-text-secondary: #a7c080;
+  --color-accent-primary: #dbbc7f;
+  --color-accent-secondary: #e69875;
+  --color-border: #4f5b58;
+  --color-border-rgb: 79, 91, 88;
+}
+
+// Nord
+[data-theme="nord"] {
+  --color-bg-primary: #2e3440;
+  --color-bg-secondary: #3b4252;
+  --color-text-primary: #eceff4;
+  --color-text-secondary: #d8dee9;
+  --color-accent-primary: #88c0d0;
+  --color-accent-secondary: #81a1c1;
+  --color-border: #4c566a;
+  --color-border-rgb: 76, 86, 106;
+}
+
+// OneDark
+[data-theme="onedark"] {
+  --color-bg-primary: #282c34;
+  --color-bg-secondary: #21252b;
+  --color-text-primary: #abb2bf;
+  --color-text-secondary: #828997;
+  --color-accent-primary: #61afef;
+  --color-accent-secondary: #c678dd;
+  --color-border: #3e4451;
+  --color-border-rgb: 62, 68, 81;
+} 

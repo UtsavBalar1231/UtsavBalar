@@ -31,32 +31,8 @@ const paths = {
     transition: all 0.2s ease;
   }
 
-  /* Apply hover effect based on theme */
-  :global([data-theme="default"]) a:hover .social-icon {
-    color: #000000;
-  }
-
-  :global([data-theme="gruvbox-dark"]) a:hover .social-icon {
-    color: #282828;
-  }
-
-  :global([data-theme="gruvbox-light"]) a:hover .social-icon {
-    color: #3c3836;
-  }
-
-  :global([data-theme="catppuccin"]) a:hover .social-icon {
-    color: #1e1e2e;
-  }
-
-  :global([data-theme="everforest"]) a:hover .social-icon {
-    color: #2b3339;
-  }
-
-  :global([data-theme="nord"]) a:hover .social-icon {
-    color: #2e3440;
-  }
-
-  :global([data-theme="onedark"]) a:hover .social-icon {
-    color: #282c34;
+  /* Apply hover effect using CSS variables */
+  :global(a:hover .social-icon) {
+    color: var(--bg-primary);
   }
 </style>

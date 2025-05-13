@@ -1,3 +1,6 @@
+/* Import theme definitions */
+@use 'theme';
+
 /* Font Face Declarations */
 @font-face {
   font-family: "AdwaitaMono";
@@ -144,29 +147,29 @@ html {
 }
 
 .theme-dot-default {
-  background-color: #3b82f6;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-gruvbox-dark {
-  background-color: #b8bb26;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-gruvbox-light {
-  background-color: #98971a;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-catppuccin {
-  background-color: #f5c2e7;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-everforest {
-  background-color: #dbbc7f;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-nord {
-  background-color: #88c0d0;
+  background-color: var(--color-accent-primary);
 }
 
 .theme-dot-onedark {
-  background-color: #61afef;
+  background-color: var(--color-accent-primary);
 }

@@ -1,5 +1,6 @@
 ---
 import "../styles/global.scss";
+import ThemeManager from "../components/ThemeManager.astro";
 
 // Base domain URL without trailing slash
 const domainBaseURL = "https://utsavbalar.in";
@@ -170,24 +171,8 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
       }
     </style>
 
-    <!-- Theme initialization script -->
-    <script is:inline>
-      // Check for saved theme preference or use default
-      const getStoredTheme = () => localStorage.getItem("theme");
-      const setTheme = (theme) => {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-      };
-
-      // Apply the theme on initial load
-      const storedTheme = getStoredTheme();
-      if (storedTheme) {
-        setTheme(storedTheme);
-      } else {
-        // Default theme
-        setTheme("default");
-      }
-    </script>
+    <!-- Include ThemeManager component -->
+    <ThemeManager />
   </head>
 
   <body class="min-h-[100vh] flex items-center justify-center p-4">

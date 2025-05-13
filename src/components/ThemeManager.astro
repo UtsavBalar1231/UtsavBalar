@@ -1,0 +1,47 @@
+---
+// Theme definitions
+export const themes = [
+  { value: "default", label: "Default (Dark)" },
+  { value: "gruvbox-dark", label: "Gruvbox Dark" },
+  { value: "gruvbox-light", label: "Gruvbox Light" },
+  { value: "catppuccin", label: "Catppuccin" },
+  { value: "everforest", label: "Everforest" },
+  { value: "nord", label: "Nord" },
+  { value: "onedark", label: "OneDark" },
+];
+
+// Get theme by value
+export function getTheme(value: string) {
+  return themes.find(theme => theme.value === value) || themes[0];
+}
+
+// Functions for use in other components via import
+export function getCurrentTheme() {
+  // This function can only be used client-side due to localStorage
+  if (typeof localStorage !== 'undefined') {
+    return localStorage.getItem('theme') || 'default';
+  }
+  return 'default';
+}
+
+export function applyTheme(theme: string) {
+  // This function can only be used client-side
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+}
+---
+
+<script>
+  // Initialize theme on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      document.documentElement.setAttribute('data-theme', storedTheme);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'default');
+      localStorage.setItem('theme', 'default');
+    }
+  });
+</script> 
