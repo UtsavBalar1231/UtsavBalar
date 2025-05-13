@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@astrojs/mdx": "^4.2.6",
+        "@astrojs/react": "^4.2.7",
         "@mdx-js/mdx": "^3.1.0",
         "astro": "^5.4.2",
         "marked": "^15.0.11",
@@ -24,6 +25,8 @@
         "@astrojs/sitemap": "^3.2.1",
         "@astrojs/tailwind": "^5.1.4",
         "astro-compress": "^2.3.6",
+        "prettier": "^3.5.3",
+        "prettier-plugin-astro": "^0.14.1",
         "sass": "^1.85.1"
     }
 }

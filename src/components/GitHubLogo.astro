@@ -1,17 +1,22 @@
 ---
 // GitHubLogo.astro - Dynamic GitHub-style logo generator
-const { username = 'UtsavBalar1231', size = 128 } = Astro.props;
+const { username = "UtsavBalar1231", size = 128 } = Astro.props;
 
 // Extract initials from the username
 const initials = username
   .split(/[^a-zA-Z0-9]+/) // Split by non-alphanumeric characters
   .filter(Boolean) // Remove empty strings
-  .map(word => word[0]?.toUpperCase() || '') // Get first character of each word
+  .map((word) => word[0]?.toUpperCase() || "") // Get first character of each word
   .slice(0, 2) // Get at most 2 characters
-  .join(''); // Join them
+  .join(""); // Join them
 ---
 
-<svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 128 128">
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 128 128"
+>
   <style>
     .logo-bg {
       fill: var(--bg-primary, #1e1e2f);
@@ -22,20 +27,20 @@ const initials = username
       transition: fill 0.3s ease-in-out;
     }
   </style>
-  
+
   <!-- Circular background -->
-  <circle class="logo-bg" cx="64" cy="64" r="64" />
-  
+  <circle class="logo-bg" cx="64" cy="64" r="64"></circle>
+
   <!-- Text with initials -->
-  <text 
-    x="64" 
-    y="76" 
-    font-family="AdwaitaMono, monospace" 
-    font-size="42" 
-    font-weight="bold" 
-    text-anchor="middle" 
+  <text
+    x="64"
+    y="76"
+    font-family="AdwaitaMono, monospace"
+    font-size="42"
+    font-weight="bold"
+    text-anchor="middle"
     class="logo-text"
   >
-    {initials || 'UB'}
+    {initials || "UB"}
   </text>
-</svg> 
+</svg>

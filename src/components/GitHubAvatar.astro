@@ -1,31 +1,31 @@
 ---
-import ThemeAvatar from './ThemeAvatar.astro';
+import ThemeAvatar from "./ThemeAvatar.astro";
 
 // Pass props to determine size
-const { width = 96, height = 96, class: className = '' } = Astro.props;
+const { width = 96, height = 96, class: className = "" } = Astro.props;
 
 // GitHub username to fetch the avatar for
-const username = 'UtsavBalar1231';
+const username = "UtsavBalar1231";
 
 // Fetch GitHub user data
-let avatarUrl = '';
-let name = '';
+let avatarUrl = "";
+let name = "";
 
 try {
   // GitHub API has rate limits, so let's add a timeout
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
-  
+
   const response = await fetch(`https://api.github.com/users/${username}`, {
     signal: controller.signal,
     headers: {
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'Astro-Portfolio'
-    }
+      Accept: "application/vnd.github.v3+json",
+      "User-Agent": "Astro-Portfolio",
+    },
   });
-  
+
   clearTimeout(timeoutId);
-  
+
   if (response.ok) {
     const userData = await response.json();
     avatarUrl = userData.avatar_url;
@@ -34,7 +34,7 @@ try {
     console.error(`Failed to fetch GitHub user data: ${response.status}`);
   }
 } catch (error) {
-  console.error('Error fetching GitHub user data:', error);
+  console.error("Error fetching GitHub user data:", error);
 }
 
 // If GitHub fetch fails, get a random cat image
@@ -43,39 +43,44 @@ if (!avatarUrl) {
     // Use a timeout for cat image fetch too
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-    
+
     // Check if cataas is reachable
-    const catResponse = await fetch(`https://cataas.com/cat?width=${width}&height=${height}`, {
-      method: 'HEAD',
-      signal: controller.signal
-    });
-    
+    const catResponse = await fetch(
+      `https://cataas.com/cat?width=${width}&height=${height}`,
+      {
+        method: "HEAD",
+        signal: controller.signal,
+      },
+    );
+
     clearTimeout(timeoutId);
-    
+
     if (catResponse.ok) {
       avatarUrl = `https://cataas.com/cat?width=${width}&height=${height}`;
     } else {
-      console.error('Cat service unavailable');
+      console.error("Cat service unavailable");
     }
   } catch (error) {
-    console.error('Error fetching cat image:', error);
+    console.error("Error fetching cat image:", error);
   }
 }
 
 // Default avatar if all fetches fail
-const defaultAvatar = '/img/default-avatar.svg';
+const defaultAvatar = "/img/default-avatar.svg";
 ---
 
-{avatarUrl ? (
-  <img 
-    src={avatarUrl} 
-    alt={name ? `${name}'s GitHub avatar` : "Random cat image"} 
-    title={name || "Random cat image"}
-    width={width}
-    height={height}
-    class={className}
-    loading="eager"
-  />
-) : (
-  <ThemeAvatar width={width} height={height} class={className} />
-)} 
+{
+  avatarUrl ? (
+    <img
+      src={avatarUrl}
+      alt={name ? `${name}'s GitHub avatar` : "Random cat image"}
+      title={name || "Random cat image"}
+      width={width}
+      height={height}
+      class={className}
+      loading="eager"
+    />
+  ) : (
+    <ThemeAvatar width={width} height={height} class={className} />
+  )
+}

@@ -1,19 +1,19 @@
 ---
 // MDXFile.astro - Component for importing and rendering .mdx files inline
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 interface Props {
   filePath: string; // Path to the .mdx file relative to the src directory
   class?: string;
 }
 
-const { filePath, class: className = '' } = Astro.props;
+const { filePath, class: className = "" } = Astro.props;
 
 // Get the absolute path to the src directory
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const srcDir = path.resolve(__dirname, '..');
+const srcDir = path.resolve(__dirname, "..");
 
 // Resolve the full path to the MDX file
 const fullPath = path.resolve(srcDir, filePath);
@@ -28,22 +28,24 @@ try {
 }
 ---
 
-{Content ? (
-  <div class={`mdx-file ${className}`}>
-    <Content.default />
-  </div>
-) : (
-  <div class="mdx-error">
-    <p>Error loading MDX file: {filePath}</p>
-  </div>
-)}
+{
+  Content ? (
+    <div class={`mdx-file ${className}`}>
+      <Content.default />
+    </div>
+  ) : (
+    <div class="mdx-error">
+      <p>Error loading MDX file: {filePath}</p>
+    </div>
+  )
+}
 
 <style>
   .mdx-file {
     color: var(--text-primary);
     line-height: 1.6;
   }
-  
+
   .mdx-error {
     color: #ff5555;
     font-style: italic;
@@ -51,4 +53,4 @@ try {
     border-left: 3px solid #ff5555;
     background-color: rgba(255, 85, 85, 0.1);
   }
-</style> 
+</style>

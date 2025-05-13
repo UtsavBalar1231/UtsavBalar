@@ -1,6 +1,6 @@
 ---
 // MDXContent.astro - Component for rendering MDX content from content collections
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry } from "astro:content";
 
 interface Props {
   collection: string;
@@ -8,7 +8,7 @@ interface Props {
   class?: string;
 }
 
-const { collection, slug, class: className = '' } = Astro.props;
+const { collection, slug, class: className = "" } = Astro.props;
 
 let entry;
 let Content;
@@ -33,29 +33,34 @@ try {
 }
 ---
 
-{Content ? (
-  <div class={`mdx-collection ${className}`}>
-    <Content />
-  </div>
-) : (
-  <div class="mdx-error">
-    <p>Error loading content from collection: {collection}{slug ? `/${slug}` : ''}</p>
-  </div>
-)}
+{
+  Content ? (
+    <div class={`mdx-collection ${className}`}>
+      <Content />
+    </div>
+  ) : (
+    <div class="mdx-error">
+      <p>
+        Error loading content from collection: {collection}
+        {slug ? `/${slug}` : ""}
+      </p>
+    </div>
+  )
+}
 
 <style>
   .mdx-collection {
     color: var(--text-primary);
     line-height: 1.6;
   }
-  
+
   .mdx-collection :global(h1) {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 1rem;
     color: var(--accent-primary);
   }
-  
+
   .mdx-collection :global(h2) {
     font-size: 1.5rem;
     font-weight: bold;
@@ -63,7 +68,7 @@ try {
     margin-bottom: 0.75rem;
     color: var(--accent-primary);
   }
-  
+
   .mdx-collection :global(h3) {
     font-size: 1.25rem;
     font-weight: bold;
@@ -71,37 +76,38 @@ try {
     margin-bottom: 0.5rem;
     color: var(--accent-secondary);
   }
-  
+
   .mdx-collection :global(p) {
     margin-bottom: 1rem;
   }
-  
+
   .mdx-collection :global(a) {
     color: var(--accent-primary);
     text-decoration: underline;
     transition: color 0.2s ease-in-out;
   }
-  
+
   .mdx-collection :global(a:hover) {
     color: var(--accent-secondary);
   }
-  
-  .mdx-collection :global(ul), .mdx-collection :global(ol) {
+
+  .mdx-collection :global(ul),
+  .mdx-collection :global(ol) {
     margin-left: 1.5rem;
     margin-bottom: 1rem;
   }
-  
+
   .mdx-collection :global(li) {
     margin-bottom: 0.5rem;
   }
-  
+
   .mdx-collection :global(code) {
-    font-family: 'AdwaitaMono', monospace;
+    font-family: "AdwaitaMono", monospace;
     background-color: var(--bg-secondary);
     padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
   }
-  
+
   .mdx-collection :global(pre) {
     background-color: var(--bg-secondary);
     padding: 1rem;
@@ -109,7 +115,7 @@ try {
     overflow-x: auto;
     margin-bottom: 1rem;
   }
-  
+
   .mdx-collection :global(blockquote) {
     border-left: 4px solid var(--accent-primary);
     padding-left: 1rem;
@@ -119,17 +125,17 @@ try {
     font-style: italic;
     color: var(--text-secondary);
   }
-  
+
   .mdx-collection :global(img) {
     max-width: 100%;
     height: auto;
     border-radius: 0.25rem;
     margin-bottom: 1rem;
   }
-  
+
   /* Add custom styling for code blocks */
   .mdx-collection :global(pre code) {
-    font-family: 'AdwaitaMono', monospace;
+    font-family: "AdwaitaMono", monospace;
     font-size: 0.9rem;
     line-height: 1.5;
     padding: 0;
@@ -163,7 +169,7 @@ try {
     text-align: right;
     width: 1.5rem;
   }
-  
+
   .mdx-error {
     color: #ff5555;
     font-style: italic;
@@ -171,4 +177,4 @@ try {
     border-left: 3px solid #ff5555;
     background-color: rgba(255, 85, 85, 0.1);
   }
-</style> 
+</style>
