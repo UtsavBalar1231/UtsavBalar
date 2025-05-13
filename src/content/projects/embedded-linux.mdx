@@ -1,0 +1,88 @@
+---
+title: Embedded Linux Development
+description: Custom Linux distribution for industrial IoT devices
+tags: ["Linux", "Embedded", "Yocto", "BSP"]
+featured: true
+date: 2023-01-15
+---
+
+# Embedded Linux Development
+
+This project involved creating a custom Linux distribution for industrial IoT devices using the Yocto Project and Buildroot.
+
+## Objectives
+
+- Create a minimal, secure Linux distribution for resource-constrained devices
+- Develop custom device drivers for specialized hardware
+- Implement over-the-air update mechanisms
+- Optimize boot time and system performance
+
+## Implementation
+
+The system was built using Yocto Project with custom meta-layers for specific hardware components. Key components included:
+
+```bash
+# Example layered architecture
+├── meta-core           # Base system components
+├── meta-hardware       # Hardware-specific BSP
+│   ├── meta-rockchip   # Rockchip SoC support
+│   ├── meta-sensors    # Custom sensor drivers
+├── meta-security       # Security hardening features
+├── meta-ota            # Over-the-air update system
+└── meta-application    # Application-specific components
+```
+
+## Device Tree Configuration
+
+A crucial part of the project was proper device tree configuration:
+
+```c
+// Simplified device tree example
+/ {
+    compatible = "vendor,device";
+    #address-cells = <2>;
+    #size-cells = <2>;
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        cpu@0 {
+            device_type = "cpu";
+            compatible = "arm,cortex-a53";
+            reg = <0x0>;
+        };
+        // More CPUs...
+    };
+
+    soc {
+        compatible = "simple-bus";
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        i2c0: i2c@ff660000 {
+            compatible = "vendor,i2c";
+            reg = <0x0 0xff660000 0x0 0x1000>;
+            interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
+            clocks = <&cru SCLK_I2C0>;
+            clock-names = "i2c";
+            pinctrl-names = "default";
+            pinctrl-0 = <&i2c0_pins>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "disabled";
+        };
+        
+        // More devices...
+    };
+};
+```
+
+## Results
+
+The final system achieved:
+
+- Boot time under 3 seconds
+- Secure boot with hardware root of trust
+- Seamless OTA updates with rollback protection
+- Power consumption optimized for battery operation 

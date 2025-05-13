@@ -14,7 +14,8 @@ Visit the live site: [utsavbalar.in](https://utsavbalar.in)
 - **Live Data** – automatically fetches latest Linux kernel version from kernel.org
 - **GitHub Integration** – pulls profile picture and info from GitHub
 - **SEO & Social Media Ready** – includes OpenGraph and Twitter metadata
-- **MDX Content** – clean formatting using MDX
+- **MDX Content** – clean formatting using MDX and content collections
+- **Inline MDX Rendering** – render markdown content directly in components
 - **Code Editor-Inspired Design** – developer-friendly aesthetics
 
 ## Tech Stack
@@ -55,11 +56,19 @@ npm run build
 - Font files are stored in `public/fonts/AdwaitaMono/`
 - Font declarations are in `src/styles/global.scss`
 
+### Content Management
+- Create markdown content in `src/content/` directories
+- Use the content collections API for structured content
+- Render markdown inline with the provided components:
+  - `MDXRenderer` - For inline markdown strings
+  - `MDXContent` - For content from collections
+  - `MDXFile` - For importing MDX files directly
+
 ### Updating Content
 Edit these files to customize your content:
 - `src/components/Profile.astro` – Personal profile information
-- `src/components/ContentAbout.astro` – About section content (MDX format)
-- `src/components/ContentProjects.astro` – Projects/portfolio section
+- `src/content/about/intro.mdx` – About section content (MDX format)
+- `src/content/projects/` – Projects/portfolio section
 - `src/components/Socials.astro` – Update your social media links
 
 ## Features Added
@@ -74,6 +83,12 @@ Edit these files to customize your content:
 - AdwaitaMono NerdFont for clean monospace typography
 - Preloaded font files for optimal performance
 - Fallback fonts configured for compatibility
+
+### MDX Content System
+- Content collections for structured data
+- Inline MDX rendering capabilities
+- Markdown processing with syntax highlighting
+- Theme-aware content styling
 
 ### Dynamic Content
 - Automatic fetching of latest Linux kernel version

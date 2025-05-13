@@ -1,0 +1,128 @@
+---
+// MDXRenderer.astro - A component for rendering MDX content inline
+import { marked } from 'marked';
+
+interface Props {
+  content: string;
+  isMarkdown?: boolean;
+}
+
+const { content, isMarkdown = true } = Astro.props;
+
+let renderedContent = '';
+
+try {
+  if (isMarkdown) {
+    // Use marked to render markdown content
+    renderedContent = marked.parse(content);
+  }
+} catch (error) {
+  console.error('Error rendering markdown content:', error);
+  renderedContent = `<div class="text-red-500">Error rendering content: ${error.message}</div>`;
+}
+---
+
+<div class="mdx-content" set:html={renderedContent} />
+
+<style>
+  .mdx-content {
+    color: var(--text-primary);
+  }
+  
+  .mdx-content h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--accent-primary);
+  }
+  
+  .mdx-content h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+  }
+  
+  .mdx-content h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-secondary);
+  }
+  
+  .mdx-content p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .mdx-content a {
+    color: var(--accent-primary);
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .mdx-content a:hover {
+    color: var(--accent-secondary);
+  }
+  
+  .mdx-content ul, .mdx-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mdx-content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .mdx-content code {
+    font-family: 'AdwaitaMono', monospace;
+    background-color: var(--bg-secondary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+  
+  .mdx-content pre {
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .mdx-content blockquote {
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1rem;
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+  
+  .mdx-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mdx-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  
+  .mdx-content table th {
+    background-color: var(--bg-secondary);
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .mdx-content table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+</style> 
