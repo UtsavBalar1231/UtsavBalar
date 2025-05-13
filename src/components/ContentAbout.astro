@@ -1,0 +1,132 @@
+---
+import { Code } from 'astro:components';
+
+const code = `# Utsav Balar
+## Embedded Linux & BSP Engineer
+
+> Currently pursuing a Master's in Computer Science at NIT Meghalaya and working as a freelance Linux Kernel Developer.
+
+## Experience
+
+### Vicharak | Embedded Linux cum BSP Engineer
+**Dec 2022 - Dec 2023**
+- Led BSP development for Vaaman SBC (RK3399)
+- Managed device tree configs, U-Boot integration
+- Engineered system images for various Linux distros
+- Contributed to Windows on ARM for Rockchip RK3588
+
+### Freelance | Linux Kernel Developer
+**Jan 2024 - Present**
+- BSP development for various platforms
+- Linux kernel customization
+- Device driver integration
+- Custom ROM development for Xiaomi devices
+
+## Skills
+
+### Proficient
+\`\`\`
+C, Rust, Bash, AWK
+Embedded Linux, Linux Kernel Dev
+BSP Engineering, Device Drivers
+Git, AOSP, Custom ROM Development
+\`\`\`
+
+### Semi-Proficient
+\`\`\`
+Yocto/Buildroot Project
+U-Boot
+ARM Architecture
+\`\`\`
+
+### Familiar With
+\`\`\`
+Python, C++, HTML/CSS, PHP
+MySQL, MongoDB, React, Node.js
+Figma, Adobe XD/AI
+\`\`\`
+
+### Tools
+\`\`\`
+GCC/Clang Cross-Compiler, GDB
+QEMU, Git, Docker, Travis CI
+Drone CI, Jenkins
+\`\`\`
+
+### Certifications
+- Embedded Linux Development, Udemy, 2023
+- Linux Foundation Certified System Administrator (LFCS), 2022
+
+## Education
+
+### Master's in Computer Science and Engineering
+*National Institute of Technology, Meghalaya, IN*
+**Expected Jun 2025**
+
+### Bachelor's in Computer Engineering
+*UKA Tarsadia University, Gujarat, IN*
+**2019 - 2023**
+- Privacy-focused, de-Googled Android ROM with custom kernel
+- University management system using PHP and MySQL
+- JavaScript-based web plugin for graphical user authentication
+
+## Personal
+
+### Interests
+- Open-source development
+- Low-level engineering
+- Embedded systems
+- Reading books
+- Watching movies
+- Listening to music
+
+### Favorite Books
+- Shrimad Bhagavad Gita
+- 12 Rules for Life by Jordan B. Peterson
+- Ikigai by Héctor García and Francesc Miralles
+
+### Favorite Movies
+- Films by Martin Scorsese
+- Films by Christopher Nolan
+- Films by Quentin Tarantino
+
+### Favorite Music
+- 90s and 2000s nostalgic jams
+- Electronic beats
+- Artists like Pixies, MGMT, Daft Punk, Oliver Heldens
+
+### Links
+- [Spotify](https://open.spotify.com/user/21xsxpeenbk6f6cedao77vxpy?si=FxTIw4ZJReGwU1Mb_8NU6w)
+`;
+---
+
+<Code
+    code={code}
+    lang="mdx"
+    wrap={true}
+/>
+
+<style is:global>
+
+    /* Custom styling for code block line numbers */
+    pre.astro-code {
+        @apply bg-transparent !important;
+    }
+
+    pre.astro-code code {
+        @apply block;
+        counter-reset: step;
+        counter-increment: step 0;
+    }
+
+    pre.astro-code code .line {
+        @apply relative;
+    }
+
+    pre.astro-code code .line::before {
+        content: counter(step);
+        counter-increment: step;
+        @apply text-gray-600 pr-2;
+    }
+
+</style>

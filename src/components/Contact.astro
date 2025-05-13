@@ -1,0 +1,25 @@
+---
+import Socials from './Socials.astro';
+import KernelVersion from './KernelVersion.astro';
+---
+
+<div>
+
+    <!-- Start: Terminal -->
+    <div class="mt-6 bg-black rounded-lg p-4 border border-gray-600 text-xs">
+
+        <div class="flex items-center mb-2">
+            <span class="text-primary mr-2">$</span>
+            <span class="text-gray-100">uname -rom</span>
+        </div>
+
+        <KernelVersion />
+
+    </div>
+    <!-- End: Terminal -->
+
+    <!-- Start: Social Links -->
+    <Socials />
+    <!-- End: Social Links -->
+
+</div>

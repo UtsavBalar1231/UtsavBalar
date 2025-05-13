@@ -1,0 +1,125 @@
+---
+// Theme options array with name and display name
+const themes = [
+    { value: 'default', label: 'Default (Dark)' },
+    { value: 'gruvbox-dark', label: 'Gruvbox Dark' },
+    { value: 'gruvbox-light', label: 'Gruvbox Light' },
+    { value: 'catppuccin', label: 'Catppuccin' },
+    { value: 'everforest', label: 'Everforest' },
+    { value: 'nord', label: 'Nord' },
+    { value: 'onedark', label: 'OneDark' }
+];
+---
+
+<div class="theme-selector fixed top-4 right-4 z-20">
+    <button 
+        id="theme-toggle"
+        class="p-3 rounded-3xl border-2 border-gray-600 hover:bg-gray-800 transition-colors text-xs"
+        title="Change theme"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
+        </svg>
+    </button>
+
+    <div id="theme-dropdown" class="absolute right-0 mt-2 py-2 w-56 rounded-md border border-gray-600 bg-black shadow-lg hidden">
+        {themes.map(theme => (
+            <button 
+                class="theme-option block w-full text-left px-4 py-2 text-sm hover:bg-gray-700" 
+                data-theme={theme.value}
+            >
+                {theme.label}
+            </button>
+        ))}
+    </div>
+</div>
+
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeDropdown = document.getElementById('theme-dropdown');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        
+        // Show/hide theme dropdown
+        themeToggle.addEventListener('click', () => {
+            themeDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!themeToggle.contains(e.target) && !themeDropdown.contains(e.target)) {
+                themeDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Theme option selection
+        themeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const newTheme = option.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeDropdown.classList.add('hidden');
+                
+                // Highlight the active theme
+                themeOptions.forEach(opt => opt.classList.remove('bg-gray-700'));
+                option.classList.add('bg-gray-700');
+            });
+            
+            // Highlight the current theme on load
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            if (option.getAttribute('data-theme') === currentTheme) {
+                option.classList.add('bg-gray-700');
+            }
+        });
+    });
+</script>
+
+<style>
+    .theme-option {
+        cursor: pointer;
+    }
+    
+    /* Add theme preview color dots */
+    .theme-option[data-theme="default"]::before {
+        content: "●";
+        color: #3b82f6;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="gruvbox-dark"]::before {
+        content: "●";
+        color: #b8bb26;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="gruvbox-light"]::before {
+        content: "●";
+        color: #98971a;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="catppuccin"]::before {
+        content: "●";
+        color: #f5c2e7;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="everforest"]::before {
+        content: "●";
+        color: #dbbc7f;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="nord"]::before {
+        content: "●";
+        color: #88c0d0;
+        margin-right: 8px;
+    }
+    
+    .theme-option[data-theme="onedark"]::before {
+        content: "●";
+        color: #61afef;
+        margin-right: 8px;
+    }
+</style> 

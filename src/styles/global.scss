@@ -1,0 +1,135 @@
+/* Font Face Declarations */
+@font-face {
+  font-family: 'AdwaitaMono';
+  src: url('/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AdwaitaMono';
+  src: url('/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AdwaitaMono';
+  src: url('/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AdwaitaMono';
+  src: url('/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+// Theme color variables
+:root {
+  // Default theme (dark)
+  --bg-primary: #000000;
+  --bg-secondary: #121212;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #2563eb;
+  --border-color: #4b5563;
+  --border-color-rgb: 75, 85, 99;
+}
+
+// Gruvbox Dark
+[data-theme="gruvbox-dark"] {
+  --bg-primary: #282828;
+  --bg-secondary: #32302f;
+  --text-primary: #ebdbb2;
+  --text-secondary: #a89984;
+  --accent-primary: #b8bb26;
+  --accent-secondary: #98971a;
+  --border-color: #504945;
+  --border-color-rgb: 80, 73, 69;
+}
+
+// Gruvbox Light
+[data-theme="gruvbox-light"] {
+  --bg-primary: #fbf1c7;
+  --bg-secondary: #f2e5bc;
+  --text-primary: #3c3836;
+  --text-secondary: #504945;
+  --accent-primary: #98971a;
+  --accent-secondary: #79740e;
+  --border-color: #d5c4a1;
+  --border-color-rgb: 213, 196, 161;
+}
+
+// Catppuccin
+[data-theme="catppuccin"] {
+  --bg-primary: #1e1e2e;
+  --bg-secondary: #302d41;
+  --text-primary: #d9e0ee;
+  --text-secondary: #a6adc8;
+  --accent-primary: #f5c2e7;
+  --accent-secondary: #cba6f7;
+  --border-color: #6e6c7e;
+  --border-color-rgb: 110, 108, 126;
+}
+
+// Everforest
+[data-theme="everforest"] {
+  --bg-primary: #2b3339;
+  --bg-secondary: #323c41;
+  --text-primary: #d3c6aa;
+  --text-secondary: #a7c080;
+  --accent-primary: #dbbc7f;
+  --accent-secondary: #e69875;
+  --border-color: #4f5b58;
+  --border-color-rgb: 79, 91, 88;
+}
+
+// Nord
+[data-theme="nord"] {
+  --bg-primary: #2e3440;
+  --bg-secondary: #3b4252;
+  --text-primary: #eceff4;
+  --text-secondary: #d8dee9;
+  --accent-primary: #88c0d0;
+  --accent-secondary: #81a1c1;
+  --border-color: #4c566a;
+  --border-color-rgb: 76, 86, 106;
+}
+
+// OneDark
+[data-theme="onedark"] {
+  --bg-primary: #282c34;
+  --bg-secondary: #21252b;
+  --text-primary: #abb2bf;
+  --text-secondary: #828997;
+  --accent-primary: #61afef;
+  --accent-secondary: #c678dd;
+  --border-color: #3e4451;
+  --border-color-rgb: 62, 68, 81;
+}
+
+// Apply theme colors to elements
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'AdwaitaMono', monospace;
+}
+
+html {
+  transition: all 0.3s ease-in-out;
+  font-family: 'AdwaitaMono', monospace;
+}

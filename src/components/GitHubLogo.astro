@@ -1,0 +1,49 @@
+---
+// GitHub username to generate logo for
+const username = 'UtsavBalar1231';
+
+// Get the first two letters of the username for the logo
+let shortUsername = '';
+try {
+  // Try to get exact case from GitHub API
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 3000);
+  
+  const response = await fetch(`https://api.github.com/users/${username}`, {
+    signal: controller.signal,
+    headers: {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'Portfolio'
+    }
+  });
+  
+  clearTimeout(timeoutId);
+  
+  if (response.ok) {
+    const userData = await response.json();
+    // Get first two letters of the actual display name or username
+    const name = userData.name || username;
+    shortUsername = name.substring(0, 2).toUpperCase();
+  } else {
+    // Fallback to username if API fails
+    shortUsername = username.substring(0, 2).toUpperCase();
+  }
+} catch (error) {
+  // Fallback to username if API fails
+  shortUsername = username.substring(0, 2).toUpperCase();
+}
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <style>
+    .text { 
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 40px;
+    }
+    .blue-text { fill: var(--accent-primary, #3b82f6); }
+    .gray-text { fill: var(--text-secondary, #6b7280); }
+  </style>
+  <rect width="100" height="100" rx="10" fill="none"/>
+  <text x="50" y="45" class="text blue-text" text-anchor="middle">{shortUsername}</text>
+</svg> 

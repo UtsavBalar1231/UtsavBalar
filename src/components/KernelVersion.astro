@@ -1,0 +1,57 @@
+---
+// Fetch the latest kernel version from kernel.org
+let latestVersion = '';
+let releaseDate = '';
+
+try {
+  const response = await fetch('https://www.kernel.org/releases.json');
+  
+  if (response.ok) {
+    const data = await response.json();
+    
+    // Get the latest stable release
+    const stableReleases = data.releases.filter(release => release.moniker === 'stable');
+    if (stableReleases.length > 0) {
+      const latestStable = stableReleases[0];
+      latestVersion = latestStable.version;
+      
+      // Format the date
+      if (latestStable.released) {
+        const releaseTime = new Date(latestStable.released.timestamp * 1000);
+        releaseDate = releaseTime.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+    }
+  }
+} catch (error) {
+  console.error('Error fetching kernel version:', error);
+}
+
+// Fallback version if fetch fails
+const fallbackVersion = '6.9.4-rc20';
+---
+
+{latestVersion ? (
+  <Fragment>
+    <div class="mt-2 text-gray-400">
+      Linux {latestVersion} GNU/Linux
+      <br />
+      Released {releaseDate || 'recently'}
+      <br />
+      Compiled with GCC 15.0.0
+      <br />
+      Ready to hack...
+    </div>
+  </Fragment>
+) : (
+  <div class="mt-2 text-gray-400">
+    Linux version {fallbackVersion}
+    <br />
+    Compiled with GCC 15.0.0
+    <br />
+    Ready to hack...
+  </div>
+)} 
