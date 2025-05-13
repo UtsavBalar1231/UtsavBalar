@@ -179,24 +179,152 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     <slot />
 
     <script>
-      // Enhance smooth scrolling behavior
+      // Enhance smooth scrolling behavior with Vim keybindings
       document.addEventListener('DOMContentLoaded', () => {
-        // Handle scrolling with arrow keys
+        // Track last G key press time for double-key commands
+        let lastGKeyPress = 0;
+        
+        // Handle scrolling with arrow keys and Vim keybindings
         document.addEventListener('keydown', (e) => {
+          // Skip if we're in an input or textarea
+          if (isEditableElement(e.target as HTMLElement)) {
+            return;
+          }
+          
+          // Standard navigation keys
           if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', 'Space'].includes(e.key)) {
             const scrollableElements = document.querySelectorAll('.no-scrollbar, [class*="overflow-"]');
             
             scrollableElements.forEach(el => {
-              if (isElementInViewport(el) && isScrollable(el)) {
+              if (isElementInViewport(el as HTMLElement) && isScrollable(el as HTMLElement)) {
                 // Let browser handle the scrolling with smooth behavior
                 return;
               }
             });
           }
+          
+          // Find the active scrollable element
+          const scrollableElements = Array.from(document.querySelectorAll('.no-scrollbar, [class*="overflow-"]')) as HTMLElement[];
+          let activeElement: HTMLElement | null = null;
+          
+          // Find the first scrollable element that's in viewport
+          for (const el of scrollableElements) {
+            if (isElementInViewport(el) && isScrollable(el)) {
+              activeElement = el;
+              break;
+            }
+          }
+          
+          // If no element found, use the document for scrolling
+          if (!activeElement) {
+            activeElement = document.documentElement;
+          }
+          
+          const scrollAmount = 60; // pixels to scroll for j/k
+          
+          // Vim keybindings
+          switch (e.key.toLowerCase()) {
+            case 'j': // Scroll down
+              e.preventDefault();
+              activeElement.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+              break;
+              
+            case 'k': // Scroll up
+              e.preventDefault();
+              activeElement.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+              break;
+              
+            case 'g': // For gg (top) command
+              if (e.timeStamp - lastGKeyPress < 500) { // If double-g pressed
+                e.preventDefault();
+                activeElement.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+              lastGKeyPress = e.timeStamp;
+              break;
+              
+            case 'd': // For Ctrl+d (half page down)
+              if (e.ctrlKey) {
+                e.preventDefault();
+                activeElement.scrollBy({ 
+                  top: Math.floor(activeElement.clientHeight / 2), 
+                  behavior: 'smooth' 
+                });
+              }
+              break;
+              
+            case 'u': // For Ctrl+u (half page up)
+              if (e.ctrlKey) {
+                e.preventDefault();
+                activeElement.scrollBy({ 
+                  top: -Math.floor(activeElement.clientHeight / 2), 
+                  behavior: 'smooth' 
+                });
+              }
+              break;
+              
+            case 't': // For gt (next tab)
+              if (e.timeStamp - lastGKeyPress < 500) {
+                e.preventDefault();
+                navigateToNextTab();
+              }
+              break;
+              
+            case 'T': // For gT (previous tab)
+              if (e.timeStamp - lastGKeyPress < 500) {
+                e.preventDefault();
+                navigateToPreviousTab();
+              }
+              break;
+          }
+          
+          // G key for scrolling to bottom
+          if (e.key === 'G') {
+            e.preventDefault();
+            activeElement.scrollTo({ 
+              top: activeElement.scrollHeight, 
+              behavior: 'smooth' 
+            });
+          }
         });
+        
+        // Navigate to next tab
+        function navigateToNextTab() {
+          const tabRadios = document.querySelectorAll('.tab-radio') as NodeListOf<HTMLInputElement>;
+          if (tabRadios.length <= 1) return;
+          
+          let currentIndex = -1;
+          for (let i = 0; i < tabRadios.length; i++) {
+            if (tabRadios[i].checked) {
+              currentIndex = i;
+              break;
+            }
+          }
+          
+          const nextIndex = (currentIndex + 1) % tabRadios.length;
+          tabRadios[nextIndex].checked = true;
+          tabRadios[nextIndex].dispatchEvent(new Event('change'));
+        }
+        
+        // Navigate to previous tab
+        function navigateToPreviousTab() {
+          const tabRadios = document.querySelectorAll('.tab-radio') as NodeListOf<HTMLInputElement>;
+          if (tabRadios.length <= 1) return;
+          
+          let currentIndex = -1;
+          for (let i = 0; i < tabRadios.length; i++) {
+            if (tabRadios[i].checked) {
+              currentIndex = i;
+              break;
+            }
+          }
+          
+          const prevIndex = (currentIndex - 1 + tabRadios.length) % tabRadios.length;
+          tabRadios[prevIndex].checked = true;
+          tabRadios[prevIndex].dispatchEvent(new Event('change'));
+        }
 
         // Helper function to check if element is in viewport
-        function isElementInViewport(el) {
+        function isElementInViewport(el: HTMLElement): boolean {
           const rect = el.getBoundingClientRect();
           return (
             rect.top >= 0 &&
@@ -207,8 +335,32 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
         }
 
         // Helper function to check if element is scrollable
-        function isScrollable(el) {
+        function isScrollable(el: HTMLElement): boolean {
           return el.scrollHeight > el.clientHeight;
+        }
+
+        // Helper function to check if element is editable
+        function isEditableElement(el: HTMLElement): boolean {
+          if (!el) return false;
+          
+          const tagName = el.tagName.toLowerCase();
+          
+          // Check for input/textarea elements
+          if (['input', 'textarea', 'select'].includes(tagName)) {
+            return true;
+          }
+          
+          // Check for contenteditable elements
+          if (el.hasAttribute('contenteditable') && el.getAttribute('contenteditable') !== 'false') {
+            return true;
+          }
+          
+          // Check if inside a form element
+          if (el.closest('form')) {
+            return true;
+          }
+          
+          return false;
         }
       });
     </script>

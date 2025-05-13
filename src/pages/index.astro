@@ -69,19 +69,61 @@ import ContentProjects from "../components/ContentProjects.astro";
 
   <!-- Credits -->
   <div
-    class="fixed md:absolute bottom-0 left-0 right-0 w-full text-center bg-black py-2"
+    class="fixed md:absolute bottom-0 left-0 right-0 w-full bg-black py-2 flex justify-between items-center px-4"
   >
-    Built with <a
-      href="https://astro.build"
-      title="Astro"
-      target="_blank"
-      class="text-primary hover:underline">Astro</a
-    > by <a
-      href="https://github.com/UtsavBalar1231"
-      target="_blank"
-      title="Utsav Balar"
-      class="text-primary hover:underline">Utsav Balar</a
+    <div class="text-center mx-auto">
+      Built with <a
+        href="https://astro.build"
+        title="Astro"
+        target="_blank"
+        class="text-primary hover:underline">Astro</a
+      > by <a
+        href="https://github.com/UtsavBalar1231"
+        target="_blank"
+        title="Utsav Balar"
+        class="text-primary hover:underline">Utsav Balar</a
+      >
+    </div>
+    
+    <!-- Help Icon -->
+    <button 
+      id="vim-help-toggle" 
+      class="w-8 h-8 flex items-center justify-center rounded-full hover:-translate-y-0.5 transition-all duration-150 help-icon ml-2"
+      title="Vim Keybindings Help (press ? key)"
     >
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        class="text-primary"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Vim Keybindings Help -->
+  <div id="vim-help-panel" class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden">
+    <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
+    <ul class="text-xs space-y-1">
+      <li><span class="text-primary">j/k</span> - Scroll down/up</li>
+      <li><span class="text-primary">gg</span> - Scroll to top</li>
+      <li><span class="text-primary">G</span> - Scroll to bottom</li>
+      <li><span class="text-primary">Ctrl+d/u</span> - Half page down/up</li>
+      <li><span class="text-primary">gt</span> - Next tab</li>
+      <li><span class="text-primary">gT</span> - Previous tab</li>
+      <li><span class="text-primary">?</span> - Toggle this help</li>
+      <li><span class="text-primary">Esc</span> - Close this help</li>
+    </ul>
+    <button id="vim-help-close" class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button>
   </div>
 </Layout>
 
@@ -103,6 +145,34 @@ import ContentProjects from "../components/ContentProjects.astro";
         }
       });
     });
+    
+    // Setup Vim help panel toggle
+    const helpToggle = document.getElementById('vim-help-toggle');
+    const helpPanel = document.getElementById('vim-help-panel');
+    const helpClose = document.getElementById('vim-help-close');
+    
+    if (helpToggle && helpPanel && helpClose) {
+      helpToggle.addEventListener('click', () => {
+        helpPanel.classList.toggle('hidden');
+      });
+      
+      helpClose.addEventListener('click', () => {
+        helpPanel.classList.add('hidden');
+      });
+      
+      // Also toggle help with ? key (Vim style)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '?') {
+          e.preventDefault();
+          helpPanel.classList.toggle('hidden');
+        }
+        
+        // Close with Escape key
+        if (e.key === 'Escape' && !helpPanel.classList.contains('hidden')) {
+          helpPanel.classList.add('hidden');
+        }
+      });
+    }
   });
 </script>
 
@@ -162,5 +232,26 @@ import ContentProjects from "../components/ContentProjects.astro";
     overscroll-behavior: none;
     scroll-behavior: smooth; /* Enable smooth scrolling */
     -webkit-overflow-scrolling: touch; /* For iOS devices */
+  }
+</style>
+
+<style>
+  .help-icon {
+    opacity: 0.7;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .help-icon:hover {
+    opacity: 1;
+    color: var(--accent-primary);
+  }
+  
+  /* Responsive positioning for the help panel */
+  @media (max-width: 768px) {
+    #vim-help-panel {
+      bottom: 40px; /* Position the panel above the credits bar */
+      right: 4px;
+      max-width: calc(100vw - 32px); /* Prevent overflow */
+    }
   }
 </style>
