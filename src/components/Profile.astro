@@ -11,28 +11,28 @@ const profile = {
 ---
 
 <div
-  class="flex flex-col gap-6 items-center text-center sm:items-start sm:text-left"
+  class="flex flex-col gap-2 items-center text-center md:items-start md:text-left"
 >
-  <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+  <div class="flex flex-col lg:flex-row gap-2 md:gap-1 lg:items-center">
     <GitHubAvatar
       width={96}
       height={96}
-      class="w-24 h-24 rounded-full object-cover border-2 border-primary text-text-primary mx-auto sm:mx-0"
+      class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-2 border-primary text-text-primary mx-auto md:mx-0"
     />
 
     <div>
       <h1
-        class="text-2xl font-extrabold mb-1 inline-block relative text-text-primary"
+        class="text-xl md:text-2xl font-extrabold mb-1 inline-block relative text-text-primary"
       >
         {profile.name}
       </h1>
 
-      <p class="text-sm mb-2 text-primary">
+      <p class="text-xs md:text-sm mb-2 text-primary">
         {profile.title}
       </p>
 
       <p
-        class="flex items-center justify-center sm:justify-start text-sm text-gray-400"
+        class="flex items-center justify-center md:justify-start text-xs md:text-sm text-gray-400"
       >
         <svg
           class="-mt-0.5 inline mr-2"
@@ -53,7 +53,7 @@ const profile = {
     </div>
   </div>
 
-  <p class="text-sm leading-relaxed mt-4 text-gray-400">
+  <p class="text-xs md:text-sm leading-relaxed mt-1 md:mt-2 text-gray-400">
     {profile.description}
   </p>
 </div>

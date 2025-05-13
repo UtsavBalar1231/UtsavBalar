@@ -15,7 +15,7 @@ const themeGroups = {
 <div class="theme-toggle relative">
   <button
     id="theme-toggle-btn"
-    class="flex items-center justify-center w-10 h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-3 theme-toggle-btn"
+    class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-2 sm:p-3 theme-toggle-btn"
     title="Change theme"
   >
     <span class="material-symbols-rounded icon-sm">
@@ -25,17 +25,17 @@ const themeGroups = {
 
   <div
     id="theme-dropdown"
-    class="absolute right-0 bottom-12 mt-2 py-2 w-64 rounded-md border shadow-lg hidden z-20 theme-dropdown max-h-96 overflow-y-auto"
+    class="absolute right-0 bottom-12 mt-2 py-2 w-56 sm:w-64 rounded-md border shadow-lg hidden z-20 theme-dropdown max-h-80 sm:max-h-96 overflow-y-auto text-xs sm:text-sm"
   >
     {
       Object.entries(themeGroups).map(([groupName, groupThemes]) => (
         <div>
-          <div class="px-4 py-1 text-xs text-primary font-bold uppercase border-b border-gray-600 mb-1">
+          <div class="px-4 py-1 text-[10px] sm:text-xs text-primary font-bold uppercase border-b border-gray-600 mb-1">
             {groupName}
           </div>
           {groupThemes.map((theme) => (
             <button
-              class="theme-option block w-full text-left px-4 py-2 text-sm flex items-center hover:bg-opacity-20"
+              class="theme-option block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm flex items-center hover:bg-opacity-20"
               data-theme={theme.value}
             >
               <span class={`theme-dot theme-dot-${theme.value}`} />

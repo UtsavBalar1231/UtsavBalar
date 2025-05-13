@@ -99,6 +99,11 @@ body {
   font-family: "AdwaitaMono", monospace;
   overscroll-behavior: none; /* Disable overscroll/bounce effect */
   -webkit-overflow-scrolling: touch; /* For iOS devices */
+  font-size: 14px;
+  
+  @media (min-width: 640px) {
+    font-size: 16px;
+  }
 }
 
 html {
@@ -107,6 +112,18 @@ html {
   overscroll-behavior: none; /* Disable overscroll/bounce effect */
   scroll-behavior: smooth; /* Enable smooth scrolling */
   scrollbar-gutter: stable; /* Prevent layout shift when scrollbar appears */
+}
+
+// Mobile optimizations
+@media (max-width: 640px) {
+  :root {
+    --scroll-transition-duration: 300ms; /* Faster transitions on mobile */
+  }
+  
+  html, body {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure full width */
+  }
 }
 
 // Theme dot styles

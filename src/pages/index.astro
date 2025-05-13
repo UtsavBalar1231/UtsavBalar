@@ -16,7 +16,7 @@ import ContentProjects from "../components/ContentProjects.astro";
   >
     <!-- Start: Left / upper card -->
     <div
-      class="p-8 md:p-6 flex flex-col justify-between w-full md:w-2/5 border-b md:border-b-0 md:border-r border-gray-600"
+      		class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600"
     >
       <Profile />
 
@@ -25,38 +25,38 @@ import ContentProjects from "../components/ContentProjects.astro";
     <!-- End: Left / upper card -->
 
     <!-- Start: Right / lower card (yes 4/5 instead of 3/5) -->
-    <div class="w-full md:w-4/5 p-0">
+    	<div class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col">
       <!-- Start: Inner wrapper -->
       <div
-        class="min-h-full h-[90vh] flex flex-col overflow-y-scroll no-scrollbar"
+        class="min-h-[50vh] md:min-h-full md:h-[90vh] flex flex-col"
       >
         <!-- Use hidden radio buttons to control the tabs -->
-        <div class="tab-controls">
+        <div class="tab-controls flex flex-col h-full overflow-hidden">
           <input type="radio" id="tab1" name="tabs" class="tab-radio" checked />
-
           <input type="radio" id="tab2" name="tabs" class="tab-radio" />
 
-          <!-- Start: Tab bar -->
-          <div class="flex bg-black border-b border-gray-600 sticky top-0 z-10">
+          <!-- Start: Tab bar (sticky at top) -->
+          <div class="tab-header flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full">
             <ContentLink contentId="tab1" contentName="profile.mdx" />
-
             <ContentLink contentId="tab2" contentName="projects.mdx" />
           </div>
           <!-- End: Tab bar -->
 
-          <!-- Start: Tab content -->
-          <div class="p-6 flex-grow overflow-y-auto bg-black no-scrollbar tab-content-container">
-            <!-- Start: About content -->
-            <div id="content1" class="tab-content">
-              <ContentCode />
-            </div>
-            <!-- End: About content -->
+          <!-- Start: Tab content (scrollable) -->
+          <div class="tab-content-wrapper flex-grow overflow-auto h-full">
+            <div class="p-4 md:p-6 bg-black no-scrollbar tab-content-container">
+              <!-- Start: About content -->
+              <div id="content1" class="tab-content">
+                <ContentCode />
+              </div>
+              <!-- End: About content -->
 
-            <!-- Start: Projects content -->
-            <div id="content2" class="tab-content">
-              <ContentProjects />
+              <!-- Start: Projects content -->
+              <div id="content2" class="tab-content">
+                <ContentProjects />
+              </div>
+              <!-- End: Projects content -->
             </div>
-            <!-- End: Projects content -->
           </div>
           <!-- End: Tab content -->
         </div>
@@ -69,9 +69,9 @@ import ContentProjects from "../components/ContentProjects.astro";
 
   <!-- Credits -->
   <div
-    class="fixed md:absolute bottom-0 left-0 right-0 w-full bg-black py-2 flex justify-between items-center px-4"
+    class="fixed md:absolute bottom-0 left-0 right-0 w-full bg-black py-2 flex justify-between items-center px-4 z-10"
   >
-    <div class="text-center mx-auto">
+    <div class="text-center mx-auto text-xs md:text-sm">
       Built with <a
         href="https://astro.build"
         title="Astro"
@@ -131,7 +131,7 @@ import ContentProjects from "../components/ContentProjects.astro";
   // Enhance smooth scrolling for tab transitions
   document.addEventListener('DOMContentLoaded', () => {
     const tabRadios = document.querySelectorAll('.tab-radio');
-    const tabContentContainer = document.querySelector('.tab-content-container');
+    const tabContentContainer = document.querySelector('.tab-content-wrapper');
     
     // Reset scroll position when switching tabs
     tabRadios.forEach(radio => {
@@ -199,7 +199,7 @@ import ContentProjects from "../components/ContentProjects.astro";
     @apply block opacity-100;
   }
 
-  #tab1:checked ~ .flex .tab-link:nth-child(1) {
+  #tab1:checked ~ .tab-header .tab-link:nth-child(1) {
     @apply border-b-2 border-b-primary;
   }
 
@@ -208,7 +208,7 @@ import ContentProjects from "../components/ContentProjects.astro";
     @apply block opacity-100;
   }
 
-  #tab2:checked ~ .flex .tab-link:nth-child(2) {
+  #tab2:checked ~ .tab-header .tab-link:nth-child(2) {
     @apply border-b-2 border-b-primary;
   }
 
@@ -252,6 +252,7 @@ import ContentProjects from "../components/ContentProjects.astro";
       bottom: 40px; /* Position the panel above the credits bar */
       right: 4px;
       max-width: calc(100vw - 32px); /* Prevent overflow */
+      font-size: 0.7rem;
     }
   }
 </style>
