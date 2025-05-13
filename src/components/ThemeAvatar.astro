@@ -5,7 +5,17 @@ const { width = 96, height = 96, class: className = '' } = Astro.props;
 
 <div class={`theme-avatar ${className}`} style={`width: ${width}px; height: ${height}px;`}>
   <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 96 96">
-    <rect width="96" height="96" fill="transparent" />
+    <style>
+      .avatar-text {
+        fill: var(--accent-primary, #dbbc7f);
+        transition: fill 0.3s ease-in-out;
+      }
+      .avatar-bg {
+        fill: var(--bg-primary, #1e1e2f);
+        transition: fill 0.3s ease-in-out;
+      }
+    </style>
+    <rect class="avatar-bg" width="96" height="96" rx="96" />
     <text x="48" y="58" class="avatar-text" font-family="AdwaitaMono, monospace" font-size="32" font-weight="bold" text-anchor="middle">UB</text>
   </svg>
 </div>
@@ -15,10 +25,5 @@ const { width = 96, height = 96, class: className = '' } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .avatar-text {
-    fill: var(--accent-primary);
-    transition: fill 0.3s ease-in-out;
   }
 </style> 
