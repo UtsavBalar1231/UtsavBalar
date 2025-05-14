@@ -3,9 +3,10 @@ import SocialIcon from "./SocialIcon.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 
 interface Social {
-  icon: "github" | "linkedIn" | "twitter" | "email" | "xing";
+  icon: "github" | "linkedIn" | "twitter" | "email" | "xing" | "telegram" | "reddit" | "cat";
   link: string;
   title?: string;
+  onClick?: string;
 }
 
 const socials: Social[] = [
@@ -25,31 +26,73 @@ const socials: Social[] = [
     title: "View Twitter Profile",
   },
   {
+    icon: "telegram",
+    link: "https://t.me/utsavthecunt",
+    title: "Connect on Telegram",
+  },
+  {
+    icon: "reddit",
+    link: "https://www.reddit.com/user/utsavthecunt",
+    title: "View Reddit Profile",
+  },
+  {
     icon: "email",
     link: "mailto:utsavbalar1231@gmail.com",
     title: "Send Email",
   },
+  {
+    icon: "cat",
+    link: "#",
+    title: "Get a new cat!",
+    onClick: "refreshCatImage(); return false;",
+  },
 ];
+
+// Split socials into two rows
+const firstRowSocials = socials.slice(0, 4);
+const secondRowSocials = socials.slice(4);
 ---
 
 <!-- Start: Social Links -->
-<div class="flex flex-wrap gap-2 sm:gap-3 mt-3 sm:mt-4 justify-between items-center">
-  {
-    socials.map((social) => (
-      <a
-        href={social.link}
-        target="_blank"
-        title={social.title}
-        rel="noopener noreferrer"
-        class="social-link flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-2 sm:p-3"
-      >
-        <SocialIcon icon={social.icon} />
-      </a>
-    ))
-  }
+<div class="flex flex-col gap-3 mt-3 sm:mt-4">
+  <!-- First Row -->
+  <div class="flex justify-between items-center">
+    {
+      firstRowSocials.map((social) => (
+        <a
+          href={social.link}
+          target="_blank"
+          title={social.title}
+          rel="noopener noreferrer"
+          class="social-link flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-2 sm:p-3"
+          onclick={social.onClick}
+        >
+          <SocialIcon icon={social.icon} />
+        </a>
+      ))
+    }
+  </div>
 
-  <!-- Theme Toggle -->
-  <ThemeToggle />
+  <!-- Second Row -->
+  <div class="flex justify-between items-center">
+    {
+      secondRowSocials.map((social) => (
+        <a
+          href={social.link}
+          target="_blank"
+          title={social.title}
+          rel="noopener noreferrer"
+          class="social-link flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-2 sm:p-3"
+          onclick={social.onClick}
+        >
+          <SocialIcon icon={social.icon} />
+        </a>
+      ))
+    }
+
+    <!-- Theme Toggle -->
+    <ThemeToggle />
+  </div>
 </div>
 <!-- End: Social Links -->
 
@@ -64,3 +107,18 @@ const socials: Social[] = [
     background-color: var(--accent-primary);
   }
 </style>
+
+<script>
+  // Make sure the refreshCatImage function is available in the global scope
+  if (typeof window.refreshCatImage !== 'function') {
+    window.refreshCatImage = () => {
+      const avatarEl = document.getElementById('profile-avatar') as HTMLImageElement;
+      if (avatarEl) {
+        const random = Math.floor(Math.random() * 1000);
+        const width = avatarEl.getAttribute('width');
+        const height = avatarEl.getAttribute('height');
+        avatarEl.src = `https://cataas.com/cat?width=${width}&height=${height}&s=${random}`;
+      }
+    };
+  }
+</script>
