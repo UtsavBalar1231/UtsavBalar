@@ -10,6 +10,8 @@ import ContentProjects from "../components/ContentProjects.astro";
 import ContentQuotes from "../components/ContentQuotes.astro";
 import ContentBookBits from "../components/ContentBookBits.astro";
 import ContentResume from "../components/ContentResume.astro";
+
+import Analytics from "@vercel/analytics/astro";
 ---
 
 <Layout>
@@ -17,18 +19,23 @@ import ContentResume from "../components/ContentResume.astro";
   <main
     class="flex flex-col md:flex-row w-full max-w-full md:max-w-7xl border border-gray-600 rounded-2xl overflow-hidden shadow-2xl relative bg-black mb-12 md:mb-4"
   >
-    <!-- Start: Left / upper card -->
+    <!-- Start: Left / upper card - Mobile: Home Screen -->
     <div
-      class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600"
+      id="profile-section"
+      class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600 md:min-h-0 min-h-screen md:static"
     >
       <Profile />
 
+      <Analytics />
       <Contact />
     </div>
     <!-- End: Left / upper card -->
 
     <!-- Start: Right / lower card -->
-    <div class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col">
+    <div
+      id="content-section"
+      class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col md:static mobile-content-section"
+    >
       <!-- Start: Inner wrapper -->
       <div class="min-h-[50vh] md:min-h-full md:h-[90vh] flex flex-col">
         <!-- Use hidden radio buttons to control the tabs -->
@@ -41,7 +48,7 @@ import ContentResume from "../components/ContentResume.astro";
 
           <!-- Start: Tab bar (sticky at top) -->
           <div
-            class="tab-header flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full overflow-x-auto no-scrollbar"
+            class="tab-header hidden md:flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full overflow-x-auto no-scrollbar"
           >
             <ContentLink contentId="tab1" contentName="Profile" />
             <ContentLink contentId="tab2" contentName="Projects" />
@@ -65,19 +72,19 @@ import ContentResume from "../components/ContentResume.astro";
                 <ContentProjects />
               </div>
               <!-- End: Projects content -->
-              
+
               <!-- Start: Resume content -->
               <div id="content3" class="tab-content">
                 <ContentResume />
               </div>
               <!-- End: Resume content -->
-              
+
               <!-- Start: Quotes content -->
               <div id="content4" class="tab-content">
                 <ContentQuotes />
               </div>
               <!-- End: Quotes content -->
-              
+
               <!-- Start: Book Bits content -->
               <div id="content5" class="tab-content">
                 <ContentBookBits />
@@ -94,91 +101,381 @@ import ContentResume from "../components/ContentResume.astro";
   </main>
   <!-- End: Main Wrapper -->
 
-  <!-- Credits -->
+  <!-- Start: Mobile bottom tab bar - Placed outside the main content flow -->
   <div
-    class="fixed md:absolute bottom-0 left-0 right-0 w-full bg-black py-2 flex justify-between items-center px-4 z-10"
+    id="mobile-tab-bar"
+    class="md:hidden fixed bottom-12 left-0 right-0 z-9999 flex justify-center pointer-events-auto"
   >
-    <div class="text-center mx-auto text-xs md:text-sm">
-      Built with <a
-        href="https://astro.build"
-        title="Astro"
-        target="_blank"
-        class="text-primary hover:underline">Astro</a
-      > by <a
-        href="https://github.com/UtsavBalar1231"
-        target="_blank"
-        title="Utsav Balar"
-        class="text-primary hover:underline">Utsav Balar</a
+    <div
+      class="bg-black border border-gray-600 rounded-full shadow-xl flex justify-between px-2"
+    >
+      <label
+        id="home-btn"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Home"
       >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </label>
+      <label
+        for="tab1"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Profile"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </label>
+      <label
+        for="tab2"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Projects"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+      </label>
+      <label
+        for="tab3"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Resume"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+      </label>
+      <label
+        for="tab4"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Quotes"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+      </label>
+      <label
+        for="tab5"
+        class="mobile-tab-btn p-2 rounded-full text-gray-400"
+        title="Book Bits"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+          ></path>
+        </svg>
+      </label>
     </div>
-
-    <!-- Help Icon -->
-    <button
-      id="vim-help-toggle"
-      class="w-8 h-8 flex items-center justify-center rounded-full hover:-translate-y-0.5 transition-all duration-150 help-icon ml-2"
-      title="Vim Keybindings Help (press ? key)"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="text-primary"
-      >
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-      </svg>
-    </button>
   </div>
-
-  <!-- Vim Keybindings Help -->
-  <div
-    id="vim-help-panel"
-    class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden"
-  >
-    <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
-    <ul class="text-xs space-y-1">
-      <li><span class="text-primary">j/k</span> - Scroll down/up</li>
-      <li><span class="text-primary">gg</span> - Scroll to top</li>
-      <li><span class="text-primary">G</span> - Scroll to bottom</li>
-      <li>
-        <span class="text-primary">Ctrl+d/u</span> - Half page down/up
-      </li>
-      <li><span class="text-primary">gt</span> - Next tab</li>
-      <li><span class="text-primary">gT</span> - Previous tab</li>
-      <li><span class="text-primary">?</span> - Toggle this help</li>
-      <li><span class="text-primary">Esc</span> - Close this help</li>
-    </ul>
-    <button
-      id="vim-help-close"
-      class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button
-    >
-  </div>
+  <!-- End: Mobile bottom tab bar -->
 </Layout>
+
+<!-- End: Inner wrapper -->
+
+<!-- End: Right / lower card -->
+
+<!-- End: Main Wrapper -->
+
+<!-- Credits -->
+<div
+  class="credits-bar fixed md:absolute bottom-0 left-0 right-0 w-full bg-black py-1 md:py-2 flex justify-between items-center px-4 z-20"
+>
+  <div class="text-center mx-auto text-xs md:text-sm">
+    Built with <a
+      href="https://astro.build"
+      title="Astro"
+      target="_blank"
+      class="text-primary hover:underline">Astro</a
+    > by <a
+      href="https://github.com/UtsavBalar1231"
+      target="_blank"
+      title="Utsav Balar"
+      class="text-primary hover:underline">Utsav Balar</a
+    >
+  </div>
+
+  <!-- Help Icon -->
+  <button
+    id="vim-help-toggle"
+    class="w-8 h-8 flex items-center justify-center rounded-full hover:-translate-y-0.5 transition-all duration-150 help-icon ml-2 hidden md:flex"
+    title="Vim Keybindings Help (press ? key)"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="text-primary"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+  </button>
+</div>
+
+<!-- Vim Keybindings Help -->
+<div
+  id="vim-help-panel"
+  class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden"
+>
+  <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
+  <ul class="text-xs space-y-1">
+    <li><span class="text-primary">j/k</span> - Scroll down/up</li>
+    <li><span class="text-primary">gg</span> - Scroll to top</li>
+    <li><span class="text-primary">G</span> - Scroll to bottom</li>
+    <li>
+      <span class="text-primary">Ctrl+d/u</span> - Half page down/up
+    </li>
+    <li><span class="text-primary">gt</span> - Next tab</li>
+    <li><span class="text-primary">gT</span> - Previous tab</li>
+    <li><span class="text-primary">?</span> - Toggle this help</li>
+    <li><span class="text-primary">Esc</span> - Close this help</li>
+  </ul>
+  <button
+    id="vim-help-close"
+    class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button
+  >
+</div>
 
 <script>
   // Enhance smooth scrolling for tab transitions
   document.addEventListener("DOMContentLoaded", () => {
     const tabRadios = document.querySelectorAll(".tab-radio");
     const tabContentContainer = document.querySelector(".tab-content-wrapper");
+    const mobileTabBtns = document.querySelectorAll(".mobile-tab-btn");
+    const profileSection = document.getElementById("profile-section");
+    const contentSection = document.getElementById("content-section");
+    const homeBtn = document.getElementById("home-btn");
 
-    // Reset scroll position when switching tabs
+    // Mobile view state tracking
+    let isMobileView = window.innerWidth < 768;
+
+    // Set initial mobile view state on page load
+    if (isMobileView) {
+      // Use setTimeout to ensure the tab bar remains visible after DOM manipulation
+      setTimeout(() => {
+        setupMobileView();
+      }, 0);
+    }
+
+    // Handle window resize events
+    window.addEventListener("resize", () => {
+      const newIsMobileView = window.innerWidth < 768;
+
+      // Only take action if mobile state changed
+      if (newIsMobileView !== isMobileView) {
+        isMobileView = newIsMobileView;
+
+        if (isMobileView) {
+          setupMobileView();
+        } else {
+          // Reset to desktop view
+          resetToDesktopView();
+        }
+      }
+    });
+
+    // Function to setup initial mobile view - home screen visible
+    function setupMobileView() {
+      if (profileSection && contentSection) {
+        // Show profile section (home)
+        profileSection.style.display = "flex";
+        // Hide content section initially
+        contentSection.style.display = "none";
+
+        // Make sure tab bar is visible
+        const tabBar = document.getElementById("mobile-tab-bar");
+        if (tabBar) {
+          tabBar.style.display = "flex";
+          tabBar.style.visibility = "visible";
+          tabBar.style.opacity = "1";
+        }
+
+        // Reset any active tabs
+        mobileTabBtns.forEach((btn, index) => {
+          // Make home button active
+          btn.classList.toggle("active-tab", index === 0);
+        });
+      }
+    }
+
+    // Function to go back to home page (profile section)
+    function goToHomePage() {
+      if (profileSection && contentSection) {
+        profileSection.style.display = "flex";
+        contentSection.style.display = "none";
+
+        // Update tab button states
+        mobileTabBtns.forEach((btn, index) => {
+          btn.classList.toggle("active-tab", index === 0);
+        });
+      }
+    }
+
+    // Function to go to a content page
+    function goToContentPage() {
+      if (profileSection && contentSection) {
+        profileSection.style.display = "none";
+        contentSection.style.display = "flex";
+
+        // Reset scroll position
+        if (tabContentContainer) {
+          tabContentContainer.scrollTo({
+            top: 0,
+            behavior: "auto",
+          });
+        }
+      }
+    }
+
+    // Reset to desktop view when screen is enlarged
+    function resetToDesktopView() {
+      if (profileSection && contentSection) {
+        profileSection.style.display = "flex";
+        contentSection.style.display = "flex";
+      }
+    }
+
+    // Add click handler for the home button
+    if (homeBtn) {
+      homeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        goToHomePage();
+
+        // Update button states
+        mobileTabBtns.forEach((btn, index) => {
+          btn.classList.toggle("active-tab", index === 0);
+        });
+      });
+    }
+
+    // Add event listeners to tab buttons
     tabRadios.forEach((radio) => {
       radio.addEventListener("change", () => {
+        // Reset scroll position when switching tabs
         if (tabContentContainer) {
-          // Smoothly scroll to top when switching tabs
           tabContentContainer.scrollTo({
             top: 0,
             behavior: "smooth",
           });
         }
+
+        // For mobile: switch to content view when selecting non-Home tabs
+        if (isMobileView) {
+          goToContentPage();
+
+          // Update the active tab highlight
+          const tabId = (radio as HTMLInputElement).id;
+          const tabNumber = parseInt(tabId.replace("tab", ""));
+
+          // Correctly map tab numbers to mobile tab button indexes
+          // Home button is at index 0, content tabs start at index 1
+          mobileTabBtns.forEach((btn, index) => {
+            // For tab1, index should be 1 (profile)
+            // For tab2, index should be 2 (projects)
+            // and so on
+            btn.classList.toggle(
+              "active-tab",
+              index === tabNumber // Adjust index to match tab number
+            );
+          });
+        }
       });
+    });
+
+    // Add event listeners to mobile tab buttons (except home)
+    mobileTabBtns.forEach((btn, index) => {
+      // Skip the home button (we added a special handler above)
+      if (index > 0) {
+        btn.addEventListener("click", () => {
+          // If we're on mobile, switch to content view
+          if (isMobileView) {
+            goToContentPage();
+          }
+
+          // Update active tab highlight
+          mobileTabBtns.forEach((b, i) => {
+            b.classList.toggle("active-tab", i === index);
+          });
+        });
+      }
     });
 
     // Setup Vim help panel toggle
@@ -201,7 +498,7 @@ import ContentResume from "../components/ContentResume.astro";
         if (isEditableElement(e.target)) {
           return;
         }
-        
+
         if (e.key === "?") {
           e.preventDefault();
           helpPanel.classList.toggle("hidden");
@@ -212,33 +509,76 @@ import ContentResume from "../components/ContentResume.astro";
           helpPanel.classList.add("hidden");
         }
       });
-      
+
       // Helper function to check if element is editable
       function isEditableElement(el: any) {
         if (!el) return false;
-        
+
         const tagName = el.tagName.toLowerCase();
-        
+
         // Check for input/textarea elements
-        if (['input', 'textarea', 'select'].includes(tagName)) {
+        if (["input", "textarea", "select"].includes(tagName)) {
           return true;
         }
-        
+
         // Check for contenteditable elements
-        if (el.hasAttribute('contenteditable') && el.getAttribute('contenteditable') !== 'false') {
+        if (
+          el.hasAttribute("contenteditable") &&
+          el.getAttribute("contenteditable") !== "false"
+        ) {
           return true;
         }
-        
+
         // Check if inside a form element
-        if (el.closest('form')) {
+        if (el.closest("form")) {
           return true;
         }
-        
+
         return false;
       }
-      
+
       // Log that Vim keybindings are active
       console.log("Vim keybindings activated. Press '?' for help.");
+    }
+
+    // Final check to ensure mobile tab bar is visible
+    const mobileTabBar = document.getElementById("mobile-tab-bar");
+    if (mobileTabBar && window.innerWidth < 768) {
+      // Force visibility with a slight delay
+      setTimeout(() => {
+        mobileTabBar.style.display = "flex";
+        mobileTabBar.style.visibility = "visible";
+        mobileTabBar.style.opacity = "1";
+        mobileTabBar.style.zIndex = "9999";
+      }, 100);
+    }
+  });
+
+  // Additional listener for window load to ensure tab bar visibility
+  window.addEventListener("load", function () {
+    const mobileTabBar = document.getElementById("mobile-tab-bar");
+    if (mobileTabBar && window.innerWidth < 768) {
+      mobileTabBar.style.display = "flex";
+      mobileTabBar.style.visibility = "visible";
+      mobileTabBar.style.opacity = "1";
+      mobileTabBar.style.zIndex = "9999";
+    } else if (mobileTabBar && window.innerWidth >= 768) {
+      // Ensure the tab bar is hidden on larger screens
+      mobileTabBar.style.display = "none";
+    }
+  });
+
+  // Additional resize listener to ensure tab bar stays hidden/visible as needed
+  window.addEventListener("resize", function() {
+    const mobileTabBar = document.getElementById("mobile-tab-bar");
+    if (mobileTabBar) {
+      if (window.innerWidth < 768) {
+        mobileTabBar.style.display = "flex";
+        mobileTabBar.style.visibility = "visible";
+        mobileTabBar.style.opacity = "1";
+      } else {
+        mobileTabBar.style.display = "none";
+      }
     }
   });
 </script>
@@ -278,7 +618,7 @@ import ContentResume from "../components/ContentResume.astro";
   #tab2:checked ~ .tab-header .tab-link:nth-child(2) {
     @apply border-b-2 border-b-primary;
   }
-  
+
   /* When tab3 is checked, show content3 and highlight its tab */
   #tab3:checked ~ * #content3 {
     @apply block opacity-100;
@@ -287,7 +627,7 @@ import ContentResume from "../components/ContentResume.astro";
   #tab3:checked ~ .tab-header .tab-link:nth-child(3) {
     @apply border-b-2 border-b-primary;
   }
-  
+
   /* When tab4 is checked, show content4 and highlight its tab */
   #tab4:checked ~ * #content4 {
     @apply block opacity-100;
@@ -296,7 +636,7 @@ import ContentResume from "../components/ContentResume.astro";
   #tab4:checked ~ .tab-header .tab-link:nth-child(4) {
     @apply border-b-2 border-b-primary;
   }
-  
+
   /* When tab5 is checked, show content5 and highlight its tab */
   #tab5:checked ~ * #content5 {
     @apply block opacity-100;
@@ -327,6 +667,56 @@ import ContentResume from "../components/ContentResume.astro";
     scroll-behavior: smooth; /* Enable smooth scrolling */
     -webkit-overflow-scrolling: touch; /* For iOS devices */
   }
+
+  /* Mobile-specific styles */
+  @media (max-width: 767px) {
+    /* Styling for the mobile tab buttons */
+    .mobile-tab-btn {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .mobile-tab-btn.active-tab {
+      color: var(--accent-primary);
+      background-color: rgba(56, 189, 248, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Adjust main wrapper padding and border on mobile */
+    main {
+      padding: 0 !important;
+      border-radius: 0 !important;
+      border-width: 0 !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* Tab bar styling */
+    #mobile-tab-bar {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: flex !important;
+      position: fixed !important;
+      z-index: 9999 !important;
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      bottom: 38px !important;
+      margin-bottom: 0 !important;
+      pointer-events: auto !important;
+      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.8)) !important;
+      will-change: transform !important;
+    }
+
+    /* Add padding to tab content container */
+    .tab-content-container {
+      padding-bottom: 180px !important;
+    }
+
+    /* Adjust footer height and spacing */
+    .fixed.md\:absolute.bottom-0 {
+      height: 30px !important;
+      padding-top: 0.25rem !important;
+      padding-bottom: 0.25rem !important;
+    }
+  }
 </style>
 
 <style>
@@ -349,6 +739,93 @@ import ContentResume from "../components/ContentResume.astro";
       right: 4px;
       max-width: calc(100vw - 32px); /* Prevent overflow */
       font-size: 0.7rem;
+    }
+  }
+</style>
+
+<style>
+  /* Add to the mobile styles section */
+  /* Mobile tab bar specific styling */
+  .mobile-tab-btn {
+    padding: 0.625rem !important; /* Slightly larger touch targets */
+  }
+
+  /* Make sure mobile tab bar is visible with higher contrast */
+  #mobile-tab-bar .mobile-tab-btn {
+    color: var(--color-text-primary);
+  }
+
+  #mobile-tab-bar .mobile-tab-btn.active-tab {
+    color: var(--color-accent-primary);
+    background-color: rgba(var(--color-accent-primary-rgb), 0.4);
+    transform: translateY(-2px);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Make content section scrollable on mobile with proper padding */
+  @media (max-width: 767px) {
+    .tab-content-wrapper {
+      padding-bottom: 1rem;
+      scroll-padding-bottom: 1rem;
+    }
+
+    /* Style scrollbar to ensure it doesn't interfere with tab bar */
+    .tab-content-wrapper::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+  }
+</style>
+
+<style>
+  /* Adjusted spacing for mobile tab bar and footer */
+  @media (max-width: 767px) {
+    .credits-bar {
+      height: 32px !important;
+      font-size: 0.7rem !important;
+    }
+    
+    #mobile-tab-bar {
+      bottom: 38px !important;
+      margin-bottom: 0 !important;
+    }
+    
+    /* Improve active tab visibility */
+    .mobile-tab-btn.active-tab {
+      transform: translateY(-2px) !important;
+    }
+    
+    /* Add bottom safe area padding for iOS devices */
+    @supports (padding: max(0px)) {
+      .tab-content-container {
+        padding-bottom: max(
+          120px,
+          120px + env(safe-area-inset-bottom)
+        ) !important;
+      }
+      
+      #mobile-tab-bar {
+        bottom: max(38px, 38px + env(safe-area-inset-bottom) / 2) !important;
+      }
+      
+      .credits-bar {
+        padding-bottom: max(
+          0.25rem,
+          0.25rem + env(safe-area-inset-bottom)
+        ) !important;
+      }
+    }
+
+    /* Add padding to prevent tab bar from overlapping content */
+    #profile-section {
+      padding-bottom: 100px !important;
+    }
+    
+    /* Hide vim help completely on mobile */
+    #vim-help-toggle, #vim-help-panel {
+      display: none !important;
     }
   }
 </style>

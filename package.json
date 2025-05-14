@@ -12,6 +12,7 @@
         "@astrojs/mdx": "^4.2.6",
         "@astrojs/react": "^4.2.7",
         "@mdx-js/mdx": "^3.1.0",
+        "@vercel/analytics": "^1.5.0",
         "astro": "^5.4.2",
         "marked": "^15.0.11",
         "prism-react-renderer": "^2.3.1",
