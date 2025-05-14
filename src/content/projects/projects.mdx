@@ -14,64 +14,10 @@ Led the BSP development for Vicharak's Vaaman Single Board Computer (RK3399-base
 ## Custom ROM & Kernel Development
 Extensive work on custom ROM and kernel development for Xiaomi devices, including Redmi K20 Pro, Mi 11X, Mi 12X, and Poco F2/F3. Focused on optimizing performance and power management for Qualcomm Snapdragon platforms.
 
-```c
-/* Example of a kernel power management function */
-static int __maybe_unused xiaomi_suspend(struct device *dev)
-{
-    struct xiaomi_device *xdev = dev_get_drvdata(dev);
-    int ret;
-
-    /* Disable clock before suspending */
-    ret = clk_disable_unprepare(xdev->clk);
-    if (ret)
-        dev_err(dev, "Failed to disable clock during suspend: %d\n", ret);
-
-    /* Put the device into low power state */
-    ret = regulator_disable(xdev->vdd);
-    if (ret)
-        dev_err(dev, "Failed to disable regulator during suspend: %d\n", ret);
-
-    return ret;
-}
-```
-
 [View GitHub Projects](https://github.com/UtsavBalar1231)
 
 ## Linux BSP Development
 Freelance work on multiple projects involving BSP development, Linux kernel customization, and device driver integration for platforms like Qualcomm Snapdragon, Raspberry Pi, and Rockchip SoCs.
-
-Example device tree configuration for a custom board:
-
-```c
-/* Simplified device tree for RK3399 board */
-/ {
-    compatible = "vicharak,vaaman", "rockchip,rk3399";
-    
-    memory@0 {
-        device_type = "memory";
-        reg = <0x0 0x00000000 0x0 0x80000000>;
-    };
-
-    chosen {
-        stdout-path = "serial2:1500000n8";
-        bootargs = "earlycon=uart8250,mmio32,0xff1a0000 console=ttyS2,1500000n8 swiotlb=1 coherent_pool=1m";
-    };
-    
-    /* SoC configuration and peripherals */
-    soc {
-        uart2: serial@ff1a0000 {
-            compatible = "rockchip,rk3399-uart", "snps,dw-apb-uart";
-            reg = <0x0 0xff1a0000 0x0 0x100>;
-            interrupts = <101 4>;
-            clocks = <&cru 128>, <&cru 129>;
-            clock-names = "baudclk", "apb_pclk";
-            pinctrl-names = "default";
-            pinctrl-0 = <&uart2_xfer>;
-            status = "okay";
-        };
-    };
-}
-```
 
 ## Open Source Contributions
 Actively contributing to various open source projects in the Linux ecosystem, with a focus on improving hardware support for ARM-based platforms and optimizing kernel performance.

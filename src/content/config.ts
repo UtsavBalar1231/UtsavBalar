@@ -25,8 +25,34 @@ const projectsCollection = defineCollection({
   }),
 });
 
+// Define schema for quotes collection
+const quotesCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    date: z.date().optional(),
+    author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+  }),
+});
+
+// Define schema for book bits collection
+const bookBitsCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    date: z.date().optional(),
+    author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+  }),
+});
+
 // Export collections
 export const collections = {
   about: aboutCollection,
   projects: projectsCollection,
+  quotes: quotesCollection,
+  bookBits: bookBitsCollection,
 };
