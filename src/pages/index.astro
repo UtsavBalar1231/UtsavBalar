@@ -16,7 +16,7 @@ import ContentProjects from "../components/ContentProjects.astro";
   >
     <!-- Start: Left / upper card -->
     <div
-      		class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600"
+      class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600"
     >
       <Profile />
 
@@ -24,19 +24,19 @@ import ContentProjects from "../components/ContentProjects.astro";
     </div>
     <!-- End: Left / upper card -->
 
-    <!-- Start: Right / lower card (yes 4/5 instead of 3/5) -->
-    	<div class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col">
+    <!-- Start: Right / lower card -->
+    <div class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col">
       <!-- Start: Inner wrapper -->
-      <div
-        class="min-h-[50vh] md:min-h-full md:h-[90vh] flex flex-col"
-      >
+      <div class="min-h-[50vh] md:min-h-full md:h-[90vh] flex flex-col">
         <!-- Use hidden radio buttons to control the tabs -->
         <div class="tab-controls flex flex-col h-full overflow-hidden">
           <input type="radio" id="tab1" name="tabs" class="tab-radio" checked />
           <input type="radio" id="tab2" name="tabs" class="tab-radio" />
 
           <!-- Start: Tab bar (sticky at top) -->
-          <div class="tab-header flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full">
+          <div
+            class="tab-header flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full"
+          >
             <ContentLink contentId="tab1" contentName="profile.mdx" />
             <ContentLink contentId="tab2" contentName="projects.mdx" />
           </div>
@@ -84,23 +84,23 @@ import ContentProjects from "../components/ContentProjects.astro";
         class="text-primary hover:underline">Utsav Balar</a
       >
     </div>
-    
+
     <!-- Help Icon -->
-    <button 
-      id="vim-help-toggle" 
+    <button
+      id="vim-help-toggle"
       class="w-8 h-8 flex items-center justify-center rounded-full hover:-translate-y-0.5 transition-all duration-150 help-icon ml-2"
       title="Vim Keybindings Help (press ? key)"
     >
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        width="16" 
-        height="16" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        stroke-width="2" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
         class="text-primary"
       >
         <circle cx="12" cy="12" r="10"></circle>
@@ -109,67 +109,75 @@ import ContentProjects from "../components/ContentProjects.astro";
       </svg>
     </button>
   </div>
-  
+
   <!-- Vim Keybindings Help -->
-  <div id="vim-help-panel" class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden">
+  <div
+    id="vim-help-panel"
+    class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden"
+  >
     <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
     <ul class="text-xs space-y-1">
       <li><span class="text-primary">j/k</span> - Scroll down/up</li>
       <li><span class="text-primary">gg</span> - Scroll to top</li>
       <li><span class="text-primary">G</span> - Scroll to bottom</li>
-      <li><span class="text-primary">Ctrl+d/u</span> - Half page down/up</li>
+      <li>
+        <span class="text-primary">Ctrl+d/u</span> - Half page down/up
+      </li>
       <li><span class="text-primary">gt</span> - Next tab</li>
       <li><span class="text-primary">gT</span> - Previous tab</li>
       <li><span class="text-primary">?</span> - Toggle this help</li>
       <li><span class="text-primary">Esc</span> - Close this help</li>
     </ul>
-    <button id="vim-help-close" class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button>
+    <button
+      id="vim-help-close"
+      class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button
+    >
   </div>
 </Layout>
 
 <script>
   // Enhance smooth scrolling for tab transitions
-  document.addEventListener('DOMContentLoaded', () => {
-    const tabRadios = document.querySelectorAll('.tab-radio');
-    const tabContentContainer = document.querySelector('.tab-content-wrapper');
-    
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabRadios = document.querySelectorAll(".tab-radio");
+    const tabContentContainer = document.querySelector(".tab-content-wrapper");
+
     // Reset scroll position when switching tabs
-    tabRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
+    tabRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
         if (tabContentContainer) {
           // Smoothly scroll to top when switching tabs
           tabContentContainer.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       });
     });
-    
+
     // Setup Vim help panel toggle
-    const helpToggle = document.getElementById('vim-help-toggle');
-    const helpPanel = document.getElementById('vim-help-panel');
-    const helpClose = document.getElementById('vim-help-close');
-    
+    const helpToggle = document.getElementById("vim-help-toggle");
+    const helpPanel = document.getElementById("vim-help-panel");
+    const helpClose = document.getElementById("vim-help-close");
+
     if (helpToggle && helpPanel && helpClose) {
-      helpToggle.addEventListener('click', () => {
-        helpPanel.classList.toggle('hidden');
+      helpToggle.addEventListener("click", () => {
+        helpPanel.classList.toggle("hidden");
       });
-      
-      helpClose.addEventListener('click', () => {
-        helpPanel.classList.add('hidden');
+
+      helpClose.addEventListener("click", () => {
+        helpPanel.classList.add("hidden");
       });
-      
+
       // Also toggle help with ? key (Vim style)
-      document.addEventListener('keydown', (e) => {
-        if (e.key === '?') {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "?") {
           e.preventDefault();
-          helpPanel.classList.toggle('hidden');
+          helpPanel.classList.toggle("hidden");
         }
-        
+
         // Close with Escape key
-        if (e.key === 'Escape' && !helpPanel.classList.contains('hidden')) {
-          helpPanel.classList.add('hidden');
+        if (e.key === "Escape" && !helpPanel.classList.contains("hidden")) {
+          helpPanel.classList.add("hidden");
         }
       });
     }
@@ -218,7 +226,7 @@ import ContentProjects from "../components/ContentProjects.astro";
     scrollbar-width: none; /* Firefox */
     overscroll-behavior: none; /* Disable overscroll/bounce effect */
     scroll-behavior: smooth; /* Enable smooth scrolling */
-    
+
     /* Add scroll momentum and physics feel */
     -webkit-overflow-scrolling: touch; /* For iOS devices */
   }
@@ -226,7 +234,7 @@ import ContentProjects from "../components/ContentProjects.astro";
   .no-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
-  
+
   /* Handle all scrollable areas that aren't using the no-scrollbar class */
   [class*="overflow-"]:not(.no-scrollbar) {
     overscroll-behavior: none;
@@ -238,14 +246,16 @@ import ContentProjects from "../components/ContentProjects.astro";
 <style>
   .help-icon {
     opacity: 0.7;
-    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transition:
+      opacity 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
   }
-  
+
   .help-icon:hover {
     opacity: 1;
     color: var(--accent-primary);
   }
-  
+
   /* Responsive positioning for the help panel */
   @media (max-width: 768px) {
     #vim-help-panel {
