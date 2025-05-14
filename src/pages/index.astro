@@ -197,6 +197,11 @@ import ContentResume from "../components/ContentResume.astro";
 
       // Also toggle help with ? key (Vim style)
       document.addEventListener("keydown", (e) => {
+        // Skip if we're in an input or textarea
+        if (isEditableElement(e.target)) {
+          return;
+        }
+        
         if (e.key === "?") {
           e.preventDefault();
           helpPanel.classList.toggle("hidden");
@@ -207,6 +212,33 @@ import ContentResume from "../components/ContentResume.astro";
           helpPanel.classList.add("hidden");
         }
       });
+      
+      // Helper function to check if element is editable
+      function isEditableElement(el: any) {
+        if (!el) return false;
+        
+        const tagName = el.tagName.toLowerCase();
+        
+        // Check for input/textarea elements
+        if (['input', 'textarea', 'select'].includes(tagName)) {
+          return true;
+        }
+        
+        // Check for contenteditable elements
+        if (el.hasAttribute('contenteditable') && el.getAttribute('contenteditable') !== 'false') {
+          return true;
+        }
+        
+        // Check if inside a form element
+        if (el.closest('form')) {
+          return true;
+        }
+        
+        return false;
+      }
+      
+      // Log that Vim keybindings are active
+      console.log("Vim keybindings activated. Press '?' for help.");
     }
   });
 </script>

@@ -81,14 +81,18 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     />
 
     <!-- Google Material Symbols -->
-    <link 
-      rel="stylesheet" 
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" 
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200"
     />
-    <link 
-      rel="stylesheet" 
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" 
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200"
     />
+
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 
     <!-- Initialize Prism.js -->
     <script is:inline>
@@ -113,8 +117,8 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     <!-- End: Meta-Tags -->
 
     <!-- Start: DNS prefetch and preconnect -->
-    <link rel="preload" as="image" href="/img/default-avatar.svg" />
-    <link rel="preload" as="image" href="/img/logo.svg" />
+    <link rel="prefetch" href="/img/default-avatar.svg" />
+    <link rel="prefetch" href="/img/logo.svg" />
     <!-- End: DNS prefetch and preconnect -->
 
     <!-- Start: Theming and Favicons -->
@@ -196,38 +200,55 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
 
     <script>
       // Enhance smooth scrolling behavior with Vim keybindings
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener("DOMContentLoaded", () => {
         // Initialize Prism for any code blocks on the page
-        if (typeof Prism !== 'undefined') {
-          (Prism as any).highlightAll();
+        if (typeof Prism !== "undefined" && Prism.highlightAll) {
+          Prism.highlightAll();
         }
-        
+
         // Track last G key press time for double-key commands
         let lastGKeyPress = 0;
-        
+
         // Handle scrolling with arrow keys and Vim keybindings
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener("keydown", (e) => {
           // Skip if we're in an input or textarea
           if (isEditableElement(e.target as HTMLElement)) {
             return;
           }
-          
+
           // Standard navigation keys
-          if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', 'Space'].includes(e.key)) {
-            const scrollableElements = document.querySelectorAll('.no-scrollbar, [class*="overflow-"]');
-            
-            scrollableElements.forEach(el => {
-              if (isElementInViewport(el as HTMLElement) && isScrollable(el as HTMLElement)) {
+          if (
+            [
+              "ArrowDown",
+              "ArrowUp",
+              "PageDown",
+              "PageUp",
+              "Home",
+              "End",
+              "Space",
+            ].includes(e.key)
+          ) {
+            const scrollableElements = document.querySelectorAll(
+              '.no-scrollbar, [class*="overflow-"]',
+            );
+
+            scrollableElements.forEach((el) => {
+              if (
+                isElementInViewport(el as HTMLElement) &&
+                isScrollable(el as HTMLElement)
+              ) {
                 // Let browser handle the scrolling with smooth behavior
                 return;
               }
             });
           }
-          
+
           // Find the active scrollable element
-          const scrollableElements = Array.from(document.querySelectorAll('.no-scrollbar, [class*="overflow-"]')) as HTMLElement[];
+          const scrollableElements = Array.from(
+            document.querySelectorAll('.no-scrollbar, [class*="overflow-"]'),
+          ) as HTMLElement[];
           let activeElement: HTMLElement | null = null;
-          
+
           // Find the first scrollable element that's in viewport
           for (const el of scrollableElements) {
             if (isElementInViewport(el) && isScrollable(el)) {
@@ -235,84 +256,111 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
               break;
             }
           }
-          
+
           // If no element found, use the document for scrolling
           if (!activeElement) {
             activeElement = document.documentElement;
           }
-          
+
           const scrollAmount = 60; // pixels to scroll for j/k
-          
+
           // Vim keybindings
           switch (e.key.toLowerCase()) {
-            case 'j': // Scroll down
+            case "j": // Scroll down
               e.preventDefault();
-              activeElement.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+              activeElement.scrollBy({
+                top: scrollAmount,
+                behavior: "smooth",
+              });
               break;
-              
-            case 'k': // Scroll up
+
+            case "k": // Scroll up
               e.preventDefault();
-              activeElement.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+              activeElement.scrollBy({
+                top: -scrollAmount,
+                behavior: "smooth",
+              });
               break;
-              
-            case 'g': // For gg (top) command
-              if (e.timeStamp - lastGKeyPress < 500) { // If double-g pressed
+
+            case "g": // For gg (top) command
+              if (e.timeStamp - lastGKeyPress < 500) {
+                // If double-g pressed
                 e.preventDefault();
-                activeElement.scrollTo({ top: 0, behavior: 'smooth' });
+                activeElement.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              } else {
+                // Store timestamp for g key commands
+                lastGKeyPress = e.timeStamp;
+
+                // Add a small delay to check for t/T keypresses after g
+                setTimeout(() => {
+                  const currentTime = new Date().getTime();
+                  // If no other key was pressed within 300ms after g, reset the timestamp
+                  if (currentTime - lastGKeyPress >= 300) {
+                    lastGKeyPress = 0;
+                  }
+                }, 300);
               }
-              lastGKeyPress = e.timeStamp;
               break;
-              
-            case 'd': // For Ctrl+d (half page down)
+
+            case "d": // For Ctrl+d (half page down)
               if (e.ctrlKey) {
                 e.preventDefault();
-                activeElement.scrollBy({ 
-                  top: Math.floor(activeElement.clientHeight / 2), 
-                  behavior: 'smooth' 
+                activeElement.scrollBy({
+                  top: Math.floor(activeElement.clientHeight / 2),
+                  behavior: "smooth",
                 });
               }
               break;
-              
-            case 'u': // For Ctrl+u (half page up)
+
+            case "u": // For Ctrl+u (half page up)
               if (e.ctrlKey) {
                 e.preventDefault();
-                activeElement.scrollBy({ 
-                  top: -Math.floor(activeElement.clientHeight / 2), 
-                  behavior: 'smooth' 
+                activeElement.scrollBy({
+                  top: -Math.floor(activeElement.clientHeight / 2),
+                  behavior: "smooth",
                 });
               }
               break;
-              
-            case 't': // For gt (next tab)
+
+            case "t": // For gt (next tab)
               if (e.timeStamp - lastGKeyPress < 500) {
                 e.preventDefault();
                 navigateToNextTab();
+                // Reset the g key timestamp to prevent double triggers
+                lastGKeyPress = 0;
               }
               break;
-              
-            case 'T': // For gT (previous tab)
+
+            case "T": // For gT (previous tab)
               if (e.timeStamp - lastGKeyPress < 500) {
                 e.preventDefault();
                 navigateToPreviousTab();
+                // Reset the g key timestamp to prevent double triggers
+                lastGKeyPress = 0;
               }
               break;
           }
-          
+
           // G key for scrolling to bottom
-          if (e.key === 'G') {
+          if (e.key === "G") {
             e.preventDefault();
-            activeElement.scrollTo({ 
-              top: activeElement.scrollHeight, 
-              behavior: 'smooth' 
+            activeElement.scrollTo({
+              top: activeElement.scrollHeight,
+              behavior: "smooth",
             });
           }
         });
-        
+
         // Navigate to next tab
         function navigateToNextTab() {
-          const tabRadios = document.querySelectorAll('.tab-radio') as NodeListOf<HTMLInputElement>;
+          const tabRadios = document.querySelectorAll(
+            ".tab-radio",
+          ) as NodeListOf<HTMLInputElement>;
           if (tabRadios.length <= 1) return;
-          
+
           let currentIndex = -1;
           for (let i = 0; i < tabRadios.length; i++) {
             if (tabRadios[i].checked) {
@@ -320,17 +368,22 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
               break;
             }
           }
-          
+
           const nextIndex = (currentIndex + 1) % tabRadios.length;
           tabRadios[nextIndex].checked = true;
-          tabRadios[nextIndex].dispatchEvent(new Event('change'));
+          tabRadios[nextIndex].dispatchEvent(new Event("change"));
+
+          // Log for debugging
+          console.log(`Navigated to tab ${nextIndex + 1}`);
         }
-        
+
         // Navigate to previous tab
         function navigateToPreviousTab() {
-          const tabRadios = document.querySelectorAll('.tab-radio') as NodeListOf<HTMLInputElement>;
+          const tabRadios = document.querySelectorAll(
+            ".tab-radio",
+          ) as NodeListOf<HTMLInputElement>;
           if (tabRadios.length <= 1) return;
-          
+
           let currentIndex = -1;
           for (let i = 0; i < tabRadios.length; i++) {
             if (tabRadios[i].checked) {
@@ -338,10 +391,14 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
               break;
             }
           }
-          
-          const prevIndex = (currentIndex - 1 + tabRadios.length) % tabRadios.length;
+
+          const prevIndex =
+            (currentIndex - 1 + tabRadios.length) % tabRadios.length;
           tabRadios[prevIndex].checked = true;
-          tabRadios[prevIndex].dispatchEvent(new Event('change'));
+          tabRadios[prevIndex].dispatchEvent(new Event("change"));
+
+          // Log for debugging
+          console.log(`Navigated to tab ${prevIndex + 1}`);
         }
 
         // Helper function to check if element is in viewport
@@ -350,8 +407,10 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
           return (
             rect.top >= 0 &&
             rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            rect.bottom <=
+              (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <=
+              (window.innerWidth || document.documentElement.clientWidth)
           );
         }
 
@@ -363,24 +422,27 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
         // Helper function to check if element is editable
         function isEditableElement(el: HTMLElement): boolean {
           if (!el) return false;
-          
+
           const tagName = el.tagName.toLowerCase();
-          
+
           // Check for input/textarea elements
-          if (['input', 'textarea', 'select'].includes(tagName)) {
+          if (["input", "textarea", "select"].includes(tagName)) {
             return true;
           }
-          
+
           // Check for contenteditable elements
-          if (el.hasAttribute('contenteditable') && el.getAttribute('contenteditable') !== 'false') {
+          if (
+            el.hasAttribute("contenteditable") &&
+            el.getAttribute("contenteditable") !== "false"
+          ) {
             return true;
           }
-          
+
           // Check if inside a form element
-          if (el.closest('form')) {
+          if (el.closest("form")) {
             return true;
           }
-          
+
           return false;
         }
       });
@@ -390,11 +452,12 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
 
 <style is:global>
   /* Prevent overscroll/bounce effect on the whole document */
-  html, body {
+  html,
+  body {
     overscroll-behavior: none;
     scroll-behavior: smooth; /* Enable smooth scrolling */
   }
-  
+
   /* Font face declarations */
   @font-face {
     font-family: "AdwaitaMono";
@@ -403,7 +466,7 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     font-style: normal;
     font-display: swap;
   }
-  
+
   @font-face {
     font-family: "AdwaitaMono";
     src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf");
