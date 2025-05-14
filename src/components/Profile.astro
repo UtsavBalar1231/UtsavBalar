@@ -1,13 +1,6 @@
 ---
 import GitHubAvatar from "./GitHubAvatar.astro";
-
-const profile = {
-  name: "Utsav Balar",
-  title: "Embedded Linux & BSP Engineer",
-  location: "Gujarat, India",
-  description:
-    "Passionate Linux kernel and BSP engineer with expertise in embedded systems, custom ROM development, and FOSS contributions. Currently pursuing a Master's in Computer Science while working as a freelance Linux Kernel Developer.",
-};
+import { profile } from "../data/profile";
 ---
 
 <div
@@ -17,7 +10,7 @@ const profile = {
     <GitHubAvatar
       width={96}
       height={96}
-      class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-2 border-primary text-text-primary mx-auto md:mx-0"
+      class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary text-text-primary mx-auto md:mx-0"
     />
 
     <div>

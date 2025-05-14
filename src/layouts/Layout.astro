@@ -1,64 +1,10 @@
 ---
 import "../styles/global.scss";
 import ThemeManager from "../components/ThemeManager.astro";
-
-// Base domain URL without trailing slash
-const domainBaseURL = "https://utsavbalar.in";
-const ogImageUrl = "https://utsavbalar.in/img/meta.png";
-
-// Website publisher & region
-const authorPublisher = "Utsav Balar";
-const geoRegion = "IN-GJ";
-
-// SEO title, description and keywords
-const seoTitle = "Utsav Balar | Embedded Linux & BSP Engineer";
-const seoDescription =
-  "Embedded Linux and BSP Engineer with expertise in Linux kernel development, device drivers, and custom ROM development for various hardware platforms.";
-const seoKeywords =
-  "Utsav Balar, Embedded Linux, BSP Engineer, Linux Kernel, Device Drivers, Custom ROM, Vicharak, Rockchip, Qualcomm";
-
-// Twitter card data
-const twitter = {
-  title: seoTitle,
-  description: seoDescription,
-  image: ogImageUrl,
-  site: "https://x.com/UtsavTheCunt",
-  creator: "UtsavTheCunt",
-};
-
-// Open graph data
-const openGraph = {
-  title: seoTitle,
-  description: seoDescription,
-  url: domainBaseURL,
-  image: ogImageUrl,
-  type: "website",
-  locale: "en_US",
-  siteName: "Utsav Balar",
-};
-
-// Dublin core
-const dublinCore = {
-  title: "Utsav Balar",
-  creator: authorPublisher,
-  publisher: authorPublisher,
-  rights: authorPublisher,
-  description: seoDescription,
-  language: "en",
-  type: "Software",
-  format: "text/html",
-};
-
-// Create an inline SVG favicon with theme-aware colors
-const inlineFavicon = `
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="transparent" />
-  <text x="16" y="21" fill="currentColor" font-family="AdwaitaMono, monospace" font-size="14" font-weight="bold" text-anchor="middle">UB</text>
-</svg>
-`;
+import * as siteMetadata from "../data/siteMetadata";
 
 // Convert SVG to data URL for use as favicon
-const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).toString("base64")}`;
+const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(siteMetadata.inlineFavicon).toString("base64")}`;
 ---
 
 <!doctype html>
@@ -134,47 +80,47 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={Astro.url} />
 
-    <meta name="geo.region" content={geoRegion} />
-    <meta name="author" content={authorPublisher} />
-    <meta name="publisher" content={authorPublisher} />
-    <meta name="copyright" content={authorPublisher} />
+    <meta name="geo.region" content={siteMetadata.geoRegion} />
+    <meta name="author" content={siteMetadata.authorPublisher} />
+    <meta name="publisher" content={siteMetadata.authorPublisher} />
+    <meta name="copyright" content={siteMetadata.authorPublisher} />
     <!-- End: Misc meta tags -->
 
     <!-- Start: Facebook open graph -->
-    <meta property="og:title" content={openGraph.title} />
-    <meta property="og:description" content={openGraph.description} />
-    <meta property="og:url" content={openGraph.url} />
-    <meta property="og:type" content={openGraph.type} />
-    <meta property="og:image" content={openGraph.image} />
-    <meta property="og:locale" content={openGraph.locale} />
-    <meta property="og:site_name" content={openGraph.siteName} />
+    <meta property="og:title" content={siteMetadata.openGraph.title} />
+    <meta property="og:description" content={siteMetadata.openGraph.description} />
+    <meta property="og:url" content={siteMetadata.openGraph.url} />
+    <meta property="og:type" content={siteMetadata.openGraph.type} />
+    <meta property="og:image" content={siteMetadata.openGraph.image} />
+    <meta property="og:locale" content={siteMetadata.openGraph.locale} />
+    <meta property="og:site_name" content={siteMetadata.openGraph.siteName} />
     <!-- End: Facebook open graph -->
 
     <!-- Start: Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={twitter.title} />
-    <meta name="twitter:description" content={twitter.description} />
-    <meta name="twitter:image" content={twitter.image} />
-    <meta name="twitter:site" content={twitter.site} />
-    <meta name="twitter:creator" content={twitter.creator} />
+    <meta name="twitter:title" content={siteMetadata.twitter.title} />
+    <meta name="twitter:description" content={siteMetadata.twitter.description} />
+    <meta name="twitter:image" content={siteMetadata.twitter.image} />
+    <meta name="twitter:site" content={siteMetadata.twitter.site} />
+    <meta name="twitter:creator" content={siteMetadata.twitter.creator} />
     <!-- End: Twitter card -->
 
     <!-- Start: Dublin Core (DC) -->
-    <meta name="DC.Title" content={dublinCore.title} />
-    <meta name="DC.Creator" content={dublinCore.creator} />
-    <meta name="DC.Rights" content={dublinCore.rights} />
-    <meta name="DC.Publisher" content={dublinCore.publisher} />
-    <meta name="DC.Description" content={dublinCore.description} />
-    <meta name="DC.Language" content={dublinCore.language} />
-    <meta name="DC.Type" content={dublinCore.type} />
-    <meta name="DC.Format" content={dublinCore.format} />
+    <meta name="DC.Title" content={siteMetadata.dublinCore.title} />
+    <meta name="DC.Creator" content={siteMetadata.dublinCore.creator} />
+    <meta name="DC.Rights" content={siteMetadata.dublinCore.rights} />
+    <meta name="DC.Publisher" content={siteMetadata.dublinCore.publisher} />
+    <meta name="DC.Description" content={siteMetadata.dublinCore.description} />
+    <meta name="DC.Language" content={siteMetadata.dublinCore.language} />
+    <meta name="DC.Type" content={siteMetadata.dublinCore.type} />
+    <meta name="DC.Format" content={siteMetadata.dublinCore.format} />
     <!-- End: Dublin Core (DC) -->
 
     <!-- Title & Description -->
-    <title>{seoTitle}</title>
-    <meta name="description" content={seoDescription} />
-    <meta name="abstract" content={seoDescription} />
-    <meta name="keywords" content={seoKeywords} />
+    <title>{siteMetadata.seoTitle}</title>
+    <meta name="description" content={siteMetadata.seoDescription} />
+    <meta name="abstract" content={siteMetadata.seoDescription} />
+    <meta name="keywords" content={siteMetadata.seoKeywords} />
 
     <!-- Dynamic favicon styles -->
     <style is:inline>
@@ -202,9 +148,9 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(inlineFavicon).t
       // Enhance smooth scrolling behavior with Vim keybindings
       document.addEventListener("DOMContentLoaded", () => {
         // Initialize Prism for any code blocks on the page
-        if (typeof Prism !== "undefined" && Prism.highlightAll) {
-          Prism.highlightAll();
-        }
+if (typeof Prism !== "undefined" && typeof Prism.highlightAll === 'function') {
+  Prism.highlightAll();
+}
 
         // Track last G key press time for double-key commands
         let lastGKeyPress = 0;

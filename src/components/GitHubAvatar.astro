@@ -43,7 +43,7 @@ if (useGithub) {
   }
 } else {
   // Get a random cat image by default
-  avatarUrl = `https://cataas.com/cat?width=${width}&height=${height}&s=${randomSeed}`;
+  	avatarUrl = `https://cataas.com/cat/funny?width=${width}&height=${height}&s=${randomSeed}`;
   name = "Random Cat";
 }
 
@@ -64,20 +64,41 @@ const defaultAvatar = "/img/default-avatar.svg";
 
 {
   avatarUrl ? (
-    <img
-      src={avatarUrl}
-      alt={name ? `${name}'s avatar` : "Random cat image"}
-      title={name || "Random cat image"}
-      width={width}
-      height={height}
-      class={className}
-      loading="eager"
-      id="profile-avatar"
-    />
+    <div class={`avatar-container ${className}`}>
+      <img
+        src={avatarUrl}
+        alt={name ? `${name}'s avatar` : "Random cat image"}
+        title={name || "Random cat image"}
+        width={width}
+        height={height}
+        loading="eager"
+        id="profile-avatar"
+        class="w-full h-full object-cover"
+      />
+    </div>
   ) : (
     <ThemeAvatar width={width} height={height} class={className} />
   )
 }
+
+<style>
+  .avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .avatar-container img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+  }
+</style>
 
 <script>
   // Add function to refresh cat image that will be called by the refresh button
@@ -85,8 +106,10 @@ const defaultAvatar = "/img/default-avatar.svg";
     const avatarEl = document.getElementById('profile-avatar') as HTMLImageElement;
     if (avatarEl) {
       const random = Math.floor(Math.random() * 1000);
-      const width = avatarEl.getAttribute('width');
-      const height = avatarEl.getAttribute('height');
+      // Get dimensions from parent container if available
+      const container = avatarEl.closest('.avatar-container');
+      const width = container ? container.clientWidth : avatarEl.getAttribute('width');
+      const height = container ? container.clientHeight : avatarEl.getAttribute('height');
       avatarEl.src = `https://cataas.com/cat?width=${width}&height=${height}&s=${random}`;
     }
   };
