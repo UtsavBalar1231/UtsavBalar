@@ -17,7 +17,7 @@ import Analytics from "@vercel/analytics/astro";
 <Layout>
   <!-- Start: Main Wrapper -->
   <main
-    class="flex flex-col md:flex-row w-full max-w-full md:max-w-7xl border border-gray-600 rounded-2xl overflow-hidden shadow-2xl relative bg-black mb-12 md:mb-4"
+    class="flex flex-col md:flex-row w-full max-w-full md:max-w-7xl border border-gray-600 rounded-2xl overflow-hidden relative bg-black mb-12 md:mb-4"
   >
     <!-- Start: Left / upper card - Mobile: Home Screen -->
     <div
@@ -107,7 +107,7 @@ import Analytics from "@vercel/analytics/astro";
     class="md:hidden fixed bottom-12 left-0 right-0 z-9999 flex justify-center pointer-events-auto"
   >
     <div
-      class="bg-black border border-gray-600 rounded-full shadow-xl flex justify-between px-2"
+      class="bg-black border border-gray-600 rounded-full flex justify-between px-2"
     >
       <label
         id="home-btn"
@@ -293,7 +293,7 @@ import Analytics from "@vercel/analytics/astro";
 <!-- Vim Keybindings Help -->
 <div
   id="vim-help-panel"
-  class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg shadow-lg text-sm z-20 hidden"
+  class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg text-sm z-20 hidden"
 >
   <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
   <ul class="text-xs space-y-1">
@@ -701,7 +701,6 @@ import Analytics from "@vercel/analytics/astro";
       bottom: 38px !important;
       margin-bottom: 0 !important;
       pointer-events: auto !important;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.8)) !important;
       will-change: transform !important;
     }
 
@@ -759,9 +758,6 @@ import Analytics from "@vercel/analytics/astro";
     color: var(--color-accent-primary);
     background-color: rgba(var(--color-accent-primary-rgb), 0.4);
     transform: translateY(-2px);
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 
   /* Make content section scrollable on mobile with proper padding */
