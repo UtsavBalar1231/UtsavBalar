@@ -14,6 +14,23 @@ module.exports = {
 				'gray-800': 'var(--bg-secondary)',
 				'gray-400': 'var(--text-secondary)',
 				'gray-100': 'var(--text-primary)',
+				// Extended colors
+				error: 'var(--error)',
+				warning: 'var(--warning)',
+				success: 'var(--success)',
+				info: 'var(--info)',
+				// Neutral shades
+				'neutral-50': 'var(--color-neutral-50)',
+				'neutral-100': 'var(--color-neutral-100)',
+				'neutral-200': 'var(--color-neutral-200)',
+				'neutral-300': 'var(--color-neutral-300)',
+				'neutral-400': 'var(--color-neutral-400)',
+				'neutral-500': 'var(--color-neutral-500)',
+				'neutral-600': 'var(--color-neutral-600)',
+				'neutral-700': 'var(--color-neutral-700)',
+				'neutral-800': 'var(--color-neutral-800)',
+				'neutral-900': 'var(--color-neutral-900)',
+				'neutral-950': 'var(--color-neutral-950)',
 			},
 			fontFamily: {
 				'mono': ['AdwaitaMono', 'monospace'],

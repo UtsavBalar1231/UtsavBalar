@@ -14,6 +14,25 @@
   --color-border: #4b5563;
   --color-border-rgb: 75, 85, 99;
 
+  // Extended color palette
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-success: #10b981;
+  --color-info: #06b6d4;
+  
+  // Neutral shades
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #18181b;
+  --color-neutral-950: #09090b;
+
   // Functional color mapping
   --bg-primary: var(--color-bg-primary);
   --bg-secondary: var(--color-bg-secondary);
@@ -23,6 +42,15 @@
   --accent-secondary: var(--color-accent-secondary);
   --border-color: var(--color-border);
   --border-color-rgb: var(--color-border-rgb);
+  
+  // Functional mapping for extended colors
+  --error: var(--color-error);
+  --warning: var(--color-warning);
+  --success: var(--color-success);
+  --info: var(--color-info);
+  
+  // Theme dots colors
+  --theme-dot-default: var(--color-accent-primary);
 }
 
 // Theme Definitions
@@ -40,6 +68,15 @@
   --color-accent-secondary: #98971a;
   --color-border: #504945;
   --color-border-rgb: 80, 73, 69;
+  
+  // Extended colors
+  --color-error: #fb4934;
+  --color-warning: #fe8019;
+  --color-success: #b8bb26;
+  --color-info: #83a598;
+  
+  // Theme dot color
+  --theme-dot-gruvbox-dark-hard: var(--color-accent-primary);
 }
 
 // Gruvbox Light
@@ -52,6 +89,15 @@
   --color-accent-secondary: #79740e;
   --color-border: #d5c4a1;
   --color-border-rgb: 213, 196, 161;
+  
+  // Extended colors
+  --color-error: #9d0006;
+  --color-warning: #af3a03;
+  --color-success: #79740e;
+  --color-info: #076678;
+  
+  // Theme dot color
+  --theme-dot-gruvbox-light-hard: var(--color-accent-primary);
 }
 
 // Ayu Dark
@@ -64,6 +110,15 @@
   --color-accent-secondary: #ff8f40;
   --color-border: #3e4b59;
   --color-border-rgb: 62, 75, 89;
+  
+  // Extended colors
+  --color-error: #ff3333;
+  --color-warning: #ff8f40;
+  --color-success: #c2d94c;
+  --color-info: #59c2ff;
+  
+  // Theme dot color
+  --theme-dot-ayu-dark: var(--color-accent-primary);
 }
 
 // Catppuccin Mocha
@@ -76,6 +131,15 @@
   --color-accent-secondary: #cba6f7;
   --color-border: #6e6c7e;
   --color-border-rgb: 110, 108, 126;
+  
+  // Extended colors
+  --color-error: #f38ba8;
+  --color-warning: #fab387;
+  --color-success: #a6e3a1;
+  --color-info: #89b4fa;
+  
+  // Theme dot color
+  --theme-dot-catppuccin: var(--color-accent-primary);
 }
 
 // Catppuccin Frappé
@@ -88,6 +152,15 @@
   --color-accent-secondary: #ca9ee6;
   --color-border: #737994;
   --color-border-rgb: 115, 121, 148;
+  
+  // Extended colors
+  --color-error: #e78284;
+  --color-warning: #ef9f76;
+  --color-success: #a6d189;
+  --color-info: #8caaee;
+  
+  // Theme dot color
+  --theme-dot-catppuccin-frappe: var(--color-accent-primary);
 }
 
 // Catppuccin Latte
@@ -100,6 +173,15 @@
   --color-accent-secondary: #d20f39;
   --color-border: #ccd0da;
   --color-border-rgb: 204, 208, 218;
+  
+  // Extended colors
+  --color-error: #d20f39;
+  --color-warning: #df8e1d;
+  --color-success: #40a02b;
+  --color-info: #1e66f5;
+  
+  // Theme dot color
+  --theme-dot-catppuccin-latte: var(--color-accent-primary);
 }
 
 // Catppuccin Macchiato
@@ -112,6 +194,15 @@
   --color-accent-secondary: #c6a0f6;
   --color-border: #6e738d;
   --color-border-rgb: 110, 115, 141;
+  
+  // Extended colors
+  --color-error: #ed8796;
+  --color-warning: #f5a97f;
+  --color-success: #a6da95;
+  --color-info: #8aadf4;
+  
+  // Theme dot color
+  --theme-dot-catppuccin-macchiato: var(--color-accent-primary);
 }
 
 // Dracula
@@ -124,6 +215,15 @@
   --color-accent-secondary: #bd93f9;
   --color-border: #44475a;
   --color-border-rgb: 68, 71, 90;
+  
+  // Extended colors
+  --color-error: #ff5555;
+  --color-warning: #ffb86c;
+  --color-success: #50fa7b;
+  --color-info: #8be9fd;
+  
+  // Theme dot color
+  --theme-dot-dracula: var(--color-accent-primary);
 }
 
 // Everforest Dark
@@ -136,6 +236,15 @@
   --color-accent-secondary: #dbbc7f;
   --color-border: #4f5b58;
   --color-border-rgb: 79, 91, 88;
+  
+  // Extended colors
+  --color-error: #e67e80;
+  --color-warning: #dbbc7f;
+  --color-success: #a7c080;
+  --color-info: #7fbbb3;
+  
+  // Theme dot color
+  --theme-dot-everforest-dark: var(--color-accent-primary);
 }
 
 // Everforest Light
@@ -148,6 +257,15 @@
   --color-accent-secondary: #e69875;
   --color-border: #d4d1ab;
   --color-border-rgb: 212, 209, 171;
+  
+  // Extended colors
+  --color-error: #f85552;
+  --color-warning: #dfa000;
+  --color-success: #8da101;
+  --color-info: #3a94c5;
+  
+  // Theme dot color
+  --theme-dot-everforest-light: var(--color-accent-primary);
 }
 
 // Kanagawa Dragon
@@ -160,6 +278,15 @@
   --color-accent-secondary: #ffa066;
   --color-border: #43434f;
   --color-border-rgb: 67, 67, 79;
+  
+  // Extended colors
+  --color-error: #ff5d62;
+  --color-warning: #ffa066;
+  --color-success: #98bb6c;
+  --color-info: #7e9cd8;
+  
+  // Theme dot color
+  --theme-dot-kanagawa-dragon: var(--color-accent-primary);
 }
 
 // Material Theme Darker
@@ -172,6 +299,15 @@
   --color-accent-secondary: #f78c6c;
   --color-border: #414141;
   --color-border-rgb: 65, 65, 65;
+  
+  // Extended colors
+  --color-error: #ff5370;
+  --color-warning: #f78c6c;
+  --color-success: #c3e88d;
+  --color-info: #82aaff;
+  
+  // Theme dot color
+  --theme-dot-material-theme-darker: var(--color-accent-primary);
 }
 
 // Nord
@@ -184,6 +320,15 @@
   --color-accent-secondary: #81a1c1;
   --color-border: #4c566a;
   --color-border-rgb: 76, 86, 106;
+  
+  // Extended colors
+  --color-error: #bf616a;
+  --color-warning: #ebcb8b;
+  --color-success: #a3be8c;
+  --color-info: #88c0d0;
+  
+  // Theme dot color
+  --theme-dot-nord: var(--color-accent-primary);
 }
 
 // OneDark Pro
@@ -196,6 +341,15 @@
   --color-accent-secondary: #c678dd;
   --color-border: #3e4451;
   --color-border-rgb: 62, 68, 81;
+  
+  // Extended colors
+  --color-error: #e06c75;
+  --color-warning: #e5c07b;
+  --color-success: #98c379;
+  --color-info: #61afef;
+  
+  // Theme dot color
+  --theme-dot-one-dark-pro: var(--color-accent-primary);
 }
 
 // Rosé Pine
@@ -208,6 +362,15 @@
   --color-accent-secondary: #f6c177;
   --color-border: #3a3458;
   --color-border-rgb: 58, 52, 88;
+  
+  // Extended colors
+  --color-error: #eb6f92;
+  --color-warning: #f6c177;
+  --color-success: #9ccfd8;
+  --color-info: #c4a7e7;
+  
+  // Theme dot color
+  --theme-dot-rose-pine: var(--color-accent-primary);
 }
 
 // Tokyo Night
@@ -220,4 +383,13 @@
   --color-accent-secondary: #bb9af7;
   --color-border: #414868;
   --color-border-rgb: 65, 72, 104;
+  
+  // Extended colors
+  --color-error: #f7768e;
+  --color-warning: #ff9e64;
+  --color-success: #9ece6a;
+  --color-info: #7dcfff;
+  
+  // Theme dot color
+  --theme-dot-tokyo-night: var(--color-accent-primary);
 } 

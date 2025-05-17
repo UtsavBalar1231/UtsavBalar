@@ -137,69 +137,69 @@ html {
 
 // Style theme dots with theme colors
 .theme-dot-default {
-  background-color: #3b82f6;
+  background-color: var(--theme-dot-default);
 }
 
 .theme-dot-gruvbox-dark-hard {
-  background-color: #b8bb26;
+  background-color: var(--theme-dot-gruvbox-dark-hard);
 }
 
 .theme-dot-gruvbox-light-hard {
-  background-color: #b57614;
+  background-color: var(--theme-dot-gruvbox-light-hard);
 }
 
 .theme-dot-ayu-dark {
-  background-color: #ffb454;
+  background-color: var(--theme-dot-ayu-dark);
 }
 
 .theme-dot-catppuccin {
-  background-color: #f5c2e7;
+  background-color: var(--theme-dot-catppuccin);
 }
 
 .theme-dot-catppuccin-frappe {
-  background-color: #f4b8e4;
+  background-color: var(--theme-dot-catppuccin-frappe);
 }
 
 .theme-dot-catppuccin-latte {
-  background-color: #8839ef;
+  background-color: var(--theme-dot-catppuccin-latte);
 }
 
 .theme-dot-catppuccin-macchiato {
-  background-color: #f5bde6;
+  background-color: var(--theme-dot-catppuccin-macchiato);
 }
 
 .theme-dot-dracula {
-  background-color: #ff79c6;
+  background-color: var(--theme-dot-dracula);
 }
 
 .theme-dot-everforest-dark {
-  background-color: #e67e80;
+  background-color: var(--theme-dot-everforest-dark);
 }
 
 .theme-dot-everforest-light {
-  background-color: #d65d0e;
+  background-color: var(--theme-dot-everforest-light);
 }
 
 .theme-dot-kanagawa-dragon {
-  background-color: #ff5d62;
+  background-color: var(--theme-dot-kanagawa-dragon);
 }
 
 .theme-dot-material-theme-darker {
-  background-color: #c792ea;
+  background-color: var(--theme-dot-material-theme-darker);
 }
 
 .theme-dot-nord {
-  background-color: #88c0d0;
+  background-color: var(--theme-dot-nord);
 }
 
 .theme-dot-one-dark-pro {
-  background-color: #61afef;
+  background-color: var(--theme-dot-one-dark-pro);
 }
 
 .theme-dot-rose-pine {
-  background-color: #ebbcba;
+  background-color: var(--theme-dot-rose-pine);
 }
 
 .theme-dot-tokyo-night {
-  background-color: #7aa2f7;
+  background-color: var(--theme-dot-tokyo-night);
 }
