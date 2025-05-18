@@ -17,7 +17,11 @@ export default defineConfig({
     tailwind(),
     sitemap(),
     mdx({
-      syntaxHighlight: "prism",
+      syntaxHighlight: "shiki",
+      shikiConfig: {
+        theme: "one-dark-pro",
+        wrap: true,
+      },
     }),
     compress(),
   ],

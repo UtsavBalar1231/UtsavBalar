@@ -1,8 +1,8 @@
 ---
 // MDXFile.astro - Component for importing and rendering .mdx files inline
-import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { components as customComponents } from './MDXComponents.astro';
 
 interface Props {
   filePath: string; // Path to the .mdx file relative to the src directory
@@ -31,7 +31,7 @@ try {
 {
   Content ? (
     <div class={`mdx-file ${className}`}>
-      <Content.default />
+      <Content.default components={customComponents} />
     </div>
   ) : (
     <div class="mdx-error">
@@ -44,6 +44,62 @@ try {
   .mdx-file {
     color: var(--text-primary);
     line-height: 1.6;
+  }
+
+  .mdx-file :global(h1) {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--accent-primary);
+  }
+
+  .mdx-file :global(h2) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+  }
+
+  .mdx-file :global(h3) {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-secondary);
+  }
+
+  .mdx-file :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .mdx-file :global(a) {
+    color: var(--accent-primary);
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .mdx-file :global(a:hover) {
+    color: var(--accent-secondary);
+  }
+
+  .mdx-file :global(pre) {
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .mdx-file :global(.astro-code) {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-family: "AdwaitaMono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    background-color: var(--bg-secondary) !important;
   }
 
   .mdx-error {

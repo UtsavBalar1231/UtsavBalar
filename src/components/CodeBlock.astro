@@ -1,0 +1,231 @@
+---
+// CodeBlock.astro - Enhanced code block component for Astro
+
+interface Props {
+  code: string;
+  lang: string;
+  title?: string;
+  showLineNumbers?: boolean;
+}
+
+const { code, lang, title, showLineNumbers = true } = Astro.props;
+
+// Get readable language name for display
+const langMap: Record<string, string> = {
+  js: "JavaScript",
+  ts: "TypeScript",
+  jsx: "React JSX",
+  tsx: "React TSX",
+  html: "HTML",
+  css: "CSS",
+  scss: "SCSS",
+  json: "JSON",
+  md: "Markdown",
+  mdx: "MDX",
+  bash: "Bash",
+  sh: "Shell",
+  rust: "Rust",
+  c: "C",
+  cpp: "C++",
+  py: "Python",
+  rb: "Ruby",
+  go: "Go",
+  java: "Java",
+  php: "PHP",
+  swift: "Swift",
+  kotlin: "Kotlin",
+};
+
+const displayLang = langMap[lang] || lang;
+---
+
+<div class="code-block-wrapper">
+  {
+    title && (
+      <div class="code-title">
+        {title}
+      </div>
+    )
+  }
+  <div class="code-header">
+    <span class="code-language">{displayLang}</span>
+    <button class="copy-button" aria-label="Copy code to clipboard">
+      <span class="copy-icon">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </span>
+      <span class="copy-text">Copy</span>
+    </button>
+  </div>
+  <div class:list={["code-container", { "line-numbers": showLineNumbers }]}>
+    <pre class={`language-${lang}`}><code class={`language-${lang}`} set:html={code} /></pre>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButtons = document.querySelectorAll(".copy-button");
+    
+    copyButtons.forEach(button => {
+      button.addEventListener("click", async () => {
+        const codeBlock = button.closest(".code-block-wrapper");
+        const codeContainer = codeBlock?.querySelector("pre code");
+        const copyText = button.querySelector(".copy-text");
+        const copyIcon = button.querySelector(".copy-icon");
+        
+        if (codeContainer) {
+          try {
+            // Get text without preserving HTML
+            const codeToCopy = codeContainer.textContent || "";
+            
+            await navigator.clipboard.writeText(codeToCopy);
+            
+            // Show copied indicator
+            if (copyText) copyText.textContent = "Copied!";
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              if (copyText) copyText.textContent = "Copy";
+            }, 2000);
+          } catch (err) {
+            console.error("Failed to copy code:", err);
+            if (copyText) copyText.textContent = "Failed";
+            
+            setTimeout(() => {
+              if (copyText) copyText.textContent = "Copy";
+            }, 2000);
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .code-block-wrapper {
+    position: relative;
+    margin: 1.5rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .code-title {
+    padding: 0.75rem 1rem;
+    background-color: rgba(var(--border-color-rgb), 0.3);
+    color: var(--text-secondary);
+    font-family: "AdwaitaMono", monospace;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: rgba(var(--border-color-rgb), 0.15);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .code-language {
+    font-size: 0.75rem;
+    font-family: "AdwaitaMono", monospace;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .copy-button {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .copy-button:hover {
+    color: var(--text-primary);
+    background-color: rgba(var(--border-color-rgb), 0.3);
+  }
+
+  .copy-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .code-container {
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .code-container pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: "AdwaitaMono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .code-container pre code {
+    font-family: "AdwaitaMono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  /* Line numbers */
+  .line-numbers pre {
+    counter-reset: line;
+    padding-left: 3.5rem;
+  }
+
+  .line-numbers pre code .line {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+  }
+
+  .line-numbers pre code .line::before {
+    counter-increment: line;
+    content: counter(line);
+    position: absolute;
+    left: -2.5rem;
+    color: var(--text-secondary);
+    opacity: 0.5;
+    text-align: right;
+    width: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .copy-text {
+      display: none;
+    }
+
+    .copy-button svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+</style> 
