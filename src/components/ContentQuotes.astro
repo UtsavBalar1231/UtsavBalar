@@ -1,5 +1,8 @@
 ---
-import { quotes } from '../data/quotes.js';
+import { getMdxQuotes } from '../data/mdxQuotesParser';
+
+// Fetch quotes from MDX using our parser
+const quotes = await getMdxQuotes();
 ---
 
 <div class="quotes-container">
