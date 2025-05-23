@@ -1,5 +1,5 @@
 // Minimal styles for collapsible details/summary elements
-@import './theme.scss';
+@use 'theme';
 
 details {
   border: 1px solid var(--border-color);

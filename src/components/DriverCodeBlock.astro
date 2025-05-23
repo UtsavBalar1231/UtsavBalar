@@ -1,0 +1,42 @@
+---
+/**
+ * DriverCodeBlock Component - For displaying driver code with syntax highlighting
+ * Specialized for kernel driver code examples
+ */
+
+interface Props {
+  language?: string;
+  title?: string;
+  showLineNumbers?: boolean;
+  highlightLines?: string; // Format: "1,4-6,10"
+}
+
+const { 
+  language = "c", 
+  title, 
+  showLineNumbers = true,
+  highlightLines = ""
+} = Astro.props;
+---
+
+<div class="driver-code-container my-6 rounded-md overflow-hidden border border-[var(--code-border)] bg-[var(--code-bg)]">
+  {title && (
+    <div class="code-title border-b border-[var(--code-border)] px-4 py-2 text-sm font-mono font-medium text-[var(--code-title)]">
+      {title}
+    </div>
+  )}
+  <div class="code-content p-4 overflow-x-auto">
+    <pre class={`language-${language}`} data-line={highlightLines}><slot /></pre>
+  </div>
+</div>
+
+<style>
+  .driver-code-container {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .code-content pre {
+    margin: 0;
+    padding: 0;
+  }
+</style> 

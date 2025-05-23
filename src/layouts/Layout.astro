@@ -4,6 +4,14 @@ import "../styles/details.scss";
 import ThemeManager from "../components/ThemeManager.astro";
 import * as siteMetadata from "../data/siteMetadata";
 
+// Props for title and description
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteMetadata.seoTitle, description = siteMetadata.seoDescription } = Astro.props;
+
 // Convert SVG to data URL for use as favicon
 const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(siteMetadata.inlineFavicon).toString("base64")}`;
 ---
@@ -88,8 +96,8 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(siteMetadata.inl
     <!-- End: Misc meta tags -->
 
     <!-- Start: Facebook open graph -->
-    <meta property="og:title" content={siteMetadata.openGraph.title} />
-    <meta property="og:description" content={siteMetadata.openGraph.description} />
+    <meta property="og:title" content={title || siteMetadata.openGraph.title} />
+    <meta property="og:description" content={description || siteMetadata.openGraph.description} />
     <meta property="og:url" content={siteMetadata.openGraph.url} />
     <meta property="og:type" content={siteMetadata.openGraph.type} />
     <meta property="og:image" content={siteMetadata.openGraph.image} />
@@ -99,28 +107,28 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(siteMetadata.inl
 
     <!-- Start: Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={siteMetadata.twitter.title} />
-    <meta name="twitter:description" content={siteMetadata.twitter.description} />
+    <meta name="twitter:title" content={title || siteMetadata.twitter.title} />
+    <meta name="twitter:description" content={description || siteMetadata.twitter.description} />
     <meta name="twitter:image" content={siteMetadata.twitter.image} />
     <meta name="twitter:site" content={siteMetadata.twitter.site} />
     <meta name="twitter:creator" content={siteMetadata.twitter.creator} />
     <!-- End: Twitter card -->
 
     <!-- Start: Dublin Core (DC) -->
-    <meta name="DC.Title" content={siteMetadata.dublinCore.title} />
+    <meta name="DC.Title" content={title || siteMetadata.dublinCore.title} />
     <meta name="DC.Creator" content={siteMetadata.dublinCore.creator} />
     <meta name="DC.Rights" content={siteMetadata.dublinCore.rights} />
     <meta name="DC.Publisher" content={siteMetadata.dublinCore.publisher} />
-    <meta name="DC.Description" content={siteMetadata.dublinCore.description} />
+    <meta name="DC.Description" content={description || siteMetadata.dublinCore.description} />
     <meta name="DC.Language" content={siteMetadata.dublinCore.language} />
     <meta name="DC.Type" content={siteMetadata.dublinCore.type} />
     <meta name="DC.Format" content={siteMetadata.dublinCore.format} />
     <!-- End: Dublin Core (DC) -->
 
     <!-- Title & Description -->
-    <title>{siteMetadata.seoTitle}</title>
-    <meta name="description" content={siteMetadata.seoDescription} />
-    <meta name="abstract" content={siteMetadata.seoDescription} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="abstract" content={description} />
     <meta name="keywords" content={siteMetadata.seoKeywords} />
 
     <!-- Dynamic favicon styles -->

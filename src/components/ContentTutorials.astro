@@ -1,0 +1,267 @@
+---
+import { getCollection } from "astro:content";
+import { formatDate } from "../utils/formatDate";
+
+// Get all tutorials that are not drafts
+const allTutorials = await getCollection("tutorials", ({ data }) => {
+  return import.meta.env.DEV || !data.draft;
+});
+
+// Sort tutorials by part number
+const sortedTutorials = allTutorials.sort((a, b) => a.data.part - b.data.part);
+
+// Get unique difficulty levels and topics for filtering
+const difficulties = [...new Set(sortedTutorials.map(tutorial => tutorial.data.difficulty))];
+const allTopics = sortedTutorials.flatMap(tutorial => tutorial.data.topics);
+const uniqueTopics = [...new Set(allTopics)];
+
+// Debug log to see if tutorials are being loaded
+console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.slug));
+---
+
+<div class="container mx-auto px-0 py-4 visible opacity-100 block">
+  <h1 class="text-3xl font-bold mb-6">Linux Kernel Device Driver Tutorials</h1>
+  
+  <div class="mb-8">
+    <p class="mb-4">
+      A comprehensive tutorial series on Linux kernel device driver development, 
+      from basic concepts to advanced techniques. Designed for embedded engineers,
+      kernel developers, and anyone interested in kernel module development.
+    </p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters mb-8">
+    <h2 class="text-xl font-semibold mb-4">Filters</h2>
+    
+    <div class="filter-container grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Difficulty Filter -->
+      <div class="difficulty-filter">
+        <h3 class="text-md font-medium mb-2">Difficulty Level</h3>
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="filter-btn all-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+            data-filter="difficulty"
+            data-value="all"
+          >
+            All
+          </button>
+          {difficulties.map((difficulty) => (
+            <button
+              class="filter-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+              data-filter="difficulty"
+              data-value={difficulty}
+            >
+              {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Topics Filter -->
+      <div class="topics-filter">
+        <h3 class="text-md font-medium mb-2">Topics</h3>
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="filter-btn all-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+            data-filter="topics"
+            data-value="all"
+          >
+            All
+          </button>
+          {uniqueTopics.map((topic) => (
+            <button
+              class="filter-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+              data-filter="topics"
+              data-value={topic}
+            >
+              {topic}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tutorials Grid -->
+  <div class="tutorials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {sortedTutorials.map((tutorial) => (
+      <div 
+        class="tutorial-card border border-border rounded-md overflow-hidden"
+        data-difficulty={tutorial.data.difficulty}
+        data-topics={tutorial.data.topics.join(",")}
+      >
+        <div class="p-6">
+          <div class="flex items-center mb-3 gap-2">
+            <span class={`px-2 py-1 text-xs rounded-md ${
+              tutorial.data.difficulty === "beginner" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+              tutorial.data.difficulty === "intermediate" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
+              tutorial.data.difficulty === "advanced" ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" :
+              "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+            }`}>
+              {tutorial.data.difficulty}
+            </span>
+            <span class="text-sm text-foreground-secondary">Part {tutorial.data.part}</span>
+          </div>
+          
+          <h2 class="text-xl font-semibold mb-2 hover:text-primary">
+            <a href={`#tutorial-${tutorial.slug}`} class="tutorial-link" data-slug={tutorial.slug}>
+              {tutorial.data.title}
+            </a>
+          </h2>
+          
+          <p class="text-sm text-foreground-secondary mb-4 line-clamp-3">
+            {tutorial.data.description}
+          </p>
+          
+          <div class="flex flex-wrap gap-2 mb-4">
+            {tutorial.data.topics.slice(0, 3).map((topic) => (
+              <span class="text-xs px-2 py-1 bg-background-secondary rounded-md">
+                {topic}
+              </span>
+            ))}
+            {tutorial.data.topics.length > 3 && (
+              <span class="text-xs px-2 py-1 bg-background-secondary rounded-md">
+                +{tutorial.data.topics.length - 3} more
+              </span>
+            )}
+          </div>
+          
+          <div class="text-xs text-foreground-secondary">
+            {formatDate(tutorial.data.date)}
+            {tutorial.data.updatedDate && tutorial.data.updatedDate > tutorial.data.date && (
+              <span> (Updated: {formatDate(tutorial.data.updatedDate)})</span>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  
+  <!-- No Results Message -->
+  <div id="no-results" class="hidden text-center py-12">
+    <p class="text-xl">No tutorials match your filters.</p>
+    <button 
+      id="reset-filters"
+      class="mt-4 px-4 py-2 bg-primary text-white rounded-md"
+    >
+      Reset Filters
+    </button>
+  </div>
+</div>
+
+<script>
+  // Filtering functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const tutorialCards = document.querySelectorAll('.tutorial-card');
+    const noResults = document.getElementById('no-results');
+    const resetButton = document.getElementById('reset-filters');
+    
+    // Active filters
+    let activeFilters: {[key: string]: string} = {
+      difficulty: 'all',
+      topics: 'all'
+    };
+    
+    // Set active class and update filters
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Update active status for this filter type
+        const filterType = (button as HTMLElement).dataset.filter as string;
+        const filterValue = (button as HTMLElement).dataset.value as string;
+        
+        // Remove active class from all buttons of this type
+        document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(btn => {
+          btn.classList.remove('active', 'bg-primary', 'text-white');
+          btn.classList.add('bg-background');
+        });
+        
+        // Add active class to clicked button
+        button.classList.add('active', 'bg-primary', 'text-white');
+        button.classList.remove('bg-background');
+        
+        // Update active filters
+        activeFilters[filterType] = filterValue;
+        
+        // Apply filters
+        applyFilters();
+      });
+    });
+    
+    // Reset filters
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        // Reset active filters
+        activeFilters = {
+          difficulty: 'all',
+          topics: 'all'
+        };
+        
+        // Reset button styles
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('active', 'bg-primary', 'text-white');
+          btn.classList.add('bg-background');
+        });
+        
+        // Activate "All" buttons
+        document.querySelectorAll('.all-btn').forEach(btn => {
+          btn.classList.add('active', 'bg-primary', 'text-white');
+          btn.classList.remove('bg-background');
+        });
+        
+        // Apply filters
+        applyFilters();
+      });
+    }
+    
+    // Apply filters function
+    function applyFilters() {
+      let visibleCount = 0;
+      
+      tutorialCards.forEach(card => {
+        const cardDifficulty = (card as HTMLElement).dataset.difficulty as string;
+        const cardTopics = ((card as HTMLElement).dataset.topics as string).split(',');
+        
+        // Check if card matches all active filters
+        const matchesDifficulty = activeFilters.difficulty === 'all' || activeFilters.difficulty === cardDifficulty;
+        const matchesTopic = activeFilters.topics === 'all' || cardTopics.includes(activeFilters.topics);
+        
+        // Show/hide card
+        if (matchesDifficulty && matchesTopic) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Show "no results" message if needed
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+        } else {
+          noResults.classList.add('hidden');
+        }
+      }
+    }
+    
+    // Initialize with "All" selected
+    document.querySelectorAll('.all-btn').forEach(btn => {
+      btn.classList.add('active', 'bg-primary', 'text-white');
+      btn.classList.remove('bg-background');
+    });
+    
+    // Add click handlers for tutorial links
+    document.querySelectorAll('.tutorial-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const slug = (link as HTMLElement).getAttribute('data-slug');
+        // Here you would typically show the tutorial content
+        // This functionality will be added with dynamic content loading
+        console.log(`Tutorial clicked: ${slug}`);
+      });
+    });
+  });
+</script> 

@@ -16,9 +16,9 @@ try {
     // Use marked to render markdown content
     renderedContent = await marked.parse(content);
   }
-} catch (error) {
+} catch (error: unknown) {
   console.error("Error rendering markdown content:", error);
-  renderedContent = `<div class="text-red-500">Error rendering content: ${error.message}</div>`;
+  renderedContent = `<div class="text-red-500">Error rendering content: ${error instanceof Error ? error.message : String(error)}</div>`;
 }
 ---
 

@@ -10,6 +10,8 @@ import ContentProjects from "../components/ContentProjects.astro";
 import ContentQuotes from "../components/ContentQuotes.astro";
 import ContentBookBits from "../components/ContentBookBits.astro";
 import ContentResume from "../components/ContentResume.astro";
+import ContentTutorials from "../components/ContentTutorials.astro";
+import TutorialContent from "../components/TutorialContent.astro";
 
 import Analytics from "@vercel/analytics/astro";
 ---
@@ -45,6 +47,7 @@ import Analytics from "@vercel/analytics/astro";
           <input type="radio" id="tab3" name="tabs" class="tab-radio" />
           <input type="radio" id="tab4" name="tabs" class="tab-radio" />
           <input type="radio" id="tab5" name="tabs" class="tab-radio" />
+          <input type="radio" id="tab6" name="tabs" class="tab-radio" />
 
           <!-- Start: Tab bar (sticky at top) -->
           <div
@@ -55,6 +58,7 @@ import Analytics from "@vercel/analytics/astro";
             <ContentLink contentId="tab3" contentName="Resume" />
             <ContentLink contentId="tab4" contentName="Quotes" />
             <ContentLink contentId="tab5" contentName="Book Bits" />
+            <ContentLink contentId="tab6" contentName="Tutorials" />
           </div>
           <!-- End: Tab bar -->
 
@@ -90,6 +94,19 @@ import Analytics from "@vercel/analytics/astro";
                 <ContentBookBits />
               </div>
               <!-- End: Book Bits content -->
+              
+              <!-- Start: Tutorials content -->
+              <div id="content6" class="tab-content tutorials-tab">
+                <div class="tutorials-section">
+                  <div class="tutorials-list active">
+                    <ContentTutorials />
+                  </div>
+                  <div class="tutorial-detail">
+                    <TutorialContent />
+                  </div>
+                </div>
+              </div>
+              <!-- End: Tutorials content -->
             </div>
           </div>
           <!-- End: Tab content -->
@@ -194,30 +211,9 @@ import Analytics from "@vercel/analytics/astro";
         </svg>
       </label>
       <label
-        for="tab4"
+        for="tab6"
         class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Quotes"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-          ></path>
-        </svg>
-      </label>
-      <label
-        for="tab5"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Book Bits"
+        title="Tutorials"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -231,9 +227,7 @@ import Analytics from "@vercel/analytics/astro";
           stroke-linejoin="round"
         >
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-          <path
-            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-          ></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
         </svg>
       </label>
     </div>
@@ -581,6 +575,86 @@ import Analytics from "@vercel/analytics/astro";
       }
     }
   });
+
+  // Tutorial interaction script
+  document.addEventListener('DOMContentLoaded', () => {
+    const tutorialsTab = document.querySelector('.tutorials-tab');
+    const tutorialsList = document.querySelector('.tutorials-list');
+    const tutorialDetails = document.querySelector('.tutorial-detail');
+    
+    // Initialize - make sure the tutorial list is visible and details are hidden
+    if (tutorialsTab && tutorialsList && tutorialDetails) {
+      // Initialize - ensure tutorials list is visible when the tab is selected
+      document.querySelectorAll('.tutorial-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Handle tutorial link clicks
+      document.querySelectorAll('.tutorial-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const slug = (link as HTMLElement).getAttribute('data-slug');
+          if (slug) {
+            // Hide the list and show the detail
+            tutorialsList.classList.add('hidden-list');
+            
+            // Show the specific tutorial
+            const tutorialElement = document.getElementById(`tutorial-${slug}`);
+            if (tutorialElement) {
+              document.querySelectorAll('.tutorial-content').forEach(content => {
+                content.classList.add('hidden');
+              });
+              tutorialElement.classList.remove('hidden');
+            }
+            
+            // Add back button if it doesn't exist
+            if (!document.querySelector('.back-to-tutorials')) {
+              const backButton = document.createElement('button');
+              backButton.className = 'back-to-tutorials mb-4 inline-flex items-center text-primary hover:underline';
+              backButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to Tutorials List
+              `;
+              
+              backButton.addEventListener('click', () => {
+                // Show the list and hide all tutorials
+                tutorialsList.classList.remove('hidden-list');
+                document.querySelectorAll('.tutorial-content').forEach(content => {
+                  content.classList.add('hidden');
+                });
+                
+                // Remove back button
+                backButton.remove();
+              });
+              
+              tutorialsTab.insertBefore(backButton, tutorialsList.nextSibling);
+            }
+          }
+        });
+      });
+      
+      // Handle navigation within tutorials
+      document.querySelectorAll('.tutorial-nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const slug = (link as HTMLElement).getAttribute('data-slug');
+          if (slug) {
+            // Show the specific tutorial
+            const tutorialElement = document.getElementById(`tutorial-${slug}`);
+            if (tutorialElement) {
+              document.querySelectorAll('.tutorial-content').forEach(content => {
+                content.classList.add('hidden');
+              });
+              tutorialElement.classList.remove('hidden');
+              tutorialElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        });
+      });
+    }
+  });
 </script>
 
 <style is:global>
@@ -643,6 +717,15 @@ import Analytics from "@vercel/analytics/astro";
   }
 
   #tab5:checked ~ .tab-header .tab-link:nth-child(5) {
+    @apply border-b-2 border-b-primary;
+  }
+
+  /* When tab6 is checked, show content6 and highlight its tab */
+  #tab6:checked ~ * #content6 {
+    @apply block opacity-100;
+  }
+
+  #tab6:checked ~ .tab-header .tab-link:nth-child(6) {
     @apply border-b-2 border-b-primary;
   }
 
@@ -823,5 +906,42 @@ import Analytics from "@vercel/analytics/astro";
     #vim-help-toggle, #vim-help-panel {
       display: none !important;
     }
+  }
+</style>
+
+<style>
+  /* Tutorial content styles */
+  .tutorials-section {
+    position: relative;
+    width: 100%;
+  }
+  
+  .tutorials-list {
+    transition: opacity 0.3s ease-in-out;
+    width: 100%;
+    display: block;
+  }
+  
+  .tutorials-list.hidden-list {
+    display: none;
+  }
+  
+  .tutorial-detail {
+    width: 100%;
+  }
+  
+  .tutorial-content {
+    padding-top: 1rem;
+  }
+  
+  .tutorial-content.hidden {
+    display: none;
+  }
+  
+  .back-to-tutorials {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
   }
 </style>

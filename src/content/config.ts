@@ -49,10 +49,36 @@ const bookBitsCollection = defineCollection({
   }),
 });
 
+// Define schema for tutorials collection
+const tutorialsCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.date(),
+    updatedDate: z.date().optional(),
+    author: z.string().default("Utsav Balar"),
+    difficulty: z.enum(["beginner", "intermediate", "advanced", "professional"]),
+    topics: z.array(z.string()),
+    series: z.string().default("Linux Kernel Device Driver"),
+    part: z.number().int().positive(),
+    environment: z.object({
+      hardware: z.string(),
+      kernel: z.string(),
+      os: z.string(),
+    }),
+    prerequisites: z.array(z.string()).optional(),
+    github: z.string().url().optional(),
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
+  }),
+});
+
 // Export collections
 export const collections = {
   about: aboutCollection,
   projects: projectsCollection,
   quotes: quotesCollection,
   bookBits: bookBitsCollection,
+  tutorials: tutorialsCollection,
 };
