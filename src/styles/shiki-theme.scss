@@ -1,0 +1,179 @@
+/**
+ * Dynamic Shiki Theme Customization
+ * 
+ * Instead of trying to switch between multiple Shiki themes (which requires complex config),
+ * this file overrides the colors of the default Shiki theme using CSS variables
+ * from our theme system.
+ */
+
+@use "theme";
+
+// Set up theme-based custom properties for code syntax highlighting
+// These will override Shiki's default colors based on the current theme
+
+// Apply theme-aware colors to code blocks
+pre.astro-code {
+  // Base styling
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  font-family: "AdwaitaMono", monospace;
+  font-size: 0.9rem;
+
+  // Override Shiki's background with our theme background
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+// Style tokens based on the current theme
+[data-theme] {
+
+  // Token colors based on our theme variables
+  pre.astro-code {
+
+    // Comments
+    :global(.comment),
+    :global(.punctuation.definition.comment),
+    :global(.string.comment) {
+      color: var(--text-secondary);
+    }
+
+    // Strings
+    :global(.string),
+    :global(.string.quoted) {
+      color: var(--success);
+    }
+
+    // Numbers & Booleans
+    :global(.constant.numeric),
+    :global(.constant.language.boolean) {
+      color: var(--warning);
+    }
+
+    // Keywords
+    :global(.keyword),
+    :global(.storage.type),
+    :global(.storage.modifier) {
+      color: var(--accent-secondary);
+    }
+
+    // Functions & Methods
+    :global(.entity.name.function),
+    :global(.support.function),
+    :global(.meta.function-call),
+    :global(.meta.function .entity.name.function) {
+      color: var(--accent-primary);
+    }
+
+    // Variables
+    :global(.variable),
+    :global(.support.variable) {
+      color: var(--text-primary);
+    }
+
+    // Classes, Types, Interfaces
+    :global(.entity.name.type),
+    :global(.entity.name.class),
+    :global(.entity.name.namespace),
+    :global(.storage.type.class) {
+      color: var(--info);
+    }
+
+    // Tags & Attributes (for HTML/JSX)
+    :global(.entity.name.tag) {
+      color: var(--accent-secondary);
+    }
+
+    :global(.entity.other.attribute-name) {
+      color: var(--warning);
+    }
+
+    // Imports/Exports
+    :global(.keyword.control.import),
+    :global(.keyword.control.export) {
+      color: var(--accent-secondary);
+    }
+
+    // C-specific syntax highlighting
+    :global(.meta.preprocessor),
+    :global(.keyword.control.directive),
+    :global(.punctuation.definition.directive),
+    :global(.meta.preprocessor.include) {
+      color: var(--warning);
+    }
+
+    :global(.keyword.operator.sizeof),
+    :global(.keyword.operator.wordlike) {
+      color: var(--accent-secondary);
+    }
+
+    :global(.support.type.posix-reserved) {
+      color: var(--info);
+    }
+
+    :global(.support.function.kernel),
+    :global(.support.function.C99) {
+      color: var(--accent-primary);
+    }
+
+    :global(.variable.other.member),
+    :global(.variable.parameter) {
+      color: var(--text-primary);
+    }
+
+    :global(.constant.other.enum) {
+      color: var(--info);
+    }
+
+    // Specific for function declarations
+    :global(.entity.name.function),
+    :global(.meta.function-declaration) {
+      color: var(--accent-primary);
+    }
+
+    // Basic tokens
+    :global(.punctuation) {
+      color: var(--text-secondary);
+    }
+
+    // Makefile specific
+    :global(.meta.scope.prerequisites),
+    :global(.meta.scope.recipe),
+    :global(.variable.other.makefile) {
+      color: var(--warning);
+    }
+
+    :global(.keyword.control.directive.define),
+    :global(.keyword.control.directive.undef),
+    :global(.keyword.control.directive.line),
+    :global(.keyword.control.directive.include),
+    :global(.keyword.control.directive.pragma) {
+      color: var(--warning);
+    }
+  }
+}
+
+// Light theme adjustments - for better contrast
+[data-theme="gruvbox-light-hard"],
+[data-theme="catppuccin-latte"],
+[data-theme="everforest-light"] {
+  pre.astro-code {
+
+    // Adjust colors for better contrast in light themes
+    :global(.comment),
+    :global(.punctuation.definition.comment),
+    :global(.string.comment) {
+      color: color-mix(in srgb, var(--text-secondary) 70%, black);
+    }
+  }
+}
+
+// Fix inline code styling (not part of Shiki)
+code:not(pre code) {
+  font-family: "AdwaitaMono", monospace;
+  background-color: var(--bg-secondary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+}

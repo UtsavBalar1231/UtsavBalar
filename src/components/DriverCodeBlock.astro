@@ -5,38 +5,227 @@
  */
 
 interface Props {
-  language?: string;
-  title?: string;
-  showLineNumbers?: boolean;
-  highlightLines?: string; // Format: "1,4-6,10"
+	language?: string;
+	title?: string;
+	showLineNumbers?: boolean;
+	highlightLines?: string; // Format: "1,4-6,10"
 }
 
-const { 
-  language = "c", 
-  title, 
-  showLineNumbers = true,
-  highlightLines = ""
+const {
+	language = "c",
+	title,
+	showLineNumbers = true,
+	highlightLines = "",
 } = Astro.props;
+
+// Indicate this is kernel code
+const isC = language === "c" || language === "cpp";
+const isKernel =
+	isC &&
+	title &&
+	(title.toLowerCase().includes("kernel") ||
+		title.toLowerCase().includes("driver") ||
+		title.toLowerCase().includes("module"));
 ---
 
-<div class="driver-code-container my-6 rounded-md overflow-hidden border border-[var(--code-border)] bg-[var(--code-bg)]">
-  {title && (
-    <div class="code-title border-b border-[var(--code-border)] px-4 py-2 text-sm font-mono font-medium text-[var(--code-title)]">
-      {title}
-    </div>
-  )}
-  <div class="code-content p-4 overflow-x-auto">
-    <pre class={`language-${language}`} data-line={highlightLines}><slot /></pre>
-  </div>
+<div
+	class="driver-code-container my-6 rounded-md overflow-hidden border border-border bg-[var(--code-bg)]"
+>
+	<div
+		class="code-header flex justify-between items-center px-4 py-2 bg-[var(--code-header-bg)]"
+	>
+		<div class="flex items-center">
+			{
+				title && (
+					<div class="code-title text-sm font-mono font-medium text-text-primary mr-3">
+						{title}
+					</div>
+				)
+			}
+			<div
+				class="code-language flex items-center text-xs font-mono text-text-secondary uppercase"
+			>
+				{
+					isKernel && (
+						<span class="kernel-badge bg-[var(--kernel-badge-bg)] text-[var(--kernel-badge-text)] text-[0.65rem] px-1.5 py-0.5 rounded mr-2">
+							KERNEL
+						</span>
+					)
+				}
+				{language.toUpperCase()}
+			</div>
+		</div>
+		<button
+			class="copy-button flex items-center text-xs rounded bg-[var(--code-btn-bg)] px-2 py-1 hover:bg-[var(--code-btn-hover)] transition-colors"
+		>
+			<svg
+				class="w-3.5 h-3.5 mr-1.5"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+				<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+				></path>
+			</svg>
+			<span class="copy-text">Copy</span>
+		</button>
+	</div>
+	<div class="code-content p-4 overflow-x-auto text-text-primary">
+		<slot />
+	</div>
 </div>
 
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const copyButtons = document.querySelectorAll(
+			".driver-code-container .copy-button",
+		);
+
+		copyButtons.forEach((button) => {
+			button.addEventListener("click", async () => {
+				const codeBlock = button.closest(".driver-code-container");
+				const codeContent = codeBlock?.querySelector("pre code");
+				const copyText = button.querySelector(".copy-text");
+
+				if (codeContent) {
+					try {
+						// Get text without preserving HTML
+						const codeToCopy = codeContent.textContent || "";
+
+						await navigator.clipboard.writeText(codeToCopy);
+
+						// Show copied indicator
+						if (copyText) copyText.textContent = "Copied!";
+
+						// Reset after 2 seconds
+						setTimeout(() => {
+							if (copyText) copyText.textContent = "Copy";
+						}, 2000);
+					} catch (err) {
+						console.error("Failed to copy code:", err);
+						if (copyText) copyText.textContent = "Failed";
+
+						setTimeout(() => {
+							if (copyText) copyText.textContent = "Copy";
+						}, 2000);
+					}
+				}
+			});
+		});
+	});
+</script>
+
 <style>
-  .driver-code-container {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .code-content pre {
-    margin: 0;
-    padding: 0;
-  }
-</style> 
+	/* Theme-aware styling */
+	.driver-code-container {
+		--code-bg: color-mix(in srgb, var(--bg-primary) 92%, black);
+		--code-header-bg: color-mix(
+			in srgb,
+			var(--bg-secondary) 90%,
+			var(--bg-primary)
+		);
+		--code-btn-bg: color-mix(
+			in srgb,
+			var(--bg-secondary) 70%,
+			var(--bg-primary)
+		);
+		--code-btn-hover: color-mix(
+			in srgb,
+			var(--accent-primary) 15%,
+			var(--bg-secondary)
+		);
+		--kernel-badge-bg: color-mix(
+			in srgb,
+			var(--warning) 30%,
+			var(--bg-secondary)
+		);
+		--kernel-badge-text: var(--bg-primary);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+		transition: all 0.2s ease-in-out;
+	}
+
+	.driver-code-container:hover {
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+	}
+
+	.code-content pre {
+		margin: 0;
+		padding: 0;
+		font-family: "AdwaitaMono", monospace;
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
+
+	.code-content pre code {
+		font-family: "AdwaitaMono", monospace;
+		tab-size: 2;
+	}
+
+	/* Line numbers */
+	.line-numbers .line {
+		counter-increment: line;
+		display: inline-block;
+		position: relative;
+		padding-left: 2rem;
+	}
+
+	.line-numbers .line::before {
+		content: counter(line);
+		position: absolute;
+		left: 0;
+		color: var(--text-secondary);
+		opacity: 0.5;
+		text-align: right;
+		width: 1.5rem;
+		font-size: 0.75rem;
+		user-select: none;
+	}
+
+	/* Highlight styles for highlighted lines */
+	.line-highlight {
+		background-color: color-mix(
+			in srgb,
+			var(--accent-primary) 10%,
+			transparent
+		) !important;
+		margin: 0 -1rem;
+		padding: 0 1rem;
+		display: block;
+		width: calc(100% + 2rem);
+	}
+
+	/* Copy button animations */
+	.copy-button {
+		transition: all 0.2s ease;
+	}
+
+	.copy-button:active {
+		transform: scale(0.95);
+	}
+
+	/* Kernel code special styling */
+	.kernel-badge {
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		transition: all 0.2s ease;
+	}
+
+	.driver-code-container:hover .kernel-badge {
+		background-color: var(--warning);
+	}
+
+	@media (max-width: 640px) {
+		.copy-text {
+			display: none;
+		}
+
+		.code-language {
+			display: none;
+		}
+	}
+</style>

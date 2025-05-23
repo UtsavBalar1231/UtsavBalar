@@ -1,14 +1,14 @@
 ---
 // MDXContent.astro - Component for rendering MDX content from content collections
 import { getCollection, getEntry } from "astro:content";
-import { components as customComponents } from './MDXComponents.astro';
+import { components as customComponents } from "./MDXComponents.astro";
 
 type CollectionName = "about" | "projects" | "bookBits" | "quotes" | "resume";
 
 interface Props {
-  collection: CollectionName;
-  slug?: string;
-  class?: string;
+	collection: CollectionName;
+	slug?: string;
+	class?: string;
 }
 
 const { collection, slug, class: className = "" } = Astro.props;
@@ -17,155 +17,167 @@ let entry;
 let Content;
 
 try {
-  if (slug) {
-    // If a specific slug is provided, get that entry
-    entry = await getEntry(collection, slug);
-  } else {
-    // Otherwise, get all entries and take the first one
-    const allEntries = await getCollection(collection);
-    entry = allEntries[0];
-  }
+	if (slug) {
+		// If a specific slug is provided, get that entry
+		entry = await getEntry(collection, slug);
+	} else {
+		// Otherwise, get all entries and take the first one
+		const allEntries = await getCollection(collection);
+		entry = allEntries[0];
+	}
 
-  // Render the content if entry was found
-  if (entry) {
-    const { Content: EntryContent } = await entry.render();
-    Content = EntryContent;
-  }
+	// Render the content if entry was found
+	if (entry) {
+		// Get render function properly from the entry - entries returned from getEntry/getCollection have different APIs
+		if (typeof entry.render === "function") {
+			const { Content: EntryContent } = await entry.render();
+			Content = EntryContent;
+		} else {
+			console.error(`Entry doesn't have render method:`, entry);
+		}
+	}
 } catch (error) {
-  console.error(`Error loading content from collection ${collection}:`, error);
+	console.error(
+		`Error loading content from collection ${collection}:`,
+		error,
+	);
 }
 ---
 
 {
-  Content ? (
-    <div class={`mdx-collection ${className}`}>
-      <Content components={customComponents} />
-    </div>
-  ) : (
-    <div class="mdx-error">
-      <p>
-        Error loading content from collection: {collection}
-        {slug ? `/${slug}` : ""}
-      </p>
-    </div>
-  )
+	Content ? (
+		<div class={`mdx-collection ${className}`}>
+			<Content components={customComponents} />
+		</div>
+	) : (
+		<div class="mdx-error">
+			<p>
+				Error loading content from collection: {collection}
+				{slug ? `/${slug}` : ""}
+			</p>
+		</div>
+	)
 }
 
 <style>
-  .mdx-collection {
-    color: var(--text-primary);
-    line-height: 1.6;
-  }
+	.mdx-collection {
+		color: var(--text-primary);
+		line-height: 1.6;
+	}
 
-  .mdx-collection :global(h1) {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: var(--accent-primary);
-  }
+	.mdx-collection :global(h1) {
+		font-size: 2rem;
+		font-weight: bold;
+		margin-bottom: 1rem;
+		color: var(--accent-primary);
+	}
 
-  .mdx-collection :global(h2) {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    color: var(--accent-primary);
-  }
+	.mdx-collection :global(h2) {
+		font-size: 1.5rem;
+		font-weight: bold;
+		margin-top: 1.5rem;
+		margin-bottom: 0.75rem;
+		color: var(--accent-primary);
+	}
 
-  .mdx-collection :global(h3) {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: var(--accent-secondary);
-  }
+	.mdx-collection :global(h3) {
+		font-size: 1.25rem;
+		font-weight: bold;
+		margin-top: 1rem;
+		margin-bottom: 0.5rem;
+		color: var(--accent-secondary);
+	}
 
-  .mdx-collection :global(p) {
-    margin-bottom: 1rem;
-  }
+	.mdx-collection :global(p) {
+		margin-bottom: 1rem;
+	}
 
-  .mdx-collection :global(a) {
-    color: var(--accent-primary);
-    text-decoration: underline;
-    transition: color 0.2s ease-in-out;
-  }
+	.mdx-collection :global(a) {
+		color: var(--accent-primary);
+		text-decoration: underline;
+		transition: color 0.2s ease-in-out;
+	}
 
-  .mdx-collection :global(a:hover) {
-    color: var(--accent-secondary);
-  }
+	.mdx-collection :global(a:hover) {
+		color: var(--accent-secondary);
+	}
 
-  .mdx-collection :global(ul),
-  .mdx-collection :global(ol) {
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-  }
+	.mdx-collection :global(ul),
+	.mdx-collection :global(ol) {
+		margin-left: 1.5rem;
+		margin-bottom: 1rem;
+	}
 
-  .mdx-collection :global(li) {
-    margin-bottom: 0.5rem;
-  }
+	.mdx-collection :global(li) {
+		margin-bottom: 0.5rem;
+	}
 
-  .mdx-collection :global(code) {
-    font-family: "AdwaitaMono", monospace;
-    background-color: var(--bg-secondary);
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.25rem;
-  }
+	.mdx-collection :global(code) {
+		font-family: "AdwaitaMono", monospace;
+		background-color: var(--bg-secondary);
+		padding: 0.2rem 0.4rem;
+		border-radius: 0.25rem;
+	}
 
-  .mdx-collection :global(pre) {
-    background-color: var(--bg-secondary);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
-  }
+	.mdx-collection :global(pre) {
+		background-color: var(--bg-secondary);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		overflow-x: auto;
+		margin-bottom: 1rem;
+		border: 1px solid var(--border-color);
+	}
 
-  .mdx-collection :global(blockquote) {
-    border-left: 4px solid var(--accent-primary);
-    padding-left: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1rem;
-    font-style: italic;
-    color: var(--text-secondary);
-  }
+	.mdx-collection :global(blockquote) {
+		border-left: 4px solid var(--accent-primary);
+		padding-left: 1rem;
+		margin-left: 0;
+		margin-right: 0;
+		margin-bottom: 1rem;
+		font-style: italic;
+		color: var(--text-secondary);
+	}
 
-  .mdx-collection :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: 0.25rem;
-    margin-bottom: 1rem;
-  }
+	.mdx-collection :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 0.25rem;
+		margin-bottom: 1rem;
+	}
 
-  /* Custom styling for code blocks generated by Shiki */
-  .mdx-collection :global(.astro-code) {
-    border-radius: 0.5rem;
-    padding: 1rem;
-    font-family: "AdwaitaMono", monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    overflow-x: auto;
-    background-color: var(--bg-secondary) !important;
-  }
+	/* Custom styling for code blocks generated by Shiki */
+	.mdx-collection :global(.astro-code) {
+		/* Base styling, display is controlled by shiki-theme.scss */
+		border-radius: 0.5rem;
+		padding: 1rem;
+		font-family: "AdwaitaMono", monospace;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		overflow-x: auto;
+	}
 
-  .mdx-collection :global(.astro-code code) {
-    font-family: "AdwaitaMono", monospace;
-    font-size: 0.9rem;
-    padding: 0;
-    background-color: transparent;
-  }
+	.mdx-collection :global(.astro-code code) {
+		font-family: "AdwaitaMono", monospace;
+		font-size: 0.9rem;
+		padding: 0;
+		background-color: transparent;
+	}
 
-  .mdx-collection :global(.astro-code .line) {
-    display: inline-block;
-    width: 100%;
-    min-height: 1.5em;
-  }
+	.mdx-collection :global(.astro-code .line) {
+		display: inline-block;
+		width: 100%;
+		min-height: 1.5em;
+	}
 
-  .mdx-error {
-    color: #ff5555;
-    font-style: italic;
-    padding: 1rem;
-    border-left: 3px solid #ff5555;
-    background-color: rgba(255, 85, 85, 0.1);
-  }
+	.mdx-error {
+		color: #ff5555;
+		font-style: italic;
+		padding: 1rem;
+		border-left: 3px solid #ff5555;
+		background-color: rgba(255, 85, 85, 0.1);
+	}
 </style>
+		background-color: rgba(255, 85, 85, 0.1);
+	}
+</style>
+background-color: rgba(255, 85, 85, 0.1); }

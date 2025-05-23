@@ -10,18 +10,34 @@ interface Props {
 const { title = "Note" } = Astro.props;
 ---
 
-<div class="note-container my-6 p-4 rounded-md border-l-4 border-[var(--note-border)] bg-[var(--note-bg)]">
-  <div class="note-title font-medium mb-2 text-[var(--note-title)]">
-    {title}
-  </div>
-  <div class="note-content text-[var(--note-text)]">
-    <slot />
+<div class="note-container my-6 rounded-md border-l-4 border-info bg-[var(--note-bg)] relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full bg-info -translate-y-12 translate-x-12"></div>
+  <div class="relative z-10 p-4">
+    <div class="note-title flex items-center font-medium mb-3 text-info">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+      </svg>
+      {title}
+    </div>
+    <div class="note-content text-text-primary">
+      <slot />
+    </div>
   </div>
 </div>
 
 <style>
+  /* Theme-aware styling */
   .note-container {
+    --note-bg: color-mix(in srgb, var(--info) 5%, var(--bg-primary));
     position: relative;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .note-container:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left-width: 6px;
+    padding-left: calc(1rem - 2px);
   }
   
   .note-content :global(p) {
@@ -30,5 +46,24 @@ const { title = "Note" } = Astro.props;
   
   .note-content :global(p:last-child) {
     margin-bottom: 0;
+  }
+  
+  .note-content :global(a) {
+    color: var(--info);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  
+  .note-content :global(a:hover) {
+    text-decoration-thickness: 2px;
+  }
+  
+  .note-content :global(code) {
+    font-family: 'AdwaitaMono', monospace;
+    background-color: color-mix(in srgb, var(--info) 10%, var(--bg-secondary));
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
   }
 </style> 

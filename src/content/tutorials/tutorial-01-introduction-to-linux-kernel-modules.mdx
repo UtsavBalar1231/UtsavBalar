@@ -136,7 +136,7 @@ all:
 	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) modules
 
 # Clean target
-clean:
+`Clean:
 	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) clean
 
 endif
@@ -147,22 +147,30 @@ endif
 
 ### Module Metadata
 
+
+<DriverCodeBlock language="c" title="Module Metadata">
 ```c
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Utsav Balar");
 MODULE_DESCRIPTION("A simple Hello World kernel module");
 MODULE_VERSION("0.1");
 ```
+</DriverCodeBlock>
 
 These macros provide metadata about the module:
 
+<DriverCodeBlock language="text" title="Module Metadata Explanation">
+```text
 - `MODULE_LICENSE`: Declares the license (important for compatibility)
 - `MODULE_AUTHOR`: Who wrote the module
 - `MODULE_DESCRIPTION`: What the module does
 - `MODULE_VERSION`: The module's version number
+```
+</DriverCodeBlock>
 
 ### Module Initialization Function
 
+<DriverCodeBlock language="c" title="Module Initialization Function">
 ```c
 static int __init hello_init(void)
 {
@@ -170,6 +178,7 @@ static int __init hello_init(void)
     return 0;
 }
 ```
+</DriverCodeBlock>
 
 The `__init` marker tells the kernel that this function is only needed during initialization. After the module is loaded, this memory can be freed.
 
@@ -177,21 +186,25 @@ The function must return 0 on success or a negative error code on failure.
 
 ### Module Cleanup Function
 
+<DriverCodeBlock language="c" title="Module Cleanup Function">
 ```c
 static void __exit hello_exit(void)
 {
     printk(KERN_INFO "Hello World: Module unloaded\n");
 }
 ```
+</DriverCodeBlock>
 
 The `__exit` marker tells the kernel that this function is only needed during module removal.
 
 ### Function Registration
 
+<DriverCodeBlock language="c" title="Function Registration">
 ```c
 module_init(hello_init);
 module_exit(hello_exit);
 ```
+</DriverCodeBlock>
 
 These macros register our functions as the initialization and cleanup handlers for our module.
 

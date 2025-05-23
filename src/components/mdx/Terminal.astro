@@ -4,36 +4,110 @@
  */
 
 interface Props {
-  title?: string;
+	title?: string;
 }
 
 const { title = "Terminal" } = Astro.props;
 ---
 
-<div class="terminal-container my-6 rounded-md overflow-hidden border border-[var(--border)]">
-  {title && (
-    <div class="terminal-title px-4 py-2 text-sm font-mono bg-[var(--terminal-title-bg)] text-[var(--terminal-title-text)] flex items-center">
-      <span class="mr-2">$</span> {title}
-    </div>
-  )}
-  <div class="terminal-content p-4 font-mono text-sm bg-[var(--terminal-bg)] text-[var(--terminal-text)] overflow-x-auto">
-    <slot />
-  </div>
+<div class="terminal-container my-6 rounded-md overflow-hidden border border-border">
+	<div
+		class="terminal-title px-4 py-2 text-sm font-mono bg-[var(--terminal-title-bg)] flex items-center justify-between"
+	>
+		<div class="flex items-center">
+			<span class="mr-2 text-accent-primary">$</span>
+			<span class="text-text-primary">{title}</span>
+		</div>
+		<div class="terminal-controls flex gap-1.5">
+			<div class="w-3 h-3 rounded-full bg-error opacity-80"></div>
+			<div class="w-3 h-3 rounded-full bg-warning opacity-80"></div>
+			<div class="w-3 h-3 rounded-full bg-success opacity-80"></div>
+		</div>
+	</div>
+	<div
+		class="terminal-content p-4 font-mono text-sm bg-[var(--terminal-bg)] text-text-primary overflow-x-auto"
+	>
+		<slot />
+	</div>
 </div>
 
 <style>
-  .terminal-container {
-    position: relative;
-  }
-  
-  .terminal-content :global(pre) {
-    margin: 0;
-    padding: 0;
-    background: transparent !important;
-  }
-  
-  .terminal-content :global(code) {
-    font-family: 'AdwaitaMono', monospace;
-    tab-size: 2;
-  }
-</style> 
+	/* Theme-aware styling */
+	.terminal-container {
+		--terminal-title-bg: color-mix(
+			in srgb,
+			var(--bg-secondary) 90%,
+			var(--bg-primary)
+		);
+		--terminal-bg: color-mix(in srgb, var(--bg-primary) 95%, black);
+		position: relative;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+		transition: all 0.2s ease-in-out;
+	}
+
+	.terminal-container:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+	}
+
+	.terminal-controls div {
+		transition: opacity 0.15s ease;
+	}
+
+	.terminal-container:hover .terminal-controls div {
+		opacity: 1;
+	}
+
+	.terminal-content {
+		line-height: 1.5;
+	}
+
+	.terminal-content :global(pre) {
+		margin: 0;
+		padding: 0;
+		background: transparent !important;
+	}
+
+	.terminal-content :global(code) {
+		font-family: "AdwaitaMono", monospace;
+		tab-size: 2;
+	}
+
+	/* Styling for command lines - prefix $ with accent color */
+	.terminal-content
+		:global(pre code span.line:has(span:first-child:is(.comment))) {
+		color: var(--text-secondary);
+	}
+
+	/* Styling for command outputs */
+	.terminal-content :global(pre code span.line) {
+		position: relative;
+		display: inline-block;
+		width: 100%;
+	}
+
+	/* Add cursor animation to last line */
+	.terminal-content :global(pre code span.line:last-child)::after {
+		content: "";
+		position: relative;
+		display: inline-block;
+		width: 0.5em;
+		height: 1em;
+		background-color: var(--accent-primary);
+		margin-left: 0.2em;
+		animation: cursor-blink 1.2s infinite;
+		vertical-align: text-bottom;
+		opacity: 0.8;
+	}
+
+	@keyframes cursor-blink {
+		0%,
+		49% {
+			opacity: 0;
+		}
+		50%,
+		100% {
+			opacity: 0.8;
+		}
+	}
+</style>

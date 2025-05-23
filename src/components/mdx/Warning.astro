@@ -10,18 +10,34 @@ interface Props {
 const { title = "Warning" } = Astro.props;
 ---
 
-<div class="warning-container my-6 p-4 rounded-md border-l-4 border-[var(--warning-border)] bg-[var(--warning-bg)]">
-  <div class="warning-title font-medium mb-2 text-[var(--warning-title)]">
-    {title}
-  </div>
-  <div class="warning-content text-[var(--warning-text)]">
-    <slot />
+<div class="warning-container my-6 rounded-md border-l-4 border-warning bg-[var(--warning-bg)] relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full bg-warning -translate-y-12 translate-x-12"></div>
+  <div class="relative z-10 p-4">
+    <div class="warning-title flex items-center font-medium mb-3 text-warning">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+      </svg>
+      {title}
+    </div>
+    <div class="warning-content text-text-primary">
+      <slot />
+    </div>
   </div>
 </div>
 
 <style>
+  /* Theme-aware styling */
   .warning-container {
+    --warning-bg: color-mix(in srgb, var(--warning) 5%, var(--bg-primary));
     position: relative;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .warning-container:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left-width: 6px;
+    padding-left: calc(1rem - 2px);
   }
   
   .warning-content :global(p) {
@@ -30,5 +46,29 @@ const { title = "Warning" } = Astro.props;
   
   .warning-content :global(p:last-child) {
     margin-bottom: 0;
+  }
+  
+  .warning-content :global(strong), .warning-content :global(b) {
+    color: var(--warning);
+    font-weight: 600;
+  }
+  
+  .warning-content :global(a) {
+    color: var(--warning);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  
+  .warning-content :global(a:hover) {
+    text-decoration-thickness: 2px;
+  }
+  
+  .warning-content :global(code) {
+    font-family: 'AdwaitaMono', monospace;
+    background-color: color-mix(in srgb, var(--warning) 10%, var(--bg-secondary));
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
   }
 </style> 

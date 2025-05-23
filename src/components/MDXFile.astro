@@ -2,7 +2,7 @@
 // MDXFile.astro - Component for importing and rendering .mdx files inline
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { components as customComponents } from './MDXComponents.astro';
+import { components as customComponents } from "./MDXComponents.astro";
 
 interface Props {
   filePath: string; // Path to the .mdx file relative to the src directory
@@ -93,13 +93,14 @@ try {
   }
 
   .mdx-file :global(.astro-code) {
+    /* Base styling for code blocks - specific colors come from shiki-theme.scss */
     border-radius: 0.5rem;
     padding: 1rem;
     font-family: "AdwaitaMono", monospace;
     font-size: 0.9rem;
     line-height: 1.5;
     overflow-x: auto;
-    background-color: var(--bg-secondary) !important;
+    margin-bottom: 1rem;
   }
 
   .mdx-error {

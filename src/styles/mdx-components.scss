@@ -1,0 +1,52 @@
+/**
+ * MDX Components Styling
+ * This file contains variables for MDX components used in tutorials
+ */
+
+@use 'theme';
+
+:root {
+  // Note component theming
+  --note-bg: color-mix(in srgb, var(--info) 5%, var(--bg-primary));
+  --note-border: var(--info);
+  --note-title: var(--info);
+  --note-text: var(--text-primary);
+  
+  // Warning component theming
+  --warning-bg: color-mix(in srgb, var(--warning) 5%, var(--bg-primary));
+  --warning-border: var(--warning);
+  --warning-title: var(--warning);
+  --warning-text: var(--text-primary);
+  
+  // Terminal component theming
+  --terminal-title-bg: color-mix(in srgb, var(--bg-secondary) 90%, var(--bg-primary));
+  --terminal-bg: color-mix(in srgb, var(--bg-primary) 95%, black);
+  --terminal-title-text: var(--text-primary);
+  --terminal-text: var(--text-primary);
+  
+  // Code blocks theming
+  --code-bg: color-mix(in srgb, var(--bg-primary) 90%, black);
+  --code-border: var(--border-color);
+  --code-title: var(--text-primary);
+  --code-header-bg: color-mix(in srgb, var(--bg-secondary) 90%, var(--bg-primary));
+  --code-btn-bg: color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary));
+  --code-btn-hover: color-mix(in srgb, var(--accent-primary) 15%, var(--bg-secondary));
+  
+  // Kernel driver code specific theming
+  --kernel-badge-bg: color-mix(in srgb, var(--warning) 30%, var(--bg-secondary));
+  --kernel-badge-text: var(--bg-primary);
+}
+
+// Override for light themes
+[data-theme="gruvbox-light-hard"],
+[data-theme="catppuccin-latte"],
+[data-theme="everforest-light"] {
+  // Adjust background mixes for better contrast in light themes
+  --note-bg: color-mix(in srgb, var(--info) 10%, var(--bg-primary));
+  --warning-bg: color-mix(in srgb, var(--warning) 10%, var(--bg-primary));
+  --terminal-bg: color-mix(in srgb, var(--bg-primary) 60%, black);
+  --code-bg: color-mix(in srgb, var(--bg-primary) 70%, var(--bg-secondary));
+  
+  // Ensure text is readable in light themes
+  --kernel-badge-text: white;
+} 
