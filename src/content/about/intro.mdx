@@ -4,6 +4,8 @@ description: An introduction to who I am and what I do
 updated: 2023-05-13
 ---
 
+import DriverCodeBlock from '../../components/DriverCodeBlock.astro';
+
 # About Me
 
 I am **Utsav Balar**, an Embedded Linux and BSP Engineer with expertise in Linux kernel development, device drivers, and custom ROM development. With a strong background in embedded systems and low-level programming, I specialize in optimizing hardware-software interactions across various platforms.
@@ -32,7 +34,7 @@ I have worked on diverse projects including:
 
 My experience spans various domains of embedded systems and Linux development:
 
-```rust
+<DriverCodeBlock language="rust" title="Professional Experience">
 struct Experience {
     years: u8,
     domain: String,
@@ -73,3 +75,4 @@ let my_experience = vec![
         expertise_level: ExpertiseLevel::Intermediate,
     },
 ];
+</DriverCodeBlock>
