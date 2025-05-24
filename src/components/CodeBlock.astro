@@ -83,8 +83,10 @@ const displayLang = langMap[language] || language;
       <span class="copy-text">Copy</span>
     </button>
   </div>
-  <div class="code-content p-4 overflow-x-auto text-text-primary">
-    <slot />
+  <div class="code-content px-0 py-4 text-text-primary">
+    <div class="code-scroller overflow-x-auto">
+      <slot />
+    </div>
   </div>
 </div>
 
@@ -155,49 +157,70 @@ const displayLang = langMap[language] || language;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
 
+  /* Improved code content structure */
+  .code-content {
+    position: relative;
+    width: 100%;
+  }
+  
+  .code-scroller {
+    padding: 0 1rem;
+  }
+
   .code-content pre {
     margin: 0;
     padding: 0;
     font-family: "AdwaitaMono", monospace;
     font-size: 0.9rem;
     line-height: 1.6;
+    min-width: 100%;
   }
 
   .code-content pre code {
     font-family: "AdwaitaMono", monospace;
     tab-size: 2;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    display: inline-block;
   }
 
-  /* Line numbers */
+  /* Line number improvements */
   .line-numbers .line {
     counter-increment: line;
-    display: inline-block;
     position: relative;
-    padding-left: 2rem;
+    padding-left: 2.5rem;
+    display: block;
+    min-width: fit-content;
   }
 
   .line-numbers .line::before {
     content: counter(line);
     position: absolute;
     left: 0;
+    top: 0;
     color: var(--text-secondary);
     opacity: 0.5;
     text-align: right;
-    width: 1.5rem;
+    width: 2rem;
     font-size: 0.75rem;
+    padding-right: 0.5rem;
     user-select: none;
   }
 
-  /* Highlight styles for highlighted lines */
+  /* Highlight styles for highlighted lines - fixed width calculation */
   .line-highlight {
     background-color: color-mix(
       in srgb,
       var(--accent-primary) 10%,
       transparent
     ) !important;
-    margin: 0 -1rem;
-    padding: 0 1rem;
     display: block;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: fit-content;
     width: calc(100% + 2rem);
   }
 
