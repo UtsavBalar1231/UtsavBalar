@@ -10,11 +10,9 @@ interface Props {
   highlightLines?: string; // Format: "1,4-6,10"
 }
 
-const { 
-  language = "javascript", 
-  title, 
-  showLineNumbers = true,
-  highlightLines = ""
+const {
+  language = "javascript",
+  title,
 } = Astro.props;
 
 // Get readable language name for display
@@ -46,51 +44,72 @@ const langMap: Record<string, string> = {
 const displayLang = langMap[language] || language;
 ---
 
-<div class="code-block-container my-6 rounded-md overflow-hidden border border-border bg-[var(--code-bg)]">
-  <div class="code-header flex justify-between items-center px-4 py-2 bg-[var(--code-header-bg)]">
+<div
+  class="code-block-container my-6 rounded-md overflow-hidden border border-border bg-[var(--code-bg)]"
+>
+  <div
+    class="code-header flex justify-between items-center px-4 py-2 bg-[var(--code-header-bg)]"
+  >
     <div class="flex items-center">
-      {title && (
-        <div class="code-title text-sm font-mono font-medium text-text-primary mr-3">
-          {title}
-        </div>
-      )}
-      <div class="code-language text-xs font-mono text-text-secondary uppercase">
+      {
+        title && (
+          <div class="code-title text-sm font-mono font-medium text-text-primary mr-3">
+            {title}
+          </div>
+        )
+      }
+      <div
+        class="code-language text-xs font-mono text-text-secondary uppercase"
+      >
         {displayLang}
       </div>
     </div>
-    <button class="copy-button flex items-center text-xs rounded bg-[var(--code-btn-bg)] px-2 py-1 hover:bg-[var(--code-btn-hover)] transition-colors">
-      <svg class="w-3.5 h-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button
+      class="copy-button flex items-center text-xs rounded bg-[var(--code-btn-bg)] px-2 py-1 hover:bg-[var(--code-btn-hover)] transition-colors"
+    >
+      <svg
+        class="w-3.5 h-3.5 mr-1.5"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
         <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
       </svg>
       <span class="copy-text">Copy</span>
     </button>
   </div>
-  <div class="code-content p-4 overflow-x-auto">
-    <pre class={`language-${language} ${showLineNumbers ? 'line-numbers' : ''}`} data-line={highlightLines}><slot /></pre>
+  <div class="code-content p-4 overflow-x-auto text-text-primary">
+    <slot />
   </div>
 </div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const copyButtons = document.querySelectorAll(".copy-button");
-    
-    copyButtons.forEach(button => {
+    const copyButtons = document.querySelectorAll(
+      ".code-block-container .copy-button",
+    );
+
+    copyButtons.forEach((button) => {
       button.addEventListener("click", async () => {
         const codeBlock = button.closest(".code-block-container");
         const codeContent = codeBlock?.querySelector("pre code");
         const copyText = button.querySelector(".copy-text");
-        
+
         if (codeContent) {
           try {
             // Get text without preserving HTML
             const codeToCopy = codeContent.textContent || "";
-            
+
             await navigator.clipboard.writeText(codeToCopy);
-            
+
             // Show copied indicator
             if (copyText) copyText.textContent = "Copied!";
-            
+
             // Reset after 2 seconds
             setTimeout(() => {
               if (copyText) copyText.textContent = "Copy";
@@ -98,7 +117,7 @@ const displayLang = langMap[language] || language;
           } catch (err) {
             console.error("Failed to copy code:", err);
             if (copyText) copyText.textContent = "Failed";
-            
+
             setTimeout(() => {
               if (copyText) copyText.textContent = "Copy";
             }, 2000);
@@ -110,12 +129,24 @@ const displayLang = langMap[language] || language;
 </script>
 
 <style>
-  /* Theme-aware styling */
+  /* Theme-aware styling - Matched with DriverCodeBlock.astro */
   .code-block-container {
-    --code-bg: color-mix(in srgb, var(--bg-primary) 90%, black);
-    --code-header-bg: color-mix(in srgb, var(--bg-secondary) 90%, var(--bg-primary));
-    --code-btn-bg: color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary));
-    --code-btn-hover: color-mix(in srgb, var(--accent-primary) 15%, var(--bg-secondary));
+    --code-bg: color-mix(in srgb, var(--bg-primary) 92%, black);
+    --code-header-bg: color-mix(
+      in srgb,
+      var(--bg-secondary) 90%,
+      var(--bg-primary)
+    );
+    --code-btn-bg: color-mix(
+      in srgb,
+      var(--bg-secondary) 70%,
+      var(--bg-primary)
+    );
+    --code-btn-hover: color-mix(
+      in srgb,
+      var(--accent-primary) 15%,
+      var(--bg-secondary)
+    );
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease-in-out;
   }
@@ -123,17 +154,17 @@ const displayLang = langMap[language] || language;
   .code-block-container:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
-  
+
   .code-content pre {
     margin: 0;
     padding: 0;
-    font-family: 'AdwaitaMono', monospace;
+    font-family: "AdwaitaMono", monospace;
     font-size: 0.9rem;
     line-height: 1.6;
   }
 
   .code-content pre code {
-    font-family: 'AdwaitaMono', monospace;
+    font-family: "AdwaitaMono", monospace;
     tab-size: 2;
   }
 
@@ -159,18 +190,22 @@ const displayLang = langMap[language] || language;
 
   /* Highlight styles for highlighted lines */
   .line-highlight {
-    background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent) !important;
+    background-color: color-mix(
+      in srgb,
+      var(--accent-primary) 10%,
+      transparent
+    ) !important;
     margin: 0 -1rem;
     padding: 0 1rem;
     display: block;
     width: calc(100% + 2rem);
   }
-  
+
   /* Copy button animations */
   .copy-button {
     transition: all 0.2s ease;
   }
-  
+
   .copy-button:active {
     transform: scale(0.95);
   }
@@ -179,9 +214,9 @@ const displayLang = langMap[language] || language;
     .copy-text {
       display: none;
     }
-    
+
     .code-language {
       display: none;
     }
   }
-</style> 
+</style>
