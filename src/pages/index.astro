@@ -370,6 +370,28 @@ import Analytics from "@vercel/analytics/astro";
       }
     }
 
+    // Ensure mobile tutorials tab also resets to list view
+    const mobileTutorialsBtn = document.querySelector('label[for="tab6"].mobile-tab-btn');
+    if (mobileTutorialsBtn) {
+      mobileTutorialsBtn.addEventListener('click', () => {
+        // Get the tutorials list and check if it's hidden
+        const tutorialsList = document.querySelector('.tutorials-list');
+        if (tutorialsList && tutorialsList.classList.contains('hidden-list')) {
+          // Show the list and hide all tutorials
+          tutorialsList.classList.remove('hidden-list');
+          document.querySelectorAll('.tutorial-content').forEach(content => {
+            content.classList.add('hidden');
+          });
+          
+          // Remove back button if it exists
+          const backButton = document.querySelector('.back-to-tutorials');
+          if (backButton) {
+            backButton.remove();
+          }
+        }
+      });
+    }
+
     // Function to go back to home page (profile section)
     function goToHomePage() {
       if (profileSection && contentSection) {
@@ -605,9 +627,36 @@ import Analytics from "@vercel/analytics/astro";
                 content.classList.add('hidden');
               });
               tutorialElement.classList.remove('hidden');
+              
+              // Add back button if it doesn't exist at the top of the tutorial
+              if (!tutorialElement.querySelector('.back-to-tutorials-top')) {
+                const topBackButton = document.createElement('button');
+                topBackButton.className = 'back-to-tutorials-top mb-4 inline-flex items-center text-primary hover:underline';
+                topBackButton.innerHTML = `
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Back to All Tutorials
+                `;
+                
+                topBackButton.addEventListener('click', () => {
+                  // Show the list and hide all tutorials
+                  tutorialsList.classList.remove('hidden-list');
+                  document.querySelectorAll('.tutorial-content').forEach(content => {
+                    content.classList.add('hidden');
+                  });
+                  
+                  // Remove both back buttons
+                  const backButton = document.querySelector('.back-to-tutorials');
+                  if (backButton) backButton.remove();
+                  topBackButton.remove();
+                });
+                
+                tutorialElement.insertBefore(topBackButton, tutorialElement.firstChild);
+              }
             }
             
-            // Add back button if it doesn't exist
+            // Add main back button if it doesn't exist
             if (!document.querySelector('.back-to-tutorials')) {
               const backButton = document.createElement('button');
               backButton.className = 'back-to-tutorials mb-4 inline-flex items-center text-primary hover:underline';
@@ -625,8 +674,10 @@ import Analytics from "@vercel/analytics/astro";
                   content.classList.add('hidden');
                 });
                 
-                // Remove back button
+                // Remove back buttons
                 backButton.remove();
+                const topBackButton = document.querySelector('.back-to-tutorials-top');
+                if (topBackButton) topBackButton.remove();
               });
               
               tutorialsTab.insertBefore(backButton, tutorialsList.nextSibling);
@@ -641,6 +692,38 @@ import Analytics from "@vercel/analytics/astro";
           e.preventDefault();
           const slug = (link as HTMLElement).getAttribute('data-slug');
           if (slug) {
+            // Hide the list if not already hidden
+            if (!tutorialsList.classList.contains('hidden-list')) {
+              tutorialsList.classList.add('hidden-list');
+              
+              // Add main back button if it doesn't exist
+              if (!document.querySelector('.back-to-tutorials')) {
+                const backButton = document.createElement('button');
+                backButton.className = 'back-to-tutorials mb-4 inline-flex items-center text-primary hover:underline';
+                backButton.innerHTML = `
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Back to Tutorials List
+                `;
+                
+                backButton.addEventListener('click', () => {
+                  // Show the list and hide all tutorials
+                  tutorialsList.classList.remove('hidden-list');
+                  document.querySelectorAll('.tutorial-content').forEach(content => {
+                    content.classList.add('hidden');
+                  });
+                  
+                  // Remove back buttons
+                  backButton.remove();
+                  const topBackButton = document.querySelector('.back-to-tutorials-top');
+                  if (topBackButton) topBackButton.remove();
+                });
+                
+                tutorialsTab.insertBefore(backButton, tutorialsList.nextSibling);
+              }
+            }
+            
             // Show the specific tutorial
             const tutorialElement = document.getElementById(`tutorial-${slug}`);
             if (tutorialElement) {
@@ -649,10 +732,61 @@ import Analytics from "@vercel/analytics/astro";
               });
               tutorialElement.classList.remove('hidden');
               tutorialElement.scrollIntoView({ behavior: 'smooth' });
+              
+              // Add back button if it doesn't exist at the top of the tutorial
+              if (!tutorialElement.querySelector('.back-to-tutorials-top')) {
+                const topBackButton = document.createElement('button');
+                topBackButton.className = 'back-to-tutorials-top mb-4 inline-flex items-center text-primary hover:underline';
+                topBackButton.innerHTML = `
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Back to All Tutorials
+                `;
+                
+                topBackButton.addEventListener('click', () => {
+                  // Show the list and hide all tutorials
+                  tutorialsList.classList.remove('hidden-list');
+                  document.querySelectorAll('.tutorial-content').forEach(content => {
+                    content.classList.add('hidden');
+                  });
+                  
+                  // Remove both back buttons
+                  const backButton = document.querySelector('.back-to-tutorials');
+                  if (backButton) backButton.remove();
+                  topBackButton.remove();
+                });
+                
+                tutorialElement.insertBefore(topBackButton, tutorialElement.firstChild);
+              }
             }
           }
         });
       });
+      
+      // Handle click on the Tutorials tab to reset to the list view
+      const tutorialsTabLink = document.querySelector('a[href="#content6"], label[for="tab6"]');
+      if (tutorialsTabLink) {
+        tutorialsTabLink.addEventListener('click', () => {
+          // Reset to list view when the Tutorials tab is clicked
+          const backButton = document.querySelector('.back-to-tutorials');
+          
+          // Only take action if we're in a tutorial detail view
+          if (tutorialsList.classList.contains('hidden-list')) {
+            // Show the list and hide all tutorials
+            tutorialsList.classList.remove('hidden-list');
+            document.querySelectorAll('.tutorial-content').forEach(content => {
+              content.classList.add('hidden');
+            });
+            
+            // Remove both back buttons if they exist
+            const backButton = document.querySelector('.back-to-tutorials');
+            const topBackButton = document.querySelector('.back-to-tutorials-top');
+            if (backButton) backButton.remove();
+            if (topBackButton) topBackButton.remove();
+          }
+        });
+      }
     }
   });
 </script>
@@ -938,10 +1072,14 @@ import Analytics from "@vercel/analytics/astro";
     display: none;
   }
   
-  .back-to-tutorials {
+  .back-to-tutorials, .back-to-tutorials-top {
     cursor: pointer;
     display: flex;
     align-items: center;
     margin-top: 1rem;
+  }
+  
+  .back-to-tutorials-top {
+    margin-bottom: 1.5rem;
   }
 </style>
