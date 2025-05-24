@@ -7,15 +7,15 @@
 
 :root {
   // Note component theming
-  --note-bg: color-mix(in srgb, var(--info) 5%, var(--bg-primary));
-  --note-border: var(--info);
-  --note-title: var(--info);
+  --note-bg: color-mix(in srgb, var(--color-info) 5%, var(--bg-primary));
+  --note-border: var(--color-info);
+  --note-title: var(--color-info);
   --note-text: var(--text-primary);
   
   // Warning component theming
-  --warning-bg: color-mix(in srgb, var(--warning) 5%, var(--bg-primary));
-  --warning-border: var(--warning);
-  --warning-title: var(--warning);
+  --warning-bg: color-mix(in srgb, var(--color-warning) 5%, var(--bg-primary));
+  --warning-border: var(--color-warning);
+  --warning-title: var(--color-warning);
   --warning-text: var(--text-primary);
   
   // Terminal component theming
@@ -33,7 +33,7 @@
   --code-btn-hover: color-mix(in srgb, var(--accent-primary) 15%, var(--bg-secondary));
   
   // Kernel driver code specific theming
-  --kernel-badge-bg: color-mix(in srgb, var(--warning) 30%, var(--bg-secondary));
+  --kernel-badge-bg: color-mix(in srgb, var(--color-warning) 30%, var(--bg-secondary));
   --kernel-badge-text: var(--bg-primary);
 }
 
@@ -42,8 +42,8 @@
 [data-theme="catppuccin-latte"],
 [data-theme="everforest-light"] {
   // Adjust background mixes for better contrast in light themes
-  --note-bg: color-mix(in srgb, var(--info) 10%, var(--bg-primary));
-  --warning-bg: color-mix(in srgb, var(--warning) 10%, var(--bg-primary));
+  --note-bg: color-mix(in srgb, var(--color-info) 10%, var(--bg-primary));
+  --warning-bg: color-mix(in srgb, var(--color-warning) 10%, var(--bg-primary));
   --terminal-bg: color-mix(in srgb, var(--bg-primary) 60%, black);
   --code-bg: color-mix(in srgb, var(--bg-primary) 70%, var(--bg-secondary));
   

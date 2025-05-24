@@ -49,7 +49,7 @@ pre.astro-code {
     // Numbers & Booleans
     :global(.constant.numeric),
     :global(.constant.language.boolean) {
-      color: var(--warning);
+      color: var(--color-warning);
     }
 
     // Keywords
@@ -78,7 +78,7 @@ pre.astro-code {
     :global(.entity.name.class),
     :global(.entity.name.namespace),
     :global(.storage.type.class) {
-      color: var(--info);
+      color: var(--color-info);
     }
 
     // Tags & Attributes (for HTML/JSX)
@@ -87,7 +87,7 @@ pre.astro-code {
     }
 
     :global(.entity.other.attribute-name) {
-      color: var(--warning);
+      color: var(--color-warning);
     }
 
     // Imports/Exports
@@ -101,7 +101,7 @@ pre.astro-code {
     :global(.keyword.control.directive),
     :global(.punctuation.definition.directive),
     :global(.meta.preprocessor.include) {
-      color: var(--warning);
+      color: var(--color-warning);
     }
 
     :global(.keyword.operator.sizeof),
@@ -110,7 +110,7 @@ pre.astro-code {
     }
 
     :global(.support.type.posix-reserved) {
-      color: var(--info);
+      color: var(--color-info);
     }
 
     :global(.support.function.kernel),
@@ -124,7 +124,7 @@ pre.astro-code {
     }
 
     :global(.constant.other.enum) {
-      color: var(--info);
+      color: var(--color-info);
     }
 
     // Specific for function declarations
@@ -142,7 +142,7 @@ pre.astro-code {
     :global(.meta.scope.prerequisites),
     :global(.meta.scope.recipe),
     :global(.variable.other.makefile) {
-      color: var(--warning);
+      color: var(--color-warning);
     }
 
     :global(.keyword.control.directive.define),
@@ -150,7 +150,7 @@ pre.astro-code {
     :global(.keyword.control.directive.line),
     :global(.keyword.control.directive.include),
     :global(.keyword.control.directive.pragma) {
-      color: var(--warning);
+      color: var(--color-warning);
     }
   }
 }

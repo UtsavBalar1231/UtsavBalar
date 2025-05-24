@@ -28,7 +28,7 @@ const { title = "Note" } = Astro.props;
 <style>
   /* Theme-aware styling */
   .note-container {
-    --note-bg: color-mix(in srgb, var(--info) 5%, var(--bg-primary));
+    --note-bg: color-mix(in srgb, var(--color-info) 5%, var(--bg-primary));
     position: relative;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -49,7 +49,7 @@ const { title = "Note" } = Astro.props;
   }
   
   .note-content :global(a) {
-    color: var(--info);
+    color: var(--color-info);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
@@ -61,7 +61,7 @@ const { title = "Note" } = Astro.props;
   
   .note-content :global(code) {
     font-family: 'AdwaitaMono', monospace;
-    background-color: color-mix(in srgb, var(--info) 10%, var(--bg-secondary));
+    background-color: color-mix(in srgb, var(--color-info) 10%, var(--bg-secondary));
     padding: 0.1em 0.3em;
     border-radius: 0.25rem;
     font-size: 0.9em;

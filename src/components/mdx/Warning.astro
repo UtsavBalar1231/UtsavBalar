@@ -28,7 +28,7 @@ const { title = "Warning" } = Astro.props;
 <style>
   /* Theme-aware styling */
   .warning-container {
-    --warning-bg: color-mix(in srgb, var(--warning) 5%, var(--bg-primary));
+    --warning-bg: color-mix(in srgb, var(--color-warning) 5%, var(--bg-primary));
     position: relative;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -49,12 +49,12 @@ const { title = "Warning" } = Astro.props;
   }
   
   .warning-content :global(strong), .warning-content :global(b) {
-    color: var(--warning);
+    color: var(--color-warning);
     font-weight: 600;
   }
   
   .warning-content :global(a) {
-    color: var(--warning);
+    color: var(--color-warning);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
@@ -66,7 +66,7 @@ const { title = "Warning" } = Astro.props;
   
   .warning-content :global(code) {
     font-family: 'AdwaitaMono', monospace;
-    background-color: color-mix(in srgb, var(--warning) 10%, var(--bg-secondary));
+    background-color: color-mix(in srgb, var(--color-warning) 10%, var(--bg-secondary));
     padding: 0.1em 0.3em;
     border-radius: 0.25rem;
     font-size: 0.9em;

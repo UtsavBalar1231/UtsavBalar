@@ -15,10 +15,10 @@ module.exports = {
 				'gray-400': 'var(--text-secondary)',
 				'gray-100': 'var(--text-primary)',
 				// Extended colors
-				error: 'var(--error)',
-				warning: 'var(--warning)',
-				success: 'var(--success)',
-				info: 'var(--info)',
+				error: 'var(--color-error)',
+				warning: 'var(--color-warning)',
+				success: 'var(--color-success)',
+				info: 'var(--color-info)',
 				// Neutral shades
 				'neutral-50': 'var(--color-neutral-50)',
 				'neutral-100': 'var(--color-neutral-100)',
