@@ -1,0 +1,237 @@
+---
+// ContentEditor component - VS Code style content area
+import ContentProfile from "./ContentProfile.astro";
+import ContentCode from "./ContentAbout.astro";
+import ContentProjects from "./ContentProjects.astro";
+import ContentResume from "./ContentResume.astro";
+import ContentQuotes from "./ContentQuotes.astro";
+import ContentBookBits from "./ContentBookBits.astro";
+import ContentTutorials from "./ContentTutorials.astro";
+import TutorialContent from "./TutorialContent.astro";
+---
+
+<div class="content-editor bg-black flex-1 flex flex-col h-full overflow-hidden">
+  <!-- Content area without line numbers -->
+  <div class="editor-container flex h-full">
+    <!-- Main content area -->
+    <div class="editor-content flex-1 overflow-auto">
+      <!-- Tab content wrapper - maintains existing radio button system -->
+      <div class="tab-content-wrapper h-full">
+        <!-- Hidden radio buttons for tab control -->
+        <input type="radio" id="tab1" name="tabs" class="tab-radio" checked />
+        <input type="radio" id="tab2" name="tabs" class="tab-radio" />
+        <input type="radio" id="tab3" name="tabs" class="tab-radio" />
+        <input type="radio" id="tab4" name="tabs" class="tab-radio" />
+        <input type="radio" id="tab5" name="tabs" class="tab-radio" />
+        <input type="radio" id="tab6" name="tabs" class="tab-radio" />
+        <input type="radio" id="tab7" name="tabs" class="tab-radio" />
+
+        <!-- Content container -->
+        <div class="content-container p-6 font-mono text-sm leading-relaxed">
+          <!-- Profile content (new default) -->
+          <div id="content1" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0z"/>
+                  <path d="M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">about/profile.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Active</span>
+              </div>
+            </div>
+            <ContentProfile />
+          </div>
+
+          <!-- About content -->
+          <div id="content2" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">about/intro.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Modified</span>
+              </div>
+            </div>
+            <ContentCode />
+          </div>
+
+          <!-- Projects content -->
+          <div id="content3" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-purple-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">projects/projects.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Saved</span>
+              </div>
+            </div>
+            <ContentProjects />
+          </div>
+
+          <!-- Resume content -->
+          <div id="content4" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-red-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">resume/resume.pdf</span>
+                <span class="text-text-secondary text-xs ml-auto">Read-only</span>
+              </div>
+            </div>
+            <ContentResume />
+          </div>
+
+          <!-- Quotes content -->
+          <div id="content5" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">misc/quotes.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Saved</span>
+              </div>
+            </div>
+            <ContentQuotes />
+          </div>
+
+          <!-- Book Bits content -->
+          <div id="content6" class="tab-content">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-orange-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm6.5 0a.5.5 0 0 0-1 0v6L4 6.5 2.5 8V2z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">misc/book-bits.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Saved</span>
+              </div>
+            </div>
+            <ContentBookBits />
+          </div>
+
+          <!-- Tutorials content -->
+          <div id="content7" class="tab-content tutorials-tab">
+            <div class="editor-header mb-4 pb-2 border-b border-gray-600">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+                </svg>
+                <span class="text-text-primary font-semibold">tutorials/index.md</span>
+                <span class="text-text-secondary text-xs ml-auto">Saved</span>
+              </div>
+            </div>
+            <div class="tutorials-section">
+              <div class="tutorials-list active">
+                <ContentTutorials />
+              </div>
+              <div class="tutorial-detail">
+                <TutorialContent />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ContentEditor JavaScript removed - line numbers functionality was unused -->
+
+<style>
+  .content-editor {
+    background: var(--color-editor-bg, var(--color-bg-primary));
+  }
+
+  /* Line numbers styles removed - functionality unused */
+
+  .editor-content {
+    background: var(--color-editor-bg, var(--color-bg-primary));
+  }
+
+  .editor-header {
+    background: var(--color-bg-primary);
+    font-family: 'AdwaitaMono', monospace;
+  }
+
+  /* Hide the radio buttons */
+  .tab-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Default state - hide all tab content */
+  .tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Show active tab content */
+  #tab1:checked ~ * #content1,
+  #tab2:checked ~ * #content2,
+  #tab3:checked ~ * #content3,
+  #tab4:checked ~ * #content4,
+  #tab5:checked ~ * #content5,
+  #tab6:checked ~ * #content6,
+  #tab7:checked ~ * #content7 {
+    display: block;
+    opacity: 1;
+  }
+
+  /* VS Code specific styling */
+  [data-theme="vscode-dark"] .content-editor {
+    background: var(--color-editor-bg);
+  }
+
+  /* Custom scrollbar for content area */
+  .editor-content::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  .editor-content::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+  }
+
+  .editor-content::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 7px;
+    border: 3px solid var(--color-bg-primary);
+  }
+
+  .editor-content::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
+
+  /* Tutorial specific styles */
+  .tutorials-section {
+    position: relative;
+    width: 100%;
+  }
+  
+  .tutorials-list {
+    transition: opacity 0.3s ease-in-out;
+    width: 100%;
+    display: block;
+  }
+  
+  .tutorials-list.hidden-list {
+    display: none;
+  }
+  
+  .tutorial-detail {
+    width: 100%;
+  }
+  
+  .tutorial-content {
+    padding-top: 1rem;
+  }
+  
+  .tutorial-content.hidden {
+    display: none;
+  }
+</style>

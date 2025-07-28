@@ -95,14 +95,15 @@ console.log(
 
   <!-- Tutorials Grid -->
   <div
-    class="tutorials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    class="tutorials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children"
   >
     {
       sortedTutorials.map((tutorial) => (
         <div
-          class="tutorial-card border border-border rounded-md overflow-hidden"
+          class="tutorial-card border border-border rounded-md overflow-hidden cursor-pointer hover:border-primary transition-colors hover-lift click-feedback"
           data-difficulty={tutorial.data.difficulty}
           data-topics={tutorial.data.topics.join(",")}
+          data-slug={tutorial.slug}
         >
           <div class="p-6">
             <div class="flex items-center mb-3 gap-2">
@@ -125,13 +126,7 @@ console.log(
             </div>
 
             <h2 class="text-xl font-semibold mb-2 hover:text-primary">
-              <a
-                href={`#tutorial-${tutorial.slug}`}
-                class="tutorial-link"
-                data-slug={tutorial.slug}
-              >
-                {tutorial.data.title}
-              </a>
+              {tutorial.data.title}
             </h2>
 
             <p class="text-sm text-foreground-secondary mb-4 line-clamp-3">
@@ -291,15 +286,46 @@ console.log(
       btn.classList.remove("bg-background");
     });
 
-    // Add click handlers for tutorial links
-    document.querySelectorAll(".tutorial-link").forEach((link) => {
-      link.addEventListener("click", (e) => {
+    // Add click handlers for tutorial cards
+    document.querySelectorAll(".tutorial-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
         e.preventDefault();
-        const slug = (link as HTMLElement).getAttribute("data-slug");
-        // Here you would typically show the tutorial content
-        // This functionality will be added with dynamic content loading
-        console.log(`Tutorial clicked: ${slug}`);
+        const slug = (card as HTMLElement).getAttribute("data-slug");
+        if (slug) {
+          // Navigate to tutorial content - update hash to show tutorial
+          window.location.hash = `#tutorial-${slug}`;
+          console.log(`Tutorial clicked: ${slug}`);
+        }
+      });
+      
+      // Add hover effect for better UX
+      card.addEventListener("mouseenter", () => {
+        card.classList.add("shadow-lg", "transform", "scale-105");
+      });
+      
+      card.addEventListener("mouseleave", () => {
+        card.classList.remove("shadow-lg", "transform", "scale-105");
       });
     });
   });
 </script>
+
+<style>
+  .tutorial-card {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .tutorial-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ensure proper cursor and text selection */
+  .tutorial-card {
+    user-select: none;
+  }
+  
+  .tutorial-card:active {
+    transform: translateY(-1px);
+  }
+</style>

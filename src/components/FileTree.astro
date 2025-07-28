@@ -1,0 +1,308 @@
+---
+// FileTree component - VS Code style file explorer
+---
+
+<div class="filetree w-64 overflow-y-auto" style="background: var(--color-sidebar-bg, var(--color-bg-secondary)); border-right: 1px solid var(--color-border);">
+  <!-- Explorer header -->
+  <div class="filetree-header px-3 py-2 text-xs font-semibold primary-text" style="background: var(--color-bg-secondary); border-bottom: 1px solid var(--color-border);">
+    <div class="flex items-center gap-2">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+      </svg>
+      EXPLORER
+    </div>
+  </div>
+
+  <!-- File tree content -->
+  <div class="filetree-content p-2">
+    <!-- Portfolio root folder -->
+    <div class="folder-item">
+      <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="portfolio">
+        <svg class="folder-chevron w-3 h-3 transition-transform chevron-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+        </svg>
+        <svg class="folder-icon w-4 h-4 accent-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+        </svg>
+        <span class="text-sm font-semibold primary-text">utsav-portfolio</span>
+      </div>
+      
+      <div class="folder-content ml-4 expanded" data-folder-content="portfolio">
+        <!-- About folder -->
+        <div class="folder-item">
+          <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="about">
+            <svg class="folder-chevron w-3 h-3 transition-transform chevron-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+            </svg>
+            <svg class="folder-icon w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+            </svg>
+            <span class="text-sm primary-text">about</span>
+          </div>
+          <div class="folder-content ml-4" data-folder-content="about">
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="about" data-tab="tab2">
+              <svg class="file-icon w-4 h-4 file-icon-markdown" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+              </svg>
+              <span class="text-sm secondary-text">intro.md</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projects folder -->
+        <div class="folder-item">
+          <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="projects">
+            <svg class="folder-chevron w-3 h-3 transition-transform" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+            </svg>
+            <svg class="folder-icon w-4 h-4 folder-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+            </svg>
+            <span class="text-sm primary-text">projects</span>
+          </div>
+          <div class="folder-content ml-4" data-folder-content="projects">
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="projects" data-tab="tab2">
+              <svg class="file-icon w-4 h-4 file-icon-markdown" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+              </svg>
+              <span class="text-sm secondary-text">projects.md</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume folder -->
+        <div class="folder-item">
+          <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="resume">
+            <svg class="folder-chevron w-3 h-3 transition-transform" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+            </svg>
+            <svg class="folder-icon w-4 h-4 folder-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+            </svg>
+            <span class="text-sm primary-text">resume</span>
+          </div>
+          <div class="folder-content ml-4" data-folder-content="resume">
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="resume" data-tab="tab3">
+              <svg class="file-icon w-4 h-4 file-icon-pdf" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5z"/>
+                <path d="M1.6 11.85H0v3.999h.791v-1.342h1.041c.896 0 1.312-.327 1.312-1.18 0-.853-.416-1.477-1.312-1.477z"/>
+              </svg>
+              <span class="text-sm secondary-text">resume.pdf</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tutorials folder -->
+        <div class="folder-item">
+          <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="tutorials">
+            <svg class="folder-chevron w-3 h-3 transition-transform" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+            </svg>
+            <svg class="folder-icon w-4 h-4 folder-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+            </svg>
+            <span class="text-sm primary-text">tutorials</span>
+          </div>
+          <div class="folder-content ml-4" data-folder-content="tutorials">
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="tutorials" data-tab="tab6">
+              <svg class="file-icon w-4 h-4 text-green-400" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+              </svg>
+              <span class="text-sm secondary-text">index.md</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other files -->
+        <div class="folder-item">
+          <div class="folder-header flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-folder="misc">
+            <svg class="folder-chevron w-3 h-3 transition-transform" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M6 12.796V3.204L11.481 8 6 12.796z"/>
+            </svg>
+            <svg class="folder-icon w-4 h-4 folder-icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
+            </svg>
+            <span class="text-sm primary-text">misc</span>
+          </div>
+          <div class="folder-content ml-4" data-folder-content="misc">
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="quotes" data-tab="tab4">
+              <svg class="file-icon w-4 h-4 text-purple-400" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+              </svg>
+              <span class="text-sm secondary-text">quotes.md</span>
+            </div>
+            <div class="file-item flex items-center gap-1 py-1 px-2 rounded cursor-pointer transition-colors hover-item" data-file="bookbits" data-tab="tab5">
+              <svg class="file-icon w-4 h-4 text-orange-400" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm6.5 0a.5.5 0 0 0-1 0v6L4 6.5 2.5 8V2z"/>
+              </svg>
+              <span class="text-sm secondary-text">book-bits.md</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize expanded state
+    const portfolioFolder = document.querySelector('[data-folder="portfolio"]');
+    if (portfolioFolder) {
+      const chevron = portfolioFolder.querySelector('.folder-chevron');
+      if (chevron) {
+        chevron.style.transform = 'rotate(90deg)';
+      }
+    }
+
+    // Handle folder toggle
+    document.querySelectorAll('.folder-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        const folder = header.getAttribute('data-folder');
+        const content = document.querySelector(`[data-folder-content="${folder}"]`);
+        const chevron = header.querySelector('.folder-chevron');
+        
+        if (content && chevron) {
+          const isExpanded = content.classList.contains('expanded');
+          
+          if (isExpanded) {
+            content.classList.remove('expanded');
+            chevron.style.transform = 'rotate(0deg)';
+          } else {
+            content.classList.add('expanded');
+            chevron.style.transform = 'rotate(90deg)';
+          }
+        }
+      });
+    });
+
+    // Handle file clicks
+    document.querySelectorAll('.file-item').forEach(fileItem => {
+      fileItem.addEventListener('click', (e) => {
+        const tabId = fileItem.getAttribute('data-tab');
+        const fileName = fileItem.getAttribute('data-file');
+        
+        if (tabId) {
+          // Remove active state from all files
+          document.querySelectorAll('.file-item').forEach(item => {
+            item.classList.remove('file-active');
+          });
+          
+          // Add active state to clicked file
+          fileItem.classList.add('file-active');
+          
+          // Trigger tab change
+          const radioButton = document.getElementById(tabId) as HTMLInputElement;
+          if (radioButton) {
+            radioButton.checked = true;
+            radioButton.dispatchEvent(new Event('change'));
+          }
+          
+          // Update status bar
+          if ((window as any).updateStatusBarFile) {
+            const fileText = fileItem.querySelector('span')?.textContent || fileName + '.md';
+            (window as any).updateStatusBarFile(fileText);
+          }
+        }
+      });
+    });
+
+    // Set initial active file
+    const aboutFile = document.querySelector('[data-file="about"]');
+    if (aboutFile) {
+      aboutFile.classList.add('file-active');
+    }
+  });
+</script>
+
+<style>
+  .filetree {
+    background: var(--color-sidebar-bg, var(--color-bg-secondary));
+    min-height: 100%;
+  }
+
+  .filetree-header {
+    background: var(--color-bg-secondary);
+  }
+
+  .folder-content {
+    display: none;
+    overflow: hidden;
+  }
+
+  .folder-content.expanded {
+    display: block;
+  }
+
+  .file-active {
+    background-color: var(--color-selection-bg, rgba(255, 255, 255, 0.1)) !important;
+  }
+
+  .folder-chevron {
+    transition: transform 0.2s ease;
+  }
+
+  /* VS Code specific styling */
+  [data-theme="vscode-dark"] .filetree {
+    background: var(--color-sidebar-bg);
+  }
+
+  [data-theme="vscode-dark"] .file-active {
+    background-color: var(--color-selection-bg) !important;
+  }
+
+  /* Custom scrollbar */
+  .filetree::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .filetree::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .filetree::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  .filetree::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
+
+  /* Theme-aware classes */
+  .hover-item {
+    color: var(--color-text-primary);
+  }
+
+  .hover-item:hover {
+    background-color: var(--color-selection-bg, rgba(255, 255, 255, 0.1));
+  }
+
+  .primary-text {
+    color: var(--color-text-primary);
+  }
+
+  .secondary-text {
+    color: var(--color-text-secondary);
+  }
+
+  .accent-icon {
+    color: var(--color-accent-primary);
+  }
+
+  .chevron-icon {
+    color: var(--color-text-secondary);
+  }
+
+  .folder-icon {
+    color: var(--color-warning, #f59e0b);
+  }
+
+  .file-icon-markdown {
+    color: var(--color-info, #06b6d4);
+  }
+
+  .file-icon-pdf {
+    color: var(--color-error, #ef4444);
+  }
+</style>

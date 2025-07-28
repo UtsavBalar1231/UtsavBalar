@@ -33,7 +33,9 @@ module.exports = {
 				'neutral-950': 'var(--color-neutral-950)',
 			},
 			fontFamily: {
-				'mono': ['AdwaitaMono', 'monospace'],
+				'mono': ['AdwaitaMono', 'JetBrains Mono', 'monospace'],
+				'sans': ['Inter', 'system-ui', 'sans-serif'],
+				'code': ['JetBrains Mono', 'AdwaitaMono', 'monospace'],
 			},
 		},
 	},

@@ -1,0 +1,107 @@
+---
+// StatusBar component - VS Code style bottom status bar
+---
+
+<div class="statusbar themed-statusbar status-text h-6 flex items-center justify-between px-2 text-xs">
+  <!-- Left side - Git and file info -->
+  <div class="flex items-center gap-4">
+    <!-- Git branch -->
+    <div class="flex items-center gap-1">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M11.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zm-2.25.75a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.492 2.492 0 0 1 6 7h4a1 1 0 0 0 1-1v-.878A2.25 2.25 0 0 1 9.5 3.25z"/>
+      </svg>
+      <span>main</span>
+    </div>
+
+    <!-- File status -->
+    <div class="flex items-center gap-2">
+      <span class="status-item">UTF-8</span>
+      <span class="status-item">Markdown</span>
+    </div>
+  </div>
+
+  <!-- Center - Current file info -->
+  <div class="flex items-center gap-2 text-center">
+    <span id="current-file-info" class="font-mono">about.md</span>
+  </div>
+
+  <!-- Right side - Position and selection info -->
+  <div class="flex items-center gap-4">
+    <span class="status-item">Ln 1, Col 1</span>
+    <span class="status-item">Spaces: 2</span>
+    
+    <!-- Theme indicator -->
+    <div class="flex items-center gap-1">
+      <div class="w-2 h-2 rounded-full status-indicator opacity-75"></div>
+      <span id="current-theme" class="text-xs opacity-75">Default</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Update current theme display
+  function updateThemeDisplay() {
+    const themeElement = document.getElementById('current-theme');
+    if (themeElement) {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
+      themeElement.textContent = currentTheme.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+  }
+
+  // Update current file info based on active tab
+  function updateFileInfo(filename = 'about.md') {
+    const fileInfoElement = document.getElementById('current-file-info');
+    if (fileInfoElement) {
+      fileInfoElement.textContent = filename;
+    }
+  }
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', () => {
+    updateThemeDisplay();
+    
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          updateThemeDisplay();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  });
+
+  // Expose function globally for tab updates
+  (window as any).updateStatusBarFile = updateFileInfo;
+</script>
+
+<style>
+  .statusbar {
+    background: var(--color-statusbar-bg, var(--color-accent-primary));
+    color: var(--color-statusbar-text, #ffffff);
+    border-top: 1px solid var(--color-border);
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+    min-height: 24px;
+  }
+
+  .status-item {
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .status-item:hover {
+    opacity: 1;
+  }
+
+  /* VS Code specific styling */
+  [data-theme="vscode-dark"] .statusbar {
+    background: var(--color-statusbar-bg);
+    color: var(--color-statusbar-text);
+  }
+</style>

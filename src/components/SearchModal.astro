@@ -1,0 +1,427 @@
+---
+// SearchModal component - VS Code style command palette (Cmd+Shift+P)
+---
+
+<div id="search-modal" class="search-modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="search-modal-content themed-bg themed-border border rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-96 flex flex-col">
+    <!-- Search Header -->
+    <div class="search-header flex items-center p-4 themed-border-bottom">
+      <svg class="w-5 h-5 secondary-text mr-3" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+      <input 
+        id="search-modal-input"
+        type="text" 
+        placeholder="Search for files, commands, or content..."
+        class="flex-1 bg-transparent border-none outline-none primary-text placeholder-secondary-text text-lg"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd class="ml-3 px-2 py-1 text-xs secondary-text themed-border border rounded">ESC</kbd>
+    </div>
+    
+    <!-- Search Results -->
+    <div class="search-results flex-1 overflow-y-auto" id="search-modal-results">
+      <!-- Default commands when no search -->
+      <div class="search-category">
+        <div class="category-header px-4 py-2 text-xs font-semibold secondary-text uppercase tracking-wide themed-bg-secondary">
+          Quick Actions
+        </div>
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="toggle-theme">
+          <svg class="w-4 h-4 accent-primary mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Toggle Theme</div>
+            <div class="text-xs secondary-text">Switch between available themes</div>
+          </div>
+          <kbd class="px-2 py-1 text-xs secondary-text themed-border border rounded">⌘T</kbd>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="go-home">
+          <svg class="w-4 h-4 accent-primary mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 1l7 7-1.5 1.5L12 8v7H9V9H7v6H4V8L2.5 9.5 1 8l7-7z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Go to Profile</div>
+            <div class="text-xs secondary-text">Navigate to profile page</div>
+          </div>
+          <kbd class="px-2 py-1 text-xs secondary-text themed-border border rounded">⌘H</kbd>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="toggle-sidebar">
+          <svg class="w-4 h-4 accent-primary mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M3 0h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3zM0 3v10a2 2 0 0 0 2 2H3V1H2a2 2 0 0 0-2 2zm4-2v14h9a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H4z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Toggle Sidebar</div>
+            <div class="text-xs secondary-text">Show/hide the file explorer</div>
+          </div>
+          <kbd class="px-2 py-1 text-xs secondary-text themed-border border rounded">⌘B</kbd>
+        </div>
+      </div>
+      
+      <div class="search-category">
+        <div class="category-header px-4 py-2 text-xs font-semibold secondary-text uppercase tracking-wide themed-bg-secondary">
+          Navigate to
+        </div>
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="nav-profile">
+          <svg class="w-4 h-4 file-icon-personal mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H2z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Profile</div>
+            <div class="text-xs secondary-text">Personal introduction and background</div>
+          </div>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="nav-about">
+          <svg class="w-4 h-4 file-icon-markdown mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">About</div>
+            <div class="text-xs secondary-text">Personal introduction and background</div>
+          </div>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="nav-projects">
+          <svg class="w-4 h-4 file-icon-project mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Projects</div>
+            <div class="text-xs secondary-text">Portfolio and project showcase</div>
+          </div>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="nav-resume">
+          <svg class="w-4 h-4 file-icon-pdf mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Resume</div>
+            <div class="text-xs secondary-text">Professional experience and skills</div>
+          </div>
+        </div>
+        
+        <div class="search-result-item flex items-center px-4 py-3 hover-item hover-lift cursor-pointer" data-action="nav-tutorials">
+          <svg class="w-4 h-4 file-icon-tutorial mr-3" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z"/>
+          </svg>
+          <div class="flex-1">
+            <div class="primary-text">Tutorials</div>
+            <div class="text-xs secondary-text">Linux kernel development tutorials</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Search Footer -->
+    <div class="search-footer px-4 py-3 themed-border-top themed-bg-secondary">
+      <div class="flex items-center justify-between text-xs secondary-text">
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1">
+            <kbd class="px-1 border themed-border rounded">↑↓</kbd>
+            Navigate
+          </span>
+          <span class="flex items-center gap-1">
+            <kbd class="px-1 border themed-border rounded">⏎</kbd>
+            Select
+          </span>
+          <span class="flex items-center gap-1">
+            <kbd class="px-1 border themed-border rounded">ESC</kbd>
+            Close
+          </span>
+        </div>
+        <div id="search-results-count" class="secondary-text">
+          <!-- Results count will be shown here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Use both DOMContentLoaded and a timeout to ensure initialization
+  function initializeSearchModal() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-modal-input');
+    const results = document.getElementById('search-modal-results');
+    const resultsCount = document.getElementById('search-results-count');
+    
+    let selectedIndex = 0;
+    let currentResults: NodeListOf<Element> = document.querySelectorAll('.search-result-item');
+    
+    // Show modal
+    function showModal() {
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Focus input
+        if (input) {
+          input.focus();
+          input.value = '';
+        }
+        
+        // Reset selection
+        selectedIndex = 0;
+        updateSelection();
+        
+        // Show default results
+        showDefaultResults();
+      }
+    }
+    
+    // Hide modal
+    function hideModal() {
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        
+        // Clear input
+        if (input) {
+          input.value = '';
+        }
+      }
+    }
+    
+    // Show default results (commands and navigation)
+    function showDefaultResults() {
+      // The default results are already in the HTML
+      currentResults = document.querySelectorAll('.search-result-item');
+      updateResultsCount();
+    }
+    
+    // Update selection highlight
+    function updateSelection() {
+      currentResults.forEach((item, index) => {
+        if (index === selectedIndex) {
+          item.classList.add('bg-accent-primary', 'bg-opacity-20');
+        } else {
+          item.classList.remove('bg-accent-primary', 'bg-opacity-20');
+        }
+      });
+    }
+    
+    // Update results count
+    function updateResultsCount() {
+      if (resultsCount) {
+        resultsCount.textContent = `${currentResults.length} results`;
+      }
+    }
+    
+    // Handle search
+    function handleSearch(query: string) {
+      if (!query.trim()) {
+        showDefaultResults();
+        return;
+      }
+      
+      // For now, filter existing results based on search
+      // This could be extended to include fuzzy search
+      const filteredResults = Array.from(document.querySelectorAll('.search-result-item')).filter(item => {
+        const text = item.textContent?.toLowerCase() || '';
+        return text.includes(query.toLowerCase());
+      });
+      
+      // Hide all results first
+      document.querySelectorAll('.search-result-item').forEach(item => {
+        (item as HTMLElement).style.display = 'none';
+      });
+      
+      // Show filtered results
+      filteredResults.forEach(item => {
+        (item as HTMLElement).style.display = 'flex';
+      });
+      
+      currentResults = document.querySelectorAll('.search-result-item[style="display: flex;"], .search-result-item:not([style*="display: none"])');
+      selectedIndex = 0;
+      updateSelection();
+      updateResultsCount();
+    }
+    
+    // Execute selected action
+    function executeAction() {
+      const selectedItem = currentResults[selectedIndex];
+      if (selectedItem) {
+        const action = selectedItem.getAttribute('data-action');
+        
+        switch (action) {
+          case 'toggle-theme':
+            // Theme toggling handled by InfoPanel theme selector
+            const infoPanelToggle = document.querySelector('[onclick*="toggleRightPanel"]');
+            if (infoPanelToggle) {
+              (infoPanelToggle as HTMLElement).click();
+            }
+            break;
+            
+          case 'go-home':
+          case 'nav-profile':
+            window.location.hash = '#profile';
+            break;
+            
+          case 'nav-about':
+            window.location.hash = '#about';
+            break;
+            
+          case 'nav-projects':
+            window.location.hash = '#projects';
+            break;
+            
+          case 'nav-resume':
+            window.location.hash = '#resume';
+            break;
+            
+          case 'nav-tutorials':
+            window.location.hash = '#tutorials';
+            break;
+            
+          case 'toggle-sidebar':
+            // Toggle right panel instead of sidebar
+            if (typeof (window as any).toggleRightPanel === 'function') {
+              (window as any).toggleRightPanel();
+            }
+            break;
+        }
+        
+        hideModal();
+      }
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows/Linux)
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'P') {
+        e.preventDefault();
+        showModal();
+      }
+      
+      // ESC to close modal
+      if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+        e.preventDefault();
+        hideModal();
+      }
+      
+      // Arrow navigation when modal is open
+      if (!modal?.classList.contains('hidden')) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = Math.min(selectedIndex + 1, currentResults.length - 1);
+          updateSelection();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = Math.max(selectedIndex - 1, 0);
+          updateSelection();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          executeAction();
+        }
+      }
+    });
+    
+    // Search input handler
+    if (input) {
+      input.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value;
+        handleSearch(query);
+      });
+    }
+    
+    // Click handlers for search results
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      
+      // Click on search result item
+      if (target.closest('.search-result-item')) {
+        const item = target.closest('.search-result-item');
+        selectedIndex = Array.from(currentResults).indexOf(item!);
+        executeAction();
+      }
+      
+      // Click outside modal to close
+      if (target === modal) {
+        hideModal();
+      }
+    });
+    
+    // Expose functions globally for other components to use
+    (window as any).showSearchModal = showModal;
+    (window as any).hideSearchModal = hideModal;
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', initializeSearchModal);
+  
+  // Fallback initialization
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSearchModal);
+  } else {
+    initializeSearchModal();
+  }
+</script>
+
+<style>
+  .search-modal {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.15s ease-out;
+  }
+  
+  .search-modal-content {
+    animation: scaleIn 0.15s ease-out;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .search-result-item {
+    transition: all 0.1s ease;
+  }
+  
+  .search-result-item:hover {
+    background-color: var(--color-bg-secondary);
+  }
+  
+  kbd {
+    font-family: inherit;
+    font-size: inherit;
+  }
+  
+  /* Scrollbar styling for search results */
+  .search-results::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .search-results::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .search-results::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+  
+  .search-results::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
+</style>

@@ -392,4 +392,100 @@
   
   // Theme dot color
   --theme-dot-tokyo-night: var(--color-accent-primary);
-} 
+}
+
+// VS Code Dark+
+[data-theme="vscode-dark"] {
+  --color-bg-primary: #1e1e1e;
+  --color-bg-secondary: #252526;
+  --color-bg-tertiary: #2d2d30;
+  --color-text-primary: #cccccc;
+  --color-text-secondary: #969696;
+  --color-accent-primary: #007acc;
+  --color-accent-secondary: #0e639c;
+  --color-border: #3e3e42;
+  --color-border-rgb: 62, 62, 66;
+  
+  // Extended colors
+  --color-error: #f14c4c;
+  --color-warning: #ffcc02;
+  --color-success: #89d185;
+  --color-info: #75beff;
+  
+  // VS Code specific colors
+  --color-editor-bg: #1e1e1e;
+  --color-sidebar-bg: #252526;
+  --color-titlebar-bg: #323233;
+  
+  // Theme dot color
+  --theme-dot-vscode-dark: var(--color-accent-primary);
+  --color-statusbar-bg: #007acc;
+  --color-statusbar-text: #ffffff;
+  --color-tab-bg: #2d2d30;
+  --color-tab-active-bg: #1e1e1e;
+  --color-tab-border: #454545;
+  --color-line-number: #858585;
+  --color-selection-bg: #264f78;
+  
+  // Theme dot color
+  --theme-dot-vscode-dark: var(--color-accent-primary);
+}
+
+// Theme-aware CSS classes for consistent theming across components
+// These classes use CSS custom properties so they adapt automatically to theme changes
+
+// Background classes
+.themed-bg { background-color: var(--color-bg-primary); }
+.themed-bg-secondary { background-color: var(--color-bg-secondary); }
+.themed-sidebar { background-color: var(--color-sidebar-bg, var(--color-bg-secondary)); }
+.themed-header { background-color: var(--color-bg-secondary); }
+.themed-statusbar { background-color: var(--color-statusbar-bg, var(--color-accent-primary)); }
+.themed-input { background-color: var(--color-bg-secondary); }
+
+// Text classes
+.primary-text { color: var(--color-text-primary); }
+.secondary-text { color: var(--color-text-secondary); }
+.accent-primary { color: var(--color-accent-primary); }
+.accent-secondary { color: var(--color-accent-secondary); }
+.status-text { color: var(--color-statusbar-text, #ffffff); }
+.placeholder-secondary-text::placeholder { color: var(--color-text-secondary); }
+
+// Border classes
+.themed-border { border-color: var(--color-border); }
+.themed-border-top { border-top-color: var(--color-border); }
+.themed-border-bottom { border-bottom-color: var(--color-border); }
+.themed-border-left { border-left-color: var(--color-border); }
+.themed-border-right { border-right-color: var(--color-border); }
+
+// Interactive states
+.hover-item { 
+  transition: background-color 0.2s ease;
+}
+.hover-item:hover { 
+  background-color: var(--color-bg-tertiary, rgba(255, 255, 255, 0.1)); 
+}
+.hover-item-close:hover {
+  background-color: var(--color-error);
+  color: white;
+}
+
+// File type icons with theme-aware colors
+.file-icon-folder { color: var(--color-accent-primary); }
+.file-icon-markdown { color: var(--color-info); }
+.file-icon-typescript { color: var(--color-accent-primary); }
+.file-icon-javascript { color: var(--color-warning); }
+.file-icon-json { color: var(--color-success); }
+.file-icon-css { color: var(--color-info); }
+.file-icon-scss { color: var(--color-accent-secondary); }
+.file-icon-html { color: var(--color-error); }
+.file-icon-pdf { color: var(--color-error); }
+
+// Category-specific icons for search
+.file-icon-tutorial { color: var(--color-success); }
+.file-icon-project { color: var(--color-accent-secondary); }
+.file-icon-career { color: var(--color-error); }
+.file-icon-personal { color: var(--color-warning); }
+.file-icon-learning { color: var(--color-info); }
+
+// Status indicator
+.status-indicator { background-color: var(--color-statusbar-text, #ffffff); }

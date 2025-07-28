@@ -1,238 +1,129 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
+// New VS Code-style components
+import MenuBar from "../components/MenuBar.astro";
+import FileTree from "../components/FileTree.astro";
+import TabBar from "../components/TabBar.astro";
+import ContentEditor from "../components/ContentEditor.astro";
+import InfoPanel from "../components/InfoPanel.astro";
+import StatusBar from "../components/StatusBar.astro";
+
+// Original components for mobile compatibility
 import Profile from "../components/Profile.astro";
 import Contact from "../components/Contact.astro";
-
-import ContentLink from "../components/ContentLink.astro";
-import ContentCode from "../components/ContentAbout.astro";
-import ContentProjects from "../components/ContentProjects.astro";
-import ContentQuotes from "../components/ContentQuotes.astro";
-import ContentBookBits from "../components/ContentBookBits.astro";
-import ContentResume from "../components/ContentResume.astro";
-import ContentTutorials from "../components/ContentTutorials.astro";
-import TutorialContent from "../components/TutorialContent.astro";
+import SearchModal from "../components/SearchModal.astro";
 
 import Analytics from "@vercel/analytics/astro";
 ---
 
 <Layout>
-  <!-- Start: Main Wrapper -->
-  <main
-    class="flex flex-col md:flex-row w-full max-w-full md:max-w-7xl border border-gray-600 rounded-2xl overflow-hidden relative bg-black mb-12 md:mb-4"
-  >
-    <!-- Start: Left / upper card - Mobile: Home Screen -->
-    <div
-      id="profile-section"
-      class="p-6 md:p-6 flex flex-col justify-between w-full md:w-3/5 lg:w-2/5 border-b md:border-b-0 md:border-r border-gray-600 md:min-h-0 min-h-screen md:static"
-    >
-      <Profile />
-
-      <Analytics />
-      <Contact />
+  <!-- VS Code Editor Layout -->
+  <div class="vscode-layout h-screen w-screen flex flex-col bg-black fixed inset-0">
+    <!-- MenuBar -->
+    <div class="menubar-wrapper flex-shrink-0">
+      <MenuBar />
     </div>
-    <!-- End: Left / upper card -->
-
-    <!-- Start: Right / lower card -->
-    <div
-      id="content-section"
-      class="w-full md:w-3/5 lg:w-4/5 p-0 flex flex-col md:static mobile-content-section"
-    >
-      <!-- Start: Inner wrapper -->
-      <div class="min-h-[50vh] md:min-h-full md:h-[90vh] flex flex-col">
-        <!-- Use hidden radio buttons to control the tabs -->
-        <div class="tab-controls flex flex-col h-full overflow-hidden">
-          <input type="radio" id="tab1" name="tabs" class="tab-radio" checked />
-          <input type="radio" id="tab2" name="tabs" class="tab-radio" />
-          <input type="radio" id="tab3" name="tabs" class="tab-radio" />
-          <input type="radio" id="tab4" name="tabs" class="tab-radio" />
-          <input type="radio" id="tab5" name="tabs" class="tab-radio" />
-          <input type="radio" id="tab6" name="tabs" class="tab-radio" />
-
-          <!-- Start: Tab bar (sticky at top) -->
-          <div
-            class="tab-header hidden md:flex bg-black border-b border-gray-600 sticky top-0 z-10 w-full overflow-x-auto no-scrollbar"
-          >
-            <ContentLink contentId="tab1" contentName="Profile" />
-            <ContentLink contentId="tab2" contentName="Projects" />
-            <ContentLink contentId="tab3" contentName="Resume" />
-            <ContentLink contentId="tab4" contentName="Quotes" />
-            <ContentLink contentId="tab5" contentName="Book Bits" />
-            <ContentLink contentId="tab6" contentName="Tutorials" />
-          </div>
-          <!-- End: Tab bar -->
-
-          <!-- Start: Tab content (scrollable) -->
-          <div class="tab-content-wrapper flex-grow overflow-auto h-full">
-            <div class="p-4 md:p-6 bg-black no-scrollbar tab-content-container">
-              <!-- Start: About content -->
-              <div id="content1" class="tab-content">
-                <ContentCode />
-              </div>
-              <!-- End: About content -->
-
-              <!-- Start: Projects content -->
-              <div id="content2" class="tab-content">
-                <ContentProjects />
-              </div>
-              <!-- End: Projects content -->
-
-              <!-- Start: Resume content -->
-              <div id="content3" class="tab-content">
-                <ContentResume />
-              </div>
-              <!-- End: Resume content -->
-
-              <!-- Start: Quotes content -->
-              <div id="content4" class="tab-content">
-                <ContentQuotes />
-              </div>
-              <!-- End: Quotes content -->
-
-              <!-- Start: Book Bits content -->
-              <div id="content5" class="tab-content">
-                <ContentBookBits />
-              </div>
-              <!-- End: Book Bits content -->
-              
-              <!-- Start: Tutorials content -->
-              <div id="content6" class="tab-content tutorials-tab">
-                <div class="tutorials-section">
-                  <div class="tutorials-list active">
-                    <ContentTutorials />
-                  </div>
-                  <div class="tutorial-detail">
-                    <TutorialContent />
-                  </div>
-                </div>
-              </div>
-              <!-- End: Tutorials content -->
-            </div>
-          </div>
-          <!-- End: Tab content -->
+    
+    <!-- Main Editor Area - CSS Grid Layout -->
+    <div class="editor-main flex-1 grid min-h-0" style="grid-template-columns: 2fr 8fr;" id="editor-main-grid">
+      <!-- File Tree (Left Sidebar) -->
+      <div class="filetree-panel border-r border-gray-600 flex flex-col min-h-0">
+        <FileTree />
+      </div>
+      
+      <!-- Editor Content Area -->
+      <div class="editor-area flex flex-col min-h-0">
+        <!-- Tab Bar -->
+        <div class="tabbar-container flex-shrink-0">
+          <TabBar />
+        </div>
+        
+        <!-- Content Editor -->
+        <div class="content-wrapper flex-1 min-h-0">
+          <ContentEditor />
         </div>
       </div>
-      <!-- End: Inner wrapper -->
+      
+      <!-- Info Panel (Right Sidebar) - Hidden by default -->
+      <div id="info-panel-container" class="info-panel-container border-l border-gray-600 flex flex-col min-h-0" style="display: none;">
+        <InfoPanel />
+      </div>
     </div>
-    <!-- End: Right / lower card -->
-  </main>
-  <!-- End: Main Wrapper -->
+    
+    <!-- Status Bar -->
+    <div class="statusbar-wrapper flex-shrink-0">
+      <StatusBar />
+    </div>
+  </div>
+  
+  <!-- Mobile Fallback: Original Layout -->
+  <div class="mobile-layout md:hidden">
+    <main class="flex flex-col w-full border border-gray-600 rounded-2xl overflow-hidden relative bg-black mb-12">
+      <!-- Mobile Profile Section -->
+      <div id="profile-section" class="p-6 flex flex-col justify-between w-full border-b border-gray-600 min-h-screen">
+        <Profile />
+        <Analytics />
+        <Contact />
+      </div>
+      
+      <!-- Mobile Content Section -->
+      <div id="content-section" class="w-full p-0 flex flex-col mobile-content-section" style="display: none;">
+        <div class="min-h-[50vh] flex flex-col">
+          <div class="tab-controls flex flex-col h-full overflow-hidden">
+            <input type="radio" id="mobile-tab1" name="mobile-tabs" class="tab-radio" checked />
+            <input type="radio" id="mobile-tab2" name="mobile-tabs" class="tab-radio" />
+            <input type="radio" id="mobile-tab3" name="mobile-tabs" class="tab-radio" />
+            <input type="radio" id="mobile-tab4" name="mobile-tabs" class="tab-radio" />
+            <input type="radio" id="mobile-tab5" name="mobile-tabs" class="tab-radio" />
+            <input type="radio" id="mobile-tab6" name="mobile-tabs" class="tab-radio" />
+            
+            <div class="tab-content-wrapper flex-grow overflow-auto h-full">
+              <div class="p-4 bg-black no-scrollbar tab-content-container">
+                <ContentEditor />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-  <!-- Start: Mobile bottom tab bar - Placed outside the main content flow -->
+  <!-- Mobile Navigation - Simplified bottom tab bar -->
   <div
     id="mobile-tab-bar"
-    class="md:hidden fixed bottom-12 left-0 right-0 z-9999 flex justify-center pointer-events-auto"
+    class="md:hidden fixed bottom-12 left-0 right-0 z-50 flex justify-center pointer-events-auto"
   >
-    <div
-      class="bg-black border border-gray-600 rounded-full flex justify-between px-2"
-    >
-      <label
-        id="home-btn"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Home"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+    <div class="bg-gray-800 border border-gray-600 rounded-full flex justify-between px-2">
+      <button id="mobile-home-btn" class="mobile-tab-btn p-2 rounded-full text-gray-400 active" title="Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-      </label>
-      <label
-        for="tab1"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Profile"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      </button>
+      <button class="mobile-tab-btn p-2 rounded-full text-gray-400" data-mobile-tab="mobile-tab1" title="About">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
-      </label>
-      <label
-        for="tab2"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Projects"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
-          ></path>
+      </button>
+      <button class="mobile-tab-btn p-2 rounded-full text-gray-400" data-mobile-tab="mobile-tab2" title="Projects">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
         </svg>
-      </label>
-      <label
-        for="tab3"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Resume"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
-        </svg>
-      </label>
-      <label
-        for="tab6"
-        class="mobile-tab-btn p-2 rounded-full text-gray-400"
-        title="Tutorials"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      </button>
+      <button class="mobile-tab-btn p-2 rounded-full text-gray-400" data-mobile-tab="mobile-tab6" title="Tutorials">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
         </svg>
-      </label>
+      </button>
     </div>
   </div>
-  <!-- End: Mobile bottom tab bar -->
+
+  <!-- Global Search Modal -->
+  <SearchModal />
+  <Analytics />
 </Layout>
 
 <!-- End: Inner wrapper -->
@@ -259,792 +150,358 @@ import Analytics from "@vercel/analytics/astro";
     >
   </div>
 
-  <!-- Help Icon -->
-  <button
-    id="vim-help-toggle"
-    class="w-8 h-8 flex items-center justify-center rounded-full hover:-translate-y-0.5 transition-all duration-150 help-icon ml-2 hidden md:flex"
-    title="Vim Keybindings Help (press ? key)"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="text-primary"
-    >
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-      <line x1="12" y1="17" x2="12.01" y2="17"></line>
-    </svg>
-  </button>
+  <!-- Vim help removed - no functionality was attached -->
 </div>
 
-<!-- Vim Keybindings Help -->
-<div
-  id="vim-help-panel"
-  class="fixed right-4 bottom-12 bg-black border border-gray-600 p-4 rounded-lg text-sm z-20 hidden"
->
-  <h3 class="text-primary font-bold mb-2">Vim Keybindings</h3>
-  <ul class="text-xs space-y-1">
-    <li><span class="text-primary">j/k</span> - Scroll down/up</li>
-    <li><span class="text-primary">gg</span> - Scroll to top</li>
-    <li><span class="text-primary">G</span> - Scroll to bottom</li>
-    <li>
-      <span class="text-primary">Ctrl+d/u</span> - Half page down/up
-    </li>
-    <li><span class="text-primary">gt</span> - Next tab</li>
-    <li><span class="text-primary">gT</span> - Previous tab</li>
-    <li><span class="text-primary">?</span> - Toggle this help</li>
-    <li><span class="text-primary">Esc</span> - Close this help</li>
-  </ul>
-  <button
-    id="vim-help-close"
-    class="absolute top-1 right-2 text-gray-400 hover:text-primary">×</button
-  >
-</div>
+<!-- Vim help panel removed - no JavaScript handlers existed -->
 
 <script>
-  // Enhance smooth scrolling for tab transitions
+  // URL routing configuration
+  const routeMap = {
+    '#profile': 'tab1',
+    '#about': 'tab2', 
+    '#intro': 'tab2',
+    '#projects': 'tab3',
+    '#resume': 'tab4',
+    '#quotes': 'tab5',
+    '#book-bits': 'tab6',
+    '#bookbits': 'tab6',
+    '#tutorials': 'tab7'
+  };
+
+  const tabToRoute = {
+    'tab1': '#profile',
+    'tab2': '#about',
+    'tab3': '#projects', 
+    'tab4': '#resume',
+    'tab5': '#quotes',
+    'tab6': '#book-bits',
+    'tab7': '#tutorials'
+  };
+
+  // Initialize fuzzy search
+  let fuzzySearcher: any = null;
+  
+  async function initializeFuzzySearch() {
+    try {
+      const { globalSearcher } = await import('../data/searchIndex');
+      fuzzySearcher = globalSearcher;
+      
+      // Make search available globally
+      (window as any).fuzzySearch = (query: string, limit: number = 10) => {
+        return fuzzySearcher.search(query, limit);
+      };
+    } catch (error) {
+      console.warn('Failed to initialize fuzzy search:', error);
+    }
+  }
+
+  // VS Code Editor Layout Management
   document.addEventListener("DOMContentLoaded", () => {
-    const tabRadios = document.querySelectorAll(".tab-radio");
-    const tabContentContainer = document.querySelector(".tab-content-wrapper");
-    const mobileTabBtns = document.querySelectorAll(".mobile-tab-btn");
-    const profileSection = document.getElementById("profile-section");
-    const contentSection = document.getElementById("content-section");
-    const homeBtn = document.getElementById("home-btn");
-
-    // Mobile view state tracking
-    let isMobileView = window.innerWidth < 768;
-
-    // Set initial mobile view state on page load
-    if (isMobileView) {
-      // Use setTimeout to ensure the tab bar remains visible after DOM manipulation
-      setTimeout(() => {
-        setupMobileView();
-      }, 0);
-    }
-
-    // Handle window resize events
-    window.addEventListener("resize", () => {
-      const newIsMobileView = window.innerWidth < 768;
-
-      // Only take action if mobile state changed
-      if (newIsMobileView !== isMobileView) {
-        isMobileView = newIsMobileView;
-
-        if (isMobileView) {
-          setupMobileView();
-        } else {
-          // Reset to desktop view
-          resetToDesktopView();
-        }
-      }
-    });
-
-    // Function to setup initial mobile view - home screen visible
-    function setupMobileView() {
-      if (profileSection && contentSection) {
-        // Show profile section (home)
-        profileSection.style.display = "flex";
-        // Hide content section initially
-        contentSection.style.display = "none";
-
-        // Make sure tab bar is visible
-        const tabBar = document.getElementById("mobile-tab-bar");
-        if (tabBar) {
-          tabBar.style.display = "flex";
-          tabBar.style.visibility = "visible";
-          tabBar.style.opacity = "1";
-        }
-
-        // Reset any active tabs
-        mobileTabBtns.forEach((btn, index) => {
-          // Make home button active
-          btn.classList.toggle("active-tab", index === 0);
-        });
-      }
-    }
-
-    // Ensure mobile tutorials tab also resets to list view
-    const mobileTutorialsBtn = document.querySelector('label[for="tab6"].mobile-tab-btn');
-    if (mobileTutorialsBtn) {
-      mobileTutorialsBtn.addEventListener('click', () => {
-        // Get the tutorials list and check if it's hidden
-        const tutorialsList = document.querySelector('.tutorials-list');
-        if (tutorialsList && tutorialsList.classList.contains('hidden-list')) {
-          // Show the list and hide all tutorials
-          tutorialsList.classList.remove('hidden-list');
-          document.querySelectorAll('.tutorial-content').forEach(content => {
-            content.classList.add('hidden');
-          });
-          
-          // Remove back button if it exists
-          const backButton = document.querySelector('.back-to-tutorials');
-          if (backButton) {
-            backButton.remove();
-          }
-        }
-      });
-    }
-
-    // Function to go back to home page (profile section)
-    function goToHomePage() {
-      if (profileSection && contentSection) {
-        profileSection.style.display = "flex";
-        contentSection.style.display = "none";
-
-        // Update tab button states
-        mobileTabBtns.forEach((btn, index) => {
-          btn.classList.toggle("active-tab", index === 0);
-        });
-      }
-    }
-
-    // Function to go to a content page
-    function goToContentPage() {
-      if (profileSection && contentSection) {
-        profileSection.style.display = "none";
-        contentSection.style.display = "flex";
-
-        // Reset scroll position
-        if (tabContentContainer) {
-          tabContentContainer.scrollTo({
-            top: 0,
-            behavior: "auto",
-          });
-        }
-      }
-    }
-
-    // Reset to desktop view when screen is enlarged
-    function resetToDesktopView() {
-      if (profileSection && contentSection) {
-        profileSection.style.display = "flex";
-        contentSection.style.display = "flex";
-      }
-    }
-
-    // Add click handler for the home button
-    if (homeBtn) {
-      homeBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        goToHomePage();
-
-        // Update button states
-        mobileTabBtns.forEach((btn, index) => {
-          btn.classList.toggle("active-tab", index === 0);
-        });
-      });
-    }
-
-    // Add event listeners to tab buttons
-    tabRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        // Reset scroll position when switching tabs
-        if (tabContentContainer) {
-          tabContentContainer.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
-        }
-
-        // For mobile: switch to content view when selecting non-Home tabs
-        if (isMobileView) {
-          goToContentPage();
-
-          // Update the active tab highlight
-          const tabId = (radio as HTMLInputElement).id;
-          const tabNumber = parseInt(tabId.replace("tab", ""));
-
-          // Correctly map tab numbers to mobile tab button indexes
-          // Home button is at index 0, content tabs start at index 1
-          mobileTabBtns.forEach((btn, index) => {
-            // For tab1, index should be 1 (profile)
-            // For tab2, index should be 2 (projects)
-            // and so on
-            btn.classList.toggle(
-              "active-tab",
-              index === tabNumber // Adjust index to match tab number
-            );
-          });
-        }
-      });
-    });
-
-    // Add event listeners to mobile tab buttons (except home)
-    mobileTabBtns.forEach((btn, index) => {
-      // Skip the home button (we added a special handler above)
-      if (index > 0) {
-        btn.addEventListener("click", () => {
-          // If we're on mobile, switch to content view
-          if (isMobileView) {
-            goToContentPage();
-          }
-
-          // Update active tab highlight
-          mobileTabBtns.forEach((b, i) => {
-            b.classList.toggle("active-tab", i === index);
-          });
-        });
-      }
-    });
-
-    // Setup Vim help panel toggle
-    const helpToggle = document.getElementById("vim-help-toggle");
-    const helpPanel = document.getElementById("vim-help-panel");
-    const helpClose = document.getElementById("vim-help-close");
-
-    if (helpToggle && helpPanel && helpClose) {
-      helpToggle.addEventListener("click", () => {
-        helpPanel.classList.toggle("hidden");
-      });
-
-      helpClose.addEventListener("click", () => {
-        helpPanel.classList.add("hidden");
-      });
-
-      // Also toggle help with ? key (Vim style)
-      document.addEventListener("keydown", (e) => {
-        // Skip if we're in an input or textarea
-        if (isEditableElement(e.target)) {
-          return;
-        }
-
-        if (e.key === "?") {
-          e.preventDefault();
-          helpPanel.classList.toggle("hidden");
-        }
-
-        // Close with Escape key
-        if (e.key === "Escape" && !helpPanel.classList.contains("hidden")) {
-          helpPanel.classList.add("hidden");
-        }
-      });
-
-      // Helper function to check if element is editable
-      function isEditableElement(el: any) {
-        if (!el) return false;
-
-        const tagName = el.tagName.toLowerCase();
-
-        // Check for input/textarea elements
-        if (["input", "textarea", "select"].includes(tagName)) {
-          return true;
-        }
-
-        // Check for contenteditable elements
-        if (
-          el.hasAttribute("contenteditable") &&
-          el.getAttribute("contenteditable") !== "false"
-        ) {
-          return true;
-        }
-
-        // Check if inside a form element
-        if (el.closest("form")) {
-          return true;
-        }
-
-        return false;
-      }
-
-      // Log that Vim keybindings are active
-      console.log("Vim keybindings activated. Press '?' for help.");
-    }
-
-    // Final check to ensure mobile tab bar is visible
-    const mobileTabBar = document.getElementById("mobile-tab-bar");
-    if (mobileTabBar && window.innerWidth < 768) {
-      // Force visibility with a slight delay
-      setTimeout(() => {
-        mobileTabBar.style.display = "flex";
-        mobileTabBar.style.visibility = "visible";
-        mobileTabBar.style.opacity = "1";
-        mobileTabBar.style.zIndex = "9999";
-      }, 100);
-    }
-  });
-
-  // Additional listener for window load to ensure tab bar visibility
-  window.addEventListener("load", function () {
-    const mobileTabBar = document.getElementById("mobile-tab-bar");
-    if (mobileTabBar && window.innerWidth < 768) {
-      mobileTabBar.style.display = "flex";
-      mobileTabBar.style.visibility = "visible";
-      mobileTabBar.style.opacity = "1";
-      mobileTabBar.style.zIndex = "9999";
-    } else if (mobileTabBar && window.innerWidth >= 768) {
-      // Ensure the tab bar is hidden on larger screens
-      mobileTabBar.style.display = "none";
-    }
-  });
-
-  // Additional resize listener to ensure tab bar stays hidden/visible as needed
-  window.addEventListener("resize", function() {
-    const mobileTabBar = document.getElementById("mobile-tab-bar");
-    if (mobileTabBar) {
-      if (window.innerWidth < 768) {
-        mobileTabBar.style.display = "flex";
-        mobileTabBar.style.visibility = "visible";
-        mobileTabBar.style.opacity = "1";
-      } else {
-        mobileTabBar.style.display = "none";
-      }
-    }
-  });
-
-  // Tutorial interaction script
-  document.addEventListener('DOMContentLoaded', () => {
-    const tutorialsTab = document.querySelector('.tutorials-tab');
-    const tutorialsList = document.querySelector('.tutorials-list');
-    const tutorialDetails = document.querySelector('.tutorial-detail');
+    // Initialize fuzzy search
+    initializeFuzzySearch();
+    const isMobile = window.innerWidth < 768;
     
-    // Initialize - make sure the tutorial list is visible and details are hidden
-    if (tutorialsTab && tutorialsList && tutorialDetails) {
-      // Initialize - ensure tutorials list is visible when the tab is selected
-      document.querySelectorAll('.tutorial-content').forEach(content => {
-        content.classList.add('hidden');
-      });
+    // Show appropriate layout
+    if (isMobile) {
+      document.querySelector('.vscode-layout')?.classList.add('hidden');
+      document.querySelector('.mobile-layout')?.classList.remove('md:hidden');
+      setupMobileNavigation();
+    } else {
+      document.querySelector('.mobile-layout')?.classList.add('hidden');
+      document.querySelector('.vscode-layout')?.classList.remove('hidden');
       
-      // Handle tutorial link clicks
-      document.querySelectorAll('.tutorial-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const slug = (link as HTMLElement).getAttribute('data-slug');
-          if (slug) {
-            // Hide the list and show the detail
-            tutorialsList.classList.add('hidden-list');
-            
-            // Show the specific tutorial
-            const tutorialElement = document.getElementById(`tutorial-${slug}`);
-            if (tutorialElement) {
-              document.querySelectorAll('.tutorial-content').forEach(content => {
-                content.classList.add('hidden');
-              });
-              tutorialElement.classList.remove('hidden');
-              
-              // Add back button if it doesn't exist at the top of the tutorial
-              if (!tutorialElement.querySelector('.back-to-tutorials-top')) {
-                const topBackButton = document.createElement('button');
-                topBackButton.className = 'back-to-tutorials-top mb-4 inline-flex items-center text-primary hover:underline';
-                topBackButton.innerHTML = `
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                  Back to All Tutorials
-                `;
-                
-                topBackButton.addEventListener('click', () => {
-                  // Show the list and hide all tutorials
-                  tutorialsList.classList.remove('hidden-list');
-                  document.querySelectorAll('.tutorial-content').forEach(content => {
-                    content.classList.add('hidden');
-                  });
-                  
-                  // Remove both back buttons
-                  const backButton = document.querySelector('.back-to-tutorials');
-                  if (backButton) backButton.remove();
-                  topBackButton.remove();
-                });
-                
-                tutorialElement.insertBefore(topBackButton, tutorialElement.firstChild);
-              }
-            }
-            
-            // Add main back button if it doesn't exist
-            if (!document.querySelector('.back-to-tutorials')) {
-              const backButton = document.createElement('button');
-              backButton.className = 'back-to-tutorials mb-4 inline-flex items-center text-primary hover:underline';
-              backButton.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-                Back to Tutorials List
-              `;
-              
-              backButton.addEventListener('click', () => {
-                // Show the list and hide all tutorials
-                tutorialsList.classList.remove('hidden-list');
-                document.querySelectorAll('.tutorial-content').forEach(content => {
-                  content.classList.add('hidden');
-                });
-                
-                // Remove back buttons
-                backButton.remove();
-                const topBackButton = document.querySelector('.back-to-tutorials-top');
-                if (topBackButton) topBackButton.remove();
-              });
-              
-              tutorialsTab.insertBefore(backButton, tutorialsList.nextSibling);
-            }
-          }
-        });
-      });
+      // Handle initial route from URL hash
+      handleInitialRoute();
+    }
+
+    // Window resize handling removed - was causing unnecessary reloads
+
+    // Right panel toggle functionality with animations
+    function toggleRightPanel() {
+      const editorMain = document.querySelector('.editor-main') as HTMLElement;
+      const infoPanelContainer = document.getElementById('info-panel-container') as HTMLElement;
       
-      // Handle navigation within tutorials
-      document.querySelectorAll('.tutorial-nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const slug = (link as HTMLElement).getAttribute('data-slug');
-          if (slug) {
-            // Hide the list if not already hidden
-            if (!tutorialsList.classList.contains('hidden-list')) {
-              tutorialsList.classList.add('hidden-list');
-              
-              // Add main back button if it doesn't exist
-              if (!document.querySelector('.back-to-tutorials')) {
-                const backButton = document.createElement('button');
-                backButton.className = 'back-to-tutorials mb-4 inline-flex items-center text-primary hover:underline';
-                backButton.innerHTML = `
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                  Back to Tutorials List
-                `;
-                
-                backButton.addEventListener('click', () => {
-                  // Show the list and hide all tutorials
-                  tutorialsList.classList.remove('hidden-list');
-                  document.querySelectorAll('.tutorial-content').forEach(content => {
-                    content.classList.add('hidden');
-                  });
-                  
-                  // Remove back buttons
-                  backButton.remove();
-                  const topBackButton = document.querySelector('.back-to-tutorials-top');
-                  if (topBackButton) topBackButton.remove();
-                });
-                
-                tutorialsTab.insertBefore(backButton, tutorialsList.nextSibling);
-              }
-            }
-            
-            // Show the specific tutorial
-            const tutorialElement = document.getElementById(`tutorial-${slug}`);
-            if (tutorialElement) {
-              document.querySelectorAll('.tutorial-content').forEach(content => {
-                content.classList.add('hidden');
-              });
-              tutorialElement.classList.remove('hidden');
-              tutorialElement.scrollIntoView({ behavior: 'smooth' });
-              
-              // Add back button if it doesn't exist at the top of the tutorial
-              if (!tutorialElement.querySelector('.back-to-tutorials-top')) {
-                const topBackButton = document.createElement('button');
-                topBackButton.className = 'back-to-tutorials-top mb-4 inline-flex items-center text-primary hover:underline';
-                topBackButton.innerHTML = `
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                  Back to All Tutorials
-                `;
-                
-                topBackButton.addEventListener('click', () => {
-                  // Show the list and hide all tutorials
-                  tutorialsList.classList.remove('hidden-list');
-                  document.querySelectorAll('.tutorial-content').forEach(content => {
-                    content.classList.add('hidden');
-                  });
-                  
-                  // Remove both back buttons
-                  const backButton = document.querySelector('.back-to-tutorials');
-                  if (backButton) backButton.remove();
-                  topBackButton.remove();
-                });
-                
-                tutorialElement.insertBefore(topBackButton, tutorialElement.firstChild);
-              }
-            }
-          }
-        });
-      });
-      
-      // Handle click on the Tutorials tab to reset to the list view
-      const tutorialsTabLink = document.querySelector('a[href="#content6"], label[for="tab6"]');
-      if (tutorialsTabLink) {
-        tutorialsTabLink.addEventListener('click', () => {
-          // Reset to list view when the Tutorials tab is clicked
-          const backButton = document.querySelector('.back-to-tutorials');
+      if (editorMain && infoPanelContainer) {
+        const isVisible = infoPanelContainer.style.display !== 'none';
+        
+        // Add transition classes
+        editorMain.classList.add('panel-transition');
+        infoPanelContainer.classList.add('panel-transition');
+        
+        if (isVisible) {
+          // Hide right panel with animation
+          infoPanelContainer.classList.add('panel-hiding');
           
-          // Only take action if we're in a tutorial detail view
-          if (tutorialsList.classList.contains('hidden-list')) {
-            // Show the list and hide all tutorials
-            tutorialsList.classList.remove('hidden-list');
-            document.querySelectorAll('.tutorial-content').forEach(content => {
-              content.classList.add('hidden');
-            });
-            
-            // Remove both back buttons if they exist
-            const backButton = document.querySelector('.back-to-tutorials');
-            const topBackButton = document.querySelector('.back-to-tutorials-top');
-            if (backButton) backButton.remove();
-            if (topBackButton) topBackButton.remove();
-          }
-        });
+          // First, animate the width to 0
+          infoPanelContainer.style.width = '0px';
+          infoPanelContainer.style.minWidth = '0px';
+          infoPanelContainer.style.opacity = '0';
+          
+          // Then change grid layout and hide completely
+          setTimeout(() => {
+            infoPanelContainer.style.display = 'none';
+            editorMain.style.gridTemplateColumns = '2fr 8fr';
+            infoPanelContainer.classList.remove('panel-hiding');
+          }, 200);
+        } else {
+          // Show right panel with animation
+          infoPanelContainer.style.display = 'block';
+          infoPanelContainer.style.width = '0px';
+          infoPanelContainer.style.minWidth = '0px';
+          infoPanelContainer.style.opacity = '0';
+          
+          // Change grid layout immediately
+          editorMain.style.gridTemplateColumns = '2fr 6fr 2fr';
+          
+          // Then animate the panel in
+          requestAnimationFrame(() => {
+            infoPanelContainer.style.width = '320px';
+            infoPanelContainer.style.minWidth = '320px';
+            infoPanelContainer.style.opacity = '1';
+          });
+        }
+        
+        // Remove transition classes after animation
+        setTimeout(() => {
+          editorMain.classList.remove('panel-transition');
+          infoPanelContainer.classList.remove('panel-transition');
+        }, 250);
       }
+    }
+
+    // Expose toggle function globally
+    (window as any).toggleRightPanel = toggleRightPanel;
+
+    // URL routing functions
+    function handleInitialRoute() {
+      const hash = window.location.hash;
+      const targetTab = routeMap[hash];
+      
+      if (targetTab) {
+        // Route found, open the specific tab
+        setTimeout(() => {
+          openTab(targetTab);
+        }, 100);
+      } else {
+        // No route or invalid route, open default tab
+        setTimeout(() => {
+          openTab('tab1');
+          // Update URL to reflect default tab
+          updateURL('tab1');
+        }, 100);
+      }
+    }
+
+    function openTab(tabId: string) {
+      const tab = document.getElementById(tabId) as HTMLInputElement;
+      if (tab) {
+        tab.checked = true;
+        tab.dispatchEvent(new Event('change'));
+        
+        // Update file tree selection
+        const fileSelectors = {
+          'tab1': '[data-file="about"]',
+          'tab2': '[data-file="projects"]', 
+          'tab3': '[data-file="resume"]',
+          'tab4': '[data-file="quotes"]',
+          'tab5': '[data-file="bookbits"]',
+          'tab6': '[data-file="tutorials"]'
+        };
+        
+        // Clear previous selections
+        document.querySelectorAll('.file-active').forEach(el => el.classList.remove('file-active'));
+        
+        // Add selection to current file
+        const fileSelector = fileSelectors[tabId];
+        if (fileSelector) {
+          const fileElement = document.querySelector(fileSelector);
+          if (fileElement) {
+            fileElement.classList.add('file-active');
+          }
+        }
+      }
+    }
+
+    function updateURL(tabId: string) {
+      const route = tabToRoute[tabId];
+      if (route && window.location.hash !== route) {
+        window.history.pushState(null, '', route);
+      }
+    }
+
+    // Listen for browser back/forward navigation
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash;
+      const targetTab = routeMap[hash];
+      if (targetTab) {
+        openTab(targetTab);
+      }
+    });
+
+    // Listen for tab changes to update URL
+    document.querySelectorAll('.tab-radio').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        const tabId = (e.target as HTMLInputElement).id;
+        updateURL(tabId);
+      });
+    });
+
+    function setupMobileNavigation() {
+      const profileSection = document.getElementById("profile-section");
+      const contentSection = document.getElementById("content-section");
+      const mobileTabBtns = document.querySelectorAll(".mobile-tab-btn");
+      const homeBtn = document.getElementById("mobile-home-btn");
+
+      // Initially show profile section
+      if (profileSection) profileSection.style.display = "flex";
+      if (contentSection) contentSection.style.display = "none";
+
+      // Home button handler
+      homeBtn?.addEventListener("click", () => {
+        if (profileSection) profileSection.style.display = "flex";
+        if (contentSection) contentSection.style.display = "none";
+        
+        // Update button states
+        mobileTabBtns.forEach(btn => btn.classList.remove("active"));
+        homeBtn.classList.add("active");
+      });
+
+      // Content tab handlers
+      mobileTabBtns.forEach(btn => {
+        const tabId = btn.getAttribute("data-mobile-tab");
+        if (tabId) {
+          btn.addEventListener("click", () => {
+            if (profileSection) profileSection.style.display = "none";
+            if (contentSection) contentSection.style.display = "flex";
+            
+            // Use URL routing instead of direct tab manipulation
+            const mobileTabToRoute = {
+              'mobile-tab1': '#about',
+              'mobile-tab2': '#projects',
+              'mobile-tab3': '#resume', 
+              'mobile-tab4': '#quotes',
+              'mobile-tab5': '#book-bits',
+              'mobile-tab6': '#tutorials'
+            };
+            
+            const route = mobileTabToRoute[tabId];
+            if (route) {
+              window.location.hash = route;
+            }
+            
+            // Update button states
+            mobileTabBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+          });
+        }
+      });
     }
   });
 </script>
 
 <style is:global>
-  /* Hide the radio buttons */
-  .tab-radio {
-    @apply absolute opacity-0 pointer-events-none;
-  }
-
-  /* Default state - hide all tab content */
-  .tab-content {
-    @apply hidden opacity-0;
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  /* Default state for tab links */
-  .tab-link {
-    @apply border-b-2 border-transparent bg-transparent;
-    transition: background-color 0.2s ease-in-out;
-  }
-
-  /* When tab1 is checked, show content1 and highlight its tab */
-  #tab1:checked ~ * #content1 {
-    @apply block opacity-100;
-  }
-
-  #tab1:checked ~ .tab-header .tab-link:nth-child(1) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* When tab2 is checked, show content2 and highlight its tab */
-  #tab2:checked ~ * #content2 {
-    @apply block opacity-100;
-  }
-
-  #tab2:checked ~ .tab-header .tab-link:nth-child(2) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* When tab3 is checked, show content3 and highlight its tab */
-  #tab3:checked ~ * #content3 {
-    @apply block opacity-100;
-  }
-
-  #tab3:checked ~ .tab-header .tab-link:nth-child(3) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* When tab4 is checked, show content4 and highlight its tab */
-  #tab4:checked ~ * #content4 {
-    @apply block opacity-100;
-  }
-
-  #tab4:checked ~ .tab-header .tab-link:nth-child(4) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* When tab5 is checked, show content5 and highlight its tab */
-  #tab5:checked ~ * #content5 {
-    @apply block opacity-100;
-  }
-
-  #tab5:checked ~ .tab-header .tab-link:nth-child(5) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* When tab6 is checked, show content6 and highlight its tab */
-  #tab6:checked ~ * #content6 {
-    @apply block opacity-100;
-  }
-
-  #tab6:checked ~ .tab-header .tab-link:nth-child(6) {
-    @apply border-b-2 border-b-primary;
-  }
-
-  /* Hide scrollbar but allow scrolling */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    overscroll-behavior: none; /* Disable overscroll/bounce effect */
-    scroll-behavior: smooth; /* Enable smooth scrolling */
-
-    /* Add scroll momentum and physics feel */
-    -webkit-overflow-scrolling: touch; /* For iOS devices */
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-
-  /* Handle all scrollable areas that aren't using the no-scrollbar class */
-  [class*="overflow-"]:not(.no-scrollbar) {
-    overscroll-behavior: none;
-    scroll-behavior: smooth; /* Enable smooth scrolling */
-    -webkit-overflow-scrolling: touch; /* For iOS devices */
-  }
-
-  /* Mobile-specific styles */
-  @media (max-width: 767px) {
-    /* Styling for the mobile tab buttons */
-    .mobile-tab-btn {
-      transition: all 0.2s ease-in-out;
-    }
-
-    .mobile-tab-btn.active-tab {
-      color: var(--accent-primary);
-      background-color: rgba(56, 189, 248, 0.1);
-      transform: translateY(-2px);
-    }
-
-    /* Adjust main wrapper padding and border on mobile */
-    main {
-      padding: 0 !important;
-      border-radius: 0 !important;
-      border-width: 0 !important;
-      margin-bottom: 0 !important;
-    }
-
-    /* Tab bar styling */
-    #mobile-tab-bar {
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: flex !important;
-      position: fixed !important;
-      z-index: 9999 !important;
-      transform: translate3d(0, 0, 0) !important;
-      -webkit-transform: translate3d(0, 0, 0) !important;
-      bottom: 38px !important;
-      margin-bottom: 0 !important;
-      pointer-events: auto !important;
-      will-change: transform !important;
-    }
-
-    /* Add padding to tab content container */
-    .tab-content-container {
-      padding-bottom: 180px !important;
-    }
-
-    /* Adjust footer height and spacing */
-    .fixed.md\:absolute.bottom-0 {
-      height: 30px !important;
-      padding-top: 0.25rem !important;
-      padding-bottom: 0.25rem !important;
-    }
-  }
-</style>
-
-<style>
-  .help-icon {
-    opacity: 0.7;
-    transition:
-      opacity 0.2s ease-in-out,
-      transform 0.2s ease-in-out;
-  }
-
-  .help-icon:hover {
-    opacity: 1;
-    color: var(--accent-primary);
-  }
-
-  /* Responsive positioning for the help panel */
-  @media (max-width: 768px) {
-    #vim-help-panel {
-      bottom: 40px; /* Position the panel above the credits bar */
-      right: 4px;
-      max-width: calc(100vw - 32px); /* Prevent overflow */
-      font-size: 0.7rem;
-    }
-  }
-</style>
-
-<style>
-  /* Add to the mobile styles section */
-  /* Mobile tab bar specific styling */
-  .mobile-tab-btn {
-    padding: 0.625rem !important; /* Slightly larger touch targets */
-  }
-
-  /* Make sure mobile tab bar is visible with higher contrast */
-  #mobile-tab-bar .mobile-tab-btn {
+  /* VS Code Editor Layout Styles */
+  .vscode-layout {
+    background: var(--color-bg-primary);
     color: var(--color-text-primary);
+    font-family: 'AdwaitaMono', monospace;
+    overflow: hidden; /* Prevent any scrolling */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
 
-  #mobile-tab-bar .mobile-tab-btn.active-tab {
+  .editor-main {
+    grid-template-rows: 1fr;
+    overflow: hidden;
+  }
+
+  .editor-area {
+    overflow: hidden;
+  }
+
+  .filetree-panel {
+    overflow: hidden;
+  }
+
+  .content-wrapper {
+    overflow: hidden;
+  }
+
+  .info-panel-container {
+    overflow: hidden;
+  }
+
+  /* Ensure no body scrolling */
+  body {
+    overflow: hidden !important;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    overflow: hidden !important;
+    height: 100vh;
+  }
+
+  /* Mobile tab button styling */
+  .mobile-tab-btn {
+    transition: all 0.2s ease-in-out;
+    padding: 0.5rem;
+  }
+
+  .mobile-tab-btn.active {
     color: var(--color-accent-primary);
-    background-color: rgba(var(--color-accent-primary-rgb), 0.4);
+    background-color: rgba(var(--color-accent-primary-rgb, 59, 130, 246), 0.2);
     transform: translateY(-2px);
   }
 
-  /* Make content section scrollable on mobile with proper padding */
+  /* Mobile layout adjustments */
   @media (max-width: 767px) {
-    .tab-content-wrapper {
-      padding-bottom: 1rem;
-      scroll-padding-bottom: 1rem;
+    .mobile-layout main {
+      border-radius: 0;
+      border-width: 0;
+      margin-bottom: 0;
     }
 
-    /* Style scrollbar to ensure it doesn't interfere with tab bar */
-    .tab-content-wrapper::-webkit-scrollbar {
-      width: 0;
-      background: transparent;
-    }
-  }
-</style>
-
-<style>
-  /* Adjusted spacing for mobile tab bar and footer */
-  @media (max-width: 767px) {
-    .credits-bar {
-      height: 32px !important;
-      font-size: 0.7rem !important;
-    }
-    
     #mobile-tab-bar {
-      bottom: 38px !important;
-      margin-bottom: 0 !important;
+      z-index: 50;
+      position: fixed;
+      bottom: 3rem;
     }
-    
-    /* Improve active tab visibility */
-    .mobile-tab-btn.active-tab {
-      transform: translateY(-2px) !important;
+
+    .tab-content-container {
+      padding-bottom: 120px;
     }
-    
-    /* Add bottom safe area padding for iOS devices */
+
+    .credits-bar {
+      height: 32px;
+      font-size: 0.7rem;
+    }
+
+    /* iOS safe area support */
     @supports (padding: max(0px)) {
       .tab-content-container {
-        padding-bottom: max(
-          120px,
-          120px + env(safe-area-inset-bottom)
-        ) !important;
+        padding-bottom: max(120px, 120px + env(safe-area-inset-bottom));
       }
       
       #mobile-tab-bar {
-        bottom: max(38px, 38px + env(safe-area-inset-bottom) / 2) !important;
-      }
-      
-      .credits-bar {
-        padding-bottom: max(
-          0.25rem,
-          0.25rem + env(safe-area-inset-bottom)
-        ) !important;
+        bottom: max(3rem, 3rem + env(safe-area-inset-bottom) / 2);
       }
     }
 
-    /* Add padding to prevent tab bar from overlapping content */
     #profile-section {
-      padding-bottom: 100px !important;
+      padding-bottom: 100px;
     }
-    
-    /* Hide vim help completely on mobile */
-    #vim-help-toggle, #vim-help-panel {
-      display: none !important;
-    }
-  }
-</style>
 
-<style>
-  /* Tutorial content styles */
+    /* Vim help elements removed */
+  }
+
+  /* Help panel styles removed - functionality unused */
+
+  /* Tutorial styles */
   .tutorials-section {
     position: relative;
     width: 100%;
@@ -1081,5 +538,48 @@ import Analytics from "@vercel/analytics/astro";
   
   .back-to-tutorials-top {
     margin-bottom: 1.5rem;
+  }
+
+  /* Scrollbar styles */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overscroll-behavior: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Panel animation styles */
+  .panel-transition {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .panel-hiding {
+    overflow: hidden;
+  }
+
+  .info-panel-container {
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                min-width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 320px;
+    min-width: 320px;
+  }
+
+  .editor-main {
+    transition: grid-template-columns 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* VS Code specific theme overrides */
+  [data-theme="vscode-dark"] .vscode-layout {
+    background: var(--color-editor-bg);
+  }
+
+  [data-theme="vscode-dark"] .mobile-tab-btn.active {
+    background-color: var(--color-selection-bg);
   }
 </style>

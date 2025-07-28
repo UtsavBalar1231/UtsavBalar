@@ -1,0 +1,32 @@
+---
+// ContentProfile component - Profile content in VS Code editor style
+import Profile from "./Profile.astro";
+---
+
+<div class="content-profile">
+  <Profile />
+</div>
+
+<style>
+  .content-profile {
+    padding: 1rem;
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+  }
+
+  .content-profile :global(h1) {
+    color: var(--color-text-primary);
+  }
+
+  .content-profile :global(.text-primary) {
+    color: var(--color-accent-primary);
+  }
+
+  .content-profile :global(.text-gray-400) {
+    color: var(--color-text-secondary);
+  }
+
+  .content-profile :global(.border-primary) {
+    border-color: var(--color-accent-primary);
+  }
+</style>

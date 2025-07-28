@@ -1,6 +1,7 @@
 ---
 import "../styles/global.scss";
 import "../styles/details.scss";
+import "../styles/animations.scss";
 import ThemeManager from "../components/ThemeManager.astro";
 import * as siteMetadata from "../data/siteMetadata";
 
@@ -35,6 +36,11 @@ const faviconDataUrl = `data:image/svg+xml;base64,${Buffer.from(siteMetadata.inl
       crossorigin
     />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <!-- Google Material Symbols -->
     <link
       rel="stylesheet"

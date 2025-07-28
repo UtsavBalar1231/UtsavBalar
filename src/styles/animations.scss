@@ -1,0 +1,102 @@
+// Streamlined animations for VS Code portfolio
+// Only includes animations that are actually used
+
+// Custom easing curves for premium feel
+$ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+$ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
+// Animation durations
+$duration-fast: 150ms;
+$duration-normal: 250ms;
+$duration-slow: 350ms;
+
+// Essential keyframe animations
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Premium hover effects (used extensively)
+.hover-lift {
+  transition: transform $duration-normal $ease-out-quart,
+              box-shadow $duration-normal $ease-out-quart;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+    transition-duration: $duration-fast;
+  }
+}
+
+.hover-item {
+  transition: all $duration-fast $ease-out-quart;
+  
+  &:hover {
+    background-color: var(--color-bg-tertiary, rgba(255, 255, 255, 0.1));
+  }
+}
+
+.hover-item-close {
+  transition: all $duration-fast $ease-out-quart;
+  
+  &:hover {
+    background-color: var(--color-error, #ef4444);
+    color: white;
+  }
+}
+
+.hover-slide {
+  transition: transform $duration-fast $ease-out-quart;
+  
+  &:hover {
+    transform: translateX(2px);
+  }
+}
+
+// Staggered animations for tutorial lists
+.stagger-children > * {
+  animation: slideInUp $duration-normal $ease-out-quart;
+  animation-fill-mode: both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+// Focus styles for accessibility
+.focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+    transition: outline-offset $duration-fast $ease-out-quart;
+  }
+}
+
+// Accessible reduced motion
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,425 @@
+---
+// InfoPanel component - VS Code style right sidebar with properties and theme picker
+import { themes } from "../data/themes";
+---
+
+<div class="info-panel themed-sidebar w-80 themed-border-left overflow-y-auto h-full">
+  <!-- Panel sections -->
+  <div class="panel-sections">
+    <!-- File Properties Section -->
+    <div class="panel-section">
+      <div class="section-header themed-header px-3 py-2 text-xs font-semibold primary-text themed-border-bottom">
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-2zM2 2v1h12V2H2z"/>
+            <path d="M2 4.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-7zM3 5v6h10V5H3z"/>
+          </svg>
+          PROPERTIES
+        </div>
+      </div>
+      <div class="section-content p-3 space-y-3">
+        <div class="property-item">
+          <label class="text-xs secondary-text uppercase tracking-wide">Current File</label>
+          <div class="text-sm primary-text font-mono" id="current-file-display">profile</div>
+        </div>
+        <div class="property-item">
+          <label class="text-xs secondary-text uppercase tracking-wide">File Type</label>
+          <div class="text-sm primary-text" id="current-file-type">Profile</div>
+        </div>
+        <div class="property-item">
+          <label class="text-xs secondary-text uppercase tracking-wide">Encoding</label>
+          <div class="text-sm primary-text">UTF-8</div>
+        </div>
+        <div class="property-item">
+          <label class="text-xs secondary-text uppercase tracking-wide">Line Ending</label>
+          <div class="text-sm primary-text">LF</div>
+        </div>
+        <div class="property-item">
+          <label class="text-xs secondary-text uppercase tracking-wide">Indentation</label>
+          <div class="text-sm primary-text">Spaces: 2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theme Selector Section -->
+    <div class="panel-section">
+      <div class="section-header themed-header px-3 py-2 text-xs font-semibold primary-text themed-border-bottom">
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+          </svg>
+          COLOR THEME
+        </div>
+      </div>
+      <div class="section-content p-3">
+        <div class="theme-grid space-y-2">
+          {themes.map((theme) => (
+            <button 
+              class="theme-option flex items-center gap-3 w-full p-2 rounded hover-item hover-slide transition-colors text-left"
+              data-theme-value={theme.value}
+            >
+              <div class="theme-dot w-3 h-3 rounded-full border" style={`background-color: ${theme.dotColor}; border-color: var(--color-border)`}></div>
+              <span class="text-sm primary-text">{theme.label}</span>
+              <svg class="theme-check w-4 h-4 accent-primary ml-auto opacity-0" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="panel-section">
+      <div class="section-header themed-header px-3 py-2 text-xs font-semibold primary-text themed-border-bottom">
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+          SEARCH
+        </div>
+      </div>
+      <div class="section-content p-3">
+        <div class="search-input-container">
+          <input 
+            type="text" 
+            placeholder="Search files..."
+            class="search-input w-full px-3 py-2 themed-input themed-border rounded text-sm primary-text placeholder-secondary-text focus:outline-none focus:border-accent-primary"
+            id="file-search"
+          />
+        </div>
+        <div class="search-results mt-3 space-y-1" id="search-results">
+          <!-- Search results will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Git Section -->
+    <div class="panel-section">
+      <div class="section-header themed-header px-3 py-2 text-xs font-semibold primary-text themed-border-bottom">
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zm-2.25.75a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.492 2.492 0 0 1 6 7h4a1 1 0 0 0 1-1v-.878A2.25 2.25 0 0 1 9.5 3.25z"/>
+          </svg>
+          SOURCE CONTROL
+        </div>
+      </div>
+      <div class="section-content p-3 space-y-2">
+        <div class="git-status">
+          <div class="flex items-center gap-2 text-sm">
+            <svg class="w-4 h-4 text-green-400" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M11.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zm-2.25.75a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.492 2.492 0 0 1 6 7h4a1 1 0 0 0 1-1v-.878A2.25 2.25 0 0 1 9.5 3.25z"/>
+            </svg>
+            <span class="primary-text">main</span>
+          </div>
+          <div class="text-xs secondary-text mt-1">Working directory clean</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Theme switching functionality
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    // Get current theme
+    function getCurrentTheme() {
+      return document.documentElement.getAttribute('data-theme') || 'default';
+    }
+    
+    // Update active theme display
+    function updateActiveTheme() {
+      const currentTheme = getCurrentTheme();
+      themeOptions.forEach(option => {
+        const themeValue = option.getAttribute('data-theme-value');
+        const checkIcon = option.querySelector('.theme-check');
+        if (themeValue === currentTheme) {
+          option.classList.add('active');
+          if (checkIcon) checkIcon.classList.remove('opacity-0');
+        } else {
+          option.classList.remove('active');
+          if (checkIcon) checkIcon.classList.add('opacity-0');
+        }
+      });
+    }
+    
+    // Apply theme
+    function applyTheme(theme: string) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      updateActiveTheme();
+    }
+    
+    // Theme option click handlers
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const themeValue = option.getAttribute('data-theme-value');
+        if (themeValue) {
+          applyTheme(themeValue);
+        }
+      });
+    });
+    
+    // Initialize active theme
+    updateActiveTheme();
+
+    // File search functionality
+    const searchInput = document.getElementById('file-search') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results');
+    
+    const searchableFiles = [
+      { name: 'intro.md', path: 'about/', tab: 'tab1' },
+      { name: 'projects.md', path: 'projects/', tab: 'tab2' },
+      { name: 'resume.pdf', path: 'resume/', tab: 'tab3' },
+      { name: 'quotes.md', path: 'misc/', tab: 'tab4' },
+      { name: 'book-bits.md', path: 'misc/', tab: 'tab5' },
+      { name: 'index.md', path: 'tutorials/', tab: 'tab6' }
+    ];
+
+    if (searchInput && searchResults) {
+      searchInput.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value;
+        
+        if (query === '') {
+          searchResults.innerHTML = '';
+          return;
+        }
+        
+        // Use fuzzy search if available, otherwise fallback to basic search
+        if (typeof (window as any).fuzzySearch === 'function') {
+          const fuzzyResults = (window as any).fuzzySearch(query, 5);
+          
+          searchResults.innerHTML = fuzzyResults.map((result: any) => {
+            const item = result.item;
+            const score = Math.round(result.score * 10) / 10;
+            
+            // Determine icon color based on category
+            let iconColor = 'accent-primary';
+            if (item.category === 'Tutorial') iconColor = 'file-icon-tutorial';
+            else if (item.category === 'Projects') iconColor = 'file-icon-project';
+            else if (item.category === 'Career') iconColor = 'file-icon-career';
+            else if (item.category === 'Personal') iconColor = 'file-icon-personal';
+            else if (item.category === 'Learning') iconColor = 'file-icon-learning';
+            
+            return `
+              <div class="search-result flex items-center gap-2 p-2 rounded cursor-pointer hover-item transition-colors" data-route="${item.route}">
+                <svg class="w-4 h-4 ${iconColor}" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+                </svg>
+                <div class="flex-1">
+                  <div class="text-sm primary-text">${item.title}</div>
+                  <div class="text-xs secondary-text flex items-center gap-2">
+                    <span>${item.path}</span>
+                    <span class="accent-primary">• ${score}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          // Fallback to basic search
+          const matches = searchableFiles.filter(file => 
+            file.name.toLowerCase().includes(query.toLowerCase()) || 
+            file.path.toLowerCase().includes(query.toLowerCase())
+          );
+          
+          searchResults.innerHTML = matches.map(file => `
+            <div class="search-result flex items-center gap-2 p-2 rounded cursor-pointer hover-item transition-colors" data-tab="${file.tab}">
+              <svg class="w-4 h-4 accent-primary" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h8.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 3.75 2zM5 4.5v7h6v-7H5z"/>
+              </svg>
+              <div class="flex-1">
+                <div class="text-sm primary-text">${file.name}</div>
+                <div class="text-xs secondary-text">${file.path}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        // Add click handlers to search results
+        searchResults.querySelectorAll('.search-result').forEach(result => {
+          result.addEventListener('click', () => {
+            const route = result.getAttribute('data-route');
+            const tabId = result.getAttribute('data-tab');
+            
+            if (route) {
+              window.location.hash = route;
+            } else if (tabId) {
+              // Fallback for basic search results
+              const tabToRoute = {
+                'tab1': '#about',
+                'tab2': '#projects', 
+                'tab3': '#resume',
+                'tab4': '#quotes',
+                'tab5': '#book-bits',
+                'tab6': '#tutorials'
+              };
+              
+              const fallbackRoute = tabToRoute[tabId];
+              if (fallbackRoute) {
+                window.location.hash = fallbackRoute;
+              }
+            }
+            
+            // Clear search
+            searchInput.value = '';
+            searchResults.innerHTML = '';
+          });
+        });
+      });
+    }
+
+    // File type detection based on extension
+    function getFileType(filename: string): string {
+      const extension = filename.split('.').pop()?.toLowerCase();
+      
+      const fileTypes: { [key: string]: string } = {
+        'md': 'Markdown',
+        'pdf': 'PDF Document',
+        'js': 'JavaScript',
+        'ts': 'TypeScript',
+        'jsx': 'JavaScript React',
+        'tsx': 'TypeScript React',
+        'html': 'HTML Document',
+        'css': 'CSS Stylesheet',
+        'scss': 'SCSS Stylesheet',
+        'json': 'JSON Data',
+        'yml': 'YAML Configuration',
+        'yaml': 'YAML Configuration',
+        'xml': 'XML Document',
+        'txt': 'Plain Text',
+        'astro': 'Astro Component'
+      };
+      
+      // Special cases for files without extensions or special names
+      if (!extension) {
+        if (filename === 'profile') return 'Profile';
+        if (filename === 'intro') return 'About';
+        if (filename === 'projects') return 'Projects';
+        if (filename === 'resume') return 'Resume';
+        if (filename === 'quotes') return 'Quotes';
+        if (filename === 'book-bits') return 'Book Excerpts';
+        if (filename === 'tutorials') return 'Tutorials Index';
+        return 'Unknown';
+      }
+      
+      return fileTypes[extension] || 'Unknown';
+    }
+    
+    // Update current file display and type when tabs change
+    function updateCurrentFileDisplay(filename: string) {
+      const currentFileDisplay = document.getElementById('current-file-display');
+      const currentFileType = document.getElementById('current-file-type');
+      
+      if (currentFileDisplay) {
+        currentFileDisplay.textContent = filename;
+      }
+      
+      if (currentFileType) {
+        currentFileType.textContent = getFileType(filename);
+      }
+    }
+
+    // Listen for tab changes
+    document.querySelectorAll('.tab-radio').forEach((radio, index) => {
+      radio.addEventListener('change', () => {
+        const fileNames = ['profile', 'about.md', 'projects.md', 'resume.pdf', 'quotes.md', 'book-bits.md', 'tutorials'];
+        updateCurrentFileDisplay(fileNames[index] || 'untitled');
+      });
+    });
+    
+    // Listen for hash changes to update file info
+    function updateFileInfoFromHash() {
+      const hash = window.location.hash.substring(1); // Remove #
+      
+      const hashToFile: { [key: string]: string } = {
+        'profile': 'profile',
+        'about': 'about.md',
+        'projects': 'projects.md',
+        'resume': 'resume.pdf',
+        'quotes': 'quotes.md',
+        'book-bits': 'book-bits.md',
+        'tutorials': 'tutorials'
+      };
+      
+      // Handle tutorial-specific hashes
+      if (hash.startsWith('tutorial-')) {
+        const tutorialSlug = hash.replace('tutorial-', '');
+        updateCurrentFileDisplay(`${tutorialSlug}.md`);
+        return;
+      }
+      
+      const filename = hashToFile[hash] || 'profile';
+      updateCurrentFileDisplay(filename);
+    }
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', updateFileInfoFromHash);
+    
+    // Initialize with current hash
+    updateFileInfoFromHash();
+
+    // Expose function globally for other components
+    (window as any).updateInfoPanelFile = updateCurrentFileDisplay;
+  });
+</script>
+
+<style>
+  .info-panel {
+    background: var(--color-sidebar-bg, var(--color-bg-secondary));
+    min-height: 100%;
+  }
+
+  .section-header {
+    background: var(--color-bg-secondary);
+  }
+
+  .property-item {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .property-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .theme-option.active {
+    background-color: var(--color-selection-bg, rgba(255, 255, 255, 0.1));
+  }
+
+  .search-input:focus {
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 1px var(--color-accent-primary);
+  }
+
+  /* VS Code specific styling */
+  [data-theme="vscode-dark"] .info-panel {
+    background: var(--color-sidebar-bg);
+  }
+
+  [data-theme="vscode-dark"] .theme-option.active {
+    background-color: var(--color-selection-bg);
+  }
+
+  /* Custom scrollbar */
+  .info-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .info-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .info-panel::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  .info-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
+</style>

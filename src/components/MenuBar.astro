@@ -1,0 +1,120 @@
+---
+// MenuBar component - VS Code style top navigation
+---
+
+<div class="menubar bg-gray-800 border-b border-gray-600 h-8 flex items-center px-2 text-xs text-text-secondary">
+  <!-- Logo/Icon -->
+  <div class="flex items-center gap-2 mr-4">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-primary">
+      <path d="M24 12l-5-4v3h-6v2h6v3l5-4zM7 8v8c0 1.1-.9 2-2 2s-2-.9-2-2V8c0-1.1.9-2 2-2s2 .9 2 2zm2 0c0-2.2-1.8-4-4-4s-4 1.8-4 4v8c0 2.2 1.8 4 4 4s4-1.8 4-4V8z"/>
+    </svg>
+    <span class="font-semibold text-text-primary">Utsav Balar</span>
+  </div>
+
+  <!-- Menu Items -->
+  <div class="flex items-center gap-1">
+    <button class="menubar-item px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="window.location.hash = '#profile'">
+      Profile
+    </button>
+    <button class="menubar-item px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="window.location.hash = '#projects'">
+      Projects
+    </button>
+    <button class="menubar-item px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="window.location.hash = '#tutorials'">
+      Tutorials
+    </button>
+    <div class="relative">
+      <button id="view-menu" class="menubar-item px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="toggleViewMenu()">
+        View
+      </button>
+      <!-- View dropdown menu -->
+      <div id="view-dropdown" class="view-dropdown hidden absolute right-0 top-full mt-1 bg-gray-800 border border-gray-600 rounded shadow-lg z-50 min-w-48">
+        <button class="dropdown-item w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="window.toggleRightPanel?.(); closeViewMenu()">
+          Toggle Properties Panel
+        </button>
+        <button class="dropdown-item w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors" onclick="window.openCommandPalette?.(); closeViewMenu()">
+          Command Palette...
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side - functional controls -->
+  <div class="ml-auto flex items-center gap-2">
+    <button 
+      id="toggle-properties" 
+      class="menubar-item px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-gray-700 transition-colors text-xs"
+      title="Toggle Properties Panel"
+      onclick="window.toggleRightPanel?.()"
+    >
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-2zM2 2v1h12V2H2z"/>
+        <path d="M2 4.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-7zM3 5v6h10V5H3z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .menubar {
+    -webkit-app-region: drag;
+    background: var(--color-titlebar-bg, var(--color-bg-secondary));
+    user-select: none;
+  }
+
+  .menubar-item {
+    -webkit-app-region: no-drag;
+  }
+
+  /* VS Code specific styling */
+  [data-theme="vscode-dark"] .menubar {
+    background: var(--color-titlebar-bg);
+  }
+
+  /* View dropdown styling */
+  .view-dropdown {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    z-index: 1000;
+  }
+
+  .dropdown-item:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+</style>
+
+<script>
+  // View menu dropdown functionality
+  function toggleViewMenu() {
+    const dropdown = document.getElementById('view-dropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('hidden');
+    }
+  }
+
+  function closeViewMenu() {
+    const dropdown = document.getElementById('view-dropdown');
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const viewMenu = document.getElementById('view-menu');
+    const dropdown = document.getElementById('view-dropdown');
+    
+    if (dropdown && viewMenu && !viewMenu.contains(e.target as Node) && !dropdown.contains(e.target as Node)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  // Make functions globally available
+  (window as any).toggleViewMenu = toggleViewMenu;
+  (window as any).closeViewMenu = closeViewMenu;
+</script>

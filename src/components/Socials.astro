@@ -1,9 +1,8 @@
 ---
 import SocialIcon from "./SocialIcon.astro";
-import ThemeToggle from "./ThemeToggle.astro";
 import { socials, type Social } from "../data/socials";
 
-// Split socials into two rows
+// Split socials into two rows for balanced layout
 const firstRowSocials = socials.slice(0, 4);
 const secondRowSocials = socials.slice(4);
 ---
@@ -45,8 +44,7 @@ const secondRowSocials = socials.slice(4);
       ))
     }
 
-    <!-- Theme Toggle -->
-    <ThemeToggle />
+    <!-- Theme selection is now handled in VS Code Properties Panel -->
   </div>
 </div>
 <!-- End: Social Links -->
