@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TutorialCard from '../components/TutorialCard.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const tutorials = await getCollection('tutorials');
+
+// Sort tutorials by their slug number
+const sortedTutorials = tutorials.sort((a, b) => {
+  const numA = parseInt(a.slug.match(/\d+/)?.[0] || '0');
+  const numB = parseInt(b.slug.match(/\d+/)?.[0] || '0');
+  return numA - numB;
+});
+
+// Map tutorials with additional metadata
+const tutorialsList = sortedTutorials.map((tutorial, index) => ({
+  number: index + 1,
+  title: tutorial.data.title,
+  description: tutorial.data.description,
+  difficulty: tutorial.data.difficulty,
+  duration: tutorial.data.estimatedTime || '30 min',
+  tags: tutorial.data.topics || [],
+  url: `/tutorials/${tutorial.slug}/`
+}));
+
+// Group tutorials by difficulty (using lowercase from schema)
+const beginnerTutorials = tutorialsList.filter(t => t.difficulty === 'beginner');
+const intermediateTutorials = tutorialsList.filter(t => t.difficulty === 'intermediate');
+const advancedTutorials = tutorialsList.filter(t => t.difficulty === 'advanced');
+const professionalTutorials = tutorialsList.filter(t => t.difficulty === 'professional');
+---
+
+<Layout title="Tutorials">
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl py-8">
+    <div class="terminal-card">
+      <header class="mb-8">
+        <h1 class="text-xl font-bold mb-4" style="color: var(--text-primary);">
+          <span class="prompt">$</span> Tutorials
+        </h1>
+        <p class="text-sm" style="color: var(--text-secondary);">
+          In-depth guides on Linux kernel development, device drivers, and embedded systems programming.
+        </p>
+      </header>
+
+      {beginnerTutorials.length > 0 && (
+        <section class="mb-10">
+          <h2 class="section-title">
+            <span class="prompt">&gt;</span> Beginner
+          </h2>
+          <div class="tutorials-grid">
+            {beginnerTutorials.map(tutorial => (
+              <TutorialCard {...tutorial} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {intermediateTutorials.length > 0 && (
+        <section class="mb-10">
+          <h2 class="section-title">
+            <span class="prompt">#</span> Intermediate
+          </h2>
+          <div class="tutorials-grid">
+            {intermediateTutorials.map(tutorial => (
+              <TutorialCard {...tutorial} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {advancedTutorials.length > 0 && (
+        <section class="mb-10">
+          <h2 class="section-title">
+            <span class="prompt">~</span> Advanced
+          </h2>
+          <div class="tutorials-grid">
+            {advancedTutorials.map(tutorial => (
+              <TutorialCard {...tutorial} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {professionalTutorials.length > 0 && (
+        <section class="mb-10">
+          <h2 class="section-title">
+            <span class="prompt">!</span> Professional
+          </h2>
+          <div class="tutorials-grid">
+            {professionalTutorials.map(tutorial => (
+              <TutorialCard {...tutorial} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {tutorialsList.length === 0 && (
+        <div class="empty-state">
+          <p>No tutorials available yet. Check back soon!</p>
+        </div>
+      )}
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .terminal-card {
+    @apply p-6 sm:p-8;
+    animation: fadeIn 0.8s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .prompt {
+    color: var(--accent-primary);
+    @apply mr-2;
+  }
+
+  .section-title {
+    @apply text-lg font-bold mb-4;
+    color: var(--text-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
+
+  .tutorials-grid {
+    @apply grid gap-4;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .tutorials-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .tutorials-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty-state {
+    @apply text-center py-12;
+    color: var(--text-secondary);
+    font-family: "AdwaitaMono", monospace;
+  }
+</style>

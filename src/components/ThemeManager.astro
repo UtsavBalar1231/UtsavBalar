@@ -1,0 +1,16 @@
+---
+import { themes, getTheme, getCurrentTheme, applyTheme } from "../data/themes";
+---
+
+<script>
+  // Theme initialization is now handled by inline script in Layout.astro
+  // This component can be used for additional theme management utilities if needed
+  
+  // Ensure theme is consistent across components
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'selectedTheme' && e.newValue) {
+      document.documentElement.setAttribute('data-theme', e.newValue);
+      document.body.setAttribute('data-theme', e.newValue);
+    }
+  });
+</script> 

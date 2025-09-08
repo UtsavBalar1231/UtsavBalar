@@ -1,0 +1,134 @@
+---
+// Instead of using getCollection, we'll directly fetch the text file
+---
+
+<div class="resume-container">
+	<div class="resume-content">
+		<div class="text-content">
+			<pre id="resume-text">Loading resume...</pre>
+		</div>
+
+		<div class="resume-download-section">
+			<a href="/downloads/resume.pdf" download class="download-button">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="download-icon"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					fill="none"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+					<polyline points="7 10 12 15 17 10"></polyline>
+					<line x1="12" y1="15" x2="12" y2="3"></line>
+				</svg>
+				Download Resume
+			</a>
+		</div>
+	</div>
+</div>
+
+<script>
+	// Fetch and display the resume text file
+	fetch("/downloads/resume.txt")
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Failed to load resume");
+			}
+			return response.text();
+		})
+		.then((text) => {
+			const resumeElement = document.getElementById("resume-text");
+			if (resumeElement) {
+				resumeElement.textContent = text;
+			}
+		})
+		.catch((error) => {
+			console.error("Error loading resume:", error);
+			const resumeElement = document.getElementById("resume-text");
+			if (resumeElement) {
+				resumeElement.textContent =
+					"Error loading resume. Please try again later.";
+			}
+		});
+</script>
+
+<style>
+	.resume-container {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 1rem;
+	}
+
+	.resume-content {
+		background: rgba(var(--color-bg-secondary), 0.6);
+		border: 1px solid rgba(var(--color-border-rgb), 0.6);
+		border-radius: 0.75rem;
+		padding: 2rem;
+		box-shadow: 0 4px 8px rgba(var(--color-bg-primary), 0.7);
+	}
+
+	.text-content {
+		margin-bottom: 2rem;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		max-width: 100%;
+		font-family: "Courier New", monospace;
+		line-height: 1.5;
+		color: var(--color-text-primary);
+		overflow-x: hidden; /* Prevent horizontal scrolling */
+	}
+
+	pre {
+		font-family: inherit;
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden; /* Prevent horizontal scrolling */
+		word-wrap: break-word;
+		white-space: pre-wrap;
+	}
+
+	.resume-download-section {
+		margin-top: 2rem;
+		display: flex;
+		justify-content: center;
+	}
+
+	.download-button {
+		display: flex;
+		align-items: center;
+		background-color: var(--color-accent-primary);
+		color: var(--color-bg-primary);
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.5rem;
+		font-weight: 500;
+		transition: all 0.2s ease;
+		text-decoration: none;
+	}
+
+	.download-button:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(var(--color-accent-primary), 0.4);
+	}
+
+	.download-icon {
+		width: 20px; /* Fixed width */
+		height: 20px; /* Fixed height */
+		min-width: 20px; /* Prevents expanding */
+		min-height: 20px; /* Prevents expanding */
+		margin-right: 0.5rem;
+		display: inline-block;
+		flex-shrink: 0; /* Prevents the icon from shrinking */
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.resume-content {
+			padding: 1.5rem;
+		}
+	}
+</style>

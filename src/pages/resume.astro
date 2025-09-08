@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+const resume = await getEntry('resume', 'resume');
+const { Content } = await resume.render();
+---
+
+<Layout title="Resume">
+  <main class="prose">
+    <Content />
+    <p>
+      <a href="/downloads/resume.pdf" download>Download PDF</a>
+      <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
+    </p>
+  </main>
+</Layout>
+
+<style is:global>
+  .prose {
+    color: var(--term-text);
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--term-text);
+    text-shadow: 0 0 5px var(--term-glow);
+    margin-bottom: 1rem;
+  }
+  .prose a {
+    color: var(--term-text);
+    text-decoration: underline;
+  }
+  .prose p, .prose li {
+    margin-bottom: 1rem;
+  }
+  .prose ul, .prose ol {
+    padding-left: 2rem;
+  }
+</style>

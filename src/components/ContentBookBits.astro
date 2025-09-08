@@ -1,0 +1,135 @@
+---
+import { getMdxBookBits } from "../data/mdxBookBitsParser";
+
+// Fetch book bits from MDX using our parser
+const bookBits = await getMdxBookBits();
+---
+
+<div class="bookbits-container">
+	{
+		bookBits.map((bit) => (
+			<div class="bookbit-card">
+				<div class="bookbit-content">
+					<div class="bookbit-icon">❝</div>
+					<blockquote>
+						<p>{bit.text}</p>
+						<div class="bookbit-meta">
+							<cite class="book-title">{bit.book}</cite>
+							<cite class="page-number">- {bit.page}</cite>
+						</div>
+					</blockquote>
+					<div class="bookbit-icon bookbit-icon-end">❞</div>
+				</div>
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.bookbits-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+		padding: 0.5rem;
+	}
+
+	.bookbit-card {
+		background: rgba(var(--color-bg-secondary), 0.6);
+		border: 1px solid rgba(var(--color-border-rgb), 0.6);
+		border-radius: 0.75rem;
+		padding: 1.5rem;
+		box-shadow: 0 4px 6px rgba(var(--color-bg-primary), 0.7);
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+		overflow: hidden;
+		position: relative;
+		backdrop-filter: blur(10px);
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.bookbit-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 10px 15px rgba(var(--color-bg-primary), 0.8);
+	}
+
+	.bookbit-content {
+		position: relative;
+		padding: 1rem 0;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.bookbit-icon {
+		color: rgba(var(--color-accent-primary), 0.3);
+		font-size: 4rem;
+		line-height: 1;
+		position: absolute;
+		z-index: 0;
+	}
+
+	.bookbit-icon:first-child {
+		top: -1rem;
+		left: -0.5rem;
+	}
+
+	.bookbit-icon-end {
+		bottom: -2.5rem;
+		right: -0.5rem;
+	}
+
+	blockquote {
+		margin: 0;
+		padding: 0;
+		border-left: none;
+		background: transparent;
+		font-style: italic;
+		font-size: 1.1rem;
+		line-height: 1.6;
+		position: relative;
+		z-index: 1;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	blockquote p {
+		margin-bottom: 1rem;
+		white-space: pre-line;
+		flex: 1;
+		color: var(--color-text-primary);
+	}
+
+	.bookbit-meta {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+
+	.book-title {
+		font-style: normal;
+		display: block;
+		text-align: right;
+		color: var(--color-accent-primary);
+		font-weight: 500;
+	}
+
+	.page-number {
+		font-style: normal;
+		display: block;
+		text-align: right;
+		color: rgba(var(--color-text-secondary-rgb), 0.8);
+		font-size: 0.9rem;
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.bookbits-container {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

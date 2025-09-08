@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import Note from '../../components/mdx/Note.astro';
+import Warning from '../../components/mdx/Warning.astro';
+import Terminal from '../../components/mdx/Terminal.astro';
+
+export async function getStaticPaths() {
+  const tutorials = await getCollection('tutorials');
+  return tutorials.map(tutorial => ({
+    params: { slug: tutorial.slug },
+    props: { tutorial },
+  }));
+}
+
+const { tutorial } = Astro.props;
+const { Content } = await tutorial.render();
+
+const components = {
+  CodeBlock,
+  Note,
+  Warning,
+  Terminal,
+};
+---
+
+<Layout title={tutorial.data.title}>
+  <main class="prose">
+    <Content components={components} />
+  </main>
+</Layout>
+
+<style is:global>
+  .prose {
+    color: var(--term-text);
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--term-text);
+    text-shadow: 0 0 5px var(--term-glow);
+    margin-bottom: 1rem;
+  }
+  .prose a {
+    color: var(--term-text);
+    text-decoration: underline;
+  }
+  .prose p, .prose li {
+    margin-bottom: 1rem;
+  }
+  .prose ul, .prose ol {
+    padding-left: 2rem;
+  }
+  .prose pre {
+    background-color: #000;
+    border: 1px solid var(--term-text);
+    padding: 1rem;
+    overflow-x: auto;
+    text-shadow: none;
+  }
+  .prose code {
+    text-shadow: none;
+  }
+  .prose blockquote {
+    border-left: 4px solid var(--term-text);
+    padding-left: 1rem;
+    margin-left: 0;
+    font-style: italic;
+  }
+</style>

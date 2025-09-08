@@ -1,0 +1,45 @@
+---
+/**
+ * Note Component - For highlighting important information in tutorials
+ */
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Note" } = Astro.props;
+---
+
+<div class="my-6 rounded-md border-l-4 border-info bg-[color-mix(in_srgb,var(--color-info)_5%,var(--bg-primary))] relative overflow-hidden shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:border-l-[6px] hover:pl-[calc(1rem-2px)] group">
+  <div class="absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full bg-info -translate-y-12 translate-x-12"></div>
+  <div class="relative z-10 p-4">
+    <div class="flex items-center font-medium mb-3 text-info">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 min-w-[20px] min-h-[20px] max-w-[20px] max-h-[20px] mr-2">
+        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+      </svg>
+      {title}
+    </div>
+    <div class="text-text-primary note-content">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Global styles for nested content */
+  .note-content :global(p) {
+    @apply mb-3;
+  }
+  
+  .note-content :global(p:last-child) {
+    @apply mb-0;
+  }
+  
+  .note-content :global(a) {
+    @apply text-info underline decoration-1 underline-offset-2 hover:decoration-2;
+  }
+  
+  .note-content :global(code) {
+    @apply font-mono bg-[color-mix(in_srgb,var(--color-info)_10%,var(--bg-secondary))] px-[0.3em] py-[0.1em] rounded text-[0.9em];
+  }
+</style> 

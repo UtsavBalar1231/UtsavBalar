@@ -1,0 +1,50 @@
+---
+import GitHubAvatar from "./GitHubAvatar.astro";
+import { profile } from "../data/profile";
+---
+
+<div
+  class="flex flex-col gap-4 items-center text-center sm:items-start sm:text-left"
+>
+  <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
+    <GitHubAvatar
+      class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary text-text-primary mx-auto sm:mx-0 shadow-lg hover:shadow-xl transition-shadow duration-300"
+    />
+
+    <div>
+      <h1
+        class="text-lg sm:text-xl md:text-2xl font-extrabold mb-1 inline-block relative text-text-primary"
+      >
+        {profile.name}
+      </h1>
+
+      <p class="text-xs sm:text-sm mb-2 text-primary">
+        {profile.title}
+      </p>
+
+      <div
+        class="flex items-center justify-center sm:justify-start text-xs sm:text-sm text-gray-400"
+      >
+        <svg
+          class="mr-1 flex-shrink-0"
+          fill="none"
+          height="14"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+          ></path><circle cx="12" cy="10" r="3"></circle></svg
+        >
+        <span>{profile.location}</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-xs sm:text-sm leading-relaxed mt-1 sm:mt-2 text-gray-400">
+    {profile.description}
+  </p>
+</div>

@@ -1,11 +1,49 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Profile from '../components/Profile.astro';
+import Socials from '../components/Socials.astro';
+import Footer from '../components/Footer.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Utsav Balar - Portfolio">
+	<main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+		<div class="terminal-card animate-fade-in p-8">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+				<div class="profile-section">
+					<Profile />
+				</div>
+				<div class="socials-section">
+					<h2 class="text-lg font-bold text-accent-primary glitch-text block" style="margin: 1.5rem 0rem;">
+						<span class="terminal-prompt"></span>Connect
+					</h2>
+					<Socials />
+				</div>
+			</div>
+			<div class="terminal-output text-center text-xs sm:text-sm text-text-secondary mt-8">
+				<span class="typing-text inline-block"></span>
+			</div>
+		</div>
+	</main>
+	<Footer />
 </Layout>
+
+<style>
+	.container {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.terminal-card {
+		animation: fadeIn 0.8s ease-in;
+	}
+
+	@media (max-width: 768px) {
+		.container {
+			min-height: 100vh;
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+	}
+</style>

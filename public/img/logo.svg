@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <style>
+    circle {
+      fill: #1e1e2f;
+    }
+    text {
+      fill: #dbbc7f;
+      font-family: monospace;
+      font-weight: bold;
+    }
+  </style>
+  <circle cx="64" cy="64" r="64" />
+  <text x="64" y="76" font-size="42" text-anchor="middle">UB</text>
+</svg> 

@@ -1,0 +1,54 @@
+---
+// LogoGenerator.astro - Generates a theme-aware logo
+const { 
+  username = 'UtsavBalar1231', 
+  size = 96,
+  class: className = '',
+  baseColor = 'var(--bg-primary, #1e1e2f)',
+  textColor = 'var(--accent-primary, #dbbc7f)'
+} = Astro.props;
+
+// Extract initials from the username
+const initials = username
+  .split(/[^a-zA-Z0-9]+/) // Split by non-alphanumeric characters
+  .filter(Boolean) // Remove empty strings
+  .map(word => word[0]?.toUpperCase() || '') // Get first character of each word
+  .slice(0, 2) // Get at most 2 characters
+  .join(''); // Join them
+---
+
+<div class={`theme-logo ${className}`}>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 128 128">
+    <style>
+      .logo-bg {
+        fill: {baseColor};
+        transition: fill 0.3s ease-in-out;
+      }
+      .logo-text {
+        fill: {textColor};
+        transition: fill 0.3s ease-in-out;
+      }
+    </style>
+    
+    <circle class="logo-bg" cx="64" cy="64" r="64" />
+    <text 
+      x="64" 
+      y="76" 
+      font-family="AdwaitaMono, monospace" 
+      font-size="42" 
+      font-weight="bold" 
+      text-anchor="middle" 
+      class="logo-text"
+    >
+      {initials || 'UB'}
+    </text>
+  </svg>
+</div>
+
+<style>
+  .theme-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style> 

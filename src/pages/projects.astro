@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Footer from '../components/Footer.astro';
+
+const projectsList = [
+  {
+    title: "Custom Device Drivers for PamirAI Distiller 2",
+    description: "Engineered custom device drivers for low-power Edge AI hardware platform, including TLV320AIC3204 audio codec support and UART-based IPC protocol for Raspberry Pi CM5 and RP2040 communication.",
+    tags: ["Linux Kernel", "Device Drivers", "Raspberry Pi", "C", "Embedded"],
+    githubUrl: "https://github.com/UtsavBalar1231/linux/tree/rpi-6.12.y",
+    featured: true
+  },
+  {
+    title: "QT Application Development",
+    description: "Designed Qt-based application for PamirAI with MCP-based AI module integration, providing responsive interface for monitoring and controlling Edge AI hardware.",
+    tags: ["Qt", "Python", "AI Integration", "UI/UX"],
+    githubUrl: "https://github.com/UtsavBalar1231/distiller-cm5-python",
+    featured: true
+  },
+  {
+    title: "Freelance Embedded Linux Development",
+    description: "Multiple contract projects involving BSP development, Linux kernel customization, and device driver integration for Qualcomm Snapdragon, Raspberry Pi, and Rockchip SoCs.",
+    tags: ["BSP", "Linux Kernel", "Qualcomm", "Rockchip", "ARM"],
+    featured: false
+  },
+  {
+    title: "Vicharak Vaaman SBC",
+    description: "Led comprehensive BSP development for RK3399-based Single Board Computer. Managed device tree configurations, U-Boot bootloader integration, and Linux kernel customizations.",
+    tags: ["RK3399", "BSP", "U-Boot", "Device Tree", "Linux"],
+    demoUrl: "https://vicharak.in/vaaman",
+    featured: false
+  },
+  {
+    title: "Vicharak Axon SBC",
+    description: "BSP development for RK3588-based Single Board Computer with focus on performance optimization and power management through advanced hardware-software integration.",
+    tags: ["RK3588", "BSP", "Performance", "Power Management"],
+    demoUrl: "https://vicharak.in/axon",
+    featured: false
+  },
+  {
+    title: "Custom ROM & Kernel Development",
+    description: "Extensive development for Xiaomi devices (Redmi K20 Pro, Mi 11X/12X, Poco F2/F3). Optimized performance and power management for Qualcomm Snapdragon platforms.",
+    tags: ["Android", "Custom ROM", "Kernel", "Snapdragon", "AOSP"],
+    githubUrl: "https://github.com/UtsavBalar1231",
+    featured: true
+  },
+  {
+    title: "Open Source Contributions",
+    description: "Active contributor to Linux ecosystem, focusing on ARM-based platform hardware support and kernel performance optimizations.",
+    tags: ["Open Source", "Linux", "ARM", "Community"],
+    githubUrl: "https://github.com/UtsavBalar1231",
+    featured: false
+  }
+];
+
+const featuredProjects = projectsList.filter(p => p.featured);
+const otherProjects = projectsList.filter(p => !p.featured);
+---
+
+<Layout title="Projects">
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl py-8">
+    <div class="terminal-card">
+      <header class="mb-8">
+        <h1 class="text-xl font-bold mb-4" style="color: var(--text-primary);">
+          <span class="prompt">$</span> Projects
+        </h1>
+        <p class="text-sm" style="color: var(--text-secondary);">
+          A collection of my embedded systems, BSP development, and open source contributions.
+        </p>
+      </header>
+
+      <section class="mb-10">
+        <h2 class="section-title">
+          <span class="prompt">&gt;</span> Featured Projects
+        </h2>
+        <div class="projects-grid">
+          {featuredProjects.map(project => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          <span class="prompt">#</span> Other Projects
+        </h2>
+        <div class="projects-grid">
+          {otherProjects.map(project => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .terminal-card {
+    @apply p-6 sm:p-8;
+    animation: fadeIn 0.8s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .prompt {
+    color: var(--accent-primary);
+    @apply mr-2;
+  }
+
+  .section-title {
+    @apply text-lg font-bold mb-4;
+    color: var(--text-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
+
+  .projects-grid {
+    @apply grid gap-4;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .projects-grid {
+      gap: 1.5rem;
+    }
+  }
+</style>
