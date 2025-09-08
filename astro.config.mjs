@@ -1,6 +1,4 @@
 import { defineConfig } from "astro/config";
-
-
 import compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";

@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+
+# Build outputs
+dist/
+.astro/
+.output/
+build/
+
+# Cache and temp files
+.cache/
+.temp/
+.tmp/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+*.min.js
+*.min.css
+
+# Documentation
+*.md
+!README.md
+!CLAUDE.md
+
+# Public assets
+public/fonts/
+public/downloads/
