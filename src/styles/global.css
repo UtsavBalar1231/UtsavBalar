@@ -58,19 +58,29 @@
   /* Base body and html styles */
   html {
     @apply font-mono transition-all duration-300 ease-in-out scroll-smooth;
-    overscroll-behavior: none;
+    overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    /* Prevent dynamic height changes */
+    position: relative;
+    isolation: isolate;
   }
 
   body {
-    @apply bg-black text-text-primary font-mono text-sm sm:text-base terminal-text-glow;
-    overscroll-behavior: none;
+    @apply bg-black text-text-primary font-mono text-sm sm:text-base;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    /* Improve touch handling */
+    touch-action: manipulation;
+    /* GPU acceleration for smoother scrolling */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Create stacking context */
+    position: relative;
+    isolation: isolate;
   }
 
   /* Terminal glow for headers with phosphor persistence */
   h1, h2, h3, h4, h5, h6 {
-    @apply terminal-text-glow-intense;
     animation: phosphor-glow 2s ease-in-out infinite alternate;
   }
 
@@ -214,6 +224,12 @@ body::before {
     rgba(0, 0, 0, 0.05) 50%
   );
   background-size: 100% 4px;
+  /* Viewport containment */
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  contain: strict;
+  clip-path: inset(0);
 }
 
 /* Theme dot styles */
@@ -306,6 +322,11 @@ body::before {
     z-index: 2;
     mix-blend-mode: multiply;
     animation: rgb-shift 8s ease-in-out infinite;
+    /* Viewport containment */
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
+    isolation: isolate;
   }
   
   @keyframes rgb-shift {
@@ -328,20 +349,19 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100vw;
-    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 10% / 50%;
-    box-shadow: 
-      inset 0 0 100px rgba(0, 0, 0, 0.5),
-      inset 0 0 50px rgba(0, 0, 0, 0.4),
-      inset 0 0 30px rgba(0, 0, 0, 0.3);
     pointer-events: none;
     z-index: 3;
     animation: barrel-pulse 15s ease-in-out infinite;
+    /* Enhanced viewport containment */
     overflow: hidden;
     contain: strict;
+    clip-path: inset(0);
+    isolation: isolate;
   }
   
   @keyframes barrel-pulse {
@@ -360,14 +380,20 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100vw;
-    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     pointer-events: none;
     z-index: 4;
+    /* Enhanced viewport containment */
     overflow: hidden;
     contain: strict;
+    clip-path: inset(0);
+    isolation: isolate;
+    /* GPU acceleration */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     background: 
       repeating-linear-gradient(
         0deg,
@@ -381,7 +407,7 @@ body::before {
   
   .crt-overlay::before {
     content: "";
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -394,15 +420,19 @@ body::before {
     );
     background-size: 100% 10px;
     animation: scan-moving 3s linear infinite;
+    /* Viewport containment */
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
   }
   
   .crt-overlay::after {
     content: "";
-    position: fixed;
-    top: -15vh;
+    position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 15vh;
+    height: 15%;
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.05),
@@ -410,7 +440,12 @@ body::before {
     );
     animation: scan-bar 6s linear infinite;
     opacity: 0.7;
-    will-change: top;
+    will-change: transform;
+    /* Use transform for better performance */
+    transform: translateY(-100%);
+    /* Viewport containment */
+    overflow: hidden;
+    contain: strict;
   }
   
   @keyframes scanlines {
@@ -424,19 +459,19 @@ body::before {
   
   @keyframes scan-moving {
     0% {
-      transform: translateY(-100%);
+      transform: translateY(-10px);
     }
     100% {
-      transform: translateY(100%);
+      transform: translateY(0);
     }
   }
   
   @keyframes scan-bar {
     0% {
-      top: -15vh;
+      transform: translateY(-100%);
     }
     100% {
-      top: 100vh;
+      transform: translateY(calc(100% + 100%));
     }
   }
   
@@ -483,14 +518,17 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100vw;
-    max-height: 100vh;
     pointer-events: none;
     opacity: 0.03;
     z-index: 1;
+    /* Enhanced viewport containment */
+    overflow: hidden;
     contain: strict;
+    clip-path: inset(0);
+    isolation: isolate;
+    /* GPU acceleration */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     background: 
       repeating-radial-gradient(
         circle at 50% 50%,
@@ -581,9 +619,19 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     pointer-events: none;
     opacity: 0.03;
     z-index: 0;
+    /* Viewport containment */
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
+    isolation: isolate;
+    /* GPU acceleration */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     background-image: 
       repeating-linear-gradient(
         0deg,
