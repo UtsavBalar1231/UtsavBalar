@@ -141,25 +141,28 @@ export default {
       addComponents({
         ".terminal-card": {
           backgroundColor: "var(--bg-primary)",
-          border: "1px solid var(--border-color)",
           position: "relative",
           transition: "all 0.3s ease",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: "0",
-            left: "0",
-            right: "0",
-            bottom: "0",
-            background:
-              "linear-gradient(135deg, transparent 0%, rgba(var(--border-color-rgb), 0.05) 100%)",
-            pointerEvents: "none",
-          },
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow:
-              "0 10px 30px rgba(0, 0, 0, 0.3), 0 0 30px rgba(var(--border-color-rgb), 0.1)",
-            borderColor: "var(--accent-primary)",
+          // Border only on tablet/desktop
+          "@media (min-width: 640px)": {
+            border: "1px solid var(--border-color)",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
+              background:
+                "linear-gradient(135deg, transparent 0%, rgba(var(--border-color-rgb), 0.05) 100%)",
+              pointerEvents: "none",
+            },
+            "&:hover": {
+              transform: "translateY(-4px)",
+              boxShadow:
+                "0 10px 30px rgba(0, 0, 0, 0.3), 0 0 30px rgba(var(--border-color-rgb), 0.1)",
+              borderColor: "var(--accent-primary)",
+            },
           },
         },
         ".terminal-button": {

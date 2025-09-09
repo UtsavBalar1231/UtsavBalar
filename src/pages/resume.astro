@@ -8,12 +8,16 @@ const { Content } = await resume.render();
 ---
 
 <Layout title="Resume">
-  <main class="prose">
-    <Content />
-    <p>
-      <a href="/downloads/resume.pdf" download>Download PDF</a>
-      <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
-    </p>
+  <main class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="terminal-card p-6 sm:p-8">
+      <div class="prose">
+        <Content />
+        <p>
+          <a href="/downloads/resume.pdf" download>Download PDF</a>
+          <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
+        </p>
+      </div>
+    </div>
   </main>
   <Footer />
 </Layout>

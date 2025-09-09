@@ -4,7 +4,7 @@ import { socials } from "../data/socials";
 ---
 
 <!-- Start: Social Links -->
-<div class="social-links-grid mt-4 grid grid-cols-2 gap-2 overflow-hidden sm:mt-6 sm:grid-cols-4">
+<div class="social-links-grid mt-4 grid grid-cols-4 gap-4">
   {
     socials.map((social) => (
       <a
@@ -13,7 +13,7 @@ import { socials } from "../data/socials";
         title={social.title}
         aria-label={social.title}
         rel="noopener noreferrer"
-        class="social-link flex h-12 w-12 items-center justify-center border-2 p-2 transition-all duration-300 hover:shadow-lg sm:h-14 sm:w-14 sm:p-3"
+        class="social-link flex h-16 w-16 items-center justify-center border-2 p-3 transition-all duration-300 hover:shadow-lg sm:h-14 sm:w-14 sm:p-2"
         onclick={social.onClick}
       >
         <SocialIcon icon={social.icon} />
@@ -24,28 +24,12 @@ import { socials } from "../data/socials";
 <!-- End: Social Links -->
 
 <style>
-  .social-links-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 1rem !important;
-  }
-
-  @media (max-width: 640px) {
-    .social-links-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-  }
-
   .social-link {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     border-color: var(--border-color);
     position: relative;
     overflow: hidden;
-    padding: 0.5rem 0rem;
   }
 
   .social-link::before,
