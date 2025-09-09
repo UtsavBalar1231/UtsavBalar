@@ -1,0 +1,46 @@
+/* Performance Mode CSS Variables */
+/* This approach is cleaner than using !important everywhere */
+
+:root {
+  --animation-duration: 0.3s;
+  --transition-duration: 0.2s;
+  --crt-effects-display: block;
+  --blur-effects: blur(1px);
+  --smooth-scroll: smooth;
+}
+
+/* Performance mode overrides */
+.performance-mode {
+  --animation-duration: 0.1s;
+  --transition-duration: 0.1s;
+  --crt-effects-display: none;
+  --blur-effects: none;
+  --smooth-scroll: auto;
+}
+
+/* Mobile-specific overrides */
+@media (max-width: 767px) {
+  :root {
+    --animation-duration: 0.1s;
+    --transition-duration: 0.1s;
+    --crt-effects-display: none;
+    --blur-effects: none;
+    --smooth-scroll: auto;
+  }
+}
+
+/* Apply variables throughout */
+.crt-screen::before,
+.crt-screen::after,
+.crt-overlay {
+  display: var(--crt-effects-display);
+}
+
+* {
+  animation-duration: var(--animation-duration);
+  transition-duration: var(--transition-duration);
+}
+
+html {
+  scroll-behavior: var(--smooth-scroll);
+}

@@ -22,9 +22,23 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <!-- Immediately set theme to prevent flash -->
+    <!-- Performance detection and theme setup -->
     <script is:inline>
       (function () {
+        // Performance detection - run before theme to optimize immediately
+        const isMobile = window.innerWidth < 768;
+        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+        // Enable performance mode for mobile and low-end devices
+        if (isMobile || isLowEnd || prefersReduced || isTouchDevice) {
+          document.documentElement.classList.add("performance-mode");
+          document.documentElement.style.setProperty("--crt-intensity", "0");
+          // Disable smooth scroll on mobile for better performance
+          document.documentElement.style.scrollBehavior = "auto";
+        }
+
         // Get theme from localStorage or use default
         const stored = localStorage.getItem("selectedTheme");
         const theme = stored || "monochrome";
@@ -38,6 +52,10 @@ const { title } = Astro.props;
         }
       })();
     </script>
+
+    <!-- Resource hints for critical assets -->
+    <link rel="dns-prefetch" href="https://utsavbalar.in" />
+    <link rel="preconnect" href="https://utsavbalar.in" />
 
     <!-- Preload fonts for better performance -->
     <link
@@ -54,6 +72,9 @@ const { title } = Astro.props;
       type="font/ttf"
       crossorigin
     />
+
+    <!-- Preload critical CSS (only the theme variables) -->
+    <link rel="preload" href="/src/styles/theme.css" as="style" />
   </head>
   <body>
     <div
@@ -95,14 +116,15 @@ const { title } = Astro.props;
 
         // Add CRT power-off effect
         mainContent?.classList.add("page-transition-exit");
-        
+
         // Add scan line effect
         mainContent?.classList.add("terminal-nav-transition");
 
-        // Navigate after CRT effect completes
+        // Navigate faster on mobile, with CRT effect on desktop
+        const delay = window.innerWidth < 768 ? 100 : 400;
         setTimeout(() => {
           window.location.href = link.href;
-        }, 400);
+        }, delay);
       }
     });
   }
@@ -143,10 +165,41 @@ const { title } = Astro.props;
         mainContent?.classList.add("page-transition-exit");
         mainContent?.classList.add("terminal-nav-transition");
 
+        const delay = window.innerWidth < 768 ? 100 : 400;
         setTimeout(() => {
           window.location.href = targetUrl;
-        }, 400);
+        }, delay);
       }
+    }
+  });
+
+  // Intersection Observer for lazy animations (desktop only)
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only enable animations on desktop devices
+    if (
+      window.innerWidth >= 768 &&
+      !document.documentElement.classList.contains("performance-mode")
+    ) {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "50px",
+      };
+
+      const animationObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-in");
+            // Unobserve after animation to save resources
+            animationObserver.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe terminal cards and content sections
+      document.querySelectorAll(".terminal-card, .content-section, .project-card").forEach((el) => {
+        el.classList.add("animate-ready");
+        animationObserver.observe(el);
+      });
     }
   });
 </script>

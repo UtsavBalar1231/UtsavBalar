@@ -1,13 +1,58 @@
 /* Animations - Keyframes and complex animation effects */
 
-/* Terminal glow for headers with phosphor persistence */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  animation: phosphor-glow 2s ease-in-out infinite alternate;
+/* Mobile performance optimization - disable heavy animations */
+@media (max-width: 767px) {
+  /* Disable all continuous animations on mobile */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    animation: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Kill body voltage flicker */
+  body {
+    animation: none !important;
+    filter: none !important;
+  }
+
+  /* Disable all hover animations on touch devices */
+  .glitch-hover:hover,
+  .glitch-icon-hover:hover,
+  .glitch-border-hover:hover,
+  .glitch-subtle-hover:hover {
+    animation: none !important;
+  }
+
+  /* Simple transitions only - but preserve cursor blink speed */
+  *:not(.cursor):not(.typing-text) {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.1s !important;
+  }
+
+  /* Preserve cursor blink speed */
+  .cursor {
+    animation-duration: 1s !important;
+  }
+
+  .typing-text {
+    animation-duration: 2s !important;
+  }
+}
+
+/* Terminal glow for headers with phosphor persistence - Desktop only */
+@media (hover: hover) and (min-width: 768px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    animation: phosphor-glow 2s ease-in-out infinite alternate;
+  }
 }
 
 /* Keyframe Animations */
@@ -316,5 +361,29 @@ h6 {
   .glitch-border-hover:hover,
   .glitch-subtle-hover:hover {
     animation: none;
+  }
+}
+
+/* Lazy animation classes for intersection observer */
+@media (min-width: 768px) {
+  .animate-ready {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+
+  .animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* On mobile, elements should be visible immediately */
+@media (max-width: 767px) {
+  .animate-ready {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -34,9 +34,7 @@ const tools = {
 <div class="skills-container">
   <!-- Proficient Skills -->
   <section class="skill-section">
-    <h2 class="section-title">
-      Proficient
-    </h2>
+    <h2 class="section-title">Proficient</h2>
     <div class="skill-grid">
       {
         proficientSkills.map((skill) => (
@@ -50,9 +48,7 @@ const tools = {
 
   <!-- Semi-Proficient Skills -->
   <section class="skill-section">
-    <h2 class="section-title">
-      Semi-Proficient
-    </h2>
+    <h2 class="section-title">Semi-Proficient</h2>
     <div class="skill-grid">
       {
         semiProficientSkills.map((skill) => (
@@ -66,9 +62,7 @@ const tools = {
 
   <!-- Familiar With -->
   <section class="skill-section">
-    <h2 class="section-title">
-      Familiar With
-    </h2>
+    <h2 class="section-title">Familiar With</h2>
     <div class="skill-grid">
       {
         familiarSkills.map((skill) => (
@@ -82,9 +76,7 @@ const tools = {
 
   <!-- Development Tools -->
   <section class="skill-section">
-    <h2 class="section-title">
-      Development Tools
-    </h2>
+    <h2 class="section-title">Development Tools</h2>
     <div class="tools-container">
       <div class="tool-category">
         <h3 class="tool-title">Compilers & Debugging</h3>
@@ -140,36 +132,20 @@ const tools = {
     font-family: "AdwaitaMono", monospace;
   }
 
-  .terminal-prompt {
-    @apply mr-2;
-  }
-
   /* Color each section title differently */
   .skill-section:nth-child(1) .section-title {
-    color: var(--term-bright-green);
-  }
-  .skill-section:nth-child(1) .terminal-prompt {
     color: var(--term-bright-green);
   }
 
   .skill-section:nth-child(2) .section-title {
     color: var(--term-bright-yellow);
   }
-  .skill-section:nth-child(2) .terminal-prompt {
-    color: var(--term-bright-yellow);
-  }
 
   .skill-section:nth-child(3) .section-title {
     color: var(--term-bright-cyan);
   }
-  .skill-section:nth-child(3) .terminal-prompt {
-    color: var(--term-bright-cyan);
-  }
 
   .skill-section:nth-child(4) .section-title {
-    color: var(--term-bright-magenta);
-  }
-  .skill-section:nth-child(4) .terminal-prompt {
     color: var(--term-bright-magenta);
   }
 

@@ -96,6 +96,10 @@ export default {
           from: { width: "0" },
           to: { width: "100%" },
         },
+        blink: {
+          "0%, 50%": { opacity: "1" },
+          "51%, 100%": { opacity: "0" },
+        },
         "pulse-soft": {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
@@ -237,7 +241,7 @@ export default {
         ".terminal-cursor": {
           "&::after": {
             content: '"_"',
-            animation: "blink 1s step-end infinite",
+            animation: "blink 1.2s step-end infinite",
             color: "var(--accent-primary)",
             fontWeight: "bold",
           },

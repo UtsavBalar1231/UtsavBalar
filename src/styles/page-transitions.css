@@ -1,6 +1,35 @@
 /* Terminal-style page transition animations */
 
-/* Enhanced CRT refresh animation with more dramatic effect */
+/* Mobile-optimized transitions - simple and fast */
+@media (max-width: 767px) {
+  /* Disable all complex page transitions on mobile */
+  .page-transition,
+  .page-transition-exit,
+  .page-content-enter,
+  .terminal-nav-transition,
+  main.transitioning {
+    animation: mobile-fade 0.15s ease !important;
+  }
+
+  /* Remove all pseudo-element animations */
+  .page-transition::before,
+  .page-transition::after,
+  .terminal-nav-transition::after {
+    display: none !important;
+  }
+
+  /* Simple fade animation for mobile */
+  @keyframes mobile-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Enhanced CRT refresh animation with more dramatic effect - Desktop only */
 @keyframes crt-refresh {
   0% {
     opacity: 1;

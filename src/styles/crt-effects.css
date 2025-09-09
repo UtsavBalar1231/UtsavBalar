@@ -1,5 +1,30 @@
 /* CRT Effects - Complex terminal visual effects */
 
+/* Mobile-first approach - Disable all heavy effects on mobile for performance */
+@media (max-width: 767px) {
+  /* Kill all CRT effects on mobile */
+  .crt-screen::before,
+  .crt-screen::after,
+  .crt-overlay,
+  .crt-overlay::before,
+  .crt-overlay::after,
+  .crt-static,
+  body::before {
+    display: none !important;
+  }
+
+  /* Disable matrix background animation */
+  .matrix-bg {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Set performance mode to maximum */
+  :root {
+    --crt-intensity: 0 !important;
+  }
+}
+
 /* Prefers Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   /* Disable all animations for users who prefer reduced motion */
@@ -232,9 +257,11 @@ body::before {
       static-shift 0.5s steps(10) infinite;
   }
 
-  /* Voltage Fluctuation Effect */
-  body {
-    animation: voltage-flicker 20s ease-in-out infinite;
+  /* Voltage Fluctuation Effect - Desktop only */
+  @media (hover: hover) and (min-width: 768px) {
+    body {
+      animation: voltage-flicker 20s ease-in-out infinite;
+    }
   }
 
   /* Pixel Grid Overlay */

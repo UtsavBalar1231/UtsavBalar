@@ -132,6 +132,58 @@
   main {
     @apply relative;
   }
+
+  /* CSS Containment for better performance */
+  .terminal-card,
+  main,
+  section,
+  article {
+    contain: layout style paint;
+  }
+
+  /* Content visibility for off-screen content (modern browsers) */
+  .terminal-card:not(:first-child),
+  section:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px; /* Estimated height */
+  }
+
+  /* Mobile-specific performance optimizations */
+  @media (max-width: 767px) {
+    /* Force GPU acceleration on scrollable elements */
+    main,
+    body,
+    .terminal-card {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000;
+      perspective: 1000;
+    }
+
+    /* Disable smooth scroll on mobile for better performance */
+    html {
+      scroll-behavior: auto !important;
+    }
+
+    /* Optimize touch handling */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Reduce paint areas */
+    .terminal-card {
+      will-change: auto;
+    }
+  }
+
+  /* Desktop smooth scrolling */
+  @media (min-width: 768px) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 }
 
 /* Global link hover effects */

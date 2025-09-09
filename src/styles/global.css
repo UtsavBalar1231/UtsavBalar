@@ -17,3 +17,6 @@
 
 /* Import page transitions */
 @import "./page-transitions.css";
+
+/* Import performance mode overrides */
+@import "./performance-mode.css";

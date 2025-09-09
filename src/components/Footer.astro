@@ -146,5 +146,10 @@ const currentYear = new Date().getFullYear();
     .terminal-footer {
       @apply pb-20; /* Account for mobile nav */
     }
+
+    /* Slightly slower cursor blink for mobile comfort */
+    .cursor {
+      animation: blink 1.2s infinite !important;
+    }
   }
 </style>
