@@ -142,10 +142,35 @@ const difficultyColors: Record<string, string> = {
 
   .tag {
     @apply px-2 py-1 text-xs;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
+    border: 1px solid;
     font-family: "AdwaitaMono", monospace;
+    transition: all 0.2s ease;
+  }
+
+  /* Rotate through colors for tags */
+  .tag:nth-child(4n + 1) {
+    color: var(--term-bright-green);
+    border-color: var(--term-bright-green);
+  }
+
+  .tag:nth-child(4n + 2) {
+    color: var(--term-bright-cyan);
+    border-color: var(--term-bright-cyan);
+  }
+
+  .tag:nth-child(4n + 3) {
+    color: var(--term-bright-yellow);
+    border-color: var(--term-bright-yellow);
+  }
+
+  .tag:nth-child(4n) {
+    color: var(--term-bright-magenta);
+    border-color: var(--term-bright-magenta);
+  }
+
+  .tag:hover {
     opacity: 0.8;
+    transform: translateY(-1px);
   }
 
   .tutorial-action {

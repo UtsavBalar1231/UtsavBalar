@@ -8,7 +8,11 @@ const currentYear = new Date().getFullYear();
       © {currentYear} Utsav Balar. Licensed under MIT.
     </div>
 
-    <div class="build-info">Built with Astro · Hosted on Vercel · Source available on GitHub</div>
+    <div class="build-info">
+      Built with <span class="tech-link astro">Astro</span> · Hosted on <span
+        class="tech-link vercel">Vercel</span
+      > · Source available on <span class="tech-link github">GitHub</span>
+    </div>
 
     <div class="terminal-line">
       <span class="prompt">user@embedded-linux:~$</span>
@@ -39,8 +43,40 @@ const currentYear = new Date().getFullYear();
   }
 
   .prompt {
-    color: var(--accent-primary);
+    color: var(--term-bright-green);
     font-weight: bold;
+  }
+
+  .tech-link {
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .tech-link.astro {
+    color: var(--term-bright-magenta);
+  }
+
+  .tech-link.astro:hover {
+    color: var(--term-bright-cyan);
+    text-decoration: underline;
+  }
+
+  .tech-link.vercel {
+    color: var(--term-bright-cyan);
+  }
+
+  .tech-link.vercel:hover {
+    color: var(--term-bright-yellow);
+    text-decoration: underline;
+  }
+
+  .tech-link.github {
+    color: var(--term-bright-green);
+  }
+
+  .tech-link.github:hover {
+    color: var(--term-bright-magenta);
+    text-decoration: underline;
   }
 
   .copyright {
@@ -60,7 +96,7 @@ const currentYear = new Date().getFullYear();
     display: inline-block;
     width: 8px;
     height: 16px;
-    background-color: var(--accent-primary);
+    background-color: var(--term-bright-green);
     animation: blink 1s infinite;
   }
 

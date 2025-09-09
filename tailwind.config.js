@@ -34,17 +34,49 @@ export default {
         // Terminal glow colors
         "terminal-glow": "var(--terminal-glow)",
         "terminal-glow-intense": "var(--terminal-glow-intense)",
+        // 16-color terminal palette
+        "term-black": "var(--term-black)",
+        "term-red": "var(--term-red)",
+        "term-green": "var(--term-green)",
+        "term-yellow": "var(--term-yellow)",
+        "term-blue": "var(--term-blue)",
+        "term-magenta": "var(--term-magenta)",
+        "term-cyan": "var(--term-cyan)",
+        "term-white": "var(--term-white)",
+        "term-bright-black": "var(--term-bright-black)",
+        "term-bright-red": "var(--term-bright-red)",
+        "term-bright-green": "var(--term-bright-green)",
+        "term-bright-yellow": "var(--term-bright-yellow)",
+        "term-bright-blue": "var(--term-bright-blue)",
+        "term-bright-magenta": "var(--term-bright-magenta)",
+        "term-bright-cyan": "var(--term-bright-cyan)",
+        "term-bright-white": "var(--term-bright-white)",
       },
       backgroundColor: {
         terminal: "var(--bg-primary)",
         "terminal-secondary": "var(--bg-secondary)",
+        // Semantic backgrounds
+        error: "var(--color-error)",
+        warning: "var(--color-warning)",
+        success: "var(--color-success)",
+        info: "var(--color-info)",
       },
       textColor: {
         terminal: "var(--text-primary)",
         "terminal-secondary": "var(--text-secondary)",
+        // Semantic text colors
+        error: "var(--color-error)",
+        warning: "var(--color-warning)",
+        success: "var(--color-success)",
+        info: "var(--color-info)",
       },
       borderColor: {
         terminal: "var(--border-color)",
+        // Semantic border colors
+        error: "var(--color-error)",
+        warning: "var(--color-warning)",
+        success: "var(--color-success)",
+        info: "var(--color-info)",
       },
       opacity: {
         "crt-scanline": "var(--crt-scanline-opacity)",
@@ -119,6 +151,81 @@ export default {
         },
         ".terminal-text-glow-intense": {
           textShadow: "0 0 10px var(--terminal-glow-intense)",
+        },
+        // Color-specific glow utilities - subtle text glow
+        ".glow-red": {
+          textShadow: "0 0 3px var(--glow-red)",
+        },
+        ".glow-green": {
+          textShadow: "0 0 3px var(--glow-green)",
+        },
+        ".glow-yellow": {
+          textShadow: "0 0 3px var(--glow-yellow)",
+        },
+        ".glow-blue": {
+          textShadow: "0 0 3px var(--glow-blue)",
+        },
+        ".glow-magenta": {
+          textShadow: "0 0 3px var(--glow-magenta)",
+        },
+        ".glow-cyan": {
+          textShadow: "0 0 3px var(--glow-cyan)",
+        },
+        ".glow-white": {
+          textShadow: "0 0 3px var(--glow-white)",
+        },
+        // Bright color glows - subtle
+        ".glow-bright-red": {
+          textShadow: "0 0 4px var(--glow-bright-red)",
+        },
+        ".glow-bright-green": {
+          textShadow: "0 0 4px var(--glow-bright-green)",
+        },
+        ".glow-bright-yellow": {
+          textShadow: "0 0 4px var(--glow-bright-yellow)",
+        },
+        ".glow-bright-blue": {
+          textShadow: "0 0 4px var(--glow-bright-blue)",
+        },
+        ".glow-bright-magenta": {
+          textShadow: "0 0 4px var(--glow-bright-magenta)",
+        },
+        ".glow-bright-cyan": {
+          textShadow: "0 0 4px var(--glow-bright-cyan)",
+        },
+        ".glow-bright-white": {
+          textShadow: "0 0 4px var(--glow-bright-white)",
+        },
+        // Intense glow variants - still subtle
+        ".glow-red-intense": {
+          textShadow: "0 0 5px var(--glow-red), 0 0 10px var(--glow-red)",
+        },
+        ".glow-green-intense": {
+          textShadow: "0 0 5px var(--glow-green), 0 0 10px var(--glow-green)",
+        },
+        ".glow-yellow-intense": {
+          textShadow: "0 0 5px var(--glow-yellow), 0 0 10px var(--glow-yellow)",
+        },
+        ".glow-blue-intense": {
+          textShadow: "0 0 5px var(--glow-blue), 0 0 10px var(--glow-blue)",
+        },
+        ".glow-magenta-intense": {
+          textShadow: "0 0 5px var(--glow-magenta), 0 0 10px var(--glow-magenta)",
+        },
+        ".glow-cyan-intense": {
+          textShadow: "0 0 5px var(--glow-cyan), 0 0 10px var(--glow-cyan)",
+        },
+        ".glow-bright-red-intense": {
+          textShadow: "0 0 6px var(--glow-bright-red), 0 0 12px var(--glow-bright-red)",
+        },
+        ".glow-bright-green-intense": {
+          textShadow: "0 0 6px var(--glow-bright-green), 0 0 12px var(--glow-bright-green)",
+        },
+        ".glow-bright-yellow-intense": {
+          textShadow: "0 0 6px var(--glow-bright-yellow), 0 0 12px var(--glow-bright-yellow)",
+        },
+        ".glow-bright-cyan-intense": {
+          textShadow: "0 0 6px var(--glow-bright-cyan), 0 0 12px var(--glow-bright-cyan)",
         },
         ".terminal-prompt": {
           "&::before": {

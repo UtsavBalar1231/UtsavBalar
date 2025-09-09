@@ -137,13 +137,40 @@ const tools = {
 
   .section-title {
     @apply mb-4 text-xl font-bold;
-    color: var(--accent-primary);
     font-family: "AdwaitaMono", monospace;
   }
 
   .terminal-prompt {
-    color: var(--accent-primary);
     @apply mr-2;
+  }
+
+  /* Color each section title differently */
+  .skill-section:nth-child(1) .section-title {
+    color: var(--term-bright-green);
+  }
+  .skill-section:nth-child(1) .terminal-prompt {
+    color: var(--term-bright-green);
+  }
+
+  .skill-section:nth-child(2) .section-title {
+    color: var(--term-bright-yellow);
+  }
+  .skill-section:nth-child(2) .terminal-prompt {
+    color: var(--term-bright-yellow);
+  }
+
+  .skill-section:nth-child(3) .section-title {
+    color: var(--term-bright-cyan);
+  }
+  .skill-section:nth-child(3) .terminal-prompt {
+    color: var(--term-bright-cyan);
+  }
+
+  .skill-section:nth-child(4) .section-title {
+    color: var(--term-bright-magenta);
+  }
+  .skill-section:nth-child(4) .terminal-prompt {
+    color: var(--term-bright-magenta);
   }
 
   .skill-grid {
@@ -167,27 +194,50 @@ const tools = {
     @apply p-2 text-sm;
     border: 1px solid var(--border-color);
     font-family: "AdwaitaMono", monospace;
+    transition: all 0.2s ease;
   }
 
   .skill-card:hover {
     background-color: var(--bg-secondary);
+    transform: translateY(-2px);
   }
 
   .skill-card.proficient {
-    border-left: 2px solid var(--accent-primary);
+    border-left: 3px solid var(--term-bright-green);
+    border-color: var(--term-bright-green);
+  }
+
+  .skill-card.proficient:hover {
+    box-shadow: 0 0 15px rgba(var(--glow-bright-green-rgb), 0.3);
   }
 
   .skill-card.semi-proficient {
-    border-left: 2px solid var(--text-secondary);
+    border-left: 3px solid var(--term-bright-yellow);
+    border-color: var(--term-bright-yellow);
+  }
+
+  .skill-card.semi-proficient:hover {
+    box-shadow: 0 0 15px rgba(var(--glow-bright-yellow-rgb), 0.3);
   }
 
   .skill-card.familiar {
-    border-left: 2px solid var(--border-color);
+    border-left: 3px solid var(--term-bright-cyan);
+    border-color: var(--term-bright-cyan);
     opacity: 0.9;
   }
 
+  .skill-card.familiar:hover {
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(var(--glow-bright-cyan-rgb), 0.3);
+  }
+
   .skill-card.tool {
-    border-left: 2px solid var(--info);
+    border-left: 3px solid var(--term-bright-magenta);
+    border-color: var(--term-bright-magenta);
+  }
+
+  .skill-card.tool:hover {
+    box-shadow: 0 0 15px rgba(var(--glow-bright-magenta-rgb), 0.3);
   }
 
   .skill-name {
@@ -207,8 +257,21 @@ const tools = {
 
   .tool-title {
     @apply mb-3 text-sm font-semibold;
-    color: var(--text-secondary);
+    color: var(--term-bright-magenta);
     text-transform: uppercase;
     letter-spacing: 1px;
+  }
+
+  /* Different colors for each tool category */
+  .tool-category:nth-child(1) .tool-title {
+    color: var(--term-bright-red);
+  }
+
+  .tool-category:nth-child(2) .tool-title {
+    color: var(--term-bright-blue);
+  }
+
+  .tool-category:nth-child(3) .tool-title {
+    color: var(--term-bright-green);
   }
 </style>

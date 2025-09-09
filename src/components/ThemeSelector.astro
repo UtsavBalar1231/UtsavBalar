@@ -43,8 +43,22 @@ import { themes } from "../data/themes";
           role="menuitem"
           aria-label={`Switch to ${theme.label} theme`}
         >
-          <span class="theme-indicator" aria-hidden="true" />
-          <span class="theme-name">{theme.label}</span>
+          <div class="theme-option-content">
+            <div class="theme-option-header">
+              <span class="theme-indicator" aria-hidden="true" />
+              <span class="theme-name">{theme.label}</span>
+            </div>
+            <div class="color-palette" data-theme-preview={theme.value}>
+              <span class="color-dot" data-color="red" title="Red" />
+              <span class="color-dot" data-color="green" title="Green" />
+              <span class="color-dot" data-color="yellow" title="Yellow" />
+              <span class="color-dot" data-color="blue" title="Blue" />
+              <span class="color-dot" data-color="magenta" title="Magenta" />
+              <span class="color-dot" data-color="cyan" title="Cyan" />
+              <span class="color-dot" data-color="white" title="White" />
+              <span class="color-dot" data-color="bright" title="Accent" />
+            </div>
+          </div>
         </button>
       ))
     }
@@ -103,7 +117,7 @@ import { themes } from "../data/themes";
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 0;
-    min-width: 200px;
+    min-width: 250px;
     max-width: calc(100vw - 2rem);
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -116,9 +130,7 @@ import { themes } from "../data/themes";
   }
 
   .theme-option {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    display: block;
     width: 100%;
     padding: 0.75rem 1rem;
     background: transparent;
@@ -130,6 +142,18 @@ import { themes } from "../data/themes";
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+  }
+
+  .theme-option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .theme-option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .theme-option:hover {
@@ -149,6 +173,125 @@ import { themes } from "../data/themes";
     flex: 1;
   }
 
+  .color-palette {
+    display: flex;
+    gap: 0.25rem;
+    padding-top: 0.25rem;
+  }
+
+  .color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s ease;
+  }
+
+  .color-dot:hover {
+    transform: scale(1.2);
+  }
+
+  /* Color previews for each theme */
+  [data-theme-preview="green"] .color-dot[data-color="red"] {
+    background-color: #ff0000;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="green"] {
+    background-color: #00ff00;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="yellow"] {
+    background-color: #ffff00;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="blue"] {
+    background-color: #5c5cff;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="magenta"] {
+    background-color: #ff00ff;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="cyan"] {
+    background-color: #00ffff;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="white"] {
+    background-color: #ffffff;
+  }
+  [data-theme-preview="green"] .color-dot[data-color="bright"] {
+    background-color: #00ff00;
+  }
+
+  [data-theme-preview="amber"] .color-dot[data-color="red"] {
+    background-color: #ff6644;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="green"] {
+    background-color: #bbff00;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="yellow"] {
+    background-color: #ffb000;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="blue"] {
+    background-color: #0099ff;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="magenta"] {
+    background-color: #ff66cc;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="cyan"] {
+    background-color: #00ccff;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="white"] {
+    background-color: #ffffff;
+  }
+  [data-theme-preview="amber"] .color-dot[data-color="bright"] {
+    background-color: #ffb000;
+  }
+
+  [data-theme-preview="monochrome"] .color-dot[data-color="red"] {
+    background-color: #ff5555;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="green"] {
+    background-color: #55ff55;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="yellow"] {
+    background-color: #ffff55;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="blue"] {
+    background-color: #5555ff;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="magenta"] {
+    background-color: #ff55ff;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="cyan"] {
+    background-color: #55ffff;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="white"] {
+    background-color: #ffffff;
+  }
+  [data-theme-preview="monochrome"] .color-dot[data-color="bright"] {
+    background-color: #ffffff;
+  }
+
+  [data-theme-preview="doom"] .color-dot[data-color="red"] {
+    background-color: #ff4100;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="green"] {
+    background-color: #8ae234;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="yellow"] {
+    background-color: #ff8800;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="blue"] {
+    background-color: #729fcf;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="magenta"] {
+    background-color: #ad7fa8;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="cyan"] {
+    background-color: #34e2e2;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="white"] {
+    background-color: #eeeeec;
+  }
+  [data-theme-preview="doom"] .color-dot[data-color="bright"] {
+    background-color: #ff4100;
+  }
+
   /* Mobile styles */
   @media (max-width: 768px) {
     .theme-selector-btn {
@@ -162,10 +305,14 @@ import { themes } from "../data/themes";
     }
 
     .theme-dropdown {
-      min-width: 160px;
+      min-width: 200px;
       right: 0;
       max-width: calc(100vw - 1rem);
       max-height: calc(100vh - 80px);
+    }
+
+    .color-palette {
+      display: none; /* Hide color palette on mobile */
     }
 
     .theme-option {

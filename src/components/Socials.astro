@@ -13,7 +13,7 @@ import { socials } from "../data/socials";
         title={social.title}
         aria-label={social.title}
         rel="noopener noreferrer"
-        class="social-link flex h-16 w-16 items-center justify-center border-2 p-3 transition-all duration-300 hover:shadow-lg sm:h-14 sm:w-14 sm:p-2"
+        class="social-link flex h-16 w-16 items-center justify-center border-2 p-3 transition-all duration-300 hover:shadow-md sm:h-14 sm:w-14 sm:p-2"
         onclick={social.onClick}
       >
         <SocialIcon icon={social.icon} />
@@ -62,8 +62,8 @@ import { socials } from "../data/socials";
     border-color: var(--accent-primary);
     color: var(--bg-primary);
     box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      0 0 20px rgba(var(--accent-rgb), 0.2);
+      0 8px 24px rgba(0, 0, 0, 0.2),
+      0 0 15px rgba(var(--accent-rgb), 0.15);
   }
 
   .social-link:active {

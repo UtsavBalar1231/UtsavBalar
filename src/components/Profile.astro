@@ -6,7 +6,7 @@ import { profile } from "../data/profile";
 <div class="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
     <GitHubAvatar
-      class="mx-auto h-16 w-16 overflow-hidden rounded-full border-2 border-primary text-text-primary shadow-lg transition-shadow duration-300 hover:shadow-xl sm:mx-0 sm:h-20 sm:w-20 md:h-24 md:w-24"
+      class="mx-auto h-16 w-16 overflow-hidden rounded-full border-2 border-primary text-text-primary shadow-md transition-shadow duration-300 hover:shadow-lg sm:mx-0 sm:h-20 sm:w-20 md:h-24 md:w-24"
     />
 
     <div>
@@ -16,12 +16,13 @@ import { profile } from "../data/profile";
         {profile.name}
       </h1>
 
-      <p class="mb-2 text-xs text-primary sm:text-sm">
+      <p class="mb-2 text-xs text-term-bright-cyan sm:text-sm">
+        <span class="text-term-bright-yellow">$</span>
         {profile.title}
       </p>
 
       <div
-        class="flex items-center justify-center text-xs text-gray-400 sm:justify-start sm:text-sm"
+        class="flex items-center justify-center text-xs text-term-bright-magenta sm:justify-start sm:text-sm"
       >
         <svg
           class="mr-1 flex-shrink-0"

@@ -1,0 +1,196 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Color Palette Test">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-term-bright-cyan">
+      <span class="text-term-bright-yellow">$</span> 16-Color Terminal Palette Test
+    </h1>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-term-bright-green">Normal Colors (0-7)</h2>
+      <div class="grid grid-cols-4 gap-4">
+        <div class="p-4 border-2 border-term-black bg-black">
+          <span class="text-term-white">Black</span>
+          <div class="mt-2 text-term-black bg-white p-1">--term-black</div>
+        </div>
+        <div class="p-4 border-2 border-term-red">
+          <span class="text-term-red">Red</span>
+          <div class="mt-2 text-xs">--term-red</div>
+        </div>
+        <div class="p-4 border-2 border-term-green">
+          <span class="text-term-green">Green</span>
+          <div class="mt-2 text-xs">--term-green</div>
+        </div>
+        <div class="p-4 border-2 border-term-yellow">
+          <span class="text-term-yellow">Yellow</span>
+          <div class="mt-2 text-xs">--term-yellow</div>
+        </div>
+        <div class="p-4 border-2 border-term-blue">
+          <span class="text-term-blue">Blue</span>
+          <div class="mt-2 text-xs">--term-blue</div>
+        </div>
+        <div class="p-4 border-2 border-term-magenta">
+          <span class="text-term-magenta">Magenta</span>
+          <div class="mt-2 text-xs">--term-magenta</div>
+        </div>
+        <div class="p-4 border-2 border-term-cyan">
+          <span class="text-term-cyan">Cyan</span>
+          <div class="mt-2 text-xs">--term-cyan</div>
+        </div>
+        <div class="p-4 border-2 border-term-white">
+          <span class="text-term-white">White</span>
+          <div class="mt-2 text-xs">--term-white</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-term-bright-yellow">Bright Colors (8-15)</h2>
+      <div class="grid grid-cols-4 gap-4">
+        <div class="p-4 border-2 border-term-bright-black">
+          <span class="text-term-bright-black">Bright Black</span>
+          <div class="mt-2 text-xs">--term-bright-black</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-red">
+          <span class="text-term-bright-red">Bright Red</span>
+          <div class="mt-2 text-xs">--term-bright-red</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-green">
+          <span class="text-term-bright-green">Bright Green</span>
+          <div class="mt-2 text-xs">--term-bright-green</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-yellow">
+          <span class="text-term-bright-yellow">Bright Yellow</span>
+          <div class="mt-2 text-xs">--term-bright-yellow</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-blue">
+          <span class="text-term-bright-blue">Bright Blue</span>
+          <div class="mt-2 text-xs">--term-bright-blue</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-magenta">
+          <span class="text-term-bright-magenta">Bright Magenta</span>
+          <div class="mt-2 text-xs">--term-bright-magenta</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-cyan">
+          <span class="text-term-bright-cyan">Bright Cyan</span>
+          <div class="mt-2 text-xs">--term-bright-cyan</div>
+        </div>
+        <div class="p-4 border-2 border-term-bright-white">
+          <span class="text-term-bright-white">Bright White</span>
+          <div class="mt-2 text-xs">--term-bright-white</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-term-bright-magenta">Semantic Colors</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="p-4 border-2 border-error bg-error/10">
+          <span class="text-error font-bold">Error Color</span>
+          <div class="mt-2 text-sm text-error">This is an error message using --color-error</div>
+        </div>
+        <div class="p-4 border-2 border-warning bg-warning/10">
+          <span class="text-warning font-bold">Warning Color</span>
+          <div class="mt-2 text-sm text-warning">This is a warning message using --color-warning</div>
+        </div>
+        <div class="p-4 border-2 border-success bg-success/10">
+          <span class="text-success font-bold">Success Color</span>
+          <div class="mt-2 text-sm text-success">This is a success message using --color-success</div>
+        </div>
+        <div class="p-4 border-2 border-info bg-info/10">
+          <span class="text-info font-bold">Info Color</span>
+          <div class="mt-2 text-sm text-info">This is an info message using --color-info</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-term-bright-red">Terminal Examples</h2>
+      <div class="bg-black p-4 rounded border border-terminal font-mono">
+        <div class="mb-2">
+          <span class="text-term-bright-green">user@terminal</span>
+          <span class="text-term-bright-blue">:</span>
+          <span class="text-term-bright-cyan">~/dev/website</span>
+          <span class="text-term-bright-yellow">$</span>
+          <span class="text-term-white"> ls -la</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-bright-blue">drwxr-xr-x</span>
+          <span class="text-term-white"> 10 user staff 320 </span>
+          <span class="text-term-bright-yellow">Jan 9 16:00</span>
+          <span class="text-term-bright-cyan"> .</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-bright-blue">drwxr-xr-x</span>
+          <span class="text-term-white"> 5 user staff 160 </span>
+          <span class="text-term-bright-yellow">Jan 9 15:00</span>
+          <span class="text-term-bright-cyan"> ..</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-white">-rw-r--r-- 1 user staff 1024 </span>
+          <span class="text-term-bright-yellow">Jan 9 16:00</span>
+          <span class="text-term-bright-green"> README.md</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-white">-rw-r--r-- 1 user staff 2048 </span>
+          <span class="text-term-bright-yellow">Jan 9 16:00</span>
+          <span class="text-term-bright-magenta"> package.json</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-bright-red">[ERROR]</span>
+          <span class="text-term-white"> Failed to compile </span>
+          <span class="text-term-bright-cyan">src/main.ts</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-bright-yellow">[WARNING]</span>
+          <span class="text-term-white"> Deprecated function used in </span>
+          <span class="text-term-bright-cyan">utils.js</span>
+        </div>
+        <div class="mb-2">
+          <span class="text-term-bright-green">[SUCCESS]</span>
+          <span class="text-term-white"> Build completed in </span>
+          <span class="text-term-bright-magenta">3.42s</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-6 text-term-bright-cyan">Test Components</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-xl mb-4 text-term-bright-yellow">Buttons with Different Colors</h3>
+        <div class="flex flex-wrap gap-4">
+          <button class="px-4 py-2 border-2 border-term-bright-green text-term-bright-green hover:bg-term-bright-green hover:text-black transition-all">
+            Success Button
+          </button>
+          <button class="px-4 py-2 border-2 border-term-bright-red text-term-bright-red hover:bg-term-bright-red hover:text-black transition-all">
+            Danger Button
+          </button>
+          <button class="px-4 py-2 border-2 border-term-bright-yellow text-term-bright-yellow hover:bg-term-bright-yellow hover:text-black transition-all">
+            Warning Button
+          </button>
+          <button class="px-4 py-2 border-2 border-term-bright-cyan text-term-bright-cyan hover:bg-term-bright-cyan hover:text-black transition-all">
+            Info Button
+          </button>
+          <button class="px-4 py-2 border-2 border-term-bright-magenta text-term-bright-magenta hover:bg-term-bright-magenta hover:text-black transition-all">
+            Special Button
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xl mb-4 text-term-bright-green">Tags with Different Colors</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-2 py-1 text-xs border border-term-bright-green text-term-bright-green">JavaScript</span>
+          <span class="px-2 py-1 text-xs border border-term-bright-cyan text-term-bright-cyan">React</span>
+          <span class="px-2 py-1 text-xs border border-term-bright-yellow text-term-bright-yellow">Python</span>
+          <span class="px-2 py-1 text-xs border border-term-bright-magenta text-term-bright-magenta">Docker</span>
+          <span class="px-2 py-1 text-xs border border-term-bright-red text-term-bright-red">Rust</span>
+          <span class="px-2 py-1 text-xs border border-term-bright-blue text-term-bright-blue">TypeScript</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -1,5 +1,6 @@
 /* Retro Terminal Theme System */
 /* 4 classic terminal aesthetics with authentic CRT glow effects */
+/* Now with full 16-color (4-bit) terminal palette support */
 
 /* Base theme properties - Green Phosphor as default */
 :root {
@@ -27,11 +28,65 @@
   --crt-phosphor-persistence: 0.1;
   --crt-boot-duration: 0.5s;
 
-  /* Extended color palette */
-  --color-error: #ff3333;
-  --color-warning: #ffaa00;
-  --color-success: #00ff00;
-  --color-info: #00ffff;
+  /* 16-color terminal palette (4-bit) - Green Phosphor default */
+  /* Normal colors (0-7) */
+  --term-black: #000000;
+  --term-red: #aa0000;
+  --term-green: #00aa00;
+  --term-yellow: #aa5500;
+  --term-blue: #0000aa;
+  --term-magenta: #aa00aa;
+  --term-cyan: #00aaaa;
+  --term-white: #aaaaaa;
+
+  /* Bright colors (8-15) */
+  --term-bright-black: #555555;
+  --term-bright-red: #ff5555;
+  --term-bright-green: #55ff55;
+  --term-bright-yellow: #ffff55;
+  --term-bright-blue: #5555ff;
+  --term-bright-magenta: #ff55ff;
+  --term-bright-cyan: #55ffff;
+  --term-bright-white: #ffffff;
+
+  /* Semantic color mappings */
+  --color-error: var(--term-bright-red);
+  --color-warning: var(--term-bright-yellow);
+  --color-success: var(--term-bright-green);
+  --color-info: var(--term-bright-cyan);
+
+  /* Color-specific glow effects (default) - reduced text intensity */
+  --glow-black: rgba(0, 0, 0, 0.15);
+  --glow-red: rgba(170, 0, 0, 0.15);
+  --glow-green: rgba(0, 170, 0, 0.15);
+  --glow-yellow: rgba(170, 85, 0, 0.15);
+  --glow-blue: rgba(0, 0, 170, 0.15);
+  --glow-magenta: rgba(170, 0, 170, 0.15);
+  --glow-cyan: rgba(0, 170, 170, 0.15);
+  --glow-white: rgba(170, 170, 170, 0.15);
+  
+  --glow-bright-black: rgba(85, 85, 85, 0.2);
+  --glow-bright-red: rgba(255, 85, 85, 0.2);
+  --glow-bright-green: rgba(85, 255, 85, 0.2);
+  --glow-bright-yellow: rgba(255, 255, 85, 0.2);
+  --glow-bright-blue: rgba(85, 85, 255, 0.2);
+  --glow-bright-magenta: rgba(255, 85, 255, 0.2);
+  --glow-bright-cyan: rgba(85, 255, 255, 0.2);
+  --glow-bright-white: rgba(255, 255, 255, 0.2);
+  
+  /* RGB values for box-shadow effects */
+  --glow-red-rgb: 170, 0, 0;
+  --glow-green-rgb: 0, 170, 0;
+  --glow-yellow-rgb: 170, 85, 0;
+  --glow-blue-rgb: 0, 0, 170;
+  --glow-magenta-rgb: 170, 0, 170;
+  --glow-cyan-rgb: 0, 170, 170;
+  --glow-bright-red-rgb: 255, 85, 85;
+  --glow-bright-green-rgb: 85, 255, 85;
+  --glow-bright-yellow-rgb: 255, 255, 85;
+  --glow-bright-blue-rgb: 85, 85, 255;
+  --glow-bright-magenta-rgb: 255, 85, 255;
+  --glow-bright-cyan-rgb: 85, 255, 255;
 
   /* Neutral shades (for subtle UI elements) */
   --color-neutral-50: #f0f0f0;
@@ -88,11 +143,65 @@
   --crt-phosphor-persistence: 0.15;
   --crt-boot-duration: 0.6s;
 
-  /* Extended colors */
-  --color-error: #ff3333;
-  --color-warning: #ffaa00;
-  --color-success: #00ff00;
-  --color-info: #00ffff;
+  /* 16-color terminal palette - Green Phosphor */
+  /* Normal colors (0-7) */
+  --term-black: #000000;
+  --term-red: #cd0000;
+  --term-green: #00cd00;
+  --term-yellow: #cdcd00;
+  --term-blue: #0000ee;
+  --term-magenta: #cd00cd;
+  --term-cyan: #00cdcd;
+  --term-white: #e5e5e5;
+
+  /* Bright colors (8-15) */
+  --term-bright-black: #7f7f7f;
+  --term-bright-red: #ff0000;
+  --term-bright-green: #00ff00;
+  --term-bright-yellow: #ffff00;
+  --term-bright-blue: #5c5cff;
+  --term-bright-magenta: #ff00ff;
+  --term-bright-cyan: #00ffff;
+  --term-bright-white: #ffffff;
+
+  /* Semantic colors with green phosphor theme */
+  --color-error: var(--term-bright-red);
+  --color-warning: var(--term-bright-yellow);
+  --color-success: var(--term-bright-green);
+  --color-info: var(--term-bright-cyan);
+
+  /* Color-specific glow effects - Green Phosphor - reduced text intensity */
+  --glow-black: rgba(0, 0, 0, 0.15);
+  --glow-red: rgba(205, 0, 0, 0.15);
+  --glow-green: rgba(0, 205, 0, 0.15);
+  --glow-yellow: rgba(205, 205, 0, 0.15);
+  --glow-blue: rgba(0, 0, 238, 0.15);
+  --glow-magenta: rgba(205, 0, 205, 0.15);
+  --glow-cyan: rgba(0, 205, 205, 0.15);
+  --glow-white: rgba(229, 229, 229, 0.15);
+  
+  --glow-bright-black: rgba(127, 127, 127, 0.2);
+  --glow-bright-red: rgba(255, 0, 0, 0.25);
+  --glow-bright-green: rgba(0, 255, 0, 0.25);
+  --glow-bright-yellow: rgba(255, 255, 0, 0.25);
+  --glow-bright-blue: rgba(92, 92, 255, 0.25);
+  --glow-bright-magenta: rgba(255, 0, 255, 0.25);
+  --glow-bright-cyan: rgba(0, 255, 255, 0.25);
+  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  
+  /* RGB values for box-shadow effects */
+  --glow-red-rgb: 205, 0, 0;
+  --glow-green-rgb: 0, 205, 0;
+  --glow-yellow-rgb: 205, 205, 0;
+  --glow-blue-rgb: 0, 0, 238;
+  --glow-magenta-rgb: 205, 0, 205;
+  --glow-cyan-rgb: 0, 205, 205;
+  --glow-bright-red-rgb: 255, 0, 0;
+  --glow-bright-green-rgb: 0, 255, 0;
+  --glow-bright-yellow-rgb: 255, 255, 0;
+  --glow-bright-blue-rgb: 92, 92, 255;
+  --glow-bright-magenta-rgb: 255, 0, 255;
+  --glow-bright-cyan-rgb: 0, 255, 255;
 }
 
 /* Amber Phosphor Terminal (Vintage Unix/VAX) */
@@ -120,11 +229,65 @@
   --crt-phosphor-persistence: 0.2;
   --crt-boot-duration: 0.8s;
 
-  /* Extended colors */
-  --color-error: #ff4444;
-  --color-warning: #ffb000;
-  --color-success: #88ff00;
-  --color-info: #00bbff;
+  /* 16-color terminal palette - Amber Phosphor */
+  /* Normal colors (0-7) */
+  --term-black: #000000;
+  --term-red: #cc3300;
+  --term-green: #99cc00;
+  --term-yellow: #ccaa00;
+  --term-blue: #0066cc;
+  --term-magenta: #cc0099;
+  --term-cyan: #0099cc;
+  --term-white: #cccccc;
+
+  /* Bright colors (8-15) */
+  --term-bright-black: #666666;
+  --term-bright-red: #ff6644;
+  --term-bright-green: #bbff00;
+  --term-bright-yellow: #ffb000;
+  --term-bright-blue: #0099ff;
+  --term-bright-magenta: #ff66cc;
+  --term-bright-cyan: #00ccff;
+  --term-bright-white: #ffffff;
+
+  /* Semantic colors with amber theme */
+  --color-error: var(--term-bright-red);
+  --color-warning: var(--term-bright-yellow);
+  --color-success: var(--term-bright-green);
+  --color-info: var(--term-bright-cyan);
+
+  /* Color-specific glow effects - Amber Phosphor - reduced text intensity */
+  --glow-black: rgba(0, 0, 0, 0.15);
+  --glow-red: rgba(204, 51, 0, 0.15);
+  --glow-green: rgba(153, 204, 0, 0.15);
+  --glow-yellow: rgba(204, 170, 0, 0.15);
+  --glow-blue: rgba(0, 102, 204, 0.15);
+  --glow-magenta: rgba(204, 0, 153, 0.15);
+  --glow-cyan: rgba(0, 153, 204, 0.15);
+  --glow-white: rgba(204, 204, 204, 0.15);
+  
+  --glow-bright-black: rgba(102, 102, 102, 0.2);
+  --glow-bright-red: rgba(255, 102, 68, 0.25);
+  --glow-bright-green: rgba(187, 255, 0, 0.25);
+  --glow-bright-yellow: rgba(255, 176, 0, 0.25);
+  --glow-bright-blue: rgba(0, 153, 255, 0.25);
+  --glow-bright-magenta: rgba(255, 102, 204, 0.25);
+  --glow-bright-cyan: rgba(0, 204, 255, 0.25);
+  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  
+  /* RGB values for box-shadow effects */
+  --glow-red-rgb: 204, 51, 0;
+  --glow-green-rgb: 153, 204, 0;
+  --glow-yellow-rgb: 204, 170, 0;
+  --glow-blue-rgb: 0, 102, 204;
+  --glow-magenta-rgb: 204, 0, 153;
+  --glow-cyan-rgb: 0, 153, 204;
+  --glow-bright-red-rgb: 255, 102, 68;
+  --glow-bright-green-rgb: 187, 255, 0;
+  --glow-bright-yellow-rgb: 255, 176, 0;
+  --glow-bright-blue-rgb: 0, 153, 255;
+  --glow-bright-magenta-rgb: 255, 102, 204;
+  --glow-bright-cyan-rgb: 0, 204, 255;
 }
 
 /* Monochrome Terminal (Classic White on Black) */
@@ -152,11 +315,65 @@
   --crt-phosphor-persistence: 0.05;
   --crt-boot-duration: 0.4s;
 
-  /* Extended colors */
-  --color-error: #ff5555;
-  --color-warning: #ffaa55;
-  --color-success: #55ff55;
-  --color-info: #5555ff;
+  /* 16-color terminal palette - Monochrome with color accents */
+  /* Normal colors (0-7) */
+  --term-black: #000000;
+  --term-red: #aa0000;
+  --term-green: #00aa00;
+  --term-yellow: #aa5500;
+  --term-blue: #0000aa;
+  --term-magenta: #aa00aa;
+  --term-cyan: #00aaaa;
+  --term-white: #aaaaaa;
+
+  /* Bright colors (8-15) */
+  --term-bright-black: #555555;
+  --term-bright-red: #ff5555;
+  --term-bright-green: #55ff55;
+  --term-bright-yellow: #ffff55;
+  --term-bright-blue: #5555ff;
+  --term-bright-magenta: #ff55ff;
+  --term-bright-cyan: #55ffff;
+  --term-bright-white: #ffffff;
+
+  /* Semantic colors - subtle colors in monochrome theme */
+  --color-error: var(--term-bright-red);
+  --color-warning: var(--term-bright-yellow);
+  --color-success: var(--term-bright-green);
+  --color-info: var(--term-bright-cyan);
+
+  /* Color-specific glow effects - Monochrome - reduced text intensity */
+  --glow-black: rgba(0, 0, 0, 0.15);
+  --glow-red: rgba(170, 0, 0, 0.15);
+  --glow-green: rgba(0, 170, 0, 0.15);
+  --glow-yellow: rgba(170, 85, 0, 0.15);
+  --glow-blue: rgba(0, 0, 170, 0.15);
+  --glow-magenta: rgba(170, 0, 170, 0.15);
+  --glow-cyan: rgba(0, 170, 170, 0.15);
+  --glow-white: rgba(170, 170, 170, 0.15);
+  
+  --glow-bright-black: rgba(85, 85, 85, 0.2);
+  --glow-bright-red: rgba(255, 85, 85, 0.25);
+  --glow-bright-green: rgba(85, 255, 85, 0.25);
+  --glow-bright-yellow: rgba(255, 255, 85, 0.25);
+  --glow-bright-blue: rgba(85, 85, 255, 0.25);
+  --glow-bright-magenta: rgba(255, 85, 255, 0.25);
+  --glow-bright-cyan: rgba(85, 255, 255, 0.25);
+  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  
+  /* RGB values for box-shadow effects */
+  --glow-red-rgb: 170, 0, 0;
+  --glow-green-rgb: 0, 170, 0;
+  --glow-yellow-rgb: 170, 85, 0;
+  --glow-blue-rgb: 0, 0, 170;
+  --glow-magenta-rgb: 170, 0, 170;
+  --glow-cyan-rgb: 0, 170, 170;
+  --glow-bright-red-rgb: 255, 85, 85;
+  --glow-bright-green-rgb: 85, 255, 85;
+  --glow-bright-yellow-rgb: 255, 255, 85;
+  --glow-bright-blue-rgb: 85, 85, 255;
+  --glow-bright-magenta-rgb: 255, 85, 255;
+  --glow-bright-cyan-rgb: 85, 255, 255;
 }
 
 /* DOOM Red Terminal (Classic DOOM/Hell aesthetic) */
@@ -184,9 +401,63 @@
   --crt-phosphor-persistence: 0.25;
   --crt-boot-duration: 1s;
 
-  /* Extended colors */
-  --color-error: #ff0000;
-  --color-warning: #ff8800;
-  --color-success: #00ff00;
-  --color-info: #0088ff;
+  /* 16-color terminal palette - DOOM Hell Fire */
+  /* Normal colors (0-7) */
+  --term-black: #000000;
+  --term-red: #cc0000;
+  --term-green: #4e9a06;
+  --term-yellow: #c4a000;
+  --term-blue: #3465a4;
+  --term-magenta: #75507b;
+  --term-cyan: #06989a;
+  --term-white: #d3d7cf;
+
+  /* Bright colors (8-15) - Fire and brimstone palette */
+  --term-bright-black: #555753;
+  --term-bright-red: #ff4100;
+  --term-bright-green: #8ae234;
+  --term-bright-yellow: #ff8800;
+  --term-bright-blue: #729fcf;
+  --term-bright-magenta: #ad7fa8;
+  --term-bright-cyan: #34e2e2;
+  --term-bright-white: #eeeeec;
+
+  /* Semantic colors with DOOM theme */
+  --color-error: var(--term-bright-red);
+  --color-warning: var(--term-bright-yellow);
+  --color-success: var(--term-bright-green);
+  --color-info: var(--term-bright-cyan);
+
+  /* Color-specific glow effects - DOOM Hell Fire - reduced text intensity */
+  --glow-black: rgba(0, 0, 0, 0.15);
+  --glow-red: rgba(204, 0, 0, 0.15);
+  --glow-green: rgba(78, 154, 6, 0.15);
+  --glow-yellow: rgba(196, 160, 0, 0.15);
+  --glow-blue: rgba(52, 101, 164, 0.15);
+  --glow-magenta: rgba(117, 80, 123, 0.15);
+  --glow-cyan: rgba(6, 152, 154, 0.15);
+  --glow-white: rgba(211, 215, 207, 0.15);
+  
+  --glow-bright-black: rgba(85, 87, 83, 0.2);
+  --glow-bright-red: rgba(255, 65, 0, 0.3);
+  --glow-bright-green: rgba(138, 226, 52, 0.25);
+  --glow-bright-yellow: rgba(255, 136, 0, 0.3);
+  --glow-bright-blue: rgba(114, 159, 207, 0.25);
+  --glow-bright-magenta: rgba(173, 127, 168, 0.25);
+  --glow-bright-cyan: rgba(52, 226, 226, 0.25);
+  --glow-bright-white: rgba(238, 238, 236, 0.25);
+  
+  /* RGB values for box-shadow effects */
+  --glow-red-rgb: 204, 0, 0;
+  --glow-green-rgb: 78, 154, 6;
+  --glow-yellow-rgb: 196, 160, 0;
+  --glow-blue-rgb: 52, 101, 164;
+  --glow-magenta-rgb: 117, 80, 123;
+  --glow-cyan-rgb: 6, 152, 154;
+  --glow-bright-red-rgb: 255, 65, 0;
+  --glow-bright-green-rgb: 138, 226, 52;
+  --glow-bright-yellow-rgb: 255, 136, 0;
+  --glow-bright-blue-rgb: 114, 159, 207;
+  --glow-bright-magenta-rgb: 173, 127, 168;
+  --glow-bright-cyan-rgb: 52, 226, 226;
 }

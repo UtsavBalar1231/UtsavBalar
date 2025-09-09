@@ -1,26 +1,67 @@
 ---
 const navLinks = [
-  { href: "/", text: "Home" },
-  { href: "/about/", text: "About" },
-  { href: "/projects/", text: "Projects" },
-  { href: "/resume/", text: "Resume" },
-  { href: "/tutorials/", text: "Tutorials" },
+  { href: "/", text: "Home", color: "term-bright-green" },
+  { href: "/about/", text: "About", color: "term-bright-cyan" },
+  { href: "/projects/", text: "Projects", color: "term-bright-yellow" },
+  { href: "/resume/", text: "Resume", color: "term-bright-magenta" },
+  { href: "/tutorials/", text: "Tutorials", color: "term-bright-red" },
 ];
+
+// Get current path to determine active link
+const currentPath = Astro.url.pathname;
 ---
 
 <nav class="hidden md:block">
   <ul class="m-0 flex list-none flex-wrap justify-center gap-6 p-0 lg:gap-8">
     {
-      navLinks.map((link) => (
-        <li class="whitespace-nowrap">
-          <a
-            href={link.href}
-            class="rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            [ {link.text} ]
-          </a>
-        </li>
-      ))
+      navLinks.map((link) => {
+        const isActive =
+          currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href));
+        return (
+          <li class="whitespace-nowrap">
+            <a
+              href={link.href}
+              class:list={`nav-link rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                isActive
+                  ? `text-${link.color} font-bold`
+                  : "hover:text- text-text-primary" + link.color
+              }`}
+            >
+              <span
+                class:list={`bracket ${isActive ? `text-${link.color}` : "text-term-bright-black"}`}
+              >
+                [
+              </span>
+              <span class="nav-text">{link.text}</span>
+              <span
+                class:list={`bracket ${isActive ? `text-${link.color}` : "text-term-bright-black"}`}
+              >
+                ]
+              </span>
+            </a>
+          </li>
+        );
+      })
     }
   </ul>
 </nav>
+
+<style>
+  .nav-link:hover .bracket {
+    animation: bracket-pulse 0.3s ease;
+  }
+
+  .nav-link:hover .nav-text {
+    text-decoration: underline;
+  }
+
+  @keyframes bracket-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+</style>

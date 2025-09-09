@@ -15,16 +15,16 @@ h6 {
 @keyframes phosphor-glow {
   0% {
     text-shadow:
-      0 0 5px var(--terminal-glow),
-      0 0 10px var(--terminal-glow),
-      0 0 15px var(--terminal-glow);
+      0 0 2px currentColor,
+      0 0 3px currentColor;
+    filter: brightness(1);
   }
   100% {
     text-shadow:
-      0 0 10px var(--terminal-glow-intense),
-      0 0 20px var(--terminal-glow-intense),
-      0 0 30px var(--terminal-glow-intense),
-      0 0 40px var(--terminal-glow);
+      0 0 3px currentColor,
+      0 0 4px currentColor,
+      0 0 5px currentColor;
+    filter: brightness(1.05);
   }
 }
 
