@@ -1,141 +1,143 @@
 ---
 export interface Props {
-	title: string;
-	description: string;
-	tags: string[];
-	githubUrl?: string;
-	demoUrl?: string;
-	featured?: boolean;
+  title: string;
+  description: string;
+  tags: string[];
+  githubUrl?: string;
+  demoUrl?: string;
+  featured?: boolean;
 }
 
 const { title, description, tags, githubUrl, demoUrl, featured = false } = Astro.props;
 ---
 
-<div class={`project-card ${featured ? 'featured' : ''}`}>
-	<div class="project-header">
-		<h3 class="project-title">
-			<span class="prompt-symbol">></span>
-			{title}
-		</h3>
-		{featured && <span class="featured-badge">Featured</span>}
-	</div>
+<div class:list={`project-card ${featured ? "featured" : ""}`}>
+  <div class="project-header">
+    <h3 class="project-title">
+      <span class="prompt-symbol">&gt;</span>
+      {title}
+    </h3>
+    {featured && <span class="featured-badge">Featured</span>}
+  </div>
 
-	<p class="project-description">{description}</p>
+  <p class="project-description">{description}</p>
 
-	<div class="project-tags">
-		{tags.map((tag) => (
-			<span class="tag">{tag}</span>
-		))}
-	</div>
+  <div class="project-tags">
+    {tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
 
-	<div class="project-links">
-		{githubUrl && (
-			<a href={githubUrl} target="_blank" rel="noopener noreferrer" class="project-link">
-				<span class="link-icon">[</span>
-				GitHub
-				<span class="link-icon">]</span>
-			</a>
-		)}
-		{demoUrl && (
-			<a href={demoUrl} target="_blank" rel="noopener noreferrer" class="project-link">
-				<span class="link-icon">[</span>
-				Demo
-				<span class="link-icon">]</span>
-			</a>
-		)}
-	</div>
+  <div class="project-links">
+    {
+      githubUrl && (
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="project-link">
+          <span class="link-icon">[</span>
+          GitHub
+          <span class="link-icon">]</span>
+        </a>
+      )
+    }
+    {
+      demoUrl && (
+        <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="project-link">
+          <span class="link-icon">[</span>
+          Demo
+          <span class="link-icon">]</span>
+        </a>
+      )
+    }
+  </div>
 </div>
 
 <style>
-	.project-card {
-		@apply mb-6 p-4;
-		border: 1px solid var(--border-color);
-		background-color: var(--bg-secondary);
-		transition: all 0.3s ease;
-	}
+  .project-card {
+    @apply mb-6 p-4;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    transition: all 0.3s ease;
+  }
 
-	.project-card:hover {
-		border-color: var(--accent-primary);
-		box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.3);
-	}
+  .project-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.3);
+  }
 
-	.project-card.featured {
-		border-left: 3px solid var(--accent-primary);
-	}
+  .project-card.featured {
+    border-left: 3px solid var(--accent-primary);
+  }
 
-	.project-header {
-		@apply flex items-start justify-between mb-3;
-	}
+  .project-header {
+    @apply mb-3 flex items-start justify-between;
+  }
 
-	.project-title {
-		@apply text-lg font-bold;
-		color: var(--text-primary);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .project-title {
+    @apply text-lg font-bold;
+    color: var(--text-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.prompt-symbol {
-		color: var(--accent-primary);
-		@apply mr-2;
-	}
+  .prompt-symbol {
+    color: var(--accent-primary);
+    @apply mr-2;
+  }
 
-	.featured-badge {
-		@apply px-2 py-1 text-xs;
-		background-color: var(--accent-primary);
-		color: var(--bg-primary);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .featured-badge {
+    @apply px-2 py-1 text-xs;
+    background-color: var(--accent-primary);
+    color: var(--bg-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.project-description {
-		@apply mb-4 text-sm;
-		color: var(--text-secondary);
-		line-height: 1.6;
-	}
+  .project-description {
+    @apply mb-4 text-sm;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
 
-	.project-tags {
-		@apply flex flex-wrap gap-2 mb-4;
-	}
+  .project-tags {
+    @apply mb-4 flex flex-wrap gap-2;
+  }
 
-	.tag {
-		@apply px-2 py-1 text-xs;
-		border: 1px solid var(--border-color);
-		color: var(--text-secondary);
-		font-family: "AdwaitaMono", monospace;
-		transition: all 0.2s ease;
-	}
+  .tag {
+    @apply px-2 py-1 text-xs;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-family: "AdwaitaMono", monospace;
+    transition: all 0.2s ease;
+  }
 
-	.tag:hover {
-		border-color: var(--accent-primary);
-		color: var(--accent-primary);
-	}
+  .tag:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
 
-	.project-links {
-		@apply flex gap-4;
-	}
+  .project-links {
+    @apply flex gap-4;
+  }
 
-	.project-link {
-		@apply text-sm;
-		color: var(--accent-primary);
-		font-family: "AdwaitaMono", monospace;
-		text-decoration: none;
-		transition: opacity 0.2s ease;
-	}
+  .project-link {
+    @apply text-sm;
+    color: var(--accent-primary);
+    font-family: "AdwaitaMono", monospace;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
 
-	.project-link:hover {
-		opacity: 0.8;
-		text-decoration: underline;
-	}
+  .project-link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
 
-	.link-icon {
-		color: var(--text-secondary);
-	}
+  .link-icon {
+    color: var(--text-secondary);
+  }
 
-	@media (max-width: 640px) {
-		.project-card {
-			@apply p-3;
-		}
+  @media (max-width: 640px) {
+    .project-card {
+      @apply p-3;
+    }
 
-		.project-title {
-			@apply text-base;
-		}
-	}
+    .project-title {
+      @apply text-base;
+    }
+  }
 </style>

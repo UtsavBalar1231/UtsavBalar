@@ -1,11 +1,11 @@
 ---
 const navLinks = [
-  { href: '/', text: 'Home', icon: '~' },
-  { href: '/projects/', text: 'Projects', icon: '>' },
-  { href: '/tutorials/', text: 'Tutorials', icon: '#' },
-  { href: '/skills/', text: 'Skills', icon: '$' },
-  { href: '/resume/', text: 'Resume', icon: '@' },
-  { href: '/about/', text: 'About', icon: '&' },
+  { href: "/", text: "Home", icon: "~" },
+  { href: "/projects/", text: "Projects", icon: ">" },
+  { href: "/tutorials/", text: "Tutorials", icon: "#" },
+  { href: "/skills/", text: "Skills", icon: "$" },
+  { href: "/resume/", text: "Resume", icon: "@" },
+  { href: "/about/", text: "About", icon: "&" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -13,18 +13,20 @@ const currentPath = Astro.url.pathname;
 
 <nav class="mobile-nav">
   <ul>
-    {navLinks.map(link => {
-      const isActive = currentPath === link.href || 
-                      (link.href !== '/' && currentPath.startsWith(link.href));
-      return (
-        <li>
-          <a href={link.href} class={isActive ? 'active' : ''}>
-            <span class="icon">{link.icon}</span>
-            <span class="label">{link.text}</span>
-          </a>
-        </li>
-      );
-    })}
+    {
+      navLinks.map((link) => {
+        const isActive =
+          currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href));
+        return (
+          <li>
+            <a href={link.href} class:list={isActive ? "active" : ""}>
+              <span class="icon">{link.icon}</span>
+              <span class="label">{link.text}</span>
+            </a>
+          </li>
+        );
+      })
+    }
   </ul>
 </nav>
 
@@ -85,7 +87,7 @@ const currentPath = Astro.url.pathname;
   }
 
   a.active::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -0.5rem;
     left: 50%;
@@ -121,24 +123,17 @@ const currentPath = Astro.url.pathname;
   a:active {
     transform: scale(0.95);
   }
-  
-  /* Prevent content from being hidden behind nav */
-  @media (max-width: 767px) {
-    body {
-      padding-bottom: 60px;
-    }
-  }
-  
+
   /* Very small screens */
   @media (max-width: 320px) {
     .icon {
       font-size: 1.25rem;
     }
-    
+
     .label {
       font-size: 0.5rem;
     }
-    
+
     a {
       padding: 0.125rem;
     }

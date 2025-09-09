@@ -1,222 +1,214 @@
 ---
 const proficientSkills = [
-	"C",
-	"Rust",
-	"Bash",
-	"AWK",
-	"Python",
-	"Embedded Linux",
-	"Linux Kernel Dev",
-	"BSP Engineering",
-	"Device Drivers",
-	"Git",
-	"AOSP",
-	"Custom ROM Development",
+  "C",
+  "Rust",
+  "Bash",
+  "AWK",
+  "Python",
+  "Embedded Linux",
+  "Linux Kernel Dev",
+  "BSP Engineering",
+  "Device Drivers",
+  "Git",
+  "AOSP",
+  "Custom ROM Development",
 ];
 
 const semiProficientSkills = [
-	"Yocto/Buildroot Project",
-	"Git Actions",
-	"U-Boot",
-	"Apt/Rpm/Arch Package Management",
-	"ARM Architecture",
+  "Yocto/Buildroot Project",
+  "Git Actions",
+  "U-Boot",
+  "Apt/Rpm/Arch Package Management",
+  "ARM Architecture",
 ];
 
-const familiarSkills = [
-	"C++",
-	"Modern Web Stack",
-	"MongoDB",
-	"Figma",
-	"Qt QML",
-	"MicroPython",
-];
+const familiarSkills = ["C++", "Modern Web Stack", "MongoDB", "Figma", "Qt QML", "MicroPython"];
 
 const tools = {
-	compilers: ["GCC/Clang Cross-Compiler", "GDB"],
-	virtualization: ["QEMU", "Docker"],
-	cicd: ["Travis CI", "Drone CI", "Jenkins"],
+  compilers: ["GCC/Clang Cross-Compiler", "GDB"],
+  virtualization: ["QEMU", "Docker"],
+  cicd: ["Travis CI", "Drone CI", "Jenkins"],
 };
 ---
 
 <div class="skills-container">
-	<!-- Proficient Skills -->
-	<section class="skill-section">
-		<h2 class="section-title">
-			<span class="terminal-prompt">$</span> Proficient
-		</h2>
-		<div class="skill-grid">
-			{
-				proficientSkills.map((skill) => (
-					<div class="skill-card proficient">
-						<span class="skill-name">{skill}</span>
-					</div>
-				))
-			}
-		</div>
-	</section>
+  <!-- Proficient Skills -->
+  <section class="skill-section">
+    <h2 class="section-title">
+      <span class="terminal-prompt">$</span> Proficient
+    </h2>
+    <div class="skill-grid">
+      {
+        proficientSkills.map((skill) => (
+          <div class="skill-card proficient">
+            <span class="skill-name">{skill}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 
-	<!-- Semi-Proficient Skills -->
-	<section class="skill-section">
-		<h2 class="section-title">
-			<span class="terminal-prompt">&gt;</span> Semi-Proficient
-		</h2>
-		<div class="skill-grid">
-			{
-				semiProficientSkills.map((skill) => (
-					<div class="skill-card semi-proficient">
-						<span class="skill-name">{skill}</span>
-					</div>
-				))
-			}
-		</div>
-	</section>
+  <!-- Semi-Proficient Skills -->
+  <section class="skill-section">
+    <h2 class="section-title">
+      <span class="terminal-prompt">&gt;</span> Semi-Proficient
+    </h2>
+    <div class="skill-grid">
+      {
+        semiProficientSkills.map((skill) => (
+          <div class="skill-card semi-proficient">
+            <span class="skill-name">{skill}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 
-	<!-- Familiar With -->
-	<section class="skill-section">
-		<h2 class="section-title">
-			<span class="terminal-prompt">~</span> Familiar With
-		</h2>
-		<div class="skill-grid">
-			{
-				familiarSkills.map((skill) => (
-					<div class="skill-card familiar">
-						<span class="skill-name">{skill}</span>
-					</div>
-				))
-			}
-		</div>
-	</section>
+  <!-- Familiar With -->
+  <section class="skill-section">
+    <h2 class="section-title">
+      <span class="terminal-prompt">~</span> Familiar With
+    </h2>
+    <div class="skill-grid">
+      {
+        familiarSkills.map((skill) => (
+          <div class="skill-card familiar">
+            <span class="skill-name">{skill}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 
-	<!-- Development Tools -->
-	<section class="skill-section">
-		<h2 class="section-title">
-			<span class="terminal-prompt">#</span> Development Tools
-		</h2>
-		<div class="tools-container">
-			<div class="tool-category">
-				<h3 class="tool-title">Compilers & Debugging</h3>
-				<div class="skill-grid">
-					{
-						tools.compilers.map((tool) => (
-							<div class="skill-card tool">
-								<span class="skill-name">{tool}</span>
-							</div>
-						))
-					}
-				</div>
-			</div>
-			<div class="tool-category">
-				<h3 class="tool-title">Virtualization</h3>
-				<div class="skill-grid">
-					{
-						tools.virtualization.map((tool) => (
-							<div class="skill-card tool">
-								<span class="skill-name">{tool}</span>
-							</div>
-						))
-					}
-				</div>
-			</div>
-			<div class="tool-category">
-				<h3 class="tool-title">CI/CD</h3>
-				<div class="skill-grid">
-					{
-						tools.cicd.map((tool) => (
-							<div class="skill-card tool">
-								<span class="skill-name">{tool}</span>
-							</div>
-						))
-					}
-				</div>
-			</div>
-		</div>
-	</section>
+  <!-- Development Tools -->
+  <section class="skill-section">
+    <h2 class="section-title">
+      <span class="terminal-prompt">#</span> Development Tools
+    </h2>
+    <div class="tools-container">
+      <div class="tool-category">
+        <h3 class="tool-title">Compilers & Debugging</h3>
+        <div class="skill-grid">
+          {
+            tools.compilers.map((tool) => (
+              <div class="skill-card tool">
+                <span class="skill-name">{tool}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="tool-category">
+        <h3 class="tool-title">Virtualization</h3>
+        <div class="skill-grid">
+          {
+            tools.virtualization.map((tool) => (
+              <div class="skill-card tool">
+                <span class="skill-name">{tool}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="tool-category">
+        <h3 class="tool-title">CI/CD</h3>
+        <div class="skill-grid">
+          {
+            tools.cicd.map((tool) => (
+              <div class="skill-card tool">
+                <span class="skill-name">{tool}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <style>
-	.skills-container {
-		@apply space-y-8;
-	}
+  .skills-container {
+    @apply space-y-8;
+  }
 
-	.skill-section {
-		@apply mb-8;
-	}
+  .skill-section {
+    @apply mb-8;
+  }
 
-	.section-title {
-		@apply text-xl font-bold mb-4;
-		color: var(--accent-primary);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .section-title {
+    @apply mb-4 text-xl font-bold;
+    color: var(--accent-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.terminal-prompt {
-		color: var(--accent-primary);
-		@apply mr-2;
-	}
+  .terminal-prompt {
+    color: var(--accent-primary);
+    @apply mr-2;
+  }
 
-	.skill-grid {
-		@apply grid gap-3;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	}
+  .skill-grid {
+    @apply grid gap-3;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 
-	@media (min-width: 640px) {
-		.skill-grid {
-			grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-		}
-	}
+  @media (min-width: 640px) {
+    .skill-grid {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+  }
 
-	@media (min-width: 1024px) {
-		.skill-grid {
-			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		}
-	}
+  @media (min-width: 1024px) {
+    .skill-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
 
-	.skill-card {
-		@apply p-2 text-sm;
-		border: 1px solid var(--border-color);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .skill-card {
+    @apply p-2 text-sm;
+    border: 1px solid var(--border-color);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.skill-card:hover {
-		background-color: var(--bg-secondary);
-	}
+  .skill-card:hover {
+    background-color: var(--bg-secondary);
+  }
 
-	.skill-card.proficient {
-		border-left: 2px solid var(--accent-primary);
-	}
+  .skill-card.proficient {
+    border-left: 2px solid var(--accent-primary);
+  }
 
-	.skill-card.semi-proficient {
-		border-left: 2px solid var(--text-secondary);
-	}
+  .skill-card.semi-proficient {
+    border-left: 2px solid var(--text-secondary);
+  }
 
-	.skill-card.familiar {
-		border-left: 2px solid var(--border-color);
-		opacity: 0.9;
-	}
+  .skill-card.familiar {
+    border-left: 2px solid var(--border-color);
+    opacity: 0.9;
+  }
 
-	.skill-card.tool {
-		border-left: 2px solid var(--info);
-	}
+  .skill-card.tool {
+    border-left: 2px solid var(--info);
+  }
 
-	.skill-name {
-		@apply text-sm font-mono;
-		color: var(--text-primary);
-		display: block;
-		text-align: center;
-	}
+  .skill-name {
+    @apply font-mono text-sm;
+    color: var(--text-primary);
+    display: block;
+    text-align: center;
+  }
 
-	.tools-container {
-		@apply space-y-6;
-	}
+  .tools-container {
+    @apply space-y-6;
+  }
 
-	.tool-category {
-		@apply mb-4;
-	}
+  .tool-category {
+    @apply mb-4;
+  }
 
-	.tool-title {
-		@apply text-sm font-semibold mb-3;
-		color: var(--text-secondary);
-		text-transform: uppercase;
-		letter-spacing: 1px;
-	}
+  .tool-title {
+    @apply mb-3 text-sm font-semibold;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 </style>
-

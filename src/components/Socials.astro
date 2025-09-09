@@ -4,116 +4,100 @@ import { socials } from "../data/socials";
 ---
 
 <!-- Start: Social Links -->
-<div
-	class="social-links-grid grid grid-cols-2 gap-2 mt-4 sm:mt-6 sm:grid-cols-4 overflow-hidden"
->
-	{
-		socials.map((social) => (
-			<a
-				href={social.link}
-				target="_blank"
-				title={social.title}
-				aria-label={social.title}
-				rel="noopener noreferrer"
-				class="social-link flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 transition-all duration-300 border-2 hover:shadow-lg p-2 sm:p-3"
-				onclick={social.onClick}
-			>
-				<SocialIcon icon={social.icon} />
-			</a>
-		))
-	}
+<div class="social-links-grid mt-4 grid grid-cols-2 gap-2 overflow-hidden sm:mt-6 sm:grid-cols-4">
+  {
+    socials.map((social) => (
+      <a
+        href={social.link}
+        target="_blank"
+        title={social.title}
+        aria-label={social.title}
+        rel="noopener noreferrer"
+        class="social-link flex h-12 w-12 items-center justify-center border-2 p-2 transition-all duration-300 hover:shadow-lg sm:h-14 sm:w-14 sm:p-3"
+        onclick={social.onClick}
+      >
+        <SocialIcon icon={social.icon} />
+      </a>
+    ))
+  }
 </div>
 <!-- End: Social Links -->
 
 <style>
-	.social-links-grid {
-		display: grid !important;
-		grid-template-columns: repeat(4, 1fr) !important;
-		gap: 1rem !important;
-	}
+  .social-links-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1rem !important;
+  }
 
-	@media (max-width: 640px) {
-		.social-links-grid {
-			grid-template-columns: repeat(2, 1fr) !important;
-		}
-	}
+  @media (max-width: 640px) {
+    .social-links-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
 
-	.social-link {
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		background-color: var(--bg-primary);
-		color: var(--text-primary);
-		border-color: var(--border-color);
-		position: relative;
-		overflow: hidden;
-		padding: 0.5rem 0rem;
-	}
+  .social-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    position: relative;
+    overflow: hidden;
+    padding: 0.5rem 0rem;
+  }
 
-	.social-link::before,
-	.social-link::after {
-		content: "";
-		position: absolute;
-		width: 0;
-		height: 2px;
-		background: var(--accent-primary);
-		transition: width 0.3s ease;
-	}
+  .social-link::before,
+  .social-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: var(--accent-primary);
+    transition: width 0.3s ease;
+  }
 
-	.social-link::before {
-		top: 0;
-		left: 0;
-	}
+  .social-link::before {
+    top: 0;
+    left: 0;
+  }
 
-	.social-link::after {
-		bottom: 0;
-		right: 0;
-	}
+  .social-link::after {
+    bottom: 0;
+    right: 0;
+  }
 
-	.social-link:hover::before,
-	.social-link:hover::after {
-		width: 100%;
-	}
+  .social-link:hover::before,
+  .social-link:hover::after {
+    width: 100%;
+  }
 
-	.social-link:hover {
-		background-color: var(--accent-primary);
-		border-color: var(--accent-primary);
-		color: var(--bg-primary);
-		box-shadow:
-			0 10px 30px rgba(0, 0, 0, 0.3),
-			0 0 20px rgba(var(--accent-rgb), 0.2);
-	}
+  .social-link:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: var(--bg-primary);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(var(--accent-rgb), 0.2);
+  }
 
-	.social-link:active {
-		transform: scale(0.98);
-	}
-
-	.social-link svg {
-		width: 20px;
-		height: 20px;
-	}
-
-	@media (min-width: 640px) {
-		.social-link svg {
-			width: 24px;
-			height: 24px;
-		}
-	}
+  .social-link:active {
+    transform: scale(0.98);
+  }
 </style>
 
 <script>
-	// Make sure the refreshCatImage function is available in the global scope
-	if (typeof window.refreshCatImage !== "function") {
-		window.refreshCatImage = () => {
-			const avatarEl = document.getElementById(
-				"profile-avatar",
-			) as HTMLImageElement;
-			if (avatarEl) {
-				const random = Math.floor(Math.random() * 1000);
-				const width = avatarEl.getAttribute("width");
-				const height = avatarEl.getAttribute("height");
-				avatarEl.src = `https://cataas.com/cat?width=${width}&height=${height}&s=${random}`;
-			}
-		};
-	}
+  // Make sure the refreshCatImage function is available in the global scope
+  if (typeof window.refreshCatImage !== "function") {
+    window.refreshCatImage = () => {
+      const avatarEl = document.getElementById("profile-avatar") as HTMLImageElement;
+      if (avatarEl) {
+        const random = Math.floor(Math.random() * 1000);
+        const width = avatarEl.getAttribute("width");
+        const height = avatarEl.getAttribute("height");
+        avatarEl.src = `https://cataas.com/cat?width=${width}&height=${height}&s=${random}`;
+      }
+    };
+  }
 </script>

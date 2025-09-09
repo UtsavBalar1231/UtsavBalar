@@ -33,7 +33,7 @@ export async function getMdxQuotes(): Promise<Quote[]> {
 
     if (quoteMatch) {
       // Extract quote text, preserve line breaks, and remove ">" from beginning of lines
-      let text = quoteMatch[1]
+      const text = quoteMatch[1]
         .trim()
         .replace(/^>\s*/gm, "") // Remove ">" from beginning of lines
         .replace(/"\s*\n\s*>\s*"/g, "") // Handle line breaks in the quote

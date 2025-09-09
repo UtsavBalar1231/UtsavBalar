@@ -11,4 +11,4 @@ export const profile: Profile = {
   location: "Gujarat, India",
   description:
     "Passionate Linux kernel and BSP engineer with expertise in embedded systems, custom ROM development, and FOSS contributions. Currently pursuing a Master's in Computer Science while working as a freelance Linux Kernel Developer.",
-}; 
+};

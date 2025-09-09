@@ -3,16 +3,8 @@
 const { width = 96, height = 96, class: className = "" } = Astro.props;
 ---
 
-<div
-  class={`theme-avatar ${className}`}
-  style={`width: ${width}px; height: ${height}px;`}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
-    viewBox="0 0 96 96"
-  >
+<div class:list={`theme-avatar ${className}`} style={`width: ${width}px; height: ${height}px;`}>
+  <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 96 96">
     <style>
       .avatar-text {
         fill: var(--accent-primary);

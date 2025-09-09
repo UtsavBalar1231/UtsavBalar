@@ -1,19 +1,23 @@
 ---
 const navLinks = [
-  { href: '/', text: 'Home' },
-  { href: '/projects/', text: 'Projects' },
-  { href: '/tutorials/', text: 'Tutorials' },
-  { href: '/skills/', text: 'Skills' },
-  { href: '/resume/', text: 'Resume' },
-  { href: '/about/', text: 'About' },
+  { href: "/", text: "Home" },
+  { href: "/projects/", text: "Projects" },
+  { href: "/tutorials/", text: "Tutorials" },
+  { href: "/skills/", text: "Skills" },
+  { href: "/resume/", text: "Resume" },
+  { href: "/about/", text: "About" },
 ];
 ---
 
 <nav class="desktop-nav">
   <ul>
-    {navLinks.map(link => (
-      <li><a href={link.href}>[ {link.text} ]</a></li>
-    ))}
+    {
+      navLinks.map((link) => (
+        <li>
+          <a href={link.href}>[ {link.text} ]</a>
+        </li>
+      ))
+    }
   </ul>
 </nav>
 
@@ -38,29 +42,29 @@ const navLinks = [
     margin: 0;
     flex-wrap: wrap;
   }
-  
+
   @media (min-width: 1024px) {
     ul {
       gap: 2rem;
     }
   }
-  
+
   li {
     white-space: nowrap;
   }
-  
+
   a {
     text-decoration: none;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     transition: all 0.2s ease;
   }
-  
+
   a:hover {
     text-decoration: underline;
     background-color: var(--bg-secondary);
   }
-  
+
   a:focus-visible {
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;

@@ -3,27 +3,25 @@ import GitHubAvatar from "./GitHubAvatar.astro";
 import { profile } from "../data/profile";
 ---
 
-<div
-  class="flex flex-col gap-4 items-center text-center sm:items-start sm:text-left"
->
-  <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
+<div class="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
     <GitHubAvatar
-      class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary text-text-primary mx-auto sm:mx-0 shadow-lg hover:shadow-xl transition-shadow duration-300"
+      class="mx-auto h-16 w-16 overflow-hidden rounded-full border-2 border-primary text-text-primary shadow-lg transition-shadow duration-300 hover:shadow-xl sm:mx-0 sm:h-20 sm:w-20 md:h-24 md:w-24"
     />
 
     <div>
       <h1
-        class="text-lg sm:text-xl md:text-2xl font-extrabold mb-1 inline-block relative text-text-primary"
+        class="relative mb-1 inline-block text-lg font-extrabold text-text-primary sm:text-xl md:text-2xl"
       >
         {profile.name}
       </h1>
 
-      <p class="text-xs sm:text-sm mb-2 text-primary">
+      <p class="mb-2 text-xs text-primary sm:text-sm">
         {profile.title}
       </p>
 
       <div
-        class="flex items-center justify-center sm:justify-start text-xs sm:text-sm text-gray-400"
+        class="flex items-center justify-center text-xs text-gray-400 sm:justify-start sm:text-sm"
       >
         <svg
           class="mr-1 flex-shrink-0"
@@ -36,15 +34,17 @@ import { profile } from "../data/profile";
           viewBox="0 0 24 24"
           width="14"
           xmlns="http://www.w3.org/2000/svg"
-          ><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-          ></path><circle cx="12" cy="10" r="3"></circle></svg
+          ><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle
+            cx="12"
+            cy="10"
+            r="3"></circle></svg
         >
         <span>{profile.location}</span>
       </div>
     </div>
   </div>
 
-  <p class="text-xs sm:text-sm leading-relaxed mt-1 sm:mt-2 text-gray-400">
+  <p class="mt-1 text-xs leading-relaxed text-gray-400 sm:mt-2 sm:text-sm">
     {profile.description}
   </p>
 </div>

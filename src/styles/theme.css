@@ -12,11 +12,11 @@
   --color-accent-secondary: #00dd00;
   --color-border: #00ff00;
   --color-border-rgb: 0, 255, 0;
-  
+
   /* Terminal glow effect */
   --terminal-glow: rgba(0, 255, 0, 0.5);
   --terminal-glow-intense: rgba(0, 255, 0, 0.8);
-  
+
   /* CRT Effect Variables */
   --crt-scanline-opacity: 0.05;
   --crt-flicker-intensity: 0.98;
@@ -26,13 +26,13 @@
   --crt-glow-intensity: 1;
   --crt-phosphor-persistence: 0.1;
   --crt-boot-duration: 0.5s;
-  
+
   /* Extended color palette */
   --color-error: #ff3333;
   --color-warning: #ffaa00;
   --color-success: #00ff00;
   --color-info: #00ffff;
-  
+
   /* Neutral shades (for subtle UI elements) */
   --color-neutral-50: #f0f0f0;
   --color-neutral-100: #e0e0e0;
@@ -55,7 +55,7 @@
   --accent-secondary: var(--color-accent-secondary);
   --border-color: var(--color-border);
   --border-color-rgb: var(--color-border-rgb);
-  
+
   /* Functional mapping for extended colors */
   --error: var(--color-error);
   --warning: var(--color-warning);
@@ -73,11 +73,11 @@
   --color-accent-secondary: #00dd00;
   --color-border: #00ff00;
   --color-border-rgb: 0, 255, 0;
-  
+
   /* Terminal glow */
   --terminal-glow: rgba(0, 255, 0, 0.5);
   --terminal-glow-intense: rgba(0, 255, 0, 0.8);
-  
+
   /* Green theme CRT effects - Classic phosphor */
   --crt-scanline-opacity: 0.04;
   --crt-flicker-intensity: 0.99;
@@ -87,7 +87,7 @@
   --crt-glow-intensity: 1.2;
   --crt-phosphor-persistence: 0.15;
   --crt-boot-duration: 0.6s;
-  
+
   /* Extended colors */
   --color-error: #ff3333;
   --color-warning: #ffaa00;
@@ -105,11 +105,11 @@
   --color-accent-secondary: #ff9900;
   --color-border: #ffb000;
   --color-border-rgb: 255, 176, 0;
-  
+
   /* Terminal glow */
   --terminal-glow: rgba(255, 176, 0, 0.5);
   --terminal-glow-intense: rgba(255, 176, 0, 0.8);
-  
+
   /* Amber theme CRT effects - Warmer, vintage feel */
   --crt-scanline-opacity: 0.06;
   --crt-flicker-intensity: 0.97;
@@ -119,7 +119,7 @@
   --crt-glow-intensity: 0.9;
   --crt-phosphor-persistence: 0.2;
   --crt-boot-duration: 0.8s;
-  
+
   /* Extended colors */
   --color-error: #ff4444;
   --color-warning: #ffb000;
@@ -137,11 +137,11 @@
   --color-accent-secondary: #dddddd;
   --color-border: #ffffff;
   --color-border-rgb: 255, 255, 255;
-  
+
   /* Terminal glow */
   --terminal-glow: rgba(255, 255, 255, 0.3);
   --terminal-glow-intense: rgba(255, 255, 255, 0.6);
-  
+
   /* Monochrome theme CRT effects - Sharp and clean */
   --crt-scanline-opacity: 0.03;
   --crt-flicker-intensity: 0.995;
@@ -151,7 +151,7 @@
   --crt-glow-intensity: 0.7;
   --crt-phosphor-persistence: 0.05;
   --crt-boot-duration: 0.4s;
-  
+
   /* Extended colors */
   --color-error: #ff5555;
   --color-warning: #ffaa55;
@@ -169,11 +169,11 @@
   --color-accent-secondary: #ff2200;
   --color-border: #ff4100;
   --color-border-rgb: 255, 65, 0;
-  
+
   /* Terminal glow */
   --terminal-glow: rgba(255, 65, 0, 0.5);
   --terminal-glow-intense: rgba(255, 65, 0, 0.8);
-  
+
   /* DOOM theme CRT effects - Intense and hellish */
   --crt-scanline-opacity: 0.08;
   --crt-flicker-intensity: 0.95;
@@ -183,7 +183,7 @@
   --crt-glow-intensity: 1.5;
   --crt-phosphor-persistence: 0.25;
   --crt-boot-duration: 1s;
-  
+
   /* Extended colors */
   --color-error: #ff0000;
   --color-warning: #ff8800;

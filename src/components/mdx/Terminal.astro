@@ -3,21 +3,17 @@
  * Terminal Component - Wrapper for CodeBlock in terminal mode
  * Maintained for backward compatibility with existing MDX files
  */
-import CodeBlock from '../CodeBlock.astro';
+import CodeBlock from "../CodeBlock.astro";
 
 interface Props {
-	title?: string;
+  title?: string;
 }
 
 const { title = "Terminal" } = Astro.props;
 ---
 
 <div class="my-6">
-	<CodeBlock 
-		isTerminal={true}
-		title={title}
-		language="bash"
-	>
-		<slot />
-	</CodeBlock>
+  <CodeBlock isTerminal={true} title={title} language="bash">
+    <slot />
+  </CodeBlock>
 </div>

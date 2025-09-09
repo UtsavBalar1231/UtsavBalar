@@ -42,10 +42,10 @@ export async function getMdxBookBits(): Promise<BookBit[]> {
       // Extract the quote text and page information
       // This regex captures multiline quotes between > and > - Page X
       const quoteMatch = block.match(/>\s*([\s\S]*?)\s*>\s*-\s*(.+)$/m);
-      
+
       if (quoteMatch) {
         // Extract quote text, preserve line breaks, and remove ">" from beginning of lines
-        let text = quoteMatch[1]
+        const text = quoteMatch[1]
           .trim()
           .replace(/^>\s*/gm, "") // Remove ">" from beginning of lines
           .replace(/"\s*\n\s*>\s*"/g, "") // Handle line breaks in the quote
@@ -53,13 +53,13 @@ export async function getMdxBookBits(): Promise<BookBit[]> {
 
         // Extract page information
         const pageInfo = quoteMatch[2].trim();
-        
+
         // Parse author from book title (Format is usually "Author - Book Title")
         let author = "";
         let bookName = bookTitle;
-        
+
         if (bookTitle.includes("-")) {
-          const parts = bookTitle.split("-").map(part => part.trim());
+          const parts = bookTitle.split("-").map((part: string) => part.trim());
           author = parts[0];
           bookName = parts.slice(1).join(" - ");
         }
@@ -69,7 +69,7 @@ export async function getMdxBookBits(): Promise<BookBit[]> {
           text,
           author,
           book: bookName,
-          page: pageInfo
+          page: pageInfo,
         });
 
         id++;
@@ -78,4 +78,4 @@ export async function getMdxBookBits(): Promise<BookBit[]> {
   }
 
   return bookBits;
-} 
+}

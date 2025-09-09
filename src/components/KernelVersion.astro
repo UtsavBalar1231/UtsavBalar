@@ -10,9 +10,7 @@ try {
     const data = await response.json();
 
     // Get the latest stable release
-    const stableReleases = data.releases.filter(
-      (release) => release.moniker === "stable",
-    );
+    const stableReleases = data.releases.filter((release: any) => release.moniker === "stable");
     if (stableReleases.length > 0) {
       const latestStable = stableReleases[0];
       latestVersion = latestStable.version;

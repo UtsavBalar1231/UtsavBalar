@@ -52,4 +52,4 @@ export const inlineFavicon = `
   <rect width="32" height="32" fill="transparent" />
   <text x="16" y="21" fill="currentColor" font-family="AdwaitaMono, monospace" font-size="14" font-weight="bold" text-anchor="middle">UB</text>
 </svg>
-`; 
+`;

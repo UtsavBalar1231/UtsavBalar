@@ -1,13 +1,5 @@
 export interface Social {
-  icon:
-    | "github"
-    | "linkedIn"
-    | "twitter"
-    | "email"
-    | "xing"
-    | "telegram"
-    | "reddit"
-    | "cat";
+  icon: "github" | "linkedIn" | "twitter" | "email" | "xing" | "telegram" | "reddit" | "cat";
   link: string;
   title?: string;
   onClick?: string;

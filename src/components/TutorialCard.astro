@@ -1,12 +1,12 @@
 ---
 export interface Props {
-	number: number;
-	title: string;
-	description: string;
-	difficulty: string;
-	duration: string;
-	tags: string[];
-	url: string;
+  number: number;
+  title: string;
+  description: string;
+  difficulty: string;
+  duration: string;
+  tags: string[];
+  url: string;
 }
 
 const { number, title, description, difficulty, duration, tags, url } = Astro.props;
@@ -14,169 +14,167 @@ const { number, title, description, difficulty, duration, tags, url } = Astro.pr
 // Capitalize first letter of difficulty for display
 const displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
-const difficultyColors = {
-	'beginner': 'beginner',
-	'intermediate': 'intermediate',
-	'advanced': 'advanced',
-	'professional': 'professional'
+const difficultyColors: Record<string, string> = {
+  beginner: "beginner",
+  intermediate: "intermediate",
+  advanced: "advanced",
+  professional: "professional",
 };
 ---
 
 <a href={url} class="tutorial-card-link">
-	<div class="tutorial-card">
-		<div class="tutorial-header">
-			<span class="tutorial-number">#{number.toString().padStart(2, '0')}</span>
-			<span class={`difficulty-badge ${difficultyColors[difficulty]}`}>
-				{displayDifficulty}
-			</span>
-		</div>
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <span class="tutorial-number">#{number.toString().padStart(2, "0")}</span>
+      <span class:list={`difficulty-badge ${difficultyColors[difficulty]}`}>
+        {displayDifficulty}
+      </span>
+    </div>
 
-		<h3 class="tutorial-title">{title}</h3>
-		
-		<p class="tutorial-description">{description}</p>
+    <h3 class="tutorial-title">{title}</h3>
 
-		<div class="tutorial-meta">
-			<div class="tutorial-duration">
-				<span class="meta-label">Duration:</span>
-				<span class="meta-value">{duration}</span>
-			</div>
-		</div>
+    <p class="tutorial-description">{description}</p>
 
-		<div class="tutorial-tags">
-			{tags.map((tag) => (
-				<span class="tag">{tag}</span>
-			))}
-		</div>
+    <div class="tutorial-meta">
+      <div class="tutorial-duration">
+        <span class="meta-label">Duration:</span>
+        <span class="meta-value">{duration}</span>
+      </div>
+    </div>
 
-		<div class="tutorial-action">
-			<span class="action-text">Read Tutorial</span>
-			<span class="action-arrow">→</span>
-		</div>
-	</div>
+    <div class="tutorial-tags">
+      {tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+
+    <div class="tutorial-action">
+      <span class="action-text">Read Tutorial</span>
+      <span class="action-arrow">→</span>
+    </div>
+  </div>
 </a>
 
 <style>
-	.tutorial-card-link {
-		text-decoration: none;
-		display: block;
-	}
+  .tutorial-card-link {
+    text-decoration: none;
+    display: block;
+  }
 
-	.tutorial-card {
-		@apply p-4;
-		border: 1px solid var(--border-color);
-		background-color: var(--bg-secondary);
-		transition: all 0.3s ease;
-		cursor: pointer;
-	}
+  .tutorial-card {
+    @apply p-4;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
 
-	.tutorial-card:hover {
-		border-color: var(--accent-primary);
-		box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.3);
-		transform: translateY(-2px);
-	}
+  .tutorial-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.3);
+    transform: translateY(-2px);
+  }
 
-	.tutorial-header {
-		@apply flex items-center justify-between mb-3;
-	}
+  .tutorial-header {
+    @apply mb-3 flex items-center justify-between;
+  }
 
-	.tutorial-number {
-		@apply text-lg font-bold;
-		color: var(--accent-primary);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .tutorial-number {
+    @apply text-lg font-bold;
+    color: var(--accent-primary);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.difficulty-badge {
-		@apply px-2 py-1 text-xs;
-		font-family: "AdwaitaMono", monospace;
-		border: 1px solid;
-	}
+  .difficulty-badge {
+    @apply px-2 py-1 text-xs;
+    font-family: "AdwaitaMono", monospace;
+    border: 1px solid;
+  }
 
-	.difficulty-badge.beginner {
-		border-color: var(--success);
-		color: var(--success);
-	}
+  .difficulty-badge.beginner {
+    border-color: var(--success);
+    color: var(--success);
+  }
 
-	.difficulty-badge.intermediate {
-		border-color: var(--warning);
-		color: var(--warning);
-	}
+  .difficulty-badge.intermediate {
+    border-color: var(--warning);
+    color: var(--warning);
+  }
 
-	.difficulty-badge.advanced {
-		border-color: var(--error);
-		color: var(--error);
-	}
+  .difficulty-badge.advanced {
+    border-color: var(--error);
+    color: var(--error);
+  }
 
-	.difficulty-badge.professional {
-		border-color: var(--accent-primary);
-		color: var(--accent-primary);
-	}
+  .difficulty-badge.professional {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
 
-	.tutorial-title {
-		@apply text-base font-bold mb-2;
-		color: var(--text-primary);
-		font-family: "AdwaitaMono", monospace;
-		line-height: 1.4;
-	}
+  .tutorial-title {
+    @apply mb-2 text-base font-bold;
+    color: var(--text-primary);
+    font-family: "AdwaitaMono", monospace;
+    line-height: 1.4;
+  }
 
-	.tutorial-description {
-		@apply text-sm mb-3;
-		color: var(--text-secondary);
-		line-height: 1.5;
-	}
+  .tutorial-description {
+    @apply mb-3 text-sm;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
 
-	.tutorial-meta {
-		@apply flex gap-4 mb-3 text-xs;
-		color: var(--text-secondary);
-		font-family: "AdwaitaMono", monospace;
-	}
+  .tutorial-meta {
+    @apply mb-3 flex gap-4 text-xs;
+    color: var(--text-secondary);
+    font-family: "AdwaitaMono", monospace;
+  }
 
-	.meta-label {
-		opacity: 0.7;
-	}
+  .meta-label {
+    opacity: 0.7;
+  }
 
-	.meta-value {
-		color: var(--text-primary);
-	}
+  .meta-value {
+    color: var(--text-primary);
+  }
 
-	.tutorial-tags {
-		@apply flex flex-wrap gap-2 mb-3;
-	}
+  .tutorial-tags {
+    @apply mb-3 flex flex-wrap gap-2;
+  }
 
-	.tag {
-		@apply px-2 py-1 text-xs;
-		border: 1px solid var(--border-color);
-		color: var(--text-secondary);
-		font-family: "AdwaitaMono", monospace;
-		opacity: 0.8;
-	}
+  .tag {
+    @apply px-2 py-1 text-xs;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-family: "AdwaitaMono", monospace;
+    opacity: 0.8;
+  }
 
-	.tutorial-action {
-		@apply flex items-center justify-between pt-3;
-		border-top: 1px solid var(--border-color);
-		color: var(--accent-primary);
-		font-family: "AdwaitaMono", monospace;
-		font-size: 0.875rem;
-	}
+  .tutorial-action {
+    @apply flex items-center justify-between pt-3;
+    border-top: 1px solid var(--border-color);
+    color: var(--accent-primary);
+    font-family: "AdwaitaMono", monospace;
+    font-size: 0.875rem;
+  }
 
-	.action-arrow {
-		transition: transform 0.2s ease;
-	}
+  .action-arrow {
+    transition: transform 0.2s ease;
+  }
 
-	.tutorial-card:hover .action-arrow {
-		transform: translateX(4px);
-	}
+  .tutorial-card:hover .action-arrow {
+    transform: translateX(4px);
+  }
 
-	@media (max-width: 640px) {
-		.tutorial-card {
-			@apply p-3;
-		}
+  @media (max-width: 640px) {
+    .tutorial-card {
+      @apply p-3;
+    }
 
-		.tutorial-title {
-			@apply text-sm;
-		}
+    .tutorial-title {
+      @apply text-sm;
+    }
 
-		.tutorial-description {
-			@apply text-xs;
-		}
-	}
+    .tutorial-description {
+      @apply text-xs;
+    }
+  }
 </style>

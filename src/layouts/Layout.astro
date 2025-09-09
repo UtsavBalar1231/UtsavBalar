@@ -1,11 +1,11 @@
 ---
-import '../styles/global.css';
-import ThemeSelector from '../components/ThemeSelector.astro';
-import MobileNav from '../components/MobileNav.astro';
-import Nav from '../components/Nav.astro';
+import "../styles/global.css";
+import ThemeSelector from "../components/ThemeSelector.astro";
+import MobileNav from "../components/MobileNav.astro";
+import Nav from "../components/Nav.astro";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -13,216 +13,228 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		
-		<!-- Immediately set theme to prevent flash -->
-		<script is:inline>
-			(function() {
-				// Get theme from localStorage or use default
-				const stored = localStorage.getItem('selectedTheme');
-				const theme = stored || 'green';
-				
-				// Apply theme immediately to root element
-				document.documentElement.setAttribute('data-theme', theme);
-				
-				// Also set on body when it's available
-				if (document.body) {
-					document.body.setAttribute('data-theme', theme);
-				}
-			})();
-		</script>
-		
-		<!-- Preload fonts for better performance -->
-		<link rel="preload" href="/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.ttf" as="font" type="font/ttf" crossorigin />
-		<link rel="preload" href="/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf" as="font" type="font/ttf" crossorigin />
-	</head>
-	<body>
-		<div class="theme-selector-container">
-			<ThemeSelector />
-		</div>
-		<div class="crt-static"></div>
-		<div class="crt-overlay"></div>
-		<div class="matrix-bg"></div>
-		<div class="terminal-wrapper crt-screen">
-			<header class="mb-8">
-				<Nav />
-			</header>
-			<slot />
-		</div>
-		<MobileNav />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Immediately set theme to prevent flash -->
+    <script is:inline>
+      (function () {
+        // Get theme from localStorage or use default
+        const stored = localStorage.getItem("selectedTheme");
+        const theme = stored || "green";
+
+        // Apply theme immediately to root element
+        document.documentElement.setAttribute("data-theme", theme);
+
+        // Also set on body when it's available
+        if (document.body) {
+          document.body.setAttribute("data-theme", theme);
+        }
+      })();
+    </script>
+
+    <!-- Preload fonts for better performance -->
+    <link
+      rel="preload"
+      href="/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+  </head>
+  <body>
+    <div class="theme-selector-container">
+      <ThemeSelector />
+    </div>
+    <div class="crt-static"></div>
+    <div class="crt-overlay"></div>
+    <div class="matrix-bg"></div>
+    <div class="terminal-wrapper crt-screen">
+      <header class="mb-8">
+        <Nav />
+      </header>
+      <slot />
+    </div>
+    <MobileNav />
+  </body>
 </html>
 
 <script>
-	document.addEventListener('keydown', (event) => {
-		if (event.altKey) {
-			switch (event.key) {
-				case '1':
-					window.location.href = '/';
-					break;
-				case '2':
-					window.location.href = '/projects/';
-					break;
-				case '3':
-					window.location.href = '/tutorials/';
-					break;
-				case '4':
-					window.location.href = '/skills/';
-					break;
-				case '5':
-					window.location.href = '/resume/';
-					break;
-				case '6':
-					window.location.href = '/about/';
-					break;
-			}
-		}
-	});
+  document.addEventListener("keydown", (event) => {
+    if (event.altKey) {
+      switch (event.key) {
+        case "1":
+          window.location.href = "/";
+          break;
+        case "2":
+          window.location.href = "/projects/";
+          break;
+        case "3":
+          window.location.href = "/tutorials/";
+          break;
+        case "4":
+          window.location.href = "/skills/";
+          break;
+        case "5":
+          window.location.href = "/resume/";
+          break;
+        case "6":
+          window.location.href = "/about/";
+          break;
+      }
+    }
+  });
 </script>
 
 <style is:global>
-	/* Z-index hierarchy:
+  /* Z-index hierarchy:
 	   - Background effects: 0-9
 	   - Main content: 10-19
 	   - Mobile nav: 30-39
 	   - Theme selector: 40-49
 	   - Dropdowns/modals: 50+ */
-	
-	.crt-overlay {
-		z-index: 2;
-		pointer-events: none;
-		/* Ensure proper containment */
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		max-width: 100vw;
-		max-height: 100vh;
-		overflow: hidden;
-		contain: strict;
-		clip-path: inset(0);
-	}
-	
-	.crt-static {
-		z-index: 1;
-		pointer-events: none;
-		/* Ensure proper containment */
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		max-width: 100vw;
-		max-height: 100vh;
-		overflow: hidden;
-		contain: strict;
-		clip-path: inset(0);
-	}
-	
-	.matrix-bg {
-		z-index: 1;
-		pointer-events: none;
-		/* Ensure proper containment */
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		max-width: 100vw;
-		max-height: 100vh;
-		overflow: hidden;
-		contain: strict;
-		clip-path: inset(0);
-	}
 
-	.theme-selector-container {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 40;
-		max-width: calc(100vw - 2rem);
-	}
+  .crt-overlay {
+    z-index: 2;
+    pointer-events: none;
+    /* Ensure proper containment */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
+  }
 
-	.terminal-wrapper {
-		padding: 2rem;
-		padding-top: 4.5rem; /* Increased space for theme selector */
-		position: relative;
-		z-index: 10;
-		min-height: 100vh;
-		/* Create stacking context */
-		isolation: isolate;
-		/* Ensure proper layout containment */
-		contain: layout style;
-	}
+  .crt-static {
+    z-index: 1;
+    pointer-events: none;
+    /* Ensure proper containment */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
+  }
 
-	/* Fix scrolling - only viewport should scroll */
-	html {
-		margin: 0;
-		padding: 0;
-		overflow: visible;
-		height: 100%;
-		/* Prevent scroll chaining */
-		overscroll-behavior-y: contain;
-		overscroll-behavior-x: none;
-	}
+  .matrix-bg {
+    z-index: 1;
+    pointer-events: none;
+    /* Ensure proper containment */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    contain: strict;
+    clip-path: inset(0);
+  }
 
-	body {
-		margin: 0;
-		padding: 0;
-		min-height: 100vh;
-		position: relative;
-		overflow: visible;
-		/* Improve mobile touch handling */
-		touch-action: pan-y;
-		-webkit-overflow-scrolling: touch;
-		/* Prevent scroll chaining */
-		overscroll-behavior: contain;
-		/* GPU acceleration */
-		-webkit-transform: translateZ(0);
-		transform: translateZ(0);
-		/* Create stacking context */
-		isolation: isolate;
-	}
-	
-	/* Remove viewport constraint wrapper that was causing issues */
+  .theme-selector-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 40;
+    max-width: calc(100vw - 2rem);
+  }
 
-	/* Mobile styles */
-	@media (max-width: 767px) {
-		.theme-selector-container {
-			top: 0.5rem;
-			right: 0.5rem;
-			max-width: calc(100vw - 1rem);
-		}
+  .terminal-wrapper {
+    padding: 2rem;
+    padding-top: 4.5rem; /* Increased space for theme selector */
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    /* Create stacking context */
+    isolation: isolate;
+    /* Ensure proper layout containment */
+    contain: layout style;
+  }
 
-		.terminal-wrapper {
-			padding: 1rem;
-			padding-top: 3.5rem; /* Space for theme selector */
-			padding-bottom: 5rem; /* Increased space for mobile nav */
-			min-height: 100vh;
-		}
-	}
+  /* Fix scrolling - only viewport should scroll */
+  html {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    height: 100%;
+    /* Prevent scroll chaining */
+    overscroll-behavior-y: contain;
+    overscroll-behavior-x: none;
+  }
 
-	/* Tablet styles */
-	@media (min-width: 768px) and (max-width: 1023px) {
-		.terminal-wrapper {
-			padding: 1.5rem;
-			padding-top: 4.5rem; /* Space for theme selector */
-			min-height: 100vh;
-		}
-	}
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+    overflow: visible;
+    /* Improve mobile touch handling */
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent scroll chaining */
+    overscroll-behavior: contain;
+    /* GPU acceleration */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Create stacking context */
+    isolation: isolate;
+  }
 
-	/* Large screens */
-	@media (min-width: 1024px) {
-		.terminal-wrapper {
-			max-width: 1400px;
-			margin: 0 auto;
-		}
-	}
+  /* Remove viewport constraint wrapper that was causing issues */
+
+  /* Mobile styles */
+  @media (max-width: 767px) {
+    .theme-selector-container {
+      top: 0.5rem;
+      right: 0.5rem;
+      max-width: calc(100vw - 1rem);
+    }
+
+    .terminal-wrapper {
+      padding: 1rem;
+      padding-top: 3.5rem; /* Space for theme selector */
+      padding-bottom: 5rem; /* Increased space for mobile nav */
+      min-height: 100vh;
+    }
+  }
+
+  /* Tablet styles */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .terminal-wrapper {
+      padding: 1.5rem;
+      padding-top: 4.5rem; /* Space for theme selector */
+      min-height: 100vh;
+    }
+  }
+
+  /* Large screens */
+  @media (min-width: 1024px) {
+    .terminal-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+  }
 </style>

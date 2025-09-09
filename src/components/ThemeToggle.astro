@@ -5,35 +5,35 @@ import { themes } from "../data/themes";
 <div class="theme-toggle fixed bottom-4 right-4 z-50">
   <button
     id="theme-toggle-btn"
-    class="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-3xl transition-all duration-150 border-2 hover:-translate-y-0.5 p-2 sm:p-3 theme-toggle-btn"
+    class="theme-toggle-btn flex h-9 w-9 items-center justify-center rounded-3xl border-2 p-2 transition-all duration-150 hover:-translate-y-0.5 sm:h-10 sm:w-10 sm:p-3"
     title="Change theme"
     aria-label="Open theme selector"
     aria-expanded="false"
     aria-controls="theme-dropdown"
   >
-    <span class="material-symbols-rounded icon-sm" aria-hidden="true">
-      palette
-    </span>
+    <span class="material-symbols-rounded icon-sm" aria-hidden="true"> palette </span>
   </button>
 
   <div
     id="theme-dropdown"
-    class="absolute right-0 bottom-14 mt-2 py-2 w-48 sm:w-56 rounded-md border hidden z-20 theme-dropdown text-xs sm:text-sm shadow-2xl"
+    class="theme-dropdown absolute bottom-14 right-0 z-20 mt-2 hidden w-48 rounded-md border py-2 text-xs shadow-2xl sm:w-56 sm:text-sm"
     role="menu"
     aria-labelledby="theme-toggle-btn"
   >
-    <div class="px-4 py-1 text-[10px] sm:text-xs text-primary font-bold uppercase border-b border-[var(--border-color)] mb-1">
+    <div
+      class="mb-1 border-b border-[var(--border-color)] px-4 py-1 text-[10px] font-bold uppercase text-primary sm:text-xs"
+    >
       Terminal Themes
     </div>
     {
       themes.map((theme) => (
         <button
-          class="theme-option block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm flex items-center hover:bg-opacity-20"
+          class="theme-option block flex w-full items-center px-3 py-1.5 text-left text-xs hover:bg-opacity-20 sm:px-4 sm:py-2 sm:text-sm"
           data-theme={theme.value}
           role="menuitem"
           aria-label={`Switch to ${theme.label} theme`}
         >
-          <span class={`theme-dot theme-dot-${theme.value}`} aria-hidden="true" />
+          <span class:list={`theme-dot theme-dot-${theme.value}`} aria-hidden="true" />
           {theme.label}
         </button>
       ))
@@ -98,7 +98,7 @@ import { themes } from "../data/themes";
       z-index: 40; /* Below mobile nav but above content */
     }
   }
-  
+
   .theme-toggle-btn {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
@@ -111,8 +111,7 @@ import { themes } from "../data/themes";
     const themeOptions = document.querySelectorAll(".theme-option");
 
     // Get current theme
-    const getCurrentTheme = (): string =>
-      localStorage.getItem("selectedTheme") || "green";
+    const getCurrentTheme = (): string => localStorage.getItem("selectedTheme") || "green";
 
     // Set theme
     const setTheme = (theme: string): void => {
@@ -122,20 +121,14 @@ import { themes } from "../data/themes";
 
       // Update active theme display
       themeOptions.forEach((option) => {
-        option.classList.toggle(
-          "active",
-          option.getAttribute("data-theme") === theme,
-        );
+        option.classList.toggle("active", option.getAttribute("data-theme") === theme);
       });
     };
 
     // Update active state display only (theme is already set by Layout.astro)
     const currentTheme = getCurrentTheme();
     themeOptions.forEach((option) => {
-      option.classList.toggle(
-        "active",
-        option.getAttribute("data-theme") === currentTheme
-      );
+      option.classList.toggle("active", option.getAttribute("data-theme") === currentTheme);
     });
 
     // Show/hide theme dropdown - with null checks
@@ -146,9 +139,7 @@ import { themes } from "../data/themes";
 
         // Scroll to active theme in dropdown
         const activeTheme = getCurrentTheme();
-        const activeOption = document.querySelector(
-          `.theme-option[data-theme="${activeTheme}"]`,
-        );
+        const activeOption = document.querySelector(`.theme-option[data-theme="${activeTheme}"]`);
         if (activeOption && !themeDropdown.classList.contains("hidden")) {
           setTimeout(() => {
             activeOption.scrollIntoView({

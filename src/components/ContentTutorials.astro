@@ -1,52 +1,57 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { formatDate } from "../utils/formatDate";
 
 // Get all tutorials that are not drafts
-const allTutorials = await getCollection("tutorials", ({ data }) => {
+const allTutorials = await getCollection("tutorials", ({ data }: CollectionEntry<"tutorials">) => {
   return import.meta.env.DEV || !data.draft;
 });
 
 // Sort tutorials by part number
-const sortedTutorials = allTutorials.sort((a, b) => a.data.part - b.data.part);
+const sortedTutorials: CollectionEntry<"tutorials">[] = allTutorials.sort(
+  (a: CollectionEntry<"tutorials">, b: CollectionEntry<"tutorials">) => a.data.part - b.data.part
+);
 
 // Get unique difficulty levels and topics for filtering
 const difficulties = [
-  ...new Set(sortedTutorials.map((tutorial) => tutorial.data.difficulty)),
+  ...new Set(
+    sortedTutorials.map((tutorial: CollectionEntry<"tutorials">) => tutorial.data.difficulty)
+  ),
 ];
-const allTopics = sortedTutorials.flatMap((tutorial) => tutorial.data.topics);
+const allTopics = sortedTutorials.flatMap(
+  (tutorial: CollectionEntry<"tutorials">) => tutorial.data.topics
+);
 const uniqueTopics = [...new Set(allTopics)];
 
 // Debug log to see if tutorials are being loaded
 console.log(
   `Loaded ${allTutorials.length} tutorials:`,
-  allTutorials.map((t) => t.slug),
+  allTutorials.map((t: CollectionEntry<"tutorials">) => t.slug)
 );
 ---
 
-<div class="container mx-auto px-0 py-4 visible opacity-100 block">
-  <h1 class="text-3xl font-bold mb-6">Linux Kernel Device Driver Tutorials</h1>
+<div class="container visible mx-auto block px-0 py-4 opacity-100">
+  <h1 class="mb-6 text-3xl font-bold">Linux Kernel Device Driver Tutorials</h1>
 
   <div class="mb-8">
     <p class="mb-4">
-      A comprehensive tutorial series on Linux kernel device driver development,
-      from basic concepts to advanced techniques. Designed for embedded
-      engineers, kernel developers, and anyone interested in kernel module
-      development.
+      A comprehensive tutorial series on Linux kernel device driver development, from basic concepts
+      to advanced techniques. Designed for embedded engineers, kernel developers, and anyone
+      interested in kernel module development.
     </p>
   </div>
 
   <!-- Filters -->
   <div class="filters mb-8">
-    <h2 class="text-xl font-semibold mb-4">Filters</h2>
+    <h2 class="mb-4 text-xl font-semibold">Filters</h2>
 
-    <div class="filter-container grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+    <div class="filter-container grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
       <!-- Difficulty Filter -->
       <div class="difficulty-filter">
-        <h3 class="text-md font-medium mb-2">Difficulty Level</h3>
+        <h3 class="text-md mb-2 font-medium">Difficulty Level</h3>
         <div class="flex flex-wrap gap-2">
           <button
-            class="filter-btn all-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+            class="filter-btn all-btn bg-background border-border rounded-md border px-3 py-1 text-sm"
             data-filter="difficulty"
             data-value="all"
           >
@@ -55,11 +60,11 @@ console.log(
           {
             difficulties.map((difficulty) => (
               <button
-                class="filter-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+                class="filter-btn bg-background border-border rounded-md border px-3 py-1 text-sm"
                 data-filter="difficulty"
                 data-value={difficulty}
               >
-                {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                {(difficulty as string).charAt(0).toUpperCase() + (difficulty as string).slice(1)}
               </button>
             ))
           }
@@ -68,10 +73,10 @@ console.log(
 
       <!-- Topics Filter -->
       <div class="topics-filter">
-        <h3 class="text-md font-medium mb-2">Topics</h3>
+        <h3 class="text-md mb-2 font-medium">Topics</h3>
         <div class="flex flex-wrap gap-2">
           <button
-            class="filter-btn all-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+            class="filter-btn all-btn bg-background border-border rounded-md border px-3 py-1 text-sm"
             data-filter="topics"
             data-value="all"
           >
@@ -80,7 +85,7 @@ console.log(
           {
             uniqueTopics.map((topic) => (
               <button
-                class="filter-btn bg-background border border-border px-3 py-1 rounded-md text-sm"
+                class="filter-btn bg-background border-border rounded-md border px-3 py-1 text-sm"
                 data-filter="topics"
                 data-value={topic}
               >
@@ -94,20 +99,18 @@ console.log(
   </div>
 
   <!-- Tutorials Grid -->
-  <div
-    class="tutorials-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-  >
+  <div class="tutorials-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
     {
       sortedTutorials.map((tutorial) => (
         <div
-          class="tutorial-card border border-border rounded-md overflow-hidden"
+          class="tutorial-card border-border overflow-hidden rounded-md border"
           data-difficulty={tutorial.data.difficulty}
           data-topics={tutorial.data.topics.join(",")}
         >
           <div class="p-6">
-            <div class="flex items-center mb-3 gap-2">
+            <div class="mb-3 flex items-center gap-2">
               <span
-                class={`px-2 py-1 text-xs rounded-md ${
+                class:list={`rounded-md px-2 py-1 text-xs ${
                   tutorial.data.difficulty === "beginner"
                     ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                     : tutorial.data.difficulty === "intermediate"
@@ -119,12 +122,10 @@ console.log(
               >
                 {tutorial.data.difficulty}
               </span>
-              <span class="text-sm text-foreground-secondary">
-                Part {tutorial.data.part}
-              </span>
+              <span class="text-foreground-secondary text-sm">Part {tutorial.data.part}</span>
             </div>
 
-            <h2 class="text-xl font-semibold mb-2 hover:text-primary">
+            <h2 class="mb-2 text-xl font-semibold hover:text-primary">
               <a
                 href={`#tutorial-${tutorial.slug}`}
                 class="tutorial-link"
@@ -134,32 +135,26 @@ console.log(
               </a>
             </h2>
 
-            <p class="text-sm text-foreground-secondary mb-4 line-clamp-3">
+            <p class="text-foreground-secondary mb-4 line-clamp-3 text-sm">
               {tutorial.data.description}
             </p>
 
-            <div class="flex flex-wrap gap-2 mb-4">
-              {tutorial.data.topics.slice(0, 3).map((topic) => (
-                <span class="text-xs px-2 py-1 bg-background-secondary rounded-md">
-                  {topic}
-                </span>
+            <div class="mb-4 flex flex-wrap gap-2">
+              {tutorial.data.topics.slice(0, 3).map((topic: string) => (
+                <span class="bg-background-secondary rounded-md px-2 py-1 text-xs">{topic}</span>
               ))}
               {tutorial.data.topics.length > 3 && (
-                <span class="text-xs px-2 py-1 bg-background-secondary rounded-md">
+                <span class="bg-background-secondary rounded-md px-2 py-1 text-xs">
                   +{tutorial.data.topics.length - 3} more
                 </span>
               )}
             </div>
 
-            <div class="text-xs text-foreground-secondary">
+            <div class="text-foreground-secondary text-xs">
               {formatDate(tutorial.data.date)}
-              {tutorial.data.updatedDate &&
-                tutorial.data.updatedDate > tutorial.data.date && (
-                  <span>
-                    {" "}
-                    (Updated: {formatDate(tutorial.data.updatedDate)})
-                  </span>
-                )}
+              {tutorial.data.updatedDate && tutorial.data.updatedDate > tutorial.data.date && (
+                <span> (Updated: {formatDate(tutorial.data.updatedDate)})</span>
+              )}
             </div>
           </div>
         </div>
@@ -168,12 +163,9 @@ console.log(
   </div>
 
   <!-- No Results Message -->
-  <div id="no-results" class="hidden text-center py-12">
+  <div id="no-results" class="hidden py-12 text-center">
     <p class="text-xl">No tutorials match your filters.</p>
-    <button
-      id="reset-filters"
-      class="mt-4 px-4 py-2 bg-primary text-white rounded-md"
-    >
+    <button id="reset-filters" class="mt-4 rounded-md bg-primary px-4 py-2 text-white">
       Reset Filters
     </button>
   </div>
@@ -202,12 +194,10 @@ console.log(
         const filterValue = (button as HTMLElement).dataset.value as string;
 
         // Remove active class from all buttons of this type
-        document
-          .querySelectorAll(`.filter-btn[data-filter="${filterType}"]`)
-          .forEach((btn) => {
-            btn.classList.remove("active", "bg-primary", "text-white");
-            btn.classList.add("bg-background");
-          });
+        document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach((btn) => {
+          btn.classList.remove("active", "bg-primary", "text-white");
+          btn.classList.add("bg-background");
+        });
 
         // Add active class to clicked button
         button.classList.add("active", "bg-primary", "text-white");
@@ -252,19 +242,14 @@ console.log(
       let visibleCount = 0;
 
       tutorialCards.forEach((card) => {
-        const cardDifficulty = (card as HTMLElement).dataset
-          .difficulty as string;
-        const cardTopics = (
-          (card as HTMLElement).dataset.topics as string
-        ).split(",");
+        const cardDifficulty = (card as HTMLElement).dataset.difficulty as string;
+        const cardTopics = ((card as HTMLElement).dataset.topics as string).split(",");
 
         // Check if card matches all active filters
         const matchesDifficulty =
-          activeFilters.difficulty === "all" ||
-          activeFilters.difficulty === cardDifficulty;
+          activeFilters.difficulty === "all" || activeFilters.difficulty === cardDifficulty;
         const matchesTopic =
-          activeFilters.topics === "all" ||
-          cardTopics.includes(activeFilters.topics);
+          activeFilters.topics === "all" || cardTopics.includes(activeFilters.topics);
 
         // Show/hide card
         if (matchesDifficulty && matchesTopic) {
@@ -295,10 +280,8 @@ console.log(
     document.querySelectorAll(".tutorial-link").forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
-        const slug = (link as HTMLElement).getAttribute("data-slug");
         // Here you would typically show the tutorial content
         // This functionality will be added with dynamic content loading
-        console.log(`Tutorial clicked: ${slug}`);
       });
     });
   });

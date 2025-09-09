@@ -12,15 +12,15 @@ import { themes } from "../data/themes";
   >
     <span class="theme-label">Theme:</span>
     <span class="current-theme" id="current-theme-display">Green Phosphor</span>
-    <svg 
-      class="dropdown-icon" 
-      width="12" 
-      height="12" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      stroke-width="2" 
-      stroke-linecap="round" 
+    <svg
+      class="dropdown-icon"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
       stroke-linejoin="round"
       aria-hidden="true"
     >
@@ -43,7 +43,7 @@ import { themes } from "../data/themes";
           role="menuitem"
           aria-label={`Switch to ${theme.label} theme`}
         >
-          <span class="theme-indicator" aria-hidden="true"></span>
+          <span class="theme-indicator" aria-hidden="true" />
           <span class="theme-name">{theme.label}</span>
         </button>
       ))
@@ -99,10 +99,6 @@ import { themes } from "../data/themes";
     transition: transform 0.2s ease;
   }
 
-  .theme-selector-btn[aria-expanded="true"] .dropdown-icon {
-    transform: rotate(180deg);
-  }
-
   .theme-dropdown {
     position: absolute;
     top: calc(100% + 0.5rem);
@@ -140,11 +136,6 @@ import { themes } from "../data/themes";
     background-color: var(--bg-secondary);
   }
 
-  .theme-option.active {
-    background-color: var(--bg-secondary);
-    color: var(--accent-primary);
-  }
-
   .theme-indicator {
     display: inline-block;
     width: 12px;
@@ -152,11 +143,6 @@ import { themes } from "../data/themes";
     border-radius: 50%;
     border: 2px solid var(--border-color);
     position: relative;
-  }
-
-  .theme-option.active .theme-indicator {
-    background-color: var(--accent-primary);
-    border-color: var(--accent-primary);
   }
 
   .theme-name {
@@ -186,20 +172,20 @@ import { themes } from "../data/themes";
       padding: 0.625rem 0.75rem;
       font-size: 0.8125rem;
     }
-    
+
     .dropdown-icon {
       width: 10px;
       height: 10px;
     }
   }
-  
+
   /* Small mobile screens */
   @media (max-width: 375px) {
     .theme-selector-btn {
       padding: 0.25rem 0.375rem;
       font-size: 0.7rem;
     }
-    
+
     .current-theme {
       max-width: 100px;
       overflow: hidden;
@@ -214,7 +200,7 @@ import { themes } from "../data/themes";
     const themeDropdown = document.getElementById("theme-selector-dropdown");
     const themeOptions = document.querySelectorAll(".theme-option");
     const currentThemeDisplay = document.getElementById("current-theme-display");
-    
+
     // Debug: Check if elements are found
     if (!themeSelector || !themeDropdown) {
       console.error("Theme selector elements not found:", { themeSelector, themeDropdown });
@@ -222,8 +208,7 @@ import { themes } from "../data/themes";
     }
 
     // Get current theme
-    const getCurrentTheme = (): string =>
-      localStorage.getItem("selectedTheme") || "green";
+    const getCurrentTheme = (): string => localStorage.getItem("selectedTheme") || "green";
 
     // Get theme label from value
     const getThemeLabel = (themeValue: string): string => {
@@ -255,7 +240,7 @@ import { themes } from "../data/themes";
       const isActive = option.getAttribute("data-theme") === currentTheme;
       option.classList.toggle("active", isActive);
     });
-    
+
     // Update current theme display
     if (currentThemeDisplay) {
       currentThemeDisplay.textContent = getThemeLabel(currentTheme);

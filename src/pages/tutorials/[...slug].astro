@@ -1,20 +1,20 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import CodeBlock from '../../components/CodeBlock.astro';
-import Note from '../../components/mdx/Note.astro';
-import Warning from '../../components/mdx/Warning.astro';
-import Terminal from '../../components/mdx/Terminal.astro';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import Note from "../../components/mdx/Note.astro";
+import Warning from "../../components/mdx/Warning.astro";
+import Terminal from "../../components/mdx/Terminal.astro";
 
 export async function getStaticPaths() {
-  const tutorials = await getCollection('tutorials');
-  return tutorials.map(tutorial => ({
+  const tutorials = await getCollection("tutorials");
+  return tutorials.map((tutorial: CollectionEntry<"tutorials">) => ({
     params: { slug: tutorial.slug },
     props: { tutorial },
   }));
 }
 
-const { tutorial } = Astro.props;
+const { tutorial } = Astro.props as { tutorial: CollectionEntry<"tutorials"> };
 const { Content } = await tutorial.render();
 
 const components = {
@@ -35,7 +35,12 @@ const components = {
   .prose {
     color: var(--term-text);
   }
-  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
     color: var(--term-text);
     text-shadow: 0 0 5px var(--term-glow);
     margin-bottom: 1rem;
@@ -44,10 +49,12 @@ const components = {
     color: var(--term-text);
     text-decoration: underline;
   }
-  .prose p, .prose li {
+  .prose p,
+  .prose li {
     margin-bottom: 1rem;
   }
-  .prose ul, .prose ol {
+  .prose ul,
+  .prose ol {
     padding-left: 2rem;
   }
   .prose pre {

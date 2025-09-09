@@ -1,17 +1,17 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { formatDate } from "../utils/formatDate";
 
 // Get all tutorials that are not drafts
-const allTutorials = await getCollection("tutorials", ({ data }) => {
+const allTutorials = await getCollection("tutorials", ({ data }: CollectionEntry<"tutorials">) => {
   return import.meta.env.DEV || !data.draft;
 });
 
 // Sort tutorials by part number
-const sortedTutorials = allTutorials.sort((a, b) => a.data.part - b.data.part);
+const sortedTutorials: CollectionEntry<"tutorials">[] = allTutorials.sort((a: CollectionEntry<"tutorials">, b: CollectionEntry<"tutorials">) => a.data.part - b.data.part);
 
 // Debug log to see if tutorials are being loaded
-console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.slug));
+console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map((t: CollectionEntry<"tutorials">) => t.slug));
 ---
 
 <div class="tutorial-content-container">
@@ -24,17 +24,17 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
     sortedTutorials.map(async (tutorial) => {
       try {
         const { Content } = await tutorial.render();
-        
+
         return (
-          <div 
-            id={`tutorial-${tutorial.slug}`} 
+          <div
+            id={`tutorial-${tutorial.slug}`}
             class="tutorial-content hidden"
             data-slug={tutorial.slug}
           >
             <!-- Tutorial Header -->
             <header class="mb-8">
               <div class="flex items-center gap-2 mb-3">
-                <span class={`px-2 py-1 text-xs rounded-md ${
+                <span class:list={`px-2 py-1 text-xs rounded-md ${
                   tutorial.data.difficulty === "beginner" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
                   tutorial.data.difficulty === "intermediate" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
                   tutorial.data.difficulty === "advanced" ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" :
@@ -44,21 +44,21 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                 </span>
                 <span class="text-sm text-foreground-secondary">Part {tutorial.data.part}</span>
               </div>
-              
+
               <h1 class="text-3xl md:text-4xl font-bold mb-4">{tutorial.data.title}</h1>
-              
+
               <p class="text-lg text-foreground-secondary mb-4">
                 {tutorial.data.description}
               </p>
-              
+
               <div class="flex flex-wrap gap-2 mb-4">
-                {tutorial.data.topics.map((topic) => (
+                {tutorial.data.topics.map((topic: string) => (
                   <span class="text-xs px-2 py-1 bg-background-secondary rounded-md">
                     {topic}
                   </span>
                 ))}
               </div>
-              
+
               <div class="flex flex-col md:flex-row gap-4 mb-4 text-sm text-foreground-secondary">
                 <div>
                   <strong>Published:</strong> {formatDate(tutorial.data.date)}
@@ -66,12 +66,12 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                     <span> (Updated: {formatDate(tutorial.data.updatedDate)})</span>
                   )}
                 </div>
-                
+
                 <div>
                   <strong>Author:</strong> {tutorial.data.author}
                 </div>
               </div>
-              
+
               <!-- Environment Details -->
               <div class="environment-info border border-border rounded-md p-4 mb-6 bg-background-secondary">
                 <h2 class="text-lg font-semibold mb-2">Environment Details</h2>
@@ -87,22 +87,22 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                   </div>
                 </div>
               </div>
-              
+
               <!-- Prerequisites -->
               {tutorial.data.prerequisites && tutorial.data.prerequisites.length > 0 && (
                 <div class="prerequisites mb-6">
                   <h2 class="text-lg font-semibold mb-2">Prerequisites</h2>
                   <ul class="list-disc pl-5">
-                    {tutorial.data.prerequisites.map((prereq) => (
+                    {tutorial.data.prerequisites.map((prereq: string) => (
                       <li>{prereq}</li>
                     ))}
                   </ul>
                 </div>
               )}
-              
+
               <!-- GitHub Link -->
               {tutorial.data.github && (
-                <a 
+                <a
                   href={tutorial.data.github}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -115,12 +115,12 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                 </a>
               )}
             </header>
-            
+
             <!-- Content -->
             <div class="tutorial-content-body prose prose-lg dark:prose-invert prose-headings:font-medium prose-a:text-primary prose-a:no-underline hover:prose-a:underline max-w-none">
               <Content />
             </div>
-            
+
             <!-- Tutorial Navigation -->
             <div class="tutorial-navigation mt-12 flex flex-col md:flex-row gap-4 border-t border-border pt-8">
               {
@@ -128,11 +128,11 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                   const currentIndex = sortedTutorials.findIndex((t) => t.slug === tutorial.slug);
                   const prevTutorial = currentIndex > 0 ? sortedTutorials[currentIndex - 1] : null;
                   const nextTutorial = currentIndex < sortedTutorials.length - 1 ? sortedTutorials[currentIndex + 1] : null;
-                  
+
                   return (
                     <>
                       {prevTutorial ? (
-                        <a 
+                        <a
                           href={`#tutorial-${prevTutorial.slug}`}
                           class="prev-link tutorial-nav-link flex-1 group p-4 border border-border rounded-md hover:border-primary transition-colors"
                           data-slug={prevTutorial.slug}
@@ -145,9 +145,9 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                       ) : (
                         <div class="flex-1"></div>
                       )}
-                      
+
                       {nextTutorial ? (
-                        <a 
+                        <a
                           href={`#tutorial-${nextTutorial.slug}`}
                           class="next-link tutorial-nav-link flex-1 group p-4 border border-border rounded-md hover:border-primary transition-colors text-right"
                           data-slug={nextTutorial.slug}
@@ -165,36 +165,36 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                 })()
               }
             </div>
-            
+
             <!-- Related Tutorials -->
-            {sortedTutorials.length > 1 && 
+            {sortedTutorials.length > 1 &&
               (() => {
                 // Get related tutorials (same difficulty or topics)
                 const relatedTutorials = sortedTutorials
                   .filter((t) => {
                     // Not the current tutorial and either same difficulty or has common topics
                     if (t.slug === tutorial.slug) return false;
-                    
+
                     const sameDifficulty = t.data.difficulty === tutorial.data.difficulty;
-                    const hasCommonTopic = t.data.topics.some((topic) => tutorial.data.topics.includes(topic));
-                    
+                    const hasCommonTopic = t.data.topics.some((topic: string) => tutorial.data.topics.includes(topic));
+
                     return sameDifficulty || hasCommonTopic;
                   })
                   .slice(0, 3); // Limit to 3 related tutorials
-                  
+
                 return relatedTutorials.length > 0 ? (
                   <div class="related-tutorials mt-12 border-t border-border pt-8">
                     <h2 class="text-2xl font-bold mb-6">Related Tutorials</h2>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {relatedTutorials.map((relatedTutorial) => (
-                        <a 
+                      {relatedTutorials.map((relatedTutorial: CollectionEntry<"tutorials">) => (
+                        <a
                           href={`#tutorial-${relatedTutorial.slug}`}
                           class="related-tutorial-card tutorial-nav-link border border-border rounded-md overflow-hidden hover:border-primary transition-colors p-4"
                           data-slug={relatedTutorial.slug}
                         >
                           <div class="flex items-center gap-2 mb-2">
-                            <span class={`px-2 py-1 text-xs rounded-md ${
+                            <span class:list={`px-2 py-1 text-xs rounded-md ${
                               relatedTutorial.data.difficulty === "beginner" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
                               relatedTutorial.data.difficulty === "intermediate" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
                               relatedTutorial.data.difficulty === "advanced" ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" :
@@ -204,7 +204,7 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
                             </span>
                             <span class="text-sm text-foreground-secondary">Part {relatedTutorial.data.part}</span>
                           </div>
-                          
+
                           <h3 class="text-lg font-semibold hover:text-primary">
                             {relatedTutorial.data.title}
                           </h3>
@@ -240,32 +240,32 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
     margin-bottom: 1rem;
     font-weight: 600;
   }
-  
+
   .tutorial-content-body :global(h3) {
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .tutorial-content-body :global(pre) {
     border-radius: 0.375rem;
     overflow-x: auto;
   }
-  
+
   .tutorial-content-body :global(a) {
     color: var(--primary);
     text-decoration: none;
   }
-  
+
   .tutorial-content-body :global(a:hover) {
     text-decoration: underline;
   }
-  
+
   .tutorial-content-body :global(ul) {
     list-style-type: disc;
     padding-left: 1.5rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .tutorial-content-body :global(ol) {
     list-style-type: decimal;
     padding-left: 1.5rem;
@@ -285,22 +285,22 @@ console.log(`Loaded ${allTutorials.length} tutorials:`, allTutorials.map(t => t.
         }
       });
     });
-    
+
     // Show a tutorial by slug
     function showTutorial(slug: string): void {
       // Hide all tutorials
       document.querySelectorAll('.tutorial-content').forEach(content => {
         content.classList.add('hidden');
       });
-      
+
       // Show the selected tutorial
       const tutorialElement = document.getElementById(`tutorial-${slug}`);
       if (tutorialElement) {
         tutorialElement.classList.remove('hidden');
-        
+
         // Scroll to top of tutorial
         tutorialElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
   });
-</script> 
+</script>

@@ -5,23 +5,23 @@
  */
 
 interface Props {
-	language?: string;
-	title?: string;
-	highlightLines?: string; // Format: "1,4-6,10"
-	isKernel?: boolean; // Whether this is kernel/driver code
-	isTerminal?: boolean; // Enable terminal mode ($ prefix, cursor, no copy button)
-	showLanguage?: boolean; // Show language display (default: true for code, false for terminal)
-	showCursor?: boolean; // Show blinking cursor (default: false for code, true for terminal)
+  language?: string;
+  title?: string;
+  highlightLines?: string; // Format: "1,4-6,10"
+  isKernel?: boolean; // Whether this is kernel/driver code
+  isTerminal?: boolean; // Enable terminal mode ($ prefix, cursor, no copy button)
+  showLanguage?: boolean; // Show language display (default: true for code, false for terminal)
+  showCursor?: boolean; // Show blinking cursor (default: false for code, true for terminal)
 }
 
 const {
-	language = "javascript",
-	title,
-	highlightLines = "",
-	isKernel = false,
-	isTerminal = false,
-	showLanguage,
-	showCursor,
+  language = "javascript",
+  title,
+  // highlightLines = "",
+  isKernel = false,
+  isTerminal = false,
+  showLanguage,
+  showCursor,
 } = Astro.props;
 
 // Set defaults based on mode
@@ -33,291 +33,273 @@ const displayTitle = isTerminal ? title || "Terminal" : title;
 
 // Auto-detect kernel code based on title or language
 const isKernelCode =
-	!isTerminal &&
-	(isKernel ||
-		language === "c" ||
-		(title &&
-			(title.toLowerCase().includes("kernel") ||
-				title.toLowerCase().includes("driver") ||
-				title.toLowerCase().includes("module"))));
+  !isTerminal &&
+  (isKernel ||
+    language === "c" ||
+    (title &&
+      (title.toLowerCase().includes("kernel") ||
+        title.toLowerCase().includes("driver") ||
+        title.toLowerCase().includes("module"))));
 
 // Get readable language name for display
 const langMap: Record<string, string> = {
-	js: "JavaScript",
-	ts: "TypeScript",
-	jsx: "React JSX",
-	tsx: "React TSX",
-	html: "HTML",
-	css: "CSS",
-	scss: "SCSS",
-	json: "JSON",
-	md: "Markdown",
-	mdx: "MDX",
-	bash: "Bash",
-	sh: "Shell",
-	rust: "Rust",
-	c: "C",
-	cpp: "C++",
-	py: "Python",
-	rb: "Ruby",
-	go: "Go",
-	java: "Java",
-	php: "PHP",
-	swift: "Swift",
-	kotlin: "Kotlin",
+  js: "JavaScript",
+  ts: "TypeScript",
+  jsx: "React JSX",
+  tsx: "React TSX",
+  html: "HTML",
+  css: "CSS",
+  scss: "SCSS",
+  json: "JSON",
+  md: "Markdown",
+  mdx: "MDX",
+  bash: "Bash",
+  sh: "Shell",
+  rust: "Rust",
+  c: "C",
+  cpp: "C++",
+  py: "Python",
+  rb: "Ruby",
+  go: "Go",
+  java: "Java",
+  php: "PHP",
+  swift: "Swift",
+  kotlin: "Kotlin",
 };
 
 const displayLanguage = langMap[language] || language.toUpperCase();
 
 // Parse highlight lines into an array of line numbers
-function parseHighlightLines(highlightStr: string): Set<number> {
-	const lines = new Set<number>();
-	if (!highlightStr) return lines;
+// Commenting out as it's not being used currently
+// function parseHighlightLines(highlightStr: string): Set<number> {
+//   const lines = new Set<number>();
+//   if (!highlightStr) return lines;
+//
+//   const parts = highlightStr.split(",");
+//   for (const part of parts) {
+//     if (part.includes("-")) {
+//       const [start, end] = part.split("-").map((n) => parseInt(n.trim()));
+//       for (let i = start; i <= end; i++) {
+//         lines.add(i);
+//       }
+//     } else {
+//       lines.add(parseInt(part.trim()));
+//     }
+//   }
+//   return lines;
+// }
 
-	const parts = highlightStr.split(",");
-	for (const part of parts) {
-		if (part.includes("-")) {
-			const [start, end] = part.split("-").map((n) => parseInt(n.trim()));
-			for (let i = start; i <= end; i++) {
-				lines.add(i);
-			}
-		} else {
-			lines.add(parseInt(part.trim()));
-		}
-	}
-	return lines;
-}
-
-const highlightedLines = parseHighlightLines(highlightLines);
+// const highlightedLines = parseHighlightLines(highlightLines);
 ---
 
 <div
-	class:list={[
-		"my-6 rounded-md overflow-hidden border border-gray-600 transition-all duration-200 ease-in-out group",
-		isTerminal
-			? "shadow-crt hover:-translate-y-px hover:shadow-crt-hover"
-			: "bg-gray-800 relative duration-300 hover:shadow-terminal-glow",
-	]}
-	data-language={language}
-	data-mode={isTerminal ? "terminal" : "code"}
+  class:list={[
+    "group my-6 overflow-hidden rounded-md border border-gray-600 transition-all duration-200 ease-in-out",
+    isTerminal
+      ? "shadow-crt hover:-translate-y-px hover:shadow-crt-hover"
+      : "relative bg-gray-800 duration-300 hover:shadow-terminal-glow",
+  ]}
+  data-language={language}
+  data-mode={isTerminal ? "terminal" : "code"}
 >
-	<div
-		class:list={[
-			"px-4 flex items-center justify-between border-b border-gray-600",
-			isTerminal
-				? "py-3 font-mono bg-[color-mix(in_srgb,var(--bg-secondary)_90%,var(--bg-primary))]"
-				: "py-3 bg-black",
-		]}
-	>
-		<div class="flex items-center gap-3">
-			{
-				isTerminal ? (
-					<div class="flex items-center">
-						<span class="mr-2 text-primary font-bold">$</span>
-						<span class="text-text-primary">{displayTitle}</span>
-					</div>
-				) : (
-					<>
-						{displayTitle && (
-							<span class="font-semibold text-text-primary">
-								{displayTitle}
-							</span>
-						)}
-						{shouldShowLanguage && (
-							<span class="text-sm text-text-secondary opacity-80">
-								{displayLanguage}
-							</span>
-						)}
-						{isKernelCode && (
-							<span class="px-2 py-0.5 text-xs rounded bg-orange-500 text-black font-bold animate-pulse-soft hover:animate-none hover:bg-warning">
-								KERNEL
-							</span>
-						)}
-					</>
-				)
-			}
-		</div>
-		{
-			(
-				<button
-					class="bg-transparent border border-gray-600 text-text-secondary px-2 py-1 rounded text-sm flex items-center gap-1 transition-all duration-200 hover:bg-primary hover:text-black hover:border-primary active:scale-95 copy-button"
-					aria-label="Copy code"
-					title="Copy to clipboard"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<rect
-							x="9"
-							y="9"
-							width="13"
-							height="13"
-							rx="2"
-							ry="2"
-						/>
-						<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-					</svg>
-				</button>
-			)
-		}
-	</div>
-	<div
-		class:list={[
-			"overflow-x-auto [-webkit-overflow-scrolling:touch]",
-			isTerminal
-				? "code-content p-2 font-mono text-sm bg-[color-mix(in_srgb,var(--bg-primary)_95%,black)] text-text-primary"
-				: "code-content p-2 bg-gray-800 md:p-4 sm:p-3 sm:text-[0.8rem]",
-			shouldShowCursor && "with-cursor",
-		]}
-	>
-		<pre
-			class:list={[
-				"m-0 bg-transparent font-mono leading-relaxed whitespace-pre overflow-x-auto",
-				isTerminal ? "" : "text-[0.9rem] sm:text-[0.8rem]",
-			]}><code class="text-text-primary bg-transparent p-0 font-mono block min-w-max"><slot /></code></pre>
-	</div>
+  <div
+    class:list={[
+      "flex items-center justify-between border-b border-gray-600 px-4",
+      isTerminal
+        ? "bg-[color-mix(in_srgb,var(--bg-secondary)_90%,var(--bg-primary))] py-3 font-mono"
+        : "bg-black py-3",
+    ]}
+  >
+    <div class="flex items-center gap-3">
+      {
+        isTerminal ? (
+          <div class="flex items-center">
+            <span class="mr-2 font-bold text-primary">$</span>
+            <span class="text-text-primary">{displayTitle}</span>
+          </div>
+        ) : (
+          <>
+            {displayTitle && <span class="font-semibold text-text-primary">{displayTitle}</span>}
+            {shouldShowLanguage && (
+              <span class="text-sm text-text-secondary opacity-80">{displayLanguage}</span>
+            )}
+            {isKernelCode && (
+              <span class="animate-pulse-soft rounded bg-orange-500 px-2 py-0.5 text-xs font-bold text-black hover:animate-none hover:bg-warning">
+                KERNEL
+              </span>
+            )}
+          </>
+        )
+      }
+    </div>
+    {
+      (
+        <button
+          class="copy-button flex items-center gap-1 rounded border border-gray-600 bg-transparent px-2 py-1 text-sm text-text-secondary transition-all duration-200 hover:border-primary hover:bg-primary hover:text-black active:scale-95"
+          aria-label="Copy code"
+          title="Copy to clipboard"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        </button>
+      )
+    }
+  </div>
+  <div
+    class:list={[
+      "overflow-x-auto [-webkit-overflow-scrolling:touch]",
+      isTerminal
+        ? "code-content bg-[color-mix(in_srgb,var(--bg-primary)_95%,black)] p-2 font-mono text-sm text-text-primary"
+        : "code-content bg-gray-800 p-2 sm:p-3 sm:text-[0.8rem] md:p-4",
+      shouldShowCursor && "with-cursor",
+    ]}
+  >
+    <pre
+      class:list={[
+        "m-0 overflow-x-auto whitespace-pre bg-transparent font-mono leading-relaxed",
+        isTerminal ? "" : "text-[0.9rem] sm:text-[0.8rem]",
+      ]}><code class="text-text-primary bg-transparent p-0 font-mono block min-w-max"><slot /></code></pre>
+  </div>
 </div>
 
 <script>
-	document.addEventListener("DOMContentLoaded", () => {
-		// Copy functionality for code blocks
-		const copyButtons = document.querySelectorAll(".copy-button");
+  document.addEventListener("DOMContentLoaded", () => {
+    // Copy functionality for code blocks
+    const copyButtons = document.querySelectorAll(".copy-button");
 
-		copyButtons.forEach((button) => {
-			button.addEventListener("click", async () => {
-				const container = button.closest("[data-mode]");
-				if (!container) return;
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const container = button.closest("[data-mode]");
+        if (!container) return;
 
-				const codeContent = container.querySelector("code");
-				if (!codeContent) return;
+        const codeContent = container.querySelector("code");
+        if (!codeContent) return;
 
-				const text = codeContent.textContent || "";
+        const text = codeContent.textContent || "";
 
-				try {
-					await navigator.clipboard.writeText(text);
+        try {
+          await navigator.clipboard.writeText(text);
 
-					// Visual feedback
-					button.classList.add("copied");
-					const originalTitle = button.getAttribute("title");
-					button.setAttribute("title", "Copied!");
+          // Visual feedback
+          button.classList.add("copied");
+          const originalTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
 
-					setTimeout(() => {
-						button.classList.remove("copied");
-						button.setAttribute(
-							"title",
-							originalTitle || "Copy to clipboard",
-						);
-					}, 2000);
-				} catch (err) {
-					console.error("Failed to copy:", err);
-				}
-			});
-		});
-	});
+          setTimeout(() => {
+            button.classList.remove("copied");
+            button.setAttribute("title", originalTitle || "Copy to clipboard");
+          }, 2000);
+        } catch (err) {
+          console.error("Failed to copy:", err);
+        }
+      });
+    });
+  });
 </script>
 
 <style>
-	/* Button state styles that can't be done with Tailwind inline */
-	.copy-button.copied {
-		@apply bg-success text-black border-success;
-	}
+  /* Button state styles that can't be done with Tailwind inline */
+  .copy-button.copied {
+    @apply border-success bg-success text-black;
+  }
 
-	.copy-button svg {
-		@apply w-4 h-4;
-	}
+  .copy-button svg {
+    @apply h-4 w-4;
+  }
 
-	/* Scrollbar styling for code blocks */
-	.code-content::-webkit-scrollbar,
-	.terminal-content::-webkit-scrollbar {
-		@apply h-2;
-	}
+  /* Scrollbar styling for code blocks */
+  .code-content::-webkit-scrollbar,
+  .terminal-content::-webkit-scrollbar {
+    @apply h-2;
+  }
 
-	.code-content::-webkit-scrollbar-track {
-		@apply bg-gray-800;
-	}
+  .code-content::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
 
-	.terminal-content::-webkit-scrollbar-track {
-		@apply bg-transparent;
-	}
+  .terminal-content::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
 
-	.code-content::-webkit-scrollbar-thumb,
-	.terminal-content::-webkit-scrollbar-thumb {
-		@apply bg-gray-600 rounded;
-	}
+  .code-content::-webkit-scrollbar-thumb,
+  .terminal-content::-webkit-scrollbar-thumb {
+    @apply rounded bg-gray-600;
+  }
 
-	.code-content::-webkit-scrollbar-thumb:hover,
-	.terminal-content::-webkit-scrollbar-thumb:hover {
-		@apply bg-primary;
-	}
+  .code-content::-webkit-scrollbar-thumb:hover,
+  .terminal-content::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary;
+  }
 
-	/* Line highlighting (if needed) */
-	.highlight-line {
-		@apply block bg-white/10 -mx-4 px-4;
-	}
+  /* Line highlighting (if needed) */
+  .highlight-line {
+    @apply -mx-4 block bg-white/10 px-4;
+  }
 
-	/* Terminal-specific styles */
-	.terminal-content {
-		line-height: 1.5;
-	}
+  /* Terminal-specific styles */
+  .terminal-content {
+    line-height: 1.5;
+  }
 
-	.terminal-content :global(pre) {
-		@apply m-0 p-0 !bg-transparent whitespace-pre overflow-x-auto;
-		word-wrap: normal;
-	}
+  .terminal-content :global(pre) {
+    @apply m-0 overflow-x-auto whitespace-pre !bg-transparent p-0;
+    word-wrap: normal;
+  }
 
-	.terminal-content :global(code) {
-		@apply font-mono block min-w-max;
-		tab-size: 2;
-	}
+  .terminal-content :global(code) {
+    @apply block min-w-max font-mono;
+    tab-size: 2;
+  }
 
-	/* Mobile-specific styles for terminal */
-	@media (max-width: 768px) {
-		.terminal-content {
-			@apply p-3 text-xs;
-		}
+  /* Mobile-specific styles for terminal */
+  @media (max-width: 768px) {
+    .terminal-content {
+      @apply p-3 text-xs;
+    }
 
-		.terminal-content :global(code) {
-			@apply text-xs;
-		}
-	}
+    .terminal-content :global(code) {
+      @apply text-xs;
+    }
+  }
 
-	/* Styling for command lines in terminal */
-	.terminal-content
-		:global(pre code span.line:has(span:first-child:is(.comment))) {
-		@apply text-text-secondary;
-	}
+  /* Styling for command lines in terminal */
+  .terminal-content :global(pre code span.line:has(span:first-child:is(.comment))) {
+    @apply text-text-secondary;
+  }
 
-	/* Styling for terminal lines */
-	.terminal-content :global(pre code span.line) {
-		@apply relative inline-block w-full;
-	}
+  /* Styling for terminal lines */
+  .terminal-content :global(pre code span.line) {
+    @apply relative inline-block w-full;
+  }
 
-	/* Add cursor animation to last line in terminal mode */
-	.terminal-content.with-cursor
-		:global(pre code span.line:last-child)::after {
-		content: "";
-		@apply relative inline-block w-[0.5em] h-[1.5em] bg-primary ml-1 opacity-80;
-		animation: cursor-blink 1.2s infinite;
-		vertical-align: text-bottom;
-	}
+  /* Add cursor animation to last line in terminal mode */
+  .terminal-content.with-cursor :global(pre code span.line:last-child)::after {
+    content: "";
+    @apply relative ml-1 inline-block h-[1.5em] w-[0.5em] bg-primary opacity-80;
+    animation: cursor-blink 1.2s infinite;
+    vertical-align: text-bottom;
+  }
 
-	@keyframes cursor-blink {
-		0%,
-		49% {
-			opacity: 0;
-		}
-		50%,
-		100% {
-			opacity: 0.8;
-		}
-	}
+  @keyframes cursor-blink {
+    0%,
+    49% {
+      opacity: 0;
+    }
+    50%,
+    100% {
+      opacity: 0.8;
+    }
+  }
 </style>
-

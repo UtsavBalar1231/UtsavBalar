@@ -9,10 +9,10 @@ const { contentId, contentName } = Astro.props as Props;
 
 <label
   for={contentId}
-  class={[
+  class:list={[
     "tab-link",
 
-    "flex items-center gap-1 sm:gap-2 py-2 px-2 sm:px-4 text-[10px] sm:text-xs cursor-pointer",
+    "flex cursor-pointer items-center gap-1 px-2 py-2 text-[10px] sm:gap-2 sm:px-4 sm:text-xs",
 
     "bg-black",
     "text-gray-100",
@@ -33,8 +33,7 @@ const { contentId, contentName } = Astro.props as Props;
     width="14"
     xmlns="http://www.w3.org/2000/svg"
     class="hidden sm:block"
-    ><path
-      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+    ><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
     ></path><polyline points="14 2 14 8 20 8"></polyline></svg
   >
   <h2>{contentName}</h2>

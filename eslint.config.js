@@ -8,7 +8,7 @@ import prettierConfig from "eslint-config-prettier";
 
 export default [
   {
-    ignores: ["dist/*", "node_modules/*", ".astro/*", "*.config.js", "*.config.mjs"],
+    ignores: ["dist/*", "node_modules/*", ".astro/*", "*.config.js", "*.config.mjs", "**/*.mdx"],
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx,jsx}"],

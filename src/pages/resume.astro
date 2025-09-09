@@ -1,8 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getEntry } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
 
-const resume = await getEntry('resume', 'resume');
+const resume = await getEntry("resume", "resume");
 const { Content } = await resume.render();
 ---
 
@@ -20,7 +20,12 @@ const { Content } = await resume.render();
   .prose {
     color: var(--term-text);
   }
-  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
     color: var(--term-text);
     text-shadow: 0 0 5px var(--term-glow);
     margin-bottom: 1rem;
@@ -29,10 +34,12 @@ const { Content } = await resume.render();
     color: var(--term-text);
     text-decoration: underline;
   }
-  .prose p, .prose li {
+  .prose p,
+  .prose li {
     margin-bottom: 1rem;
   }
-  .prose ul, .prose ol {
+  .prose ul,
+  .prose ol {
     padding-left: 2rem;
   }
 </style>

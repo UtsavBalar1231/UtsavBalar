@@ -41,3 +41,7 @@ Thumbs.db
 # Public assets
 public/fonts/
 public/downloads/
+
+# MDX files with special syntax that Prettier can't parse
+src/components/TutorialContent.astro
+src/content/**/*.mdx
