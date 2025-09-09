@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
           <li class="whitespace-nowrap">
             <a
               href={link.href}
-              class:list={`nav-link rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+              class:list={`nav-link glitch-subtle-hover rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                 isActive
                   ? `text-${link.color} font-bold`
                   : "hover:text- text-text-primary" + link.color

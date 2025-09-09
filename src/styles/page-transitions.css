@@ -1,0 +1,201 @@
+/* Terminal-style page transition animations */
+
+/* CRT refresh animation */
+@keyframes crt-refresh {
+  0% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  10% {
+    opacity: 0.9;
+    filter: brightness(1.2) contrast(1.1);
+    transform: scaleY(1.02);
+  }
+  20% {
+    opacity: 0.95;
+    filter: brightness(0.9) contrast(1.05);
+    transform: scaleY(0.98);
+  }
+  30% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+    transform: scaleY(1);
+  }
+}
+
+/* Terminal scan line animation */
+@keyframes terminal-scan {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Page fade with terminal effect */
+@keyframes page-fade-in {
+  0% {
+    opacity: 0;
+    filter: blur(2px) brightness(1.5);
+    transform: translateY(10px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(1px) brightness(1.2);
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: translateY(0);
+  }
+}
+
+/* Typewriter effect for content */
+@keyframes typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Page transition container */
+.page-transition {
+  animation: crt-refresh 0.4s ease-out;
+  position: relative;
+}
+
+.page-transition::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  animation: terminal-scan 0.5s ease-out;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Content animations */
+.page-content-enter {
+  animation: page-fade-in 0.5s ease-out forwards;
+}
+
+/* Terminal text effect on navigation */
+.terminal-nav-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-nav-transition::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(var(--accent-rgb), 0.03) 2px,
+    rgba(var(--accent-rgb), 0.03) 4px
+  );
+  animation: terminal-scan 0.3s linear;
+  pointer-events: none;
+}
+
+/* Glitch effect for quick transitions */
+@keyframes glitch-transition {
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: inset(20% 0 30% 0);
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translate(2px, -2px);
+  }
+  60% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(1px, -1px);
+  }
+}
+
+/* Apply to main content areas */
+main {
+  position: relative;
+}
+
+main.transitioning {
+  animation: crt-refresh 0.4s ease-out;
+}
+
+/* Navigation link transitions */
+.nav-link-active {
+  position: relative;
+}
+
+.nav-link-active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-primary);
+  opacity: 0.1;
+  animation: pulse 1s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+}
+
+/* Mobile-optimized transitions */
+@media (max-width: 768px) {
+  .page-transition {
+    animation-duration: 0.3s;
+  }
+
+  .page-content-enter {
+    animation-duration: 0.4s;
+  }
+
+  .terminal-nav-transition::after {
+    animation-duration: 0.2s;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition,
+  .page-content-enter,
+  .terminal-nav-transition::after,
+  main.transitioning {
+    animation: none;
+  }
+}

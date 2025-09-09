@@ -23,16 +23,24 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .terminal-footer {
-    @apply mt-16 pb-8;
+    @apply mt-8 pb-4 sm:mt-12 sm:pb-6 md:mt-16 md:pb-8;
     border-top: 1px solid var(--border-color);
-    padding-top: 2rem;
+    padding-top: 1rem;
+
+    @media (min-width: 640px) {
+      padding-top: 2rem;
+    }
   }
 
   .footer-content {
-    @apply mx-auto max-w-4xl px-4;
+    @apply mx-auto max-w-4xl px-2 sm:px-4;
     font-family: "AdwaitaMono", monospace;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
+
+    @media (min-width: 640px) {
+      font-size: 0.875rem;
+    }
   }
 
   .terminal-line {
@@ -50,6 +58,7 @@ const currentYear = new Date().getFullYear();
   .tech-link {
     transition: all 0.2s ease;
     cursor: pointer;
+    display: inline-block;
   }
 
   .tech-link.astro {
@@ -59,6 +68,7 @@ const currentYear = new Date().getFullYear();
   .tech-link.astro:hover {
     color: var(--term-bright-cyan);
     text-decoration: underline;
+    animation: glitch-subtle 0.2s ease-in-out;
   }
 
   .tech-link.vercel {
@@ -68,6 +78,7 @@ const currentYear = new Date().getFullYear();
   .tech-link.vercel:hover {
     color: var(--term-bright-yellow);
     text-decoration: underline;
+    animation: glitch-subtle 0.2s ease-in-out;
   }
 
   .tech-link.github {
@@ -77,19 +88,32 @@ const currentYear = new Date().getFullYear();
   .tech-link.github:hover {
     color: var(--term-bright-magenta);
     text-decoration: underline;
+    animation: glitch-subtle 0.2s ease-in-out;
   }
 
   .copyright {
-    @apply mb-2 mt-6 text-center;
+    @apply mb-1 mt-2 text-center sm:mb-2 sm:mt-4 md:mt-6;
     color: var(--text-secondary);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+
+    @media (min-width: 640px) {
+      font-size: 0.8rem;
+    }
   }
 
   .build-info {
-    @apply mb-4 text-center;
+    @apply mb-2 text-center sm:mb-4;
     color: var(--text-secondary);
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     opacity: 0.6;
+
+    @media (max-width: 480px) {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      font-size: 0.75rem;
+    }
   }
 
   .cursor {
@@ -111,13 +135,9 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     .terminal-footer {
-      @apply mt-8 pb-20;
-    }
-
-    .footer-content {
-      font-size: 0.75rem;
+      @apply pb-20; /* Account for mobile nav */
     }
   }
 </style>

@@ -218,3 +218,113 @@ h6 {
 .typing-text {
   @apply animate-typing overflow-hidden whitespace-nowrap border-r-[3px] border-primary;
 }
+
+/* Reusable glitch hover classes */
+.glitch-hover:hover {
+  animation: glitch 0.3s ease-in-out;
+}
+
+/* Icon/SVG glitch using filters and transforms */
+.glitch-icon-hover:hover {
+  animation: icon-glitch 0.3s ease-in-out;
+}
+
+/* Border glitch for cards and containers */
+.glitch-border-hover:hover {
+  animation: border-glitch 0.3s ease-in-out;
+}
+
+/* Subtle glitch for smaller elements */
+.glitch-subtle-hover:hover {
+  animation: glitch-subtle 0.2s ease-in-out;
+}
+
+/* Icon glitch animation using filters */
+@keyframes icon-glitch {
+  0%,
+  100% {
+    filter: none;
+    transform: translate(0);
+  }
+  20% {
+    filter: drop-shadow(2px 0 0 rgba(255, 0, 0, 0.8)) drop-shadow(-2px 0 0 rgba(0, 255, 255, 0.8));
+    transform: translate(-1px, 0);
+  }
+  40% {
+    filter: drop-shadow(-1px 0 0 rgba(0, 0, 255, 0.8)) drop-shadow(1px 0 0 rgba(255, 0, 0, 0.8));
+    transform: translate(1px, 0);
+  }
+  60% {
+    filter: drop-shadow(0 1px 0 rgba(0, 255, 0, 0.8)) drop-shadow(0 -1px 0 rgba(255, 0, 255, 0.8));
+    transform: translate(0, -1px);
+  }
+  80% {
+    filter: drop-shadow(1px 1px 0 rgba(255, 255, 0, 0.8))
+      drop-shadow(-1px -1px 0 rgba(0, 255, 255, 0.8));
+    transform: translate(-0.5px, 0.5px);
+  }
+}
+
+/* Border glitch animation */
+@keyframes border-glitch {
+  0%,
+  100% {
+    border-color: var(--border-color);
+    box-shadow: none;
+  }
+  25% {
+    border-color: rgba(255, 0, 0, 0.8);
+    box-shadow:
+      0 0 5px rgba(255, 0, 0, 0.5),
+      inset 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+  50% {
+    border-color: rgba(0, 255, 0, 0.8);
+    box-shadow:
+      0 0 5px rgba(0, 255, 0, 0.5),
+      inset 0 0 5px rgba(255, 0, 255, 0.2);
+  }
+  75% {
+    border-color: rgba(0, 0, 255, 0.8);
+    box-shadow:
+      0 0 5px rgba(0, 0, 255, 0.5),
+      inset 0 0 5px rgba(255, 255, 0, 0.2);
+  }
+}
+
+/* Subtle glitch for smaller elements */
+@keyframes glitch-subtle {
+  0%,
+  100% {
+    transform: translate(0);
+    filter: none;
+  }
+  33% {
+    transform: translate(-0.5px, 0);
+    filter: hue-rotate(90deg);
+  }
+  66% {
+    transform: translate(0.5px, 0);
+    filter: hue-rotate(-90deg);
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .glitch-hover:hover,
+  .glitch-icon-hover:hover,
+  .glitch-border-hover:hover,
+  .glitch-subtle-hover:hover {
+    animation-duration: 0.2s;
+  }
+}
+
+/* Accessibility - reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-hover:hover,
+  .glitch-icon-hover:hover,
+  .glitch-border-hover:hover,
+  .glitch-subtle-hover:hover {
+    animation: none;
+  }
+}

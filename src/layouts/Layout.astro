@@ -65,8 +65,9 @@ const { title } = Astro.props;
     <div class="crt-overlay"></div>
     <div class="matrix-bg"></div>
     <div
-      class="pt-18 crt-screen relative isolate z-10 min-h-screen p-8 max-md:pb-20"
+      class="pt-18 crt-screen page-transition relative isolate z-10 min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
       style="contain: layout style;"
+      id="main-content"
     >
       <header class="mb-8">
         <Nav />
@@ -79,24 +80,67 @@ const { title } = Astro.props;
 </html>
 
 <script>
+  // Page transition handler
+  function initPageTransitions() {
+    const mainContent = document.getElementById("main-content");
+
+    // Add transition class on page load
+    mainContent?.classList.add("page-content-enter");
+
+    // Handle navigation with transitions
+    document.addEventListener("click", (e) => {
+      const link = (e.target as HTMLElement)?.closest("a");
+      if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
+        e.preventDefault();
+
+        // Add transition effect
+        mainContent?.classList.add("terminal-nav-transition");
+
+        // Navigate after animation starts
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 200);
+      }
+    });
+  }
+
+  // Initialize on DOM content loaded
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPageTransitions);
+  } else {
+    initPageTransitions();
+  }
+
+  // Keyboard navigation with transitions
   document.addEventListener("keydown", (event) => {
     if (event.altKey) {
+      let targetUrl = null;
+
       switch (event.key) {
         case "1":
-          window.location.href = "/";
+          targetUrl = "/";
           break;
         case "2":
-          window.location.href = "/about/";
+          targetUrl = "/about/";
           break;
         case "3":
-          window.location.href = "/projects/";
+          targetUrl = "/projects/";
           break;
         case "4":
-          window.location.href = "/resume/";
+          targetUrl = "/resume/";
           break;
         case "5":
-          window.location.href = "/tutorials/";
+          targetUrl = "/tutorials/";
           break;
+      }
+
+      if (targetUrl) {
+        const mainContent = document.getElementById("main-content");
+        mainContent?.classList.add("terminal-nav-transition");
+
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 200);
       }
     }
   });
