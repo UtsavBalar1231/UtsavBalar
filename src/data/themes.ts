@@ -18,9 +18,9 @@ export function getTheme(value: string): Theme {
 export function getCurrentTheme(): string {
   // This function can only be used client-side due to localStorage
   if (typeof localStorage !== "undefined") {
-    return localStorage.getItem("theme") || "green";
+    return localStorage.getItem("theme") || "monochrome";
   }
-  return "green";
+  return "monochrome";
 }
 
 export function applyTheme(theme: string): void {

@@ -75,10 +75,6 @@
 
   /* Responsive breakpoint optimizations */
   @media (max-width: 640px) {
-    :root {
-      --scroll-transition-duration: 300ms;
-    }
-
     html,
     body {
       @apply w-full;

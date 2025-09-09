@@ -52,7 +52,7 @@ if (useGithub) {
 const defaultAvatar = "/img/default-avatar.svg";
 ---
 
-<div class:list={`avatar-container ${className}`} style="width: 4rem; height: 4rem;">
+<div class:list={`avatar-container ${className}`} style="width: 5rem; height: 5rem;">
   {/* eslint-disable-next-line astro/jsx-a11y/no-noninteractive-element-interactions */}
   <img
     src={avatarUrl || defaultAvatar}
@@ -78,8 +78,8 @@ const defaultAvatar = "/img/default-avatar.svg";
   /* Responsive sizing using media queries */
   @media (min-width: 640px) {
     .avatar-container {
-      width: 5rem !important;
-      height: 5rem !important;
+      width: 6.25rem !important;
+      height: 6.25rem !important;
     }
   }
 

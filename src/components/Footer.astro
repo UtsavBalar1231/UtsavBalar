@@ -50,6 +50,13 @@ const currentYear = new Date().getFullYear();
     gap: 0.5rem;
   }
 
+  /* Ensure terminal line is visible on mobile */
+  @media (max-width: 767px) {
+    .terminal-line {
+      display: flex !important;
+    }
+  }
+
   .prompt {
     color: var(--term-bright-green);
     font-weight: bold;

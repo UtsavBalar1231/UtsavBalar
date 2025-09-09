@@ -15,16 +15,16 @@ h6 {
 @keyframes phosphor-glow {
   0% {
     text-shadow:
-      0 0 2px currentColor,
-      0 0 3px currentColor;
+      0 0 1px currentColor,
+      0 0 1.5px currentColor;
     filter: brightness(1);
   }
   100% {
     text-shadow:
-      0 0 3px currentColor,
-      0 0 4px currentColor,
-      0 0 5px currentColor;
-    filter: brightness(1.05);
+      0 0 1.5px currentColor,
+      0 0 2px currentColor,
+      0 0 2.5px currentColor;
+    filter: brightness(1.025);
   }
 }
 
@@ -306,16 +306,6 @@ h6 {
   66% {
     transform: translate(0.5px, 0);
     filter: hue-rotate(-90deg);
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .glitch-hover:hover,
-  .glitch-icon-hover:hover,
-  .glitch-border-hover:hover,
-  .glitch-subtle-hover:hover {
-    animation-duration: 0.2s;
   }
 }
 

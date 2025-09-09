@@ -55,24 +55,24 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
-  /* Color-specific glow effects (default) - reduced text intensity */
-  --glow-black: rgba(0, 0, 0, 0.15);
-  --glow-red: rgba(170, 0, 0, 0.15);
-  --glow-green: rgba(0, 170, 0, 0.15);
-  --glow-yellow: rgba(170, 85, 0, 0.15);
-  --glow-blue: rgba(0, 0, 170, 0.15);
-  --glow-magenta: rgba(170, 0, 170, 0.15);
-  --glow-cyan: rgba(0, 170, 170, 0.15);
-  --glow-white: rgba(170, 170, 170, 0.15);
+  /* Color-specific glow effects (default) - reduced text intensity by 50% */
+  --glow-black: rgba(0, 0, 0, 0.075);
+  --glow-red: rgba(170, 0, 0, 0.075);
+  --glow-green: rgba(0, 170, 0, 0.075);
+  --glow-yellow: rgba(170, 85, 0, 0.075);
+  --glow-blue: rgba(0, 0, 170, 0.075);
+  --glow-magenta: rgba(170, 0, 170, 0.075);
+  --glow-cyan: rgba(0, 170, 170, 0.075);
+  --glow-white: rgba(170, 170, 170, 0.075);
 
-  --glow-bright-black: rgba(85, 85, 85, 0.2);
-  --glow-bright-red: rgba(255, 85, 85, 0.2);
-  --glow-bright-green: rgba(85, 255, 85, 0.2);
-  --glow-bright-yellow: rgba(255, 255, 85, 0.2);
-  --glow-bright-blue: rgba(85, 85, 255, 0.2);
-  --glow-bright-magenta: rgba(255, 85, 255, 0.2);
-  --glow-bright-cyan: rgba(85, 255, 255, 0.2);
-  --glow-bright-white: rgba(255, 255, 255, 0.2);
+  --glow-bright-black: rgba(85, 85, 85, 0.1);
+  --glow-bright-red: rgba(255, 85, 85, 0.1);
+  --glow-bright-green: rgba(85, 255, 85, 0.1);
+  --glow-bright-yellow: rgba(255, 255, 85, 0.1);
+  --glow-bright-blue: rgba(85, 85, 255, 0.1);
+  --glow-bright-magenta: rgba(255, 85, 255, 0.1);
+  --glow-bright-cyan: rgba(85, 255, 255, 0.1);
+  --glow-bright-white: rgba(255, 255, 255, 0.1);
 
   /* RGB values for box-shadow effects */
   --glow-red-rgb: 170, 0, 0;
@@ -129,9 +129,9 @@
   --color-border: #00ff00;
   --color-border-rgb: 0, 255, 0;
 
-  /* Terminal glow */
-  --terminal-glow: rgba(0, 255, 0, 0.5);
-  --terminal-glow-intense: rgba(0, 255, 0, 0.8);
+  /* Terminal glow - reduced by 50% */
+  --terminal-glow: rgba(0, 255, 0, 0.25);
+  --terminal-glow-intense: rgba(0, 255, 0, 0.4);
 
   /* Green theme CRT effects - Classic phosphor */
   --crt-scanline-opacity: 0.04;
@@ -170,24 +170,24 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
-  /* Color-specific glow effects - Green Phosphor - reduced text intensity */
-  --glow-black: rgba(0, 0, 0, 0.15);
-  --glow-red: rgba(205, 0, 0, 0.15);
-  --glow-green: rgba(0, 205, 0, 0.15);
-  --glow-yellow: rgba(205, 205, 0, 0.15);
-  --glow-blue: rgba(0, 0, 238, 0.15);
-  --glow-magenta: rgba(205, 0, 205, 0.15);
-  --glow-cyan: rgba(0, 205, 205, 0.15);
-  --glow-white: rgba(229, 229, 229, 0.15);
+  /* Color-specific glow effects - Green Phosphor - reduced by 50% */
+  --glow-black: rgba(0, 0, 0, 0.075);
+  --glow-red: rgba(205, 0, 0, 0.075);
+  --glow-green: rgba(0, 205, 0, 0.075);
+  --glow-yellow: rgba(205, 205, 0, 0.075);
+  --glow-blue: rgba(0, 0, 238, 0.075);
+  --glow-magenta: rgba(205, 0, 205, 0.075);
+  --glow-cyan: rgba(0, 205, 205, 0.075);
+  --glow-white: rgba(229, 229, 229, 0.075);
 
-  --glow-bright-black: rgba(127, 127, 127, 0.2);
-  --glow-bright-red: rgba(255, 0, 0, 0.25);
-  --glow-bright-green: rgba(0, 255, 0, 0.25);
-  --glow-bright-yellow: rgba(255, 255, 0, 0.25);
-  --glow-bright-blue: rgba(92, 92, 255, 0.25);
-  --glow-bright-magenta: rgba(255, 0, 255, 0.25);
-  --glow-bright-cyan: rgba(0, 255, 255, 0.25);
-  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  --glow-bright-black: rgba(127, 127, 127, 0.1);
+  --glow-bright-red: rgba(255, 0, 0, 0.125);
+  --glow-bright-green: rgba(0, 255, 0, 0.125);
+  --glow-bright-yellow: rgba(255, 255, 0, 0.125);
+  --glow-bright-blue: rgba(92, 92, 255, 0.125);
+  --glow-bright-magenta: rgba(255, 0, 255, 0.125);
+  --glow-bright-cyan: rgba(0, 255, 255, 0.125);
+  --glow-bright-white: rgba(255, 255, 255, 0.125);
 
   /* RGB values for box-shadow effects */
   --glow-red-rgb: 205, 0, 0;
@@ -215,9 +215,9 @@
   --color-border: #ffb000;
   --color-border-rgb: 255, 176, 0;
 
-  /* Terminal glow */
-  --terminal-glow: rgba(255, 176, 0, 0.5);
-  --terminal-glow-intense: rgba(255, 176, 0, 0.8);
+  /* Terminal glow - reduced by 50% */
+  --terminal-glow: rgba(255, 176, 0, 0.25);
+  --terminal-glow-intense: rgba(255, 176, 0, 0.4);
 
   /* Amber theme CRT effects - Warmer, vintage feel */
   --crt-scanline-opacity: 0.06;
@@ -256,24 +256,24 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
-  /* Color-specific glow effects - Amber Phosphor - reduced text intensity */
-  --glow-black: rgba(0, 0, 0, 0.15);
-  --glow-red: rgba(204, 51, 0, 0.15);
-  --glow-green: rgba(153, 204, 0, 0.15);
-  --glow-yellow: rgba(204, 170, 0, 0.15);
-  --glow-blue: rgba(0, 102, 204, 0.15);
-  --glow-magenta: rgba(204, 0, 153, 0.15);
-  --glow-cyan: rgba(0, 153, 204, 0.15);
-  --glow-white: rgba(204, 204, 204, 0.15);
+  /* Color-specific glow effects - Amber Phosphor - reduced by 50% */
+  --glow-black: rgba(0, 0, 0, 0.075);
+  --glow-red: rgba(204, 51, 0, 0.075);
+  --glow-green: rgba(153, 204, 0, 0.075);
+  --glow-yellow: rgba(204, 170, 0, 0.075);
+  --glow-blue: rgba(0, 102, 204, 0.075);
+  --glow-magenta: rgba(204, 0, 153, 0.075);
+  --glow-cyan: rgba(0, 153, 204, 0.075);
+  --glow-white: rgba(204, 204, 204, 0.075);
 
-  --glow-bright-black: rgba(102, 102, 102, 0.2);
-  --glow-bright-red: rgba(255, 102, 68, 0.25);
-  --glow-bright-green: rgba(187, 255, 0, 0.25);
-  --glow-bright-yellow: rgba(255, 176, 0, 0.25);
-  --glow-bright-blue: rgba(0, 153, 255, 0.25);
-  --glow-bright-magenta: rgba(255, 102, 204, 0.25);
-  --glow-bright-cyan: rgba(0, 204, 255, 0.25);
-  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  --glow-bright-black: rgba(102, 102, 102, 0.1);
+  --glow-bright-red: rgba(255, 102, 68, 0.125);
+  --glow-bright-green: rgba(187, 255, 0, 0.125);
+  --glow-bright-yellow: rgba(255, 176, 0, 0.125);
+  --glow-bright-blue: rgba(0, 153, 255, 0.125);
+  --glow-bright-magenta: rgba(255, 102, 204, 0.125);
+  --glow-bright-cyan: rgba(0, 204, 255, 0.125);
+  --glow-bright-white: rgba(255, 255, 255, 0.125);
 
   /* RGB values for box-shadow effects */
   --glow-red-rgb: 204, 51, 0;
@@ -301,9 +301,9 @@
   --color-border: #ffffff;
   --color-border-rgb: 255, 255, 255;
 
-  /* Terminal glow */
-  --terminal-glow: rgba(255, 255, 255, 0.3);
-  --terminal-glow-intense: rgba(255, 255, 255, 0.6);
+  /* Terminal glow - reduced by 50% */
+  --terminal-glow: rgba(255, 255, 255, 0.15);
+  --terminal-glow-intense: rgba(255, 255, 255, 0.3);
 
   /* Monochrome theme CRT effects - Sharp and clean */
   --crt-scanline-opacity: 0.03;
@@ -342,24 +342,24 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
-  /* Color-specific glow effects - Monochrome - reduced text intensity */
-  --glow-black: rgba(0, 0, 0, 0.15);
-  --glow-red: rgba(170, 0, 0, 0.15);
-  --glow-green: rgba(0, 170, 0, 0.15);
-  --glow-yellow: rgba(170, 85, 0, 0.15);
-  --glow-blue: rgba(0, 0, 170, 0.15);
-  --glow-magenta: rgba(170, 0, 170, 0.15);
-  --glow-cyan: rgba(0, 170, 170, 0.15);
-  --glow-white: rgba(170, 170, 170, 0.15);
+  /* Color-specific glow effects - Monochrome - reduced by 50% */
+  --glow-black: rgba(0, 0, 0, 0.075);
+  --glow-red: rgba(170, 0, 0, 0.075);
+  --glow-green: rgba(0, 170, 0, 0.075);
+  --glow-yellow: rgba(170, 85, 0, 0.075);
+  --glow-blue: rgba(0, 0, 170, 0.075);
+  --glow-magenta: rgba(170, 0, 170, 0.075);
+  --glow-cyan: rgba(0, 170, 170, 0.075);
+  --glow-white: rgba(170, 170, 170, 0.075);
 
-  --glow-bright-black: rgba(85, 85, 85, 0.2);
-  --glow-bright-red: rgba(255, 85, 85, 0.25);
-  --glow-bright-green: rgba(85, 255, 85, 0.25);
-  --glow-bright-yellow: rgba(255, 255, 85, 0.25);
-  --glow-bright-blue: rgba(85, 85, 255, 0.25);
-  --glow-bright-magenta: rgba(255, 85, 255, 0.25);
-  --glow-bright-cyan: rgba(85, 255, 255, 0.25);
-  --glow-bright-white: rgba(255, 255, 255, 0.25);
+  --glow-bright-black: rgba(85, 85, 85, 0.1);
+  --glow-bright-red: rgba(255, 85, 85, 0.125);
+  --glow-bright-green: rgba(85, 255, 85, 0.125);
+  --glow-bright-yellow: rgba(255, 255, 85, 0.125);
+  --glow-bright-blue: rgba(85, 85, 255, 0.125);
+  --glow-bright-magenta: rgba(255, 85, 255, 0.125);
+  --glow-bright-cyan: rgba(85, 255, 255, 0.125);
+  --glow-bright-white: rgba(255, 255, 255, 0.125);
 
   /* RGB values for box-shadow effects */
   --glow-red-rgb: 170, 0, 0;
@@ -387,9 +387,9 @@
   --color-border: #ff4100;
   --color-border-rgb: 255, 65, 0;
 
-  /* Terminal glow */
-  --terminal-glow: rgba(255, 65, 0, 0.5);
-  --terminal-glow-intense: rgba(255, 65, 0, 0.8);
+  /* Terminal glow - reduced by 50% */
+  --terminal-glow: rgba(255, 65, 0, 0.25);
+  --terminal-glow-intense: rgba(255, 65, 0, 0.4);
 
   /* DOOM theme CRT effects - Intense and hellish */
   --crt-scanline-opacity: 0.08;
@@ -428,24 +428,24 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
-  /* Color-specific glow effects - DOOM Hell Fire - reduced text intensity */
-  --glow-black: rgba(0, 0, 0, 0.15);
-  --glow-red: rgba(204, 0, 0, 0.15);
-  --glow-green: rgba(78, 154, 6, 0.15);
-  --glow-yellow: rgba(196, 160, 0, 0.15);
-  --glow-blue: rgba(52, 101, 164, 0.15);
-  --glow-magenta: rgba(117, 80, 123, 0.15);
-  --glow-cyan: rgba(6, 152, 154, 0.15);
-  --glow-white: rgba(211, 215, 207, 0.15);
+  /* Color-specific glow effects - DOOM Hell Fire - reduced by 50% */
+  --glow-black: rgba(0, 0, 0, 0.075);
+  --glow-red: rgba(204, 0, 0, 0.075);
+  --glow-green: rgba(78, 154, 6, 0.075);
+  --glow-yellow: rgba(196, 160, 0, 0.075);
+  --glow-blue: rgba(52, 101, 164, 0.075);
+  --glow-magenta: rgba(117, 80, 123, 0.075);
+  --glow-cyan: rgba(6, 152, 154, 0.075);
+  --glow-white: rgba(211, 215, 207, 0.075);
 
-  --glow-bright-black: rgba(85, 87, 83, 0.2);
-  --glow-bright-red: rgba(255, 65, 0, 0.3);
-  --glow-bright-green: rgba(138, 226, 52, 0.25);
-  --glow-bright-yellow: rgba(255, 136, 0, 0.3);
-  --glow-bright-blue: rgba(114, 159, 207, 0.25);
-  --glow-bright-magenta: rgba(173, 127, 168, 0.25);
-  --glow-bright-cyan: rgba(52, 226, 226, 0.25);
-  --glow-bright-white: rgba(238, 238, 236, 0.25);
+  --glow-bright-black: rgba(85, 87, 83, 0.1);
+  --glow-bright-red: rgba(255, 65, 0, 0.15);
+  --glow-bright-green: rgba(138, 226, 52, 0.125);
+  --glow-bright-yellow: rgba(255, 136, 0, 0.15);
+  --glow-bright-blue: rgba(114, 159, 207, 0.125);
+  --glow-bright-magenta: rgba(173, 127, 168, 0.125);
+  --glow-bright-cyan: rgba(52, 226, 226, 0.125);
+  --glow-bright-white: rgba(238, 238, 236, 0.125);
 
   /* RGB values for box-shadow effects */
   --glow-red-rgb: 204, 0, 0;

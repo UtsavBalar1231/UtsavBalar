@@ -27,7 +27,7 @@ const { title } = Astro.props;
       (function () {
         // Get theme from localStorage or use default
         const stored = localStorage.getItem("selectedTheme");
-        const theme = stored || "green";
+        const theme = stored || "monochrome";
 
         // Apply theme immediately to root element
         document.documentElement.setAttribute("data-theme", theme);
@@ -80,26 +80,29 @@ const { title } = Astro.props;
 </html>
 
 <script>
-  // Page transition handler
+  // Page transition handler with CRT effects
   function initPageTransitions() {
     const mainContent = document.getElementById("main-content");
 
-    // Add transition class on page load
+    // Add CRT power-on effect on page load
     mainContent?.classList.add("page-content-enter");
 
-    // Handle navigation with transitions
+    // Handle navigation with CRT power-off/on transitions
     document.addEventListener("click", (e) => {
       const link = (e.target as HTMLElement)?.closest("a");
       if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
         e.preventDefault();
 
-        // Add transition effect
+        // Add CRT power-off effect
+        mainContent?.classList.add("page-transition-exit");
+        
+        // Add scan line effect
         mainContent?.classList.add("terminal-nav-transition");
 
-        // Navigate after animation starts
+        // Navigate after CRT effect completes
         setTimeout(() => {
           window.location.href = link.href;
-        }, 200);
+        }, 400);
       }
     });
   }
@@ -136,11 +139,13 @@ const { title } = Astro.props;
 
       if (targetUrl) {
         const mainContent = document.getElementById("main-content");
+        // Add CRT power-off effect
+        mainContent?.classList.add("page-transition-exit");
         mainContent?.classList.add("terminal-nav-transition");
 
         setTimeout(() => {
           window.location.href = targetUrl;
-        }, 200);
+        }, 400);
       }
     }
   });
