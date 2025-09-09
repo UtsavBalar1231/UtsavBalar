@@ -1,0 +1,216 @@
+/* Base styles - Font declarations and Tailwind directives */
+
+/* Import Tailwind CSS directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font Face Declarations */
+@font-face {
+  font-family: "AdwaitaMono";
+  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AdwaitaMono";
+  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AdwaitaMono";
+  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AdwaitaMono";
+  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Scrolling Variables */
+:root {
+  --scroll-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --scroll-transition-duration: 400ms;
+}
+
+@layer base {
+  * {
+    @apply m-0 box-border p-0;
+  }
+
+  /* Base body and html styles */
+  html {
+    @apply scroll-smooth font-mono transition-all duration-300 ease-in-out;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    /* Prevent dynamic height changes */
+    position: relative;
+    isolation: isolate;
+  }
+
+  body {
+    @apply bg-black font-mono text-sm text-text-primary sm:text-base;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    /* Improve touch handling */
+    touch-action: manipulation;
+    /* GPU acceleration for smoother scrolling */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Create stacking context */
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Responsive breakpoint optimizations */
+  @media (max-width: 640px) {
+    :root {
+      --scroll-transition-duration: 300ms;
+    }
+
+    html,
+    body {
+      @apply w-full;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1023px) {
+    :root {
+      --scroll-transition-duration: 350ms;
+    }
+  }
+
+  /* Smooth transitions between breakpoints */
+  @media (prefers-reduced-motion: no-preference) {
+    * {
+      @apply transition-[padding,margin] duration-300 ease-in-out;
+    }
+  }
+
+  /* Mobile touch target sizes */
+  @media (max-width: 767px) {
+    button,
+    a {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+
+  /* Global overflow controls */
+  * {
+    @apply box-border max-w-full;
+  }
+
+  img,
+  video,
+  iframe,
+  embed,
+  object {
+    @apply h-auto max-w-full;
+  }
+
+  pre,
+  code {
+    @apply max-w-full overflow-x-auto break-words;
+  }
+
+  main {
+    @apply relative;
+  }
+}
+
+/* Global Focus Styles for Accessibility */
+*:focus-visible {
+  @apply rounded-sm outline-2 outline-offset-2 outline-primary;
+}
+
+button:focus-visible,
+a:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Skip to main content link for screen readers */
+.skip-to-main {
+  @apply absolute left-[-9999px] z-[999] bg-black p-4 text-text-primary no-underline;
+}
+
+.skip-to-main:focus {
+  @apply left-1/2 top-0 -translate-x-1/2;
+}
+
+/* Inline code styling (not part of Shiki) */
+code:not(pre code) {
+  @apply rounded bg-gray-800 px-[0.4rem] py-[0.2rem] font-mono;
+}
+
+/* Material Symbols Configuration */
+.material-symbols-rounded,
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.material-symbols-rounded.filled,
+.material-symbols-outlined.filled {
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+/* Icon size variations */
+.icon-sm {
+  @apply text-[18px];
+}
+
+.icon-md {
+  @apply text-2xl;
+}
+
+.icon-lg {
+  @apply text-4xl;
+}
+
+/* Scrolling utilities */
+.scroll-margin-top {
+  @apply scroll-mt-8;
+}
+
+.scroll-padding {
+  @apply scroll-pt-8;
+}
+
+/* Theme dot styles */
+.theme-dot {
+  @apply mr-2 inline-block h-3 w-3 rounded-full;
+}
+
+.theme-dot-green {
+  background-color: #00ff00;
+}
+
+.theme-dot-amber {
+  background-color: #ffb000;
+}
+
+.theme-dot-monochrome {
+  background-color: #ffffff;
+}
+
+.theme-dot-doom {
+  background-color: #ff4100;
+}

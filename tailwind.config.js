@@ -35,50 +35,34 @@ export default {
         "terminal-glow": "var(--terminal-glow)",
         "terminal-glow-intense": "var(--terminal-glow-intense)",
       },
+      backgroundColor: {
+        terminal: "var(--bg-primary)",
+        "terminal-secondary": "var(--bg-secondary)",
+      },
+      textColor: {
+        terminal: "var(--text-primary)",
+        "terminal-secondary": "var(--text-secondary)",
+      },
+      borderColor: {
+        terminal: "var(--border-color)",
+      },
+      opacity: {
+        "crt-scanline": "var(--crt-scanline-opacity)",
+        "crt-static": "var(--crt-static-opacity)",
+      },
       fontFamily: {
         mono: ["AdwaitaMono", "monospace"],
       },
       animation: {
-        "cursor-blink": "cursor-blink 1s step-end infinite",
-        blink: "blink 1s step-end infinite",
-        typing: "typing 2s steps(40, end)",
-        "typing-cursor": "typing-cursor 0.75s step-end infinite",
-        glow: "glow 2s ease-in-out infinite",
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
         glitch: "glitch 0.5s infinite",
-        scanlines: "scanlines 8s linear infinite",
-        flicker: "flicker 0.15s infinite",
-        "loading-dots": "loading-dots 1.5s infinite",
         "fade-in": "fadeIn 0.5s ease-in",
-        "slide-in": "slideIn 0.5s ease-out",
-        chromatic: "chromatic 0.5s ease-in-out infinite alternate",
+        typing: "typing 2s steps(40, end)",
       },
       keyframes: {
-        "cursor-blink": {
-          "0%, 49%": { opacity: "0" },
-          "50%, 100%": { opacity: "0.8" },
-        },
-        blink: {
-          "0%, 50%": { opacity: "1" },
-          "51%, 100%": { opacity: "0" },
-        },
         typing: {
           from: { width: "0" },
           to: { width: "100%" },
-        },
-        "typing-cursor": {
-          "from, to": { borderColor: "transparent" },
-          "50%": { borderColor: "var(--accent-primary)" },
-        },
-        glow: {
-          "0%, 100%": {
-            textShadow:
-              "0 0 5px var(--accent-primary), 0 0 10px var(--accent-primary), 0 0 15px var(--accent-primary)",
-          },
-          "50%": {
-            textShadow:
-              "0 0 10px var(--accent-primary), 0 0 20px var(--accent-primary), 0 0 30px var(--accent-primary)",
-          },
         },
         "pulse-soft": {
           "0%, 100%": { opacity: "1" },
@@ -98,37 +82,9 @@ export default {
               "0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75)",
           },
         },
-        scanlines: {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100vh)" },
-        },
-        flicker: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.96" },
-          "50.1%": { opacity: "0.98" },
-          "50.2%": { opacity: "0.95" },
-        },
-        chromatic: {
-          "0%, 100%": {
-            textShadow: "0.01em 0 0 rgba(255, 0, 0, 0.5), -0.01em 0 0 rgba(0, 255, 255, 0.5)",
-          },
-          "50%": {
-            textShadow: "0.02em 0 0 rgba(255, 0, 0, 0.5), -0.02em 0 0 rgba(0, 255, 255, 0.5)",
-          },
-        },
-        "loading-dots": {
-          "0%": { content: '"."' },
-          "33%": { content: '".."' },
-          "66%": { content: '"..."' },
-          "100%": { content: '"."' },
-        },
         fadeIn: {
           from: { opacity: "0", transform: "translateY(10px)" },
           to: { opacity: "1", transform: "translateY(0)" },
-        },
-        slideIn: {
-          from: { transform: "translateX(-100%)" },
-          to: { transform: "translateX(0)" },
         },
       },
       boxShadow: {
@@ -234,26 +190,6 @@ export default {
           "&:active": {
             transform: "translateY(0)",
             boxShadow: "0 2px 0 var(--border-color), 0 5px 10px rgba(0, 0, 0, 0.2)",
-          },
-        },
-        ".ascii-divider": {
-          textAlign: "center",
-          margin: "2rem 0",
-          color: "var(--text-secondary)",
-          fontFamily: "monospace",
-          position: "relative",
-          "&::before": {
-            content: '"═══════════════════════════════════════════"',
-          },
-        },
-        ".ascii-divider-dots": {
-          "&::before": {
-            content: '"• • • • • • • • • • • • • • • • • • • • • •"',
-          },
-        },
-        ".ascii-divider-dashed": {
-          "&::before": {
-            content: '"- - - - - - - - - - - - - - - - - - - - - -"',
           },
         },
       });

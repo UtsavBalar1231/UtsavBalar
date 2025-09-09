@@ -1,0 +1,220 @@
+/* Animations - Keyframes and complex animation effects */
+
+/* Terminal glow for headers with phosphor persistence */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  animation: phosphor-glow 2s ease-in-out infinite alternate;
+}
+
+/* Keyframe Animations */
+
+@keyframes phosphor-glow {
+  0% {
+    text-shadow:
+      0 0 5px var(--terminal-glow),
+      0 0 10px var(--terminal-glow),
+      0 0 15px var(--terminal-glow);
+  }
+  100% {
+    text-shadow:
+      0 0 10px var(--terminal-glow-intense),
+      0 0 20px var(--terminal-glow-intense),
+      0 0 30px var(--terminal-glow-intense),
+      0 0 40px var(--terminal-glow);
+  }
+}
+
+@keyframes rgb-shift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(0.5px, -0.5px);
+  }
+  66% {
+    transform: translate(-0.5px, 0.5px);
+  }
+}
+
+@keyframes barrel-pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10px;
+  }
+}
+
+@keyframes scan-moving {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes scan-bar {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(calc(100% + 100%));
+  }
+}
+
+@keyframes phosphor-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.98;
+  }
+}
+
+@keyframes phosphor-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes interference {
+  0%,
+  40%,
+  100% {
+    opacity: 0.03;
+  }
+  10% {
+    opacity: 0.06;
+  }
+  30% {
+    opacity: 0.01;
+  }
+  50% {
+    opacity: 0.05;
+  }
+  60% {
+    opacity: 0.02;
+  }
+  90% {
+    opacity: 0.04;
+  }
+}
+
+@keyframes static-shift {
+  0% {
+    background-position:
+      0 0,
+      0 0;
+  }
+  20% {
+    background-position:
+      -3px 0,
+      -5px -5px;
+  }
+  40% {
+    background-position:
+      3px 0,
+      5px 5px;
+  }
+  60% {
+    background-position:
+      0 -3px,
+      0 -5px;
+  }
+  80% {
+    background-position:
+      0 3px,
+      0 5px;
+  }
+  100% {
+    background-position:
+      0 0,
+      0 0;
+  }
+}
+
+@keyframes voltage-flicker {
+  0%,
+  100% {
+    filter: brightness(1) contrast(1);
+  }
+  92% {
+    filter: brightness(1) contrast(1);
+  }
+  93% {
+    filter: brightness(0.9) contrast(0.9);
+  }
+  94% {
+    filter: brightness(1.1) contrast(1.1);
+  }
+  95% {
+    filter: brightness(0.95) contrast(0.95);
+  }
+  96% {
+    filter: brightness(1) contrast(1);
+  }
+}
+
+@keyframes pixel-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(2px, 2px);
+  }
+}
+
+/* Random Glitch Effect */
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  2% {
+    transform: translate(2px, 2px);
+    filter: hue-rotate(90deg) saturate(2);
+  }
+  4% {
+    transform: translate(-2px, -2px);
+    filter: hue-rotate(-90deg) saturate(2);
+  }
+  6% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* Legacy class mappings for compatibility */
+.fade-in {
+  @apply animate-fade-in;
+}
+
+.glitch-text {
+  @apply hover:animate-glitch;
+}
+
+.typing-text {
+  @apply animate-typing overflow-hidden whitespace-nowrap border-r-[3px] border-primary;
+}

@@ -9,64 +9,19 @@ const navLinks = [
 ];
 ---
 
-<nav class="desktop-nav">
-  <ul>
+<nav class="hidden md:block">
+  <ul class="m-0 flex list-none flex-wrap justify-center gap-6 p-0 lg:gap-8">
     {
       navLinks.map((link) => (
-        <li>
-          <a href={link.href}>[ {link.text} ]</a>
+        <li class="whitespace-nowrap">
+          <a
+            href={link.href}
+            class="rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            [ {link.text} ]
+          </a>
         </li>
       ))
     }
   </ul>
 </nav>
-
-<style>
-  /* Hide on mobile, show on tablet and desktop */
-  .desktop-nav {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .desktop-nav {
-      display: block;
-    }
-  }
-
-  ul {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-wrap: wrap;
-  }
-
-  @media (min-width: 1024px) {
-    ul {
-      gap: 2rem;
-    }
-  }
-
-  li {
-    white-space: nowrap;
-  }
-
-  a {
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    transition: all 0.2s ease;
-  }
-
-  a:hover {
-    text-decoration: underline;
-    background-color: var(--bg-secondary);
-  }
-
-  a:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 2px;
-  }
-</style>
