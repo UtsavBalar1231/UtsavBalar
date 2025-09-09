@@ -47,7 +47,10 @@ const professionalTutorials = tutorialsList.filter(
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
     <div class="terminal-card">
       <header class="mb-8">
-        <h1 class="mb-4 text-xl font-bold" style="color: var(--text-primary);">
+        <h1
+          class="mb-4 font-retro text-xl font-bold uppercase tracking-wider"
+          style="color: var(--text-primary);"
+        >
           <span class="prompt">$</span> Tutorials
         </h1>
         <p class="text-sm" style="color: var(--text-secondary);">
@@ -59,7 +62,7 @@ const professionalTutorials = tutorialsList.filter(
       {
         beginnerTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title">
+            <h2 class="section-title font-retro uppercase tracking-wide">
               <span class="prompt">&gt;</span> Beginner
             </h2>
             <div class="tutorials-grid">
@@ -74,7 +77,7 @@ const professionalTutorials = tutorialsList.filter(
       {
         intermediateTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title">
+            <h2 class="section-title font-retro uppercase tracking-wide">
               <span class="prompt">#</span> Intermediate
             </h2>
             <div class="tutorials-grid">
@@ -89,7 +92,7 @@ const professionalTutorials = tutorialsList.filter(
       {
         advancedTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title">
+            <h2 class="section-title font-retro uppercase tracking-wide">
               <span class="prompt">~</span> Advanced
             </h2>
             <div class="tutorials-grid">
@@ -104,7 +107,7 @@ const professionalTutorials = tutorialsList.filter(
       {
         professionalTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title">
+            <h2 class="section-title font-retro uppercase tracking-wide">
               <span class="prompt">!</span> Professional
             </h2>
             <div class="tutorials-grid">
@@ -141,7 +144,7 @@ const professionalTutorials = tutorialsList.filter(
   .section-title {
     @apply mb-4 text-lg font-bold;
     color: var(--text-primary);
-    font-family: "AdwaitaMono", monospace;
+    font-family: "DepartureMono", monospace;
   }
 
   .tutorials-grid {
@@ -164,6 +167,6 @@ const professionalTutorials = tutorialsList.filter(
   .empty-state {
     @apply py-12 text-center;
     color: var(--text-secondary);
-    font-family: "AdwaitaMono", monospace;
+    font-family: "D2Coding", monospace;
   }
 </style>

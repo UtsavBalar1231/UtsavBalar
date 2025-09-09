@@ -82,13 +82,30 @@ export default {
         "crt-scanline": "var(--crt-scanline-opacity)",
         "crt-static": "var(--crt-static-opacity)",
       },
+
+      fontSize: {
+        xs: ["0.85rem", { lineHeight: "1rem" }],
+        sm: ["0.95rem", { lineHeight: "1.15rem" }],
+        base: ["1.10rem", { lineHeight: "1.4rem" }],
+        lg: ["1.20rem", { lineHeight: "1.5rem" }],
+        xl: ["1.35rem", { lineHeight: "1.6rem" }],
+        "2xl": ["1.60rem", { lineHeight: "1.75rem" }],
+        "3xl": ["1.95rem", { lineHeight: "2.0rem" }],
+        "4xl": ["2.35rem", { lineHeight: "2.25rem" }],
+        "5xl": ["3.15rem", { lineHeight: "1" }],
+        "6xl": ["3.95rem", { lineHeight: "1" }],
+        "7xl": ["4.75rem", { lineHeight: "1" }],
+        "8xl": ["6.25rem", { lineHeight: "1" }],
+        "9xl": ["8.5rem", { lineHeight: "1" }],
+      },
       fontFamily: {
-        mono: ["AdwaitaMono", "monospace"],
+        mono: ["D2Coding", "monospace"],
+        retro: ["DepartureMono", "monospace"],
       },
       animation: {
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
-        glitch: "glitch 0.5s infinite",
-        "fade-in": "fadeIn 0.5s ease-in",
+        glitch: "glitch 1s infinite",
+        "fade-in": "fadeIn 1s ease-in",
         typing: "typing 2s steps(40, end)",
       },
       keyframes: {
@@ -246,6 +263,29 @@ export default {
             fontWeight: "bold",
           },
         },
+        // Retro font utilities
+        ".retro-header": {
+          fontFamily: "DepartureMono, monospace",
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+        },
+        ".retro-prompt": {
+          fontFamily: "DepartureMono, monospace",
+          "&::before": {
+            content: '"> "',
+            color: "var(--accent-primary)",
+          },
+        },
+        ".retro-nav": {
+          fontFamily: "DepartureMono, monospace",
+          letterSpacing: "0.1em",
+        },
+        ".retro-error": {
+          fontFamily: "DepartureMono, monospace",
+          color: "var(--color-error)",
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+        },
       });
 
       // Terminal components
@@ -253,7 +293,7 @@ export default {
         ".terminal-card": {
           backgroundColor: "var(--bg-primary)",
           position: "relative",
-          transition: "all 0.3s ease",
+          transition: "all 0.5s ease",
           // Border only on tablet/desktop
           "@media (min-width: 640px)": {
             border: "1px solid var(--border-color)",
@@ -283,7 +323,7 @@ export default {
           padding: "0.5rem 1rem",
           fontFamily: "monospace",
           position: "relative",
-          transition: "all 0.2s",
+          transition: "all 0.5s",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           cursor: "pointer",

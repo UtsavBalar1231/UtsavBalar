@@ -6,35 +6,30 @@
 @tailwind utilities;
 
 /* Font Face Declarations */
+
+/* D2Coding - Primary coding font */
 @font-face {
-  font-family: "AdwaitaMono";
-  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.ttf") format("truetype");
+  font-family: "D2Coding";
+  src: url("/fonts/D2Coding/D2CodingLigatureNerdFontMono-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "AdwaitaMono";
-  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.ttf") format("truetype");
+  font-family: "D2Coding";
+  src: url("/fonts/D2Coding/D2CodingLigatureNerdFontMono-Bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
+/* DepartureMono - Retro accent font */
 @font-face {
-  font-family: "AdwaitaMono";
-  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-Italic.ttf") format("truetype");
+  font-family: "DepartureMono";
+  src: url("/fonts/DepartureMono/DepartureMonoNerdFontMono-Regular.otf") format("opentype");
   font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "AdwaitaMono";
-  src: url("/fonts/AdwaitaMono/AdwaitaMonoNerdFontMono-BoldItalic.ttf") format("truetype");
-  font-weight: bold;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 

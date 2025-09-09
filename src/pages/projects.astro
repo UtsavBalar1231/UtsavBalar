@@ -69,7 +69,10 @@ const otherProjects = projectsList.filter((p) => !p.featured);
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
     <div class="terminal-card">
       <header class="mb-8">
-        <h1 class="mb-4 text-xl font-bold" style="color: var(--text-primary);">
+        <h1
+          class="mb-4 font-retro text-xl font-bold uppercase tracking-wider"
+          style="color: var(--text-primary);"
+        >
           <span class="prompt">$</span> Projects
         </h1>
         <p class="text-sm" style="color: var(--text-secondary);">
@@ -78,7 +81,7 @@ const otherProjects = projectsList.filter((p) => !p.featured);
       </header>
 
       <section class="mb-10">
-        <h2 class="section-title">
+        <h2 class="section-title font-retro uppercase tracking-wide">
           <span class="prompt">&gt;</span> Featured Projects
         </h2>
         <div class="projects-grid">
@@ -87,7 +90,7 @@ const otherProjects = projectsList.filter((p) => !p.featured);
       </section>
 
       <section>
-        <h2 class="section-title">
+        <h2 class="section-title font-retro uppercase tracking-wide">
           <span class="prompt">#</span> Other Projects
         </h2>
         <div class="projects-grid">
@@ -112,7 +115,7 @@ const otherProjects = projectsList.filter((p) => !p.featured);
   .section-title {
     @apply mb-4 text-lg font-bold;
     color: var(--text-primary);
-    font-family: "AdwaitaMono", monospace;
+    font-family: "DepartureMono", monospace;
   }
 
   .projects-grid {
