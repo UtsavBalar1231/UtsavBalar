@@ -1,5 +1,14 @@
 export interface Social {
-  icon: "github" | "linkedIn" | "twitter" | "email" | "xing" | "telegram" | "reddit" | "cat";
+  icon:
+    | "github"
+    | "linkedIn"
+    | "twitter"
+    | "email"
+    | "xing"
+    | "telegram"
+    | "reddit"
+    | "spotify"
+    | "cat";
   link: string;
   title?: string;
   onClick?: string;
@@ -35,6 +44,11 @@ export const socials: Social[] = [
     icon: "email",
     link: "mailto:utsavbalar1231@gmail.com",
     title: "Send Email",
+  },
+  {
+    icon: "spotify",
+    link: "https://open.spotify.com/user/21xsxpeenbk6f6cedao77vxpy?si=FxTIw4ZJReGwU1Mb_8NU6w",
+    title: "View Spotify Profile",
   },
   {
     icon: "cat",

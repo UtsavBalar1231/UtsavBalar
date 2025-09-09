@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getEntry } from "astro:content";
+import Footer from "../components/Footer.astro";
 
 const resume = await getEntry("resume", "resume");
 const { Content } = await resume.render();
@@ -14,6 +15,7 @@ const { Content } = await resume.render();
       <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
     </p>
   </main>
+  <Footer />
 </Layout>
 
 <style is:global>

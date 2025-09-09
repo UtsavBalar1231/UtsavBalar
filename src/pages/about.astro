@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import SkillsGrid from "../components/SkillsGrid.astro";
 
 const education = [
   {
@@ -152,25 +154,16 @@ const favoriteMusic = [
         </div>
       </section>
 
-      <!-- Links Section -->
-      <section>
+      <!-- Skills Section -->
+      <section class="mb-8">
         <h2 class="section-title">
-          <span class="prompt-symbol">@</span> Links
+          <span class="prompt-symbol">$</span> Skills
         </h2>
-        <div class="links-container">
-          <a
-            href="https://open.spotify.com/user/21xsxpeenbk6f6cedao77vxpy?si=FxTIw4ZJReGwU1Mb_8NU6w"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="external-link"
-          >
-            <span>Spotify Profile</span>
-            <span class="link-arrow">→</span>
-          </a>
-        </div>
+        <SkillsGrid />
       </section>
     </div>
   </main>
+  <Footer />
 </Layout>
 
 <style>
