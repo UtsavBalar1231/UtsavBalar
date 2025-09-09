@@ -3,6 +3,7 @@ import "../styles/global.css";
 import ThemeSelector from "../components/ThemeSelector.astro";
 import MobileNav from "../components/MobileNav.astro";
 import Nav from "../components/Nav.astro";
+import SpinningCat from "../components/SpinningCat.astro";
 
 interface Props {
   title: string;
@@ -73,6 +74,7 @@ const { title } = Astro.props;
       <slot />
     </div>
     <MobileNav />
+    <SpinningCat />
   </body>
 </html>
 

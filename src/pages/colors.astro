@@ -4,42 +4,42 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Color Palette Test">
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8 text-term-bright-cyan">
+    <h1 class="mb-8 text-3xl font-bold text-term-bright-cyan">
       <span class="text-term-bright-yellow">$</span> 16-Color Terminal Palette Test
     </h1>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-6 text-term-bright-green">Normal Colors (0-7)</h2>
+      <h2 class="mb-6 text-2xl font-bold text-term-bright-green">Normal Colors (0-7)</h2>
       <div class="grid grid-cols-4 gap-4">
-        <div class="p-4 border-2 border-term-black bg-black">
+        <div class="border-2 border-term-black bg-black p-4">
           <span class="text-term-white">Black</span>
-          <div class="mt-2 text-term-black bg-white p-1">--term-black</div>
+          <div class="mt-2 bg-white p-1 text-term-black">--term-black</div>
         </div>
-        <div class="p-4 border-2 border-term-red">
+        <div class="border-2 border-term-red p-4">
           <span class="text-term-red">Red</span>
           <div class="mt-2 text-xs">--term-red</div>
         </div>
-        <div class="p-4 border-2 border-term-green">
+        <div class="border-2 border-term-green p-4">
           <span class="text-term-green">Green</span>
           <div class="mt-2 text-xs">--term-green</div>
         </div>
-        <div class="p-4 border-2 border-term-yellow">
+        <div class="border-2 border-term-yellow p-4">
           <span class="text-term-yellow">Yellow</span>
           <div class="mt-2 text-xs">--term-yellow</div>
         </div>
-        <div class="p-4 border-2 border-term-blue">
+        <div class="border-2 border-term-blue p-4">
           <span class="text-term-blue">Blue</span>
           <div class="mt-2 text-xs">--term-blue</div>
         </div>
-        <div class="p-4 border-2 border-term-magenta">
+        <div class="border-2 border-term-magenta p-4">
           <span class="text-term-magenta">Magenta</span>
           <div class="mt-2 text-xs">--term-magenta</div>
         </div>
-        <div class="p-4 border-2 border-term-cyan">
+        <div class="border-2 border-term-cyan p-4">
           <span class="text-term-cyan">Cyan</span>
           <div class="mt-2 text-xs">--term-cyan</div>
         </div>
-        <div class="p-4 border-2 border-term-white">
+        <div class="border-2 border-term-white p-4">
           <span class="text-term-white">White</span>
           <div class="mt-2 text-xs">--term-white</div>
         </div>
@@ -47,37 +47,37 @@ import Layout from "../layouts/Layout.astro";
     </section>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-6 text-term-bright-yellow">Bright Colors (8-15)</h2>
+      <h2 class="mb-6 text-2xl font-bold text-term-bright-yellow">Bright Colors (8-15)</h2>
       <div class="grid grid-cols-4 gap-4">
-        <div class="p-4 border-2 border-term-bright-black">
+        <div class="border-2 border-term-bright-black p-4">
           <span class="text-term-bright-black">Bright Black</span>
           <div class="mt-2 text-xs">--term-bright-black</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-red">
+        <div class="border-2 border-term-bright-red p-4">
           <span class="text-term-bright-red">Bright Red</span>
           <div class="mt-2 text-xs">--term-bright-red</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-green">
+        <div class="border-2 border-term-bright-green p-4">
           <span class="text-term-bright-green">Bright Green</span>
           <div class="mt-2 text-xs">--term-bright-green</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-yellow">
+        <div class="border-2 border-term-bright-yellow p-4">
           <span class="text-term-bright-yellow">Bright Yellow</span>
           <div class="mt-2 text-xs">--term-bright-yellow</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-blue">
+        <div class="border-2 border-term-bright-blue p-4">
           <span class="text-term-bright-blue">Bright Blue</span>
           <div class="mt-2 text-xs">--term-bright-blue</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-magenta">
+        <div class="border-2 border-term-bright-magenta p-4">
           <span class="text-term-bright-magenta">Bright Magenta</span>
           <div class="mt-2 text-xs">--term-bright-magenta</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-cyan">
+        <div class="border-2 border-term-bright-cyan p-4">
           <span class="text-term-bright-cyan">Bright Cyan</span>
           <div class="mt-2 text-xs">--term-bright-cyan</div>
         </div>
-        <div class="p-4 border-2 border-term-bright-white">
+        <div class="border-2 border-term-bright-white p-4">
           <span class="text-term-bright-white">Bright White</span>
           <div class="mt-2 text-xs">--term-bright-white</div>
         </div>
@@ -85,30 +85,34 @@ import Layout from "../layouts/Layout.astro";
     </section>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-6 text-term-bright-magenta">Semantic Colors</h2>
+      <h2 class="mb-6 text-2xl font-bold text-term-bright-magenta">Semantic Colors</h2>
       <div class="grid grid-cols-2 gap-4">
-        <div class="p-4 border-2 border-error bg-error/10">
-          <span class="text-error font-bold">Error Color</span>
+        <div class="bg-error/10 border-2 border-error p-4">
+          <span class="font-bold text-error">Error Color</span>
           <div class="mt-2 text-sm text-error">This is an error message using --color-error</div>
         </div>
-        <div class="p-4 border-2 border-warning bg-warning/10">
-          <span class="text-warning font-bold">Warning Color</span>
-          <div class="mt-2 text-sm text-warning">This is a warning message using --color-warning</div>
+        <div class="bg-warning/10 border-2 border-warning p-4">
+          <span class="font-bold text-warning">Warning Color</span>
+          <div class="mt-2 text-sm text-warning">
+            This is a warning message using --color-warning
+          </div>
         </div>
-        <div class="p-4 border-2 border-success bg-success/10">
-          <span class="text-success font-bold">Success Color</span>
-          <div class="mt-2 text-sm text-success">This is a success message using --color-success</div>
+        <div class="bg-success/10 border-2 border-success p-4">
+          <span class="font-bold text-success">Success Color</span>
+          <div class="mt-2 text-sm text-success">
+            This is a success message using --color-success
+          </div>
         </div>
-        <div class="p-4 border-2 border-info bg-info/10">
-          <span class="text-info font-bold">Info Color</span>
+        <div class="bg-info/10 border-2 border-info p-4">
+          <span class="font-bold text-info">Info Color</span>
           <div class="mt-2 text-sm text-info">This is an info message using --color-info</div>
         </div>
       </div>
     </section>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-6 text-term-bright-red">Terminal Examples</h2>
-      <div class="bg-black p-4 rounded border border-terminal font-mono">
+      <h2 class="mb-6 text-2xl font-bold text-term-bright-red">Terminal Examples</h2>
+      <div class="rounded border border-terminal bg-black p-4 font-mono">
         <div class="mb-2">
           <span class="text-term-bright-green">user@terminal</span>
           <span class="text-term-bright-blue">:</span>
@@ -157,38 +161,60 @@ import Layout from "../layouts/Layout.astro";
     </section>
 
     <section>
-      <h2 class="text-2xl font-bold mb-6 text-term-bright-cyan">Test Components</h2>
-      
+      <h2 class="mb-6 text-2xl font-bold text-term-bright-cyan">Test Components</h2>
+
       <div class="mb-6">
-        <h3 class="text-xl mb-4 text-term-bright-yellow">Buttons with Different Colors</h3>
+        <h3 class="mb-4 text-xl text-term-bright-yellow">Buttons with Different Colors</h3>
         <div class="flex flex-wrap gap-4">
-          <button class="px-4 py-2 border-2 border-term-bright-green text-term-bright-green hover:bg-term-bright-green hover:text-black transition-all">
+          <button
+            class="border-2 border-term-bright-green px-4 py-2 text-term-bright-green transition-all hover:bg-term-bright-green hover:text-black"
+          >
             Success Button
           </button>
-          <button class="px-4 py-2 border-2 border-term-bright-red text-term-bright-red hover:bg-term-bright-red hover:text-black transition-all">
+          <button
+            class="border-2 border-term-bright-red px-4 py-2 text-term-bright-red transition-all hover:bg-term-bright-red hover:text-black"
+          >
             Danger Button
           </button>
-          <button class="px-4 py-2 border-2 border-term-bright-yellow text-term-bright-yellow hover:bg-term-bright-yellow hover:text-black transition-all">
+          <button
+            class="border-2 border-term-bright-yellow px-4 py-2 text-term-bright-yellow transition-all hover:bg-term-bright-yellow hover:text-black"
+          >
             Warning Button
           </button>
-          <button class="px-4 py-2 border-2 border-term-bright-cyan text-term-bright-cyan hover:bg-term-bright-cyan hover:text-black transition-all">
+          <button
+            class="border-2 border-term-bright-cyan px-4 py-2 text-term-bright-cyan transition-all hover:bg-term-bright-cyan hover:text-black"
+          >
             Info Button
           </button>
-          <button class="px-4 py-2 border-2 border-term-bright-magenta text-term-bright-magenta hover:bg-term-bright-magenta hover:text-black transition-all">
+          <button
+            class="border-2 border-term-bright-magenta px-4 py-2 text-term-bright-magenta transition-all hover:bg-term-bright-magenta hover:text-black"
+          >
             Special Button
           </button>
         </div>
       </div>
 
       <div>
-        <h3 class="text-xl mb-4 text-term-bright-green">Tags with Different Colors</h3>
+        <h3 class="mb-4 text-xl text-term-bright-green">Tags with Different Colors</h3>
         <div class="flex flex-wrap gap-2">
-          <span class="px-2 py-1 text-xs border border-term-bright-green text-term-bright-green">JavaScript</span>
-          <span class="px-2 py-1 text-xs border border-term-bright-cyan text-term-bright-cyan">React</span>
-          <span class="px-2 py-1 text-xs border border-term-bright-yellow text-term-bright-yellow">Python</span>
-          <span class="px-2 py-1 text-xs border border-term-bright-magenta text-term-bright-magenta">Docker</span>
-          <span class="px-2 py-1 text-xs border border-term-bright-red text-term-bright-red">Rust</span>
-          <span class="px-2 py-1 text-xs border border-term-bright-blue text-term-bright-blue">TypeScript</span>
+          <span class="border border-term-bright-green px-2 py-1 text-xs text-term-bright-green"
+            >JavaScript</span
+          >
+          <span class="border border-term-bright-cyan px-2 py-1 text-xs text-term-bright-cyan"
+            >React</span
+          >
+          <span class="border border-term-bright-yellow px-2 py-1 text-xs text-term-bright-yellow"
+            >Python</span
+          >
+          <span class="border border-term-bright-magenta px-2 py-1 text-xs text-term-bright-magenta"
+            >Docker</span
+          >
+          <span class="border border-term-bright-red px-2 py-1 text-xs text-term-bright-red"
+            >Rust</span
+          >
+          <span class="border border-term-bright-blue px-2 py-1 text-xs text-term-bright-blue"
+            >TypeScript</span
+          >
         </div>
       </div>
     </section>

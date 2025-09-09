@@ -1,0 +1,329 @@
+---
+// SpinningCat component - Shows the spinning cat meme overlay
+---
+
+<div id="spinning-cat-container" class="cat-container hidden">
+  <div id="exit-btn" class="exit-btn hide">
+    <span>ESC</span>
+  </div>
+  {}
+  <video id="cat-video" src="/media/catvideo.mp4" muted playsinline disablepictureinpicture></video>
+  <img id="cat-gif" src="/media/cat.gif" alt="Spinning cat" class="cat-gif" />
+  {/* eslint-disable-next-line astro/jsx-a11y/media-has-caption */}
+  <audio id="cat-audio" src="/media/cataudio.mp3"></audio>
+  {/* eslint-disable-next-line astro/jsx-a11y/media-has-caption */}
+  <audio id="oiia-audio" src="/media/oiia.mp3"></audio>
+</div>
+
+<style>
+  .cat-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 99999999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    animation: bgFlicker 1s forwards;
+    animation-delay: 4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cat-container.hidden {
+    display: none;
+  }
+
+  .cat-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    animation: videoAppear 1s ease-in-out forwards;
+    animation-delay: 8s;
+  }
+
+  .cat-gif {
+    will-change: opacity, transform;
+    width: 20%;
+    min-width: 400px;
+    object-fit: cover;
+    position: absolute;
+    z-index: 4;
+    animation: catAppear 6s ease forwards;
+  }
+
+  .exit-btn {
+    display: grid;
+    position: absolute;
+    width: 52px;
+    height: 45px;
+    border: 2px solid #00000060;
+    z-index: 10;
+    cursor: pointer;
+    text-align: center;
+    place-items: center;
+    border-radius: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0000007f;
+    color: white;
+    opacity: 0;
+    animation: btnAppear 0.4s ease-in-out forwards;
+    animation-delay: 1s;
+    transition: ease-in-out 0.3s;
+    top: 1rem;
+  }
+
+  .exit-btn span {
+    position: relative;
+    left: 1px;
+    font-family: var(--font-mono);
+  }
+
+  .exit-btn.hide {
+    opacity: 1;
+    top: -3rem;
+    transition: ease-in-out 0.3s;
+  }
+
+  .exit-btn:hover {
+    background: black;
+  }
+
+  .exit-btn:active {
+    width: 47px;
+    height: 43px;
+  }
+
+  @keyframes catAppear {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes btnAppear {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes videoAppear {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bgFlicker {
+    0% {
+      background: transparent;
+    }
+    10% {
+      background: #ff5733;
+    }
+    20% {
+      background: #ff4500;
+    }
+    30% {
+      background: #00fd0a;
+    }
+    40% {
+      background: #33c1ff;
+    }
+    50% {
+      background: #ffd700;
+    }
+    60% {
+      background: #8a2be2;
+    }
+    70% {
+      background: #ff1493;
+    }
+    80% {
+      background: #adff2f;
+    }
+    90% {
+      background: #ff6347;
+    }
+    100% {
+      background: #00fd0a;
+    }
+  }
+</style>
+
+<script>
+  class SpinningCatManager {
+    private container: HTMLElement | null;
+    private exitBtn: HTMLElement | null;
+    private catGif: HTMLElement | null;
+    private catVideo: HTMLVideoElement | null;
+    private catAudio: HTMLAudioElement | null;
+    private oiiaAudio: HTMLAudioElement | null;
+    private timeoutId: ReturnType<typeof setTimeout> | null;
+    private escBtnTimeout: ReturnType<typeof setTimeout> | null;
+    private isRunning: boolean;
+
+    constructor() {
+      this.container = document.getElementById("spinning-cat-container");
+      this.exitBtn = document.getElementById("exit-btn");
+      this.catGif = document.getElementById("cat-gif");
+      this.catVideo = document.getElementById("cat-video") as HTMLVideoElement;
+      this.catAudio = document.getElementById("cat-audio") as HTMLAudioElement;
+      this.oiiaAudio = document.getElementById("oiia-audio") as HTMLAudioElement;
+      this.timeoutId = null;
+      this.escBtnTimeout = null;
+      this.isRunning = false;
+
+      this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+      // Exit button click
+      this.exitBtn?.addEventListener("click", (e: Event) => {
+        e.stopPropagation();
+        this.stop();
+      });
+
+      // Show exit button on container click
+      this.container?.addEventListener("click", () => {
+        this.showExitButton();
+      });
+
+      // Listen for custom event to start the animation
+      window.addEventListener("startSpinningCat", () => {
+        this.start();
+      });
+
+      // Animation events
+      this.catGif?.addEventListener("animationstart", () => {
+        this.handleStartSound();
+      });
+
+      this.catGif?.addEventListener("animationend", () => {
+        this.handleAnimationEnd();
+      });
+    }
+
+    showExitButton() {
+      if (!this.exitBtn) return;
+
+      this.exitBtn.classList.remove("hide");
+
+      // Hide button after 3 seconds
+      if (this.escBtnTimeout) {
+        clearTimeout(this.escBtnTimeout);
+      }
+
+      this.escBtnTimeout = setTimeout(() => {
+        this.exitBtn?.classList.add("hide");
+      }, 3000);
+    }
+
+    handleStartSound() {
+      if (this.oiiaAudio) {
+        this.oiiaAudio.volume = 0.25;
+        this.oiiaAudio.play().catch((error) => {
+          console.error("Failed to play oiia audio:", error);
+        });
+      }
+    }
+
+    handleAnimationEnd() {
+      setTimeout(() => {
+        if (this.catVideo && this.catAudio) {
+          this.catAudio.volume = 0.25;
+
+          // Play audio and video simultaneously
+          Promise.all([this.catAudio.play(), this.catVideo.play()]).catch((error) => {
+            console.error("Playback failed:", error);
+          });
+
+          // Stop after 64 seconds total
+          this.timeoutId = setTimeout(() => {
+            this.stop();
+          }, 64000);
+        }
+      }, 500);
+    }
+
+    start() {
+      if (this.isRunning) return;
+
+      this.isRunning = true;
+      this.container?.classList.remove("hidden");
+
+      // Preload the gif
+      const img = new Image();
+      img.src = "/media/cat.gif";
+    }
+
+    stop() {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId);
+      }
+
+      if (this.escBtnTimeout) {
+        clearTimeout(this.escBtnTimeout);
+      }
+
+      // Reset audio
+      if (this.oiiaAudio) {
+        this.oiiaAudio.pause();
+        this.oiiaAudio.currentTime = 0;
+      }
+
+      if (this.catAudio) {
+        this.catAudio.pause();
+        this.catAudio.currentTime = 0;
+      }
+
+      if (this.catVideo) {
+        this.catVideo.pause();
+        this.catVideo.currentTime = 0;
+      }
+
+      // Hide container
+      this.container?.classList.add("hidden");
+      this.isRunning = false;
+
+      // Reset animations by removing and re-adding the element
+      const parent = this.container?.parentNode;
+      const nextSibling = this.container?.nextSibling;
+      if (parent && this.container) {
+        parent.removeChild(this.container);
+        parent.insertBefore(this.container, nextSibling || null);
+      }
+
+      // Re-initialize after DOM manipulation
+      setTimeout(() => {
+        this.setupEventListeners();
+      }, 100);
+    }
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    new SpinningCatManager();
+  });
+</script>

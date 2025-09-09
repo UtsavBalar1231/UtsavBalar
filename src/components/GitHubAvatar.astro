@@ -60,7 +60,7 @@ const defaultAvatar = "/img/default-avatar.svg";
     title={name || "Profile avatar"}
     loading="eager"
     id="profile-avatar"
-    class="avatar-img"
+    class="avatar-img clickable-avatar"
     onerror="this.onerror=null; this.src='/img/default-avatar.svg';"
   />
 </div>
@@ -96,6 +96,15 @@ const defaultAvatar = "/img/default-avatar.svg";
     object-fit: cover;
     display: block;
   }
+
+  .clickable-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .clickable-avatar:hover {
+    transform: scale(1.05);
+  }
 </style>
 
 <script>
@@ -111,4 +120,25 @@ const defaultAvatar = "/img/default-avatar.svg";
       avatarEl.src = `https://cataas.com/cat?width=${width}&height=${height}&s=${random}`;
     }
   };
+
+  // Add click handler for spinning cat meme
+  document.addEventListener("DOMContentLoaded", () => {
+    const avatarEl = document.getElementById("profile-avatar");
+
+    if (avatarEl) {
+      avatarEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Check if already played in this session
+        if (!sessionStorage.getItem("catPlayed")) {
+          // Set flag to prevent playing again
+          sessionStorage.setItem("catPlayed", "true");
+
+          // Dispatch custom event to start the spinning cat
+          window.dispatchEvent(new CustomEvent("startSpinningCat"));
+        }
+      });
+    }
+  });
 </script>
