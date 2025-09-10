@@ -1,28 +1,5 @@
 /* CRT Effects - Complex terminal visual effects */
 
-/* Mobile-first approach - Disable all heavy effects on mobile for performance */
-@media (max-width: 767px) {
-  /* Kill all CRT effects on mobile */
-  .crt-screen::before,
-  .crt-screen::after,
-  .noise-overlay,
-  .crt-static,
-  body::before {
-    display: none !important;
-  }
-
-  /* Disable matrix background animation */
-  .matrix-bg {
-    animation: none !important;
-    opacity: 0 !important;
-  }
-
-  /* Set performance mode to maximum */
-  :root {
-    --crt-intensity: 0 !important;
-  }
-}
-
 /* Prefers Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   /* Disable all animations for users who prefer reduced motion */
@@ -185,7 +162,7 @@ body::before {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     /* Use noise texture for static */
-    background-image: url("/noise-textures/noise-2.png");
+    background-image: url("/noise-textures/noisy-texture-200x200-2.png");
     background-repeat: repeat;
     background-size: 100px 100px;
     filter: contrast(2) brightness(0.5);

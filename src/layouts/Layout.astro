@@ -28,12 +28,10 @@ const { title } = Astro.props;
     <script is:inline>
       (function () {
         // Run performance detection before theme for immediate optimization
-        const isMobile = window.innerWidth < 768;
-        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
         const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-        if (isMobile || isLowEnd || prefersReduced || isTouchDevice) {
+        if (isLowEnd || prefersReduced) {
           document.documentElement.classList.add("performance-mode");
           document.documentElement.style.setProperty("--crt-intensity", "0");
           document.documentElement.style.scrollBehavior = "auto";
