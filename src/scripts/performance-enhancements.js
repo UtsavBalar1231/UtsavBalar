@@ -1,8 +1,5 @@
-// Performance Enhancements for Mobile
-// Add passive listeners for better scroll performance
-
 export function initPerformanceEnhancements() {
-  // Add passive touch listeners for better scroll performance
+  // Passive touch listeners for better scroll performance
   if ("ontouchstart" in window) {
     document.addEventListener("touchstart", () => {}, { passive: true });
     document.addEventListener("touchmove", () => {}, { passive: true });
@@ -14,7 +11,6 @@ export function initPerformanceEnhancements() {
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      // Re-check performance mode on resize
       checkPerformanceMode();
     }, 250);
   });
@@ -29,7 +25,7 @@ export function initPerformanceEnhancements() {
     });
   });
 
-  // Network speed detection for adaptive loading
+  // Network-based performance adaptation
   if ("connection" in navigator && navigator.connection) {
     const connection = navigator.connection;
     if (

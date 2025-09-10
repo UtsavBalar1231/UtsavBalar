@@ -3,7 +3,6 @@ import SocialIcon from "./SocialIcon.astro";
 import { socials } from "../data/socials";
 ---
 
-<!-- Start: Social Links -->
 <div class="social-links-grid xs:gap-2.5 mt-4 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
   {
     socials.map((social) => (
@@ -21,10 +20,8 @@ import { socials } from "../data/socials";
     ))
   }
 </div>
-<!-- End: Social Links -->
 
 <style>
-  /* Responsive grid for very small screens */
   @media (max-width: 360px) {
     .social-links-grid {
       grid-template-columns: repeat(3, 1fr) !important;
@@ -79,7 +76,6 @@ import { socials } from "../data/socials";
 </style>
 
 <script>
-  // Make sure the refreshCatImage function is available in the global scope
   if (typeof window.refreshCatImage !== "function") {
     window.refreshCatImage = () => {
       const avatarEl = document.getElementById("profile-avatar") as HTMLImageElement;

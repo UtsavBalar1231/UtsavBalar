@@ -104,7 +104,7 @@ export default {
       },
       animation: {
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
-        glitch: "glitch 1s infinite",
+        glitch: "glitch 2.5s infinite",
         "fade-in": "fadeIn 1s ease-in",
         typing: "typing 2s steps(40, end)",
       },
@@ -124,15 +124,23 @@ export default {
         glitch: {
           "0%, 100%": {
             textShadow:
-              "0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75)",
+              "0.08em 0 0 rgba(255, 0, 0, 0.85), -0.08em -0.03em 0 rgba(0, 255, 0, 0.85), 0.03em 0.08em 0 rgba(0, 0, 255, 0.85)",
           },
           "15%": {
             textShadow:
-              "-0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75)",
+              "-0.08em -0.03em 0 rgba(255, 0, 0, 0.85), 0.03em 0.03em 0 rgba(0, 255, 0, 0.85), -0.08em -0.08em 0 rgba(0, 0, 255, 0.85)",
+          },
+          "30%": {
+            textShadow:
+              "0.08em 0.03em 0 rgba(255, 0, 0, 0.85), -0.03em -0.08em 0 rgba(0, 255, 0, 0.85), 0.05em 0.05em 0 rgba(0, 0, 255, 0.85)",
           },
           "50%": {
             textShadow:
-              "0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75)",
+              "0.03em 0.08em 0 rgba(255, 0, 0, 0.85), 0.08em 0 0 rgba(0, 255, 0, 0.85), 0 -0.08em 0 rgba(0, 0, 255, 0.85)",
+          },
+          "70%": {
+            textShadow:
+              "-0.03em 0.05em 0 rgba(255, 0, 0, 0.85), 0.05em -0.03em 0 rgba(0, 255, 0, 0.85), -0.08em 0.03em 0 rgba(0, 0, 255, 0.85)",
           },
         },
         fadeIn: {

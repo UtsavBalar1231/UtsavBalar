@@ -37,16 +37,13 @@ const currentPath = Astro.url.pathname;
     right: 0;
     background-color: var(--bg-primary);
     border-top: 1px solid var(--border-color);
-    z-index: 35; /* Above content but below theme selector */
+    z-index: 35;
     display: none;
     padding: 0.5rem 0;
     height: 60px;
-    /* Removed backdrop-filter for performance */
-    /* Solid background instead of transparency */
     box-shadow: 0 -1px 0 var(--border-color);
     width: 100%;
     box-sizing: border-box;
-    /* Performance optimizations */
     contain: layout style paint;
     will-change: auto;
     -webkit-transform: translateZ(0);
@@ -81,14 +78,16 @@ const currentPath = Astro.url.pathname;
     text-decoration: none;
     color: var(--text-secondary);
     padding: 0.25rem;
-    /* Faster transitions for mobile */
     transition: color 0.1s ease;
     position: relative;
-    /* Prevent layout shifts */
     will-change: auto;
   }
 
-  a:hover,
+  a:hover {
+    color: var(--accent-primary);
+    animation: link-rgb-shift 3s ease-in-out infinite;
+  }
+
   a.active {
     color: var(--accent-primary);
   }
@@ -127,12 +126,10 @@ const currentPath = Astro.url.pathname;
     border-radius: 0.25rem;
   }
 
-  /* Add subtle animation on tap */
   a:active {
     transform: scale(0.95);
   }
 
-  /* Very small screens */
   @media (max-width: 320px) {
     .icon {
       font-size: 1.25rem;

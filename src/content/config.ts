@@ -1,6 +1,5 @@
 import { defineCollection, z } from "astro:content";
 
-// Define schema for about collection
 const aboutCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -10,7 +9,6 @@ const aboutCollection = defineCollection({
   }),
 });
 
-// Define schema for projects collection
 const projectsCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -25,7 +23,6 @@ const projectsCollection = defineCollection({
   }),
 });
 
-// Define schema for quotes collection
 const quotesCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -37,7 +34,6 @@ const quotesCollection = defineCollection({
   }),
 });
 
-// Define schema for book bits collection
 const bookBitsCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -60,7 +56,6 @@ const resumeCollection = defineCollection({
   }),
 });
 
-// Define schema for tutorials collection
 const tutorialsCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -86,7 +81,6 @@ const tutorialsCollection = defineCollection({
   }),
 });
 
-// Export collections
 export const collections = {
   about: aboutCollection,
   projects: projectsCollection,

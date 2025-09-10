@@ -184,10 +184,11 @@
 /* Global link hover effects */
 a {
   @apply transition-all duration-200;
+  position: relative;
 }
 
 a:hover {
-  @apply animate-glitch;
+  animation: link-rgb-shift 3s ease-in-out infinite;
 }
 
 /* Global Focus Styles for Accessibility */

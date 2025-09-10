@@ -29,7 +29,6 @@ export default [
       tailwindcss: tailwindPlugin,
     },
     rules: {
-      // TypeScript rules
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -45,20 +44,17 @@ export default [
         },
       ],
 
-      // React rules
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      // Tailwind CSS rules
       "tailwindcss/classnames-order": "warn",
       "tailwindcss/enforces-negative-arbitrary-values": "warn",
       "tailwindcss/enforces-shorthand": "warn",
       "tailwindcss/no-contradicting-classname": "error",
 
-      // General rules
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-debugger": "warn",
       "prefer-const": "error",
@@ -74,7 +70,6 @@ export default [
       },
     },
   },
-  // Astro files configuration
   ...eslintPluginAstro.configs["flat/recommended"],
   ...eslintPluginAstro.configs["flat/jsx-a11y-recommended"],
   {
@@ -92,7 +87,6 @@ export default [
       "astro/prefer-class-list-directive": "error",
     },
   },
-  // MDX files configuration
   {
     files: ["**/*.mdx"],
     languageOptions: {
@@ -104,6 +98,5 @@ export default [
       },
     },
   },
-  // Prettier config should be last
   prettierConfig,
 ];

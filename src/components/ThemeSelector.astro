@@ -72,7 +72,7 @@ import { themes } from "../data/themes";
 
   .theme-selector {
     position: relative;
-    z-index: 45; /* Above mobile nav but below dropdowns */
+    z-index: 45;
   }
 
   .theme-selector-btn {
@@ -124,7 +124,7 @@ import { themes } from "../data/themes";
     border-radius: 0.25rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    z-index: 50; /* Highest z-index for dropdown */
+    z-index: 50;
     max-height: calc(100vh - 100px);
     overflow-y: auto;
   }
@@ -191,7 +191,6 @@ import { themes } from "../data/themes";
     transform: scale(1.2);
   }
 
-  /* Color previews for each theme */
   [data-theme-preview="green"] .color-dot[data-color="red"] {
     background-color: #ff0000;
   }
@@ -292,7 +291,6 @@ import { themes } from "../data/themes";
     background-color: #ff4100;
   }
 
-  /* Mobile styles */
   @media (max-width: 768px) {
     .theme-selector-btn {
       padding: 0.375rem 0.5rem;
@@ -312,7 +310,7 @@ import { themes } from "../data/themes";
     }
 
     .color-palette {
-      display: none; /* Hide color palette on mobile */
+      display: none;
     }
 
     .theme-option {
@@ -326,7 +324,6 @@ import { themes } from "../data/themes";
     }
   }
 
-  /* Small mobile screens */
   @media (max-width: 375px) {
     .theme-selector-btn {
       padding: 0.25rem 0.375rem;
@@ -348,77 +345,63 @@ import { themes } from "../data/themes";
     const themeOptions = document.querySelectorAll(".theme-option");
     const currentThemeDisplay = document.getElementById("current-theme-display");
 
-    // Debug: Check if elements are found
     if (!themeSelector || !themeDropdown) {
       console.error("Theme selector elements not found:", { themeSelector, themeDropdown });
       return;
     }
 
-    // Get current theme
     const getCurrentTheme = (): string => localStorage.getItem("selectedTheme") || "green";
 
-    // Get theme label from value
     const getThemeLabel = (themeValue: string): string => {
       const option = document.querySelector(`.theme-option[data-theme="${themeValue}"]`);
       return option?.getAttribute("data-theme-label") || "Green Phosphor";
     };
 
-    // Set theme
     const setTheme = (theme: string): void => {
       document.documentElement.setAttribute("data-theme", theme);
       document.body.setAttribute("data-theme", theme);
       localStorage.setItem("selectedTheme", theme);
 
-      // Update active theme display
       themeOptions.forEach((option) => {
         const isActive = option.getAttribute("data-theme") === theme;
         option.classList.toggle("active", isActive);
       });
 
-      // Update current theme display
       if (currentThemeDisplay) {
         currentThemeDisplay.textContent = getThemeLabel(theme);
       }
     };
 
-    // Update active state display only (theme is already set by Layout.astro)
     const currentTheme = getCurrentTheme();
     themeOptions.forEach((option) => {
       const isActive = option.getAttribute("data-theme") === currentTheme;
       option.classList.toggle("active", isActive);
     });
 
-    // Update current theme display
     if (currentThemeDisplay) {
       currentThemeDisplay.textContent = getThemeLabel(currentTheme);
     }
 
-    // Toggle dropdown function
     const toggleDropdown = (show?: boolean) => {
       if (show === undefined) {
-        // Toggle
         themeDropdown.classList.toggle("hidden");
         const isHidden = themeDropdown.classList.contains("hidden");
         themeSelector.setAttribute("aria-expanded", (!isHidden).toString());
       } else if (show) {
-        // Show
         themeDropdown.classList.remove("hidden");
         themeSelector.setAttribute("aria-expanded", "true");
       } else {
-        // Hide
         themeDropdown.classList.add("hidden");
         themeSelector.setAttribute("aria-expanded", "false");
       }
     };
 
-    // Toggle on button click
     themeSelector.addEventListener("click", (e) => {
       e.stopPropagation();
       e.preventDefault();
       toggleDropdown();
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener("click", (e) => {
       if (
         e.target instanceof Node &&
@@ -429,7 +412,6 @@ import { themes } from "../data/themes";
       }
     });
 
-    // Theme option selection
     themeOptions.forEach((option) => {
       option.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -441,7 +423,6 @@ import { themes } from "../data/themes";
       });
     });
 
-    // Close dropdown on Escape key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         toggleDropdown(false);

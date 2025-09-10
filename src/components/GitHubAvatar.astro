@@ -1,21 +1,15 @@
 ---
-// Pass props to determine size
 const { width = 96, height = 96, class: className = "", useGithub = false } = Astro.props;
 
-// GitHub username to fetch the avatar for
 const username = "UtsavBalar1231";
 
-// Fetch GitHub user data
 let avatarUrl = "";
 let name = "";
 
-// Generate a random seed for the cat image to avoid caching
 const randomSeed = Math.floor(Math.random() * 1000);
 
-// Default to cat image unless explicitly asked for GitHub
 if (useGithub) {
   try {
-    // GitHub API has rate limits, so let's add a timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -40,13 +34,10 @@ if (useGithub) {
     console.error("Error fetching GitHub user data:", error);
   }
 } else {
-  // Get a random cat image by default with more reliable API
-  // avatarUrl = `https://api.dicebear.com/7.x/shapes/svg?seed=${randomSeed}&backgroundColor=b6e3f4,c0aede,d1d4f9&shape1Color=0a5b83,1c799f,69d2e7&shape2Color=0a5b83,1c799f,69d2e7&shape3Color=0a5b83,1c799f,69d2e7`;
   avatarUrl = `https://cataas.com/cat/funny?width=${width}&height=${height}&s=${randomSeed}`;
   name = "Random Cat";
 }
 
-// Default avatar if all fetches fail
 const defaultAvatar = "/img/default-avatar.svg";
 ---
 
@@ -73,7 +64,6 @@ const defaultAvatar = "/img/default-avatar.svg";
     aspect-ratio: 1 / 1;
   }
 
-  /* Responsive sizing using media queries */
   @media (min-width: 640px) {
     .avatar-container {
       width: 6.25rem !important;
@@ -106,12 +96,10 @@ const defaultAvatar = "/img/default-avatar.svg";
 </style>
 
 <script>
-  // Add function to refresh cat image that will be called by the refresh button
   window.refreshCatImage = () => {
     const avatarEl = document.getElementById("profile-avatar") as HTMLImageElement;
     if (avatarEl) {
       const random = Math.floor(Math.random() * 1000);
-      // Get dimensions from parent container if available
       const container = avatarEl.closest(".avatar-container");
       const width = container ? container.clientWidth : avatarEl.getAttribute("width");
       const height = container ? container.clientHeight : avatarEl.getAttribute("height");
@@ -119,7 +107,6 @@ const defaultAvatar = "/img/default-avatar.svg";
     }
   };
 
-  // Add click handler for spinning cat meme
   document.addEventListener("DOMContentLoaded", () => {
     const avatarEl = document.getElementById("profile-avatar");
 
@@ -128,12 +115,9 @@ const defaultAvatar = "/img/default-avatar.svg";
         e.preventDefault();
         e.stopPropagation();
 
-        // Check if already played in this session
         if (!sessionStorage.getItem("catPlayed")) {
-          // Set flag to prevent playing again
           sessionStorage.setItem("catPlayed", "true");
 
-          // Dispatch custom event to start the spinning cat
           window.dispatchEvent(new CustomEvent("startSpinningCat"));
         }
       });

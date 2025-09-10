@@ -1,5 +1,5 @@
 ---
-// SpinningCat component - Shows the spinning cat meme overlay
+
 ---
 
 <div id="spinning-cat-container" class="cat-container hidden">
@@ -199,23 +199,19 @@
     }
 
     setupEventListeners() {
-      // Exit button click
       this.exitBtn?.addEventListener("click", (e: Event) => {
         e.stopPropagation();
         this.stop();
       });
 
-      // Show exit button on container click
       this.container?.addEventListener("click", () => {
         this.showExitButton();
       });
 
-      // Listen for custom event to start the animation
       window.addEventListener("startSpinningCat", () => {
         this.start();
       });
 
-      // Animation events
       this.catGif?.addEventListener("animationstart", () => {
         this.handleStartSound();
       });
@@ -230,7 +226,6 @@
 
       this.exitBtn.classList.remove("hide");
 
-      // Hide button after 3 seconds
       if (this.escBtnTimeout) {
         clearTimeout(this.escBtnTimeout);
       }
@@ -254,12 +249,10 @@
         if (this.catVideo && this.catAudio) {
           this.catAudio.volume = 0.25;
 
-          // Play audio and video simultaneously
           Promise.all([this.catAudio.play(), this.catVideo.play()]).catch((error) => {
             console.error("Playback failed:", error);
           });
 
-          // Stop after 64 seconds total
           this.timeoutId = setTimeout(() => {
             this.stop();
           }, 64000);
@@ -273,7 +266,6 @@
       this.isRunning = true;
       this.container?.classList.remove("hidden");
 
-      // Preload the gif
       const img = new Image();
       img.src = "/media/cat.gif";
     }
@@ -287,7 +279,6 @@
         clearTimeout(this.escBtnTimeout);
       }
 
-      // Reset audio
       if (this.oiiaAudio) {
         this.oiiaAudio.pause();
         this.oiiaAudio.currentTime = 0;
@@ -303,11 +294,9 @@
         this.catVideo.currentTime = 0;
       }
 
-      // Hide container
       this.container?.classList.add("hidden");
       this.isRunning = false;
 
-      // Reset animations by removing and re-adding the element
       const parent = this.container?.parentNode;
       const nextSibling = this.container?.nextSibling;
       if (parent && this.container) {
@@ -315,14 +304,12 @@
         parent.insertBefore(this.container, nextSibling || null);
       }
 
-      // Re-initialize after DOM manipulation
       setTimeout(() => {
         this.setupEventListeners();
       }, 100);
     }
   }
 
-  // Initialize when DOM is ready
   document.addEventListener("DOMContentLoaded", () => {
     new SpinningCatManager();
   });

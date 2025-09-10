@@ -10,11 +10,9 @@ export interface Props {
 
 const { title, description, tags, githubUrl, demoUrl, featured = false } = Astro.props;
 
-// Categorize tags and assign colors with matching glow
 function getTagColorAndGlow(tag: string): string {
   const lowerTag = tag.toLowerCase();
 
-  // Programming languages - bright green
   if (
     ["c", "rust", "python", "javascript", "typescript", "c++", "java", "go", "ruby", "swift"].some(
       (lang) => lowerTag.includes(lang)
@@ -23,7 +21,6 @@ function getTagColorAndGlow(tag: string): string {
     return "text-term-bright-green border-term-bright-green hover:glow-bright-green";
   }
 
-  // Frameworks & Libraries - bright cyan
   if (
     ["react", "vue", "angular", "next", "astro", "svelte", "django", "flask", "express", "qt"].some(
       (fw) => lowerTag.includes(fw)
@@ -32,7 +29,6 @@ function getTagColorAndGlow(tag: string): string {
     return "text-term-bright-cyan border-term-bright-cyan hover:glow-bright-cyan";
   }
 
-  // System/Low-level - bright red
   if (
     ["kernel", "driver", "embedded", "linux", "aosp", "rom", "bsp", "bootloader"].some((sys) =>
       lowerTag.includes(sys)
@@ -41,7 +37,6 @@ function getTagColorAndGlow(tag: string): string {
     return "text-term-bright-red border-term-bright-red hover:glow-bright-red";
   }
 
-  // Tools & DevOps - bright magenta
   if (
     ["docker", "kubernetes", "git", "ci/cd", "jenkins", "qemu", "yocto", "buildroot"].some((tool) =>
       lowerTag.includes(tool)
@@ -50,7 +45,6 @@ function getTagColorAndGlow(tag: string): string {
     return "text-term-bright-magenta border-term-bright-magenta hover:glow-bright-magenta";
   }
 
-  // Databases - bright yellow
   if (
     ["mongodb", "postgres", "mysql", "redis", "sqlite", "database", "sql"].some((db) =>
       lowerTag.includes(db)
@@ -59,7 +53,6 @@ function getTagColorAndGlow(tag: string): string {
     return "text-term-bright-yellow border-term-bright-yellow hover:glow-bright-yellow";
   }
 
-  // Default - bright blue
   return "text-term-bright-blue border-term-bright-blue hover:glow-bright-blue";
 }
 ---

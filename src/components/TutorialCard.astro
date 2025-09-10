@@ -11,7 +11,6 @@ export interface Props {
 
 const { number, title, description, difficulty, duration, tags, url } = Astro.props;
 
-// Capitalize first letter of difficulty for display
 const displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
 const difficultyColors: Record<string, string> = {
@@ -153,7 +152,6 @@ const difficultyColors: Record<string, string> = {
     transition: all 0.2s ease;
   }
 
-  /* Rotate through colors for tags */
   .tag:nth-child(4n + 1) {
     color: var(--term-bright-green);
     border-color: var(--term-bright-green);

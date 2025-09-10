@@ -7,7 +7,6 @@ const navLinks = [
   { href: "/tutorials/", text: "Tutorials", color: "term-bright-red" },
 ];
 
-// Get current path to determine active link
 const currentPath = Astro.url.pathname;
 ---
 
@@ -21,7 +20,7 @@ const currentPath = Astro.url.pathname;
           <li class="whitespace-nowrap">
             <a
               href={link.href}
-              class:list={`nav-link glitch-subtle-hover rounded px-2 py-1 font-retro uppercase tracking-wider no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+              class:list={`nav-link rounded px-2 py-1 font-retro uppercase tracking-wider no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                 isActive
                   ? `text-${link.color} font-bold`
                   : "hover:text- text-text-primary" + link.color
@@ -47,6 +46,14 @@ const currentPath = Astro.url.pathname;
 </nav>
 
 <style>
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link:hover {
+    animation: link-rgb-shift 3s ease-in-out infinite;
+  }
+
   .nav-link:hover .bracket {
     animation: bracket-pulse 0.3s ease;
   }
