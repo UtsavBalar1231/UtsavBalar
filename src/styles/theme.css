@@ -13,6 +13,7 @@
   --color-accent-secondary: #00dd00;
   --color-border: #00ff00;
   --color-border-rgb: 0, 255, 0;
+  --accent-primary-rgb: 0, 255, 0;
 
   /* Terminal glow effect */
   --terminal-glow: rgba(0, 255, 0, 0.5);
@@ -209,6 +210,7 @@
   --color-accent-secondary: #ff9900;
   --color-border: #ffb000;
   --color-border-rgb: 255, 176, 0;
+  --accent-primary-rgb: 255, 176, 0;
 
   /* Terminal glow - reduced by 50% */
   --terminal-glow: rgba(255, 176, 0, 0.25);
@@ -292,6 +294,7 @@
   --color-accent-secondary: #dddddd;
   --color-border: #ffffff;
   --color-border-rgb: 255, 255, 255;
+  --accent-primary-rgb: 255, 255, 255;
 
   /* Terminal glow - reduced by 50% */
   --terminal-glow: rgba(255, 255, 255, 0.15);
@@ -375,6 +378,7 @@
   --color-accent-secondary: #ff2200;
   --color-border: #ff4100;
   --color-border-rgb: 255, 65, 0;
+  --accent-primary-rgb: 255, 65, 0;
 
   /* Terminal glow - reduced by 50% */
   --terminal-glow: rgba(255, 65, 0, 0.25);

@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import ThemeSelector from "../components/ThemeSelector.astro";
+import StatusLine from "../components/StatusLine.astro";
 import MobileNav from "../components/MobileNav.astro";
 import Nav from "../components/Nav.astro";
 import SpinningCat from "../components/SpinningCat.astro";
@@ -29,6 +29,7 @@ const { title } = Astro.props;
 
     <script is:inline>
       (function () {
+        // Initialize theme
         const stored = localStorage.getItem("selectedTheme");
         const theme = stored || "monochrome";
 
@@ -36,6 +37,21 @@ const { title } = Astro.props;
 
         if (document.body) {
           document.body.setAttribute("data-theme", theme);
+        }
+
+        // Initialize performance mode
+        const performanceStored = localStorage.getItem("performanceMode");
+        let performanceMode = false;
+        
+        if (performanceStored !== null) {
+          performanceMode = performanceStored === "true";
+        } else {
+          // Default: enabled on mobile, disabled on desktop
+          performanceMode = window.innerWidth < 768;
+        }
+        
+        if (document.body) {
+          document.body.setAttribute("data-performance", performanceMode.toString());
         }
       })();
     </script>
@@ -60,11 +76,6 @@ const { title } = Astro.props;
     <link rel="preload" href="/src/styles/theme.css" as="style" />
   </head>
   <body>
-    <div
-      class="fixed right-2 top-2 max-w-[calc(100vw-2rem)] max-md:max-w-[calc(100vw-1rem)] lg:right-4 lg:top-4"
-    >
-      <ThemeSelector />
-    </div>
     <div class="noise-overlay" style="z-index: var(--z-noise);"></div>
     <div class="grunge-overlay" style="z-index: var(--z-grunge);"></div>
     <div class="matrix-bg" style="z-index: var(--z-background);"></div>
@@ -79,6 +90,7 @@ const { title } = Astro.props;
       <slot />
     </div>
     <MobileNav />
+    <StatusLine />
     <SpinningCat />
   </body>
 </html>

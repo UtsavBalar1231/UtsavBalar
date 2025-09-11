@@ -1,159 +1,25 @@
 ---
-const currentYear = new Date().getFullYear();
 ---
 
 <footer class="terminal-footer">
-  <div class="footer-content">
-    <div class="copyright">
-      © {currentYear} Utsav Balar. Licensed under MIT.
-    </div>
-
-    <div class="build-info">
-      Built with <span class="tech-link astro">Astro</span> · Hosted on <span
-        class="tech-link vercel">Vercel</span
-      > · Source available on <span class="tech-link github">GitHub</span>
-    </div>
-
-    <div class="terminal-line">
-      <span class="prompt">user@embedded-linux:~$</span>
-      <span class="cursor"></span>
-    </div>
-  </div>
+  <div class="footer-spacer"></div>
 </footer>
 
 <style>
+  /* Footer now acts as a spacer for the StatusLine */
   .terminal-footer {
-    @apply mt-8 pb-4 sm:mt-12 sm:pb-6 md:mt-16 md:pb-8;
-    border-top: 1px solid rgba(var(--border-color-rgb), 0.5);
-    padding-top: 1rem;
-    background: rgba(var(--bg-color-rgb), 0.04);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-    box-shadow:
-      0 -2px 8px rgba(0, 0, 0, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-
-    @media (min-width: 640px) {
-      padding-top: 2rem;
-    }
+    height: 28px; /* Match StatusLine height */
+    margin-top: 2rem;
   }
 
-  .footer-content {
-    @apply mx-auto max-w-4xl px-2 sm:px-4;
-    font-family: "DepartureMono", monospace;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-
-    @media (min-width: 640px) {
-      font-size: 0.875rem;
-    }
-  }
-
-  .terminal-line {
-    @apply mb-2;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  @media (max-width: 767px) {
-    .terminal-line {
-      display: flex !important;
-    }
-  }
-
-  .prompt {
-    color: var(--term-bright-green);
-    font-weight: bold;
-  }
-
-  .tech-link {
-    transition: all 0.2s ease;
-    cursor: pointer;
-    display: inline-block;
-  }
-
-  .tech-link.astro {
-    color: var(--term-bright-magenta);
-  }
-
-  .tech-link.astro:hover {
-    color: var(--term-bright-cyan);
-    text-decoration: underline;
-    animation: glitch-subtle 0.2s ease-in-out;
-  }
-
-  .tech-link.vercel {
-    color: var(--term-bright-cyan);
-  }
-
-  .tech-link.vercel:hover {
-    color: var(--term-bright-yellow);
-    text-decoration: underline;
-    animation: glitch-subtle 0.2s ease-in-out;
-  }
-
-  .tech-link.github {
-    color: var(--term-bright-green);
-  }
-
-  .tech-link.github:hover {
-    color: var(--term-bright-magenta);
-    text-decoration: underline;
-    animation: glitch-subtle 0.2s ease-in-out;
-  }
-
-  .copyright {
-    @apply mb-1 mt-2 text-center sm:mb-2 sm:mt-4 md:mt-6;
-    color: var(--text-secondary);
-    font-size: 0.7rem;
-
-    @media (min-width: 640px) {
-      font-size: 0.8rem;
-    }
-  }
-
-  .build-info {
-    @apply mb-2 text-center sm:mb-4;
-    color: var(--text-secondary);
-    font-size: 0.65rem;
-    opacity: 0.6;
-
-    @media (max-width: 480px) {
-      display: none;
-    }
-
-    @media (min-width: 640px) {
-      font-size: 0.75rem;
-    }
-  }
-
-  .cursor {
-    display: inline-block;
-    width: 8px;
-    height: 16px;
-    background-color: var(--term-bright-green);
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%,
-    49% {
-      opacity: 1;
-    }
-    50%,
-    100% {
-      opacity: 0;
-    }
+  .footer-spacer {
+    height: 100%;
   }
 
   @media (max-width: 767px) {
     .terminal-footer {
-      @apply pb-20; /* Account for mobile nav */
-    }
-
-    .cursor {
-      animation: blink 1.2s infinite !important;
+      height: calc(24px + 56px); /* StatusLine + MobileNav heights */
+      margin-top: 1rem;
     }
   }
 </style>
