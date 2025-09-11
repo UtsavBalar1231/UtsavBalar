@@ -10,5 +10,5 @@
 	}
   </style>
   <rect width="96" height="96" rx="96" />
-  <text x="48" y="58" font-family="AdwaitaMono, monospace" font-size="32" font-weight="bold" text-anchor="middle">UB</text>
+  <text x="48" y="58" font-family="monospace" font-size="32" font-weight="bold" text-anchor="middle">UB</text>
 </svg> 

@@ -74,25 +74,31 @@ const displayLanguage = langMap[language] || language.toUpperCase();
     class:list={[
       "flex items-center justify-between border-b border-gray-600 px-4",
       isTerminal
-        ? "bg-[color-mix(in_srgb,var(--bg-secondary)_90%,var(--bg-primary))] py-3 font-mono"
-        : "bg-black py-3",
+        ? "bg-[color-mix(in_srgb,var(--bg-secondary)_90%,var(--bg-primary))] py-3 font-ui-interactive"
+        : "bg-black py-3 font-ui-interactive",
     ]}
   >
     <div class="flex items-center gap-3">
       {
         isTerminal ? (
           <div class="flex items-center">
-            <span class="mr-2 font-bold text-term-bright-green">$</span>
-            <span class="text-term-bright-cyan">{displayTitle}</span>
+            <span class="mr-2 text-term-bright-green font-ui-prompt">$</span>
+            <span class="text-term-bright-cyan font-ui-interactive">{displayTitle}</span>
           </div>
         ) : (
           <>
-            {displayTitle && <span class="font-semibold text-text-primary">{displayTitle}</span>}
+            {displayTitle && (
+              <span class="font-semibold text-text-primary font-ui-interactive">
+                {displayTitle}
+              </span>
+            )}
             {shouldShowLanguage && (
-              <span class="text-sm text-term-bright-blue opacity-80">{displayLanguage}</span>
+              <span class="text-sm text-term-bright-blue opacity-80 font-ui-badge">
+                {displayLanguage}
+              </span>
             )}
             {isKernelCode && (
-              <span class="animate-pulse-soft rounded bg-term-bright-red px-2 py-0.5 text-xs font-bold text-term-black hover:animate-none hover:bg-term-bright-yellow">
+              <span class="animate-pulse-soft rounded bg-term-bright-red px-2 py-0.5 font-bold text-term-black font-ui-badge hover:animate-none hover:bg-term-bright-yellow">
                 KERNEL
               </span>
             )}

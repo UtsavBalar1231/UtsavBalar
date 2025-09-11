@@ -3,8 +3,10 @@ const navLinks = [
   { href: "/", text: "Home", icon: "~" },
   { href: "/about/", text: "About", icon: "&" },
   { href: "/projects/", text: "Projects", icon: ">" },
+  { href: "/quotes/", text: "Quotes", icon: "%" },
+  { href: "/bookbits/", text: "Bits", icon: "$" },
   { href: "/resume/", text: "Resume", icon: "@" },
-  { href: "/tutorials/", text: "Tutorials", icon: "#" },
+  { href: "/tutorials/", text: "Learn", icon: "#" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -39,10 +41,11 @@ const currentPath = Astro.url.pathname;
     backdrop-filter: blur(10px) saturate(1.1);
     -webkit-backdrop-filter: blur(10px) saturate(1.1);
     border-top: 1px solid rgba(var(--border-color-rgb), 0.5);
-    z-index: 35;
+    z-index: var(--z-mobile-nav);
     display: none;
     padding: 0.5rem 0;
-    height: 60px;
+    min-height: 56px;
+    height: calc(56px + env(safe-area-inset-bottom));
     box-shadow:
       0 -2px 8px rgba(0, 0, 0, 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -109,19 +112,19 @@ const currentPath = Astro.url.pathname;
   }
 
   .icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+    font-size: 1.25rem;
+    margin-bottom: 0.2rem;
     display: block;
     font-weight: bold;
-    font-family: "DepartureMono", monospace;
+    font-family: DepartureMono, monospace;
   }
 
   .label {
-    font-size: 0.625rem;
+    font-family: DepartureMono, monospace;
+    font-size: 0.55rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.03em;
     font-weight: 500;
-    font-family: "DepartureMono", monospace;
   }
 
   a:focus-visible {

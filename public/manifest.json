@@ -1,0 +1,41 @@
+{
+  "name": "Utsav Balar - Portfolio",
+  "short_name": "UB Portfolio",
+  "description": "Linux kernel developer, system programmer, and open source enthusiast",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#dbbc7f",
+  "orientation": "portrait-primary",
+  "categories": ["developer", "portfolio", "education"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/default-avatar.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "About",
+      "url": "/about/",
+      "description": "Learn more about me"
+    },
+    {
+      "name": "Projects",
+      "url": "/projects/",
+      "description": "View my projects"
+    },
+    {
+      "name": "Tutorials",
+      "url": "/tutorials/",
+      "description": "Technical tutorials"
+    }
+  ]
+}

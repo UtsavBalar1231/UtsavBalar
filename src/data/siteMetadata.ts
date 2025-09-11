@@ -42,6 +42,6 @@ export const dublinCore = {
 export const inlineFavicon = `
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <rect width="32" height="32" fill="transparent" />
-  <text x="16" y="21" fill="currentColor" font-family="AdwaitaMono, monospace" font-size="14" font-weight="bold" text-anchor="middle">UB</text>
+  <text x="16" y="21" fill="currentColor" font-family="monospace" font-size="14" font-weight="bold" text-anchor="middle">UB</text>
 </svg>
 `;

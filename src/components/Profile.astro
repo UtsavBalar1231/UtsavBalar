@@ -11,13 +11,13 @@ import { profile } from "../data/profile";
 
     <div>
       <h1
-        class="relative mb-1 inline-block font-retro text-lg font-extrabold uppercase tracking-wider text-text-primary sm:text-xl md:text-2xl"
+        class="relative mb-1 inline-block text-lg font-extrabold text-text-primary font-ui-heading sm:text-xl md:text-2xl"
       >
         {profile.name}
       </h1>
 
-      <p class="mb-2 font-retro text-xs text-term-bright-cyan sm:text-sm">
-        <span class="text-term-bright-yellow">$</span>
+      <p class="mb-2 text-xs text-term-bright-cyan font-ui-interactive sm:text-sm">
+        <span class="text-term-bright-yellow font-ui-prompt">$</span>
         {profile.title}
       </p>
 
@@ -45,7 +45,7 @@ import { profile } from "../data/profile";
     </div>
   </div>
 
-  <p class="mt-1 text-xs leading-relaxed text-gray-400 sm:mt-2 sm:text-sm">
+  <p class="mt-1 text-xs leading-relaxed text-gray-400 font-content sm:mt-2 sm:text-sm">
     {profile.description}
   </p>
 </div>

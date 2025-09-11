@@ -3,8 +3,10 @@ const navLinks = [
   { href: "/", text: "Home", color: "term-bright-green" },
   { href: "/about/", text: "About", color: "term-bright-cyan" },
   { href: "/projects/", text: "Projects", color: "term-bright-yellow" },
-  { href: "/resume/", text: "Resume", color: "term-bright-magenta" },
-  { href: "/tutorials/", text: "Tutorials", color: "term-bright-red" },
+  { href: "/quotes/", text: "Quotes", color: "term-bright-blue" },
+  { href: "/bookbits/", text: "Bits", color: "term-bright-magenta" },
+  { href: "/resume/", text: "Resume", color: "term-bright-red" },
+  { href: "/tutorials/", text: "Tutorials", color: "term-bright-yellow" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -20,7 +22,7 @@ const currentPath = Astro.url.pathname;
           <li class="whitespace-nowrap">
             <a
               href={link.href}
-              class:list={`nav-link rounded px-2 py-1 font-retro uppercase tracking-wider no-underline transition-all duration-200 ease-in-out hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+              class:list={`nav-link rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out font-ui-nav hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                 isActive
                   ? `text-${link.color} font-bold`
                   : "hover:text- text-text-primary" + link.color

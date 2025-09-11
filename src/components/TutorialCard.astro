@@ -90,17 +90,18 @@ const difficultyColors: Record<string, string> = {
   .tutorial-number {
     @apply text-lg font-bold;
     color: var(--accent-primary);
-    font-family: "DepartureMono", monospace;
+    font-family: DepartureMono, monospace;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
   .difficulty-badge {
     @apply px-2 py-1 text-xs;
-    font-family: "DepartureMono", monospace;
+    font-family: DepartureMono, monospace;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border: 1px solid;
+    font-weight: 600;
   }
 
   .difficulty-badge.beginner {
@@ -126,7 +127,7 @@ const difficultyColors: Record<string, string> = {
   .tutorial-title {
     @apply mb-2 text-base font-bold;
     color: var(--text-primary);
-    font-family: "DepartureMono", monospace;
+    font-family: DepartureMono, monospace;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     line-height: 1.4;
@@ -141,15 +142,19 @@ const difficultyColors: Record<string, string> = {
   .tutorial-meta {
     @apply mb-3 flex gap-4 text-xs;
     color: var(--text-secondary);
-    font-family: "D2Coding", monospace;
+    font-family: monospace;
   }
 
   .meta-label {
     opacity: 0.7;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .meta-value {
     color: var(--text-primary);
+    font-family: monospace;
   }
 
   .tutorial-tags {
@@ -162,7 +167,9 @@ const difficultyColors: Record<string, string> = {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border: 1px solid;
-    font-family: "D2Coding", monospace;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     transition: all 0.2s ease;
     box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.02),
@@ -198,8 +205,10 @@ const difficultyColors: Record<string, string> = {
     @apply flex items-center justify-between pt-3;
     border-top: 1px solid var(--border-color);
     color: var(--accent-primary);
-    font-family: "D2Coding", monospace;
+    font-family: DepartureMono, monospace;
     font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .action-arrow {
@@ -221,6 +230,42 @@ const difficultyColors: Record<string, string> = {
 
     .tutorial-description {
       @apply text-xs;
+    }
+
+    .tutorial-number {
+      @apply text-base;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .tutorial-card {
+      @apply p-2;
+    }
+
+    .tutorial-title {
+      font-size: 0.8rem;
+    }
+
+    .tutorial-description {
+      font-size: 0.7rem;
+    }
+
+    .tutorial-number {
+      @apply text-sm;
+    }
+
+    .difficulty-badge {
+      font-size: 0.6rem;
+      @apply px-1;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      @apply px-1;
+    }
+
+    .tutorial-action {
+      font-size: 0.75rem;
     }
   }
 </style>

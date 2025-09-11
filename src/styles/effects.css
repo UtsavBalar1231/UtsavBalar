@@ -12,9 +12,16 @@
   --bg-opacity: 0.08;
 }
 
-/* Background base */
+/* Background base with theme hue */
 body {
-  background: #000000;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--bg-color-rgb), 0.03),
+      /* Subtle theme color at top */ rgba(var(--bg-color-rgb), 0.06)
+        /* Slightly stronger at bottom */
+    ),
+    #000000; /* Black base layer */
 }
 
 /* Main glass effect utility */

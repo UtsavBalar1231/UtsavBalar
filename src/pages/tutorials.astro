@@ -47,13 +47,10 @@ const professionalTutorials = tutorialsList.filter(
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
     <div class="terminal-card">
       <header class="mb-8">
-        <h1
-          class="mb-4 font-retro text-xl font-bold uppercase tracking-wider"
-          style="color: var(--text-primary);"
-        >
-          <span class="prompt">$</span> Tutorials
+        <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
+          <span class="prompt font-ui-prompt">$</span> Tutorials
         </h1>
-        <p class="text-sm" style="color: var(--text-secondary);">
+        <p class="text-sm font-content" style="color: var(--text-secondary);">
           In-depth guides on Linux kernel development, device drivers, and embedded systems
           programming.
         </p>
@@ -62,8 +59,8 @@ const professionalTutorials = tutorialsList.filter(
       {
         beginnerTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title font-retro uppercase tracking-wide">
-              <span class="prompt">&gt;</span> Beginner
+            <h2 class="section-title font-ui-heading">
+              <span class="prompt font-ui-prompt">&gt;</span> Beginner
             </h2>
             <div class="tutorials-grid">
               {beginnerTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
@@ -77,8 +74,8 @@ const professionalTutorials = tutorialsList.filter(
       {
         intermediateTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title font-retro uppercase tracking-wide">
-              <span class="prompt">#</span> Intermediate
+            <h2 class="section-title font-ui-heading">
+              <span class="prompt font-ui-prompt">#</span> Intermediate
             </h2>
             <div class="tutorials-grid">
               {intermediateTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
@@ -92,8 +89,8 @@ const professionalTutorials = tutorialsList.filter(
       {
         advancedTutorials.length > 0 && (
           <section class="mb-10">
-            <h2 class="section-title font-retro uppercase tracking-wide">
-              <span class="prompt">~</span> Advanced
+            <h2 class="section-title font-ui-heading">
+              <span class="prompt font-ui-prompt">~</span> Advanced
             </h2>
             <div class="tutorials-grid">
               {advancedTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
@@ -167,6 +164,6 @@ const professionalTutorials = tutorialsList.filter(
   .empty-state {
     @apply py-12 text-center;
     color: var(--text-secondary);
-    font-family: "D2Coding", monospace;
+    font-family: monospace;
   }
 </style>

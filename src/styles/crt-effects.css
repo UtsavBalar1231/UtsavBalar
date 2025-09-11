@@ -11,7 +11,7 @@
 
 :root {
   --noise-opacity: 0.35;
-  --grunge-overlay-opacity: 0.11; /* Reduced by 25% from 0.15 */
+  --grunge-overlay-opacity: 0.055; /* Reduced by 50% from 0.11 */
   --noise-speed: 0.3s;
 }
 
@@ -52,7 +52,7 @@
   pointer-events: none;
   z-index: 4;
 
-  background: url("/grunge.jpg");
+  background: url("/grunge.webp");
   background-size: cover;
   mix-blend-mode: soft-light;
   opacity: var(--grunge-overlay-opacity);
@@ -77,7 +77,7 @@
 /* Ultra mode adjustments */
 @media (min-width: 2560px) {
   .grunge-overlay {
-    opacity: calc(var(--grunge-overlay-opacity) - 0.2);
+    opacity: calc(var(--grunge-overlay-opacity) * 0.5);
   }
 }
 

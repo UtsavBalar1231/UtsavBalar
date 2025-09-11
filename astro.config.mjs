@@ -9,8 +9,11 @@ export default defineConfig({
   trailingSlash: "always",
   site: "https://utsavbalar.in",
 
-  // Single page, no prefetch needed
-  prefetch: false,
+  // Enable prefetching for faster navigation
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: "hover",
+  },
 
   integrations: [
     tailwind({

@@ -64,20 +64,20 @@ function getTagColorAndGlow(tag: string): string {
   ]}
 >
   <div class="mb-3 flex items-start justify-between">
-    <h3 class="font-retro text-lg font-bold uppercase tracking-wide text-terminal max-sm:text-base">
-      <span class="mr-2 text-primary">&gt;</span>
+    <h3 class="text-lg font-bold text-terminal font-ui-heading max-sm:text-base">
+      <span class="mr-2 text-primary font-ui-prompt">&gt;</span>
       {title}
     </h3>
-    {featured && <span class="bg-primary px-2 py-1 font-mono text-xs text-black">Featured</span>}
+    {featured && <span class="bg-primary px-2 py-1 text-black font-ui-badge">Featured</span>}
   </div>
 
-  <p class="mb-4 text-sm leading-relaxed text-terminal-secondary">{description}</p>
+  <p class="mb-4 text-sm leading-relaxed text-terminal-secondary font-content">{description}</p>
 
   <div class="mb-4 flex flex-wrap gap-2">
     {
       tags.map((tag) => (
         <span
-          class:list={`border px-2 py-1 font-mono text-xs transition-all duration-200 hover:scale-105 ${getTagColorAndGlow(tag)}`}
+          class:list={`border px-2 py-1 transition-all duration-200 font-ui-badge hover:scale-105 ${getTagColorAndGlow(tag)}`}
           style="background: rgba(var(--bg-color-rgb), 0.06); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.01);"
         >
           {tag}
@@ -93,7 +93,7 @@ function getTagColorAndGlow(tag: string): string {
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="glitch-subtle-hover font-mono text-sm text-term-bright-green no-underline transition-all duration-200 hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
+          class="glitch-subtle-hover text-sm text-term-bright-green no-underline transition-all duration-200 font-ui-interactive hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
         >
           <span class="text-term-bright-black">[</span>
           GitHub
@@ -107,7 +107,7 @@ function getTagColorAndGlow(tag: string): string {
           href={demoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="glitch-subtle-hover font-mono text-sm text-term-bright-magenta no-underline transition-all duration-200 hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
+          class="glitch-subtle-hover text-sm text-term-bright-magenta no-underline transition-all duration-200 font-ui-interactive hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
         >
           <span class="text-term-bright-black">[</span>
           Demo

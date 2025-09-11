@@ -69,20 +69,17 @@ const otherProjects = projectsList.filter((p) => !p.featured);
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
     <div class="terminal-card">
       <header class="mb-8">
-        <h1
-          class="mb-4 font-retro text-xl font-bold uppercase tracking-wider"
-          style="color: var(--text-primary);"
-        >
-          <span class="prompt">$</span> Projects
+        <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
+          <span class="prompt font-ui-prompt">$</span> Projects
         </h1>
-        <p class="text-sm" style="color: var(--text-secondary);">
+        <p class="text-sm font-content" style="color: var(--text-secondary);">
           A collection of my embedded systems, BSP development, and open source contributions.
         </p>
       </header>
 
       <section class="mb-10">
-        <h2 class="section-title font-retro uppercase tracking-wide">
-          <span class="prompt">&gt;</span> Featured Projects
+        <h2 class="section-title font-ui-heading">
+          <span class="prompt font-ui-prompt">&gt;</span> Featured Projects
         </h2>
         <div class="projects-grid">
           {featuredProjects.map((project) => <ProjectCard {...project} />)}
@@ -90,8 +87,8 @@ const otherProjects = projectsList.filter((p) => !p.featured);
       </section>
 
       <section>
-        <h2 class="section-title font-retro uppercase tracking-wide">
-          <span class="prompt">#</span> Other Projects
+        <h2 class="section-title font-ui-heading">
+          <span class="prompt font-ui-prompt">#</span> Other Projects
         </h2>
         <div class="projects-grid">
           {otherProjects.map((project) => <ProjectCard {...project} />)}
@@ -123,15 +120,23 @@ const otherProjects = projectsList.filter((p) => !p.featured);
     grid-template-columns: 1fr;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 768px) and (max-width: 1023px) {
     .projects-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
     }
   }
 
   @media (min-width: 1024px) {
     .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
+    }
+  }
+
+  @media (orientation: landscape) and (min-width: 768px) and (max-width: 1023px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

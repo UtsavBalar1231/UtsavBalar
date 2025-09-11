@@ -20,23 +20,15 @@ const { title } = Astro.props;
       name="description"
       content="Utsav Balar's portfolio - Linux kernel developer, system programmer, and open source enthusiast"
     />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#dbbc7f" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
     <script is:inline>
       (function () {
-        // Only check for accessibility preference
-        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        if (prefersReduced) {
-          document.documentElement.classList.add("performance-mode");
-          document.documentElement.style.setProperty("--noise-opacity", "0");
-          document.documentElement.style.setProperty("--grunge-overlay-opacity", "0");
-          document.documentElement.style.scrollBehavior = "auto";
-        }
-
         const stored = localStorage.getItem("selectedTheme");
         const theme = stored || "monochrome";
 
@@ -51,18 +43,17 @@ const { title } = Astro.props;
     <link rel="dns-prefetch" href="https://utsavbalar.in" />
     <link rel="preconnect" href="https://utsavbalar.in" />
 
+    <!-- External resource hints for performance -->
+    <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="dns-prefetch" href="https://cataas.com" />
+    <link rel="preconnect" href="https://api.github.com" crossorigin />
+    <link rel="preconnect" href="https://cataas.com" crossorigin />
+
     <link
       rel="preload"
-      href="/fonts/D2Coding/D2CodingLigatureNerdFontMono-Regular.ttf"
+      href="/fonts/DepartureMono/DepartureMonoNerdFontMono-Regular.woff2"
       as="font"
-      type="font/ttf"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/D2Coding/D2CodingLigatureNerdFontMono-Bold.ttf"
-      as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
 
@@ -70,15 +61,15 @@ const { title } = Astro.props;
   </head>
   <body>
     <div
-      class="fixed z-40 max-w-[calc(100vw-2rem)] max-md:right-2 max-md:top-2 max-md:max-w-[calc(100vw-1rem)] md:right-2 md:top-16 lg:right-4 lg:top-4"
+      class="fixed right-2 top-2 max-w-[calc(100vw-2rem)] max-md:max-w-[calc(100vw-1rem)] lg:right-4 lg:top-4"
     >
       <ThemeSelector />
     </div>
-    <div class="noise-overlay"></div>
-    <div class="grunge-overlay"></div>
-    <div class="matrix-bg"></div>
+    <div class="noise-overlay" style="z-index: var(--z-noise);"></div>
+    <div class="grunge-overlay" style="z-index: var(--z-grunge);"></div>
+    <div class="matrix-bg" style="z-index: var(--z-background);"></div>
     <div
-      class="pt-18 page-transition relative z-10 min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
+      class="pt-18 page-transition relative min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
       style="contain: layout style;"
       id="main-content"
     >
@@ -121,7 +112,7 @@ const { title } = Astro.props;
     initPageTransitions();
   }
 
-  // Alt+1-5 keyboard navigation
+  // Alt+1-7 keyboard navigation
   document.addEventListener("keydown", (event) => {
     if (event.altKey) {
       let targetUrl = null;
@@ -137,9 +128,15 @@ const { title } = Astro.props;
           targetUrl = "/projects/";
           break;
         case "4":
-          targetUrl = "/resume/";
+          targetUrl = "/quotes/";
           break;
         case "5":
+          targetUrl = "/bookbits/";
+          break;
+        case "6":
+          targetUrl = "/resume/";
+          break;
+        case "7":
           targetUrl = "/tutorials/";
           break;
       }
@@ -157,12 +154,23 @@ const { title } = Astro.props;
     }
   });
 
+  // Register Service Worker for offline support
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(() => {
+          // Service Worker registered successfully
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    });
+  }
+
   // Lazy animations for desktop only
   document.addEventListener("DOMContentLoaded", () => {
-    if (
-      window.innerWidth >= 768 &&
-      !document.documentElement.classList.contains("performance-mode")
-    ) {
+    if (window.innerWidth >= 768) {
       const observerOptions = {
         threshold: 0.1,
         rootMargin: "50px",

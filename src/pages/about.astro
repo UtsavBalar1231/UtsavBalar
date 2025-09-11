@@ -46,17 +46,14 @@ const favoriteMusic = [
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
     <div class="terminal-card animate-fade-in">
       <header class="mb-8">
-        <h1
-          class="mb-4 font-retro text-xl font-bold uppercase tracking-wider"
-          style="color: var(--text-primary);"
-        >
+        <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
           About
         </h1>
       </header>
 
       <section class="mb-10">
-        <h2 class="section-title font-retro uppercase tracking-wide">
-          <span class="prompt-symbol">$</span> Education
+        <h2 class="section-title font-ui-heading">
+          <span class="prompt-symbol font-ui-prompt">$</span> Education
         </h2>
         <div class="education-grid">
           {
@@ -154,8 +151,8 @@ const favoriteMusic = [
       </section>
 
       <section class="mb-8">
-        <h2 class="section-title font-retro uppercase tracking-wide">
-          <span class="prompt-symbol">$</span> Skills
+        <h2 class="section-title font-ui-heading">
+          <span class="prompt-symbol font-ui-prompt">$</span> Skills
         </h2>
         <SkillsGrid />
       </section>
@@ -182,7 +179,9 @@ const favoriteMusic = [
   .section-title {
     @apply mb-4 text-lg font-bold;
     color: var(--text-primary);
-    font-family: "DepartureMono", monospace;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .prompt-symbol {
@@ -210,12 +209,18 @@ const favoriteMusic = [
   .edu-degree {
     @apply text-lg font-semibold;
     color: var(--text-primary);
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .current-badge {
     @apply rounded px-2 py-1 text-xs;
     background-color: var(--accent-primary);
     color: var(--bg-primary);
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .edu-institution {
@@ -275,7 +280,7 @@ const favoriteMusic = [
   /* Languages Styles */
   .terminal-command {
     @apply mb-2 flex items-center gap-2;
-    font-family: "D2Coding", monospace;
+    font-family: monospace;
   }
 
   .command-prompt {
@@ -294,7 +299,7 @@ const favoriteMusic = [
 
   .locale-line {
     @apply mb-1 flex gap-4;
-    font-family: "D2Coding", monospace;
+    font-family: monospace;
   }
 
   .locale-code {

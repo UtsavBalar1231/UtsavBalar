@@ -1,15 +1,13 @@
 /* Animations - Keyframes and complex animation effects */
 
-/* Terminal glow for headers with phosphor persistence - Desktop only */
-@media (hover: hover) and (min-width: 768px) {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    animation: phosphor-glow 2s ease-in-out infinite alternate;
-  }
+/* Terminal glow for headers with phosphor persistence */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  animation: phosphor-glow 2s ease-in-out infinite alternate;
 }
 
 /* Keyframe Animations */
@@ -247,23 +245,31 @@
   @apply animate-typing overflow-hidden whitespace-nowrap border-r-[3px] border-primary;
 }
 
-/* Reusable glitch hover classes */
-.glitch-hover:hover {
+/* Reusable glitch hover classes - works on mobile with :active */
+.glitch-hover:hover,
+.glitch-hover:active,
+.glitch-hover:focus {
   animation: glitch 0.3s ease-in-out;
 }
 
 /* Icon/SVG glitch using filters and transforms */
-.glitch-icon-hover:hover {
+.glitch-icon-hover:hover,
+.glitch-icon-hover:active,
+.glitch-icon-hover:focus {
   animation: icon-glitch 0.5s ease-in-out;
 }
 
 /* Border glitch for cards and containers */
-.glitch-border-hover:hover {
+.glitch-border-hover:hover,
+.glitch-border-hover:active,
+.glitch-border-hover:focus {
   animation: border-glitch 0.5s ease-in-out;
 }
 
 /* Subtle glitch for smaller elements */
-.glitch-subtle-hover:hover {
+.glitch-subtle-hover:hover,
+.glitch-subtle-hover:active,
+.glitch-subtle-hover:focus {
   animation: glitch-subtle 0.4s ease-in-out;
 }
 
@@ -340,9 +346,17 @@
 /* Accessibility - reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .glitch-hover:hover,
+  .glitch-hover:active,
+  .glitch-hover:focus,
   .glitch-icon-hover:hover,
+  .glitch-icon-hover:active,
+  .glitch-icon-hover:focus,
   .glitch-border-hover:hover,
-  .glitch-subtle-hover:hover {
+  .glitch-border-hover:active,
+  .glitch-border-hover:focus,
+  .glitch-subtle-hover:hover,
+  .glitch-subtle-hover:active,
+  .glitch-subtle-hover:focus {
     animation: none;
   }
 }

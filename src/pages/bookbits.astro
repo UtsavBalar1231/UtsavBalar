@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BookBitCard from "../components/BookBitCard.astro";
+import Footer from "../components/Footer.astro";
+import { getMdxBookBits } from "../data/mdxBookBitsParser";
+
+const bookBits = await getMdxBookBits();
+
+// Group book bits by book
+const bookBitsByBook = bookBits.reduce(
+  (acc, bit) => {
+    const bookKey = `${bit.author} - ${bit.book}`;
+    if (!acc[bookKey]) {
+      acc[bookKey] = {
+        author: bit.author,
+        book: bit.book,
+        bits: [],
+      };
+    }
+    acc[bookKey].bits.push(bit);
+    return acc;
+  },
+  {} as Record<string, { author: string; book: string; bits: typeof bookBits }>
+);
+
+// Convert to array for easier iteration
+const groupedBooks = Object.values(bookBitsByBook);
+---
+
+<Layout title="Bits from Books">
+  <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
+    <div class="terminal-card">
+      <header class="mb-8">
+        <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
+          <span class="prompt font-ui-prompt">$</span> Bits from Books
+        </h1>
+        <p class="text-sm font-content" style="color: var(--text-secondary);">
+          Thought-provoking excerpts and passages from books that left an impression.
+        </p>
+      </header>
+
+      {
+        groupedBooks.map((bookGroup, groupIndex) => (
+          <section class="book-section mb-10">
+            <h2 class="book-title font-ui-heading">
+              <span class="prompt font-ui-prompt">&gt;</span>
+              {bookGroup.author && bookGroup.author !== "" && (
+                <span class="book-author">{bookGroup.author}</span>
+              )}
+              {bookGroup.author && bookGroup.author !== "" && " - "}
+              <span class="book-name">{bookGroup.book}</span>
+            </h2>
+            <div class="bits-grid">
+              {bookGroup.bits.map((bit, index) => (
+                <BookBitCard {...bit} bookIndex={groupIndex} bitIndex={index} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+
+      {
+        bookBits.length === 0 && (
+          <div class="empty-state">
+            <p>No book excerpts available yet. Check back soon!</p>
+          </div>
+        )
+      }
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .terminal-card {
+    @apply animate-fade-in p-6 sm:p-8;
+  }
+
+  .prompt {
+    color: var(--accent-primary);
+    @apply mr-2;
+  }
+
+  .book-section {
+    @apply mb-8;
+  }
+
+  .book-title {
+    @apply mb-4 text-lg font-bold;
+    color: var(--text-primary);
+    font-family: "DepartureMono", monospace;
+    position: relative;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(var(--border-color-rgb), 0.3);
+  }
+
+  .book-author {
+    color: var(--text-secondary);
+    font-weight: normal;
+  }
+
+  .book-name {
+    color: var(--text-primary);
+  }
+
+  .bits-grid {
+    @apply grid gap-4;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .bits-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .bits-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  .empty-state {
+    @apply py-12 text-center;
+    color: var(--text-secondary);
+    font-family: monospace;
+  }
+
+  /* Add subtle animation to book sections */
+  .book-section {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .book-section:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .book-section:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .book-section:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .book-section:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .book-section:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

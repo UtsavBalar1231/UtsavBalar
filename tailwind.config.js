@@ -99,7 +99,7 @@ export default {
         "9xl": ["8.5rem", { lineHeight: "1" }],
       },
       fontFamily: {
-        mono: ["D2Coding", "monospace"],
+        mono: ["monospace"],
         retro: ["DepartureMono", "monospace"],
       },
       animation: {
@@ -173,8 +173,52 @@ export default {
   },
   plugins: [
     function ({ addUtilities, addComponents }) {
-      // Terminal text utilities
+      // Typography System Utilities
       addUtilities({
+        // Core Typography Classes for DepartureMono usage
+        ".font-ui": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+        },
+        ".font-ui-heading": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+          letterSpacing: "0.05em",
+          textTransform: "uppercase",
+        },
+        ".font-ui-nav": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+        },
+        ".font-ui-interactive": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+          letterSpacing: "0.05em",
+        },
+        ".font-ui-badge": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+          letterSpacing: "0.05em",
+          textTransform: "uppercase",
+          fontSize: "0.75rem",
+        },
+        ".font-ui-prompt": {
+          fontFamily: "DepartureMono, monospace",
+          fontDisplay: "swap",
+          fontWeight: "bold",
+        },
+        ".font-content": {
+          fontFamily: "monospace",
+          lineHeight: "1.6",
+        },
+        ".font-code": {
+          fontFamily: "monospace",
+          fontSize: "0.95em",
+        },
+
+        // Terminal text utilities
         ".terminal-text-glow": {
           textShadow: "0 0 5px var(--terminal-glow)",
         },

@@ -125,7 +125,9 @@ const tools = {
 
   .section-title {
     @apply mb-4 text-xl font-bold;
-    font-family: "D2Coding", monospace;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   .skill-section:nth-child(1) .section-title {
@@ -146,7 +148,13 @@ const tools = {
 
   .skill-grid {
     @apply grid gap-3;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  @media (min-width: 375px) {
+    .skill-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
   }
 
   @media (min-width: 640px) {
@@ -167,7 +175,9 @@ const tools = {
     backdrop-filter: blur(6px) saturate(1.1);
     -webkit-backdrop-filter: blur(6px) saturate(1.1);
     border: 1px solid rgba(var(--border-color-rgb), 0.4);
-    font-family: "D2Coding", monospace;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     transition: all 0.2s ease;
     box-shadow:
       0 2px 4px rgba(0, 0, 0, 0.03),
@@ -240,8 +250,9 @@ const tools = {
   .tool-title {
     @apply mb-3 text-sm font-semibold;
     color: var(--term-bright-magenta);
+    font-family: DepartureMono, monospace;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
   }
 
   .tool-category:nth-child(1) .tool-title {

@@ -2,9 +2,9 @@
 
 @import "./theme.css";
 @import "./base.css";
+@import "./z-index.css";
 @import "./crt-effects.css";
 @import "./effects.css";
 @import "./animations.css";
 @import "./shiki-theme.css";
 @import "./page-transitions.css";
-@import "./performance-mode.css";

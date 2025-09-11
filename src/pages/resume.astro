@@ -25,6 +25,7 @@ const { Content } = await resume.render();
 <style is:global>
   .prose {
     color: var(--term-text);
+    font-family: monospace;
   }
   .prose h1,
   .prose h2,
@@ -33,16 +34,23 @@ const { Content } = await resume.render();
   .prose h5,
   .prose h6 {
     color: var(--term-text);
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     text-shadow: 0 0 2px currentColor;
     margin-bottom: 1rem;
   }
   .prose a {
     color: var(--term-text);
+    font-family: DepartureMono, monospace;
     text-decoration: underline;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   .prose p,
   .prose li {
     margin-bottom: 1rem;
+    line-height: 1.6;
   }
   .prose ul,
   .prose ol {

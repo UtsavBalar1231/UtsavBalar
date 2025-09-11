@@ -47,7 +47,8 @@ const defaultAvatar = "/img/default-avatar.svg";
     src={avatarUrl || defaultAvatar}
     alt={name ? `${name}'s avatar` : "Profile avatar"}
     title={name || "Profile avatar"}
-    loading="eager"
+    loading="lazy"
+    decoding="async"
     id="profile-avatar"
     class="avatar-img clickable-avatar"
     onerror="this.onerror=null; this.src='/img/default-avatar.svg';"
