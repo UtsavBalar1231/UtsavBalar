@@ -103,7 +103,7 @@ const displayLanguage = langMap[language] || language.toUpperCase();
     {
       (
         <button
-          class="copy-button flex items-center gap-1 rounded border border-gray-600 bg-transparent px-2 py-1 text-sm text-text-secondary transition-all duration-200 hover:border-primary hover:bg-primary hover:text-black active:scale-95"
+          class="copy-button flex items-center gap-1 rounded border border-gray-600 px-2 py-1 text-sm text-text-secondary transition-all duration-200 hover:border-primary hover:text-black active:scale-95"
           aria-label="Copy code"
           title="Copy to clipboard"
         >
@@ -176,6 +176,26 @@ const displayLanguage = langMap[language] || language.toUpperCase();
 </script>
 
 <style>
+  /* Copy button glassmorphism styles */
+  .copy-button {
+    background: rgba(var(--bg-color-rgb), 0.06);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow:
+      0 1px 4px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .copy-button:hover {
+    background: rgba(var(--accent-primary-rgb), 0.9) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow:
+      0 0 8px rgba(var(--accent-primary-rgb), 0.3),
+      0 2px 6px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
   /* Button state styles that can't be done with Tailwind inline */
   .copy-button.copied {
     @apply border-success bg-success text-black;

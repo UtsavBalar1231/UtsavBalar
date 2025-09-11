@@ -1,48 +1,5 @@
 /* Animations - Keyframes and complex animation effects */
 
-/* Mobile performance optimization - disable heavy animations */
-@media (max-width: 767px) {
-  /* Disable all continuous animations on mobile */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    animation: none !important;
-    text-shadow: none !important;
-  }
-
-  /* Kill body voltage flicker */
-  body {
-    animation: none !important;
-    filter: none !important;
-  }
-
-  /* Disable all hover animations on touch devices */
-  .glitch-hover:hover,
-  .glitch-icon-hover:hover,
-  .glitch-border-hover:hover,
-  .glitch-subtle-hover:hover {
-    animation: none !important;
-  }
-
-  /* Simple transitions only - but preserve cursor blink speed */
-  *:not(.cursor):not(.typing-text) {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.1s !important;
-  }
-
-  /* Preserve cursor blink speed */
-  .cursor {
-    animation-duration: 1s !important;
-  }
-
-  .typing-text {
-    animation-duration: 2s !important;
-  }
-}
-
 /* Terminal glow for headers with phosphor persistence - Desktop only */
 @media (hover: hover) and (min-width: 768px) {
   h1,
@@ -93,15 +50,6 @@
   }
   50% {
     opacity: 0.6;
-  }
-}
-
-@keyframes scanlines {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 10px;
   }
 }
 
@@ -227,44 +175,6 @@
   }
   100% {
     transform: translate(2px, 2px);
-  }
-}
-
-/* Noise texture animation - cycles through 4 noise patterns */
-@keyframes noise-cycle {
-  0% {
-    background-image: url("/noise-textures/noisy-texture-200x200-1.png");
-  }
-  25% {
-    background-image: url("/noise-textures/noisy-texture-200x200-2.png");
-  }
-  50% {
-    background-image: url("/noise-textures/noisy-texture-200x200-3.png");
-  }
-  75% {
-    background-image: url("/noise-textures/noisy-texture-200x200-4.png");
-  }
-  100% {
-    background-image: url("/noise-textures/noisy-texture-200x200-1.png");
-  }
-}
-
-/* Noise position drift for subtle movement */
-@keyframes noise-drift {
-  0% {
-    background-position: 0 0;
-  }
-  25% {
-    background-position: -5% 5%;
-  }
-  50% {
-    background-position: 5% -5%;
-  }
-  75% {
-    background-position: -3% -3%;
-  }
-  100% {
-    background-position: 0 0;
   }
 }
 
@@ -450,13 +360,5 @@
   .animate-in {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* On mobile, elements should be visible immediately */
-@media (max-width: 767px) {
-  .animate-ready {
-    opacity: 1 !important;
-    transform: none !important;
   }
 }

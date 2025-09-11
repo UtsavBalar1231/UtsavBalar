@@ -1,22 +1,10 @@
 /* Global CSS - Main entry point for all styles */
 
-/* Import theme CSS variables */
 @import "./theme.css";
-
-/* Import base styles and Tailwind directives */
 @import "./base.css";
-
-/* Import CRT effects */
 @import "./crt-effects.css";
-
-/* Import animations */
+@import "./effects.css";
 @import "./animations.css";
-
-/* Import syntax highlighting */
 @import "./shiki-theme.css";
-
-/* Import page transitions */
 @import "./page-transitions.css";
-
-/* Import performance mode overrides */
 @import "./performance-mode.css";

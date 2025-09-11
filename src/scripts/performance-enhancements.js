@@ -17,9 +17,7 @@ export function initPerformanceEnhancements() {
 
   // Pause animations when tab is not visible
   document.addEventListener("visibilitychange", () => {
-    const elements = document.querySelectorAll(
-      ".crt-screen, .crt-overlay, .crt-static, .matrix-bg"
-    );
+    const elements = document.querySelectorAll(".noise-overlay, .grunge-overlay, .matrix-bg");
     elements.forEach((el) => {
       el.setAttribute("data-paused", document.hidden ? "true" : "false");
     });
@@ -46,9 +44,11 @@ function checkPerformanceMode() {
 
   if (isMobile || isLowEnd || prefersReduced || isTouchDevice) {
     document.documentElement.classList.add("performance-mode");
-    document.documentElement.style.setProperty("--crt-intensity", "0");
+    document.documentElement.style.setProperty("--noise-opacity", "0");
+    document.documentElement.style.setProperty("--grunge-overlay-opacity", "0");
   } else {
     document.documentElement.classList.remove("performance-mode");
-    document.documentElement.style.setProperty("--crt-intensity", "1");
+    document.documentElement.style.setProperty("--noise-opacity", "0.65");
+    document.documentElement.style.setProperty("--grunge-overlay-opacity", "0.9");
   }
 }

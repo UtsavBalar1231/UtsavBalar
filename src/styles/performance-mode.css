@@ -18,17 +18,6 @@
   --smooth-scroll: auto;
 }
 
-/* Mobile-specific overrides */
-@media (max-width: 767px) {
-  :root {
-    --animation-duration: 0.1s;
-    --transition-duration: 0.1s;
-    --crt-effects-display: none;
-    --blur-effects: none;
-    --smooth-scroll: auto;
-  }
-}
-
 /* Apply variables throughout */
 .crt-screen::before,
 .crt-screen::after,

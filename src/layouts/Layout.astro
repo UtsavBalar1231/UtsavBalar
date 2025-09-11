@@ -27,13 +27,13 @@ const { title } = Astro.props;
 
     <script is:inline>
       (function () {
-        // Run performance detection before theme for immediate optimization
-        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+        // Only check for accessibility preference
         const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        if (isLowEnd || prefersReduced) {
+        if (prefersReduced) {
           document.documentElement.classList.add("performance-mode");
-          document.documentElement.style.setProperty("--crt-intensity", "0");
+          document.documentElement.style.setProperty("--noise-opacity", "0");
+          document.documentElement.style.setProperty("--grunge-overlay-opacity", "0");
           document.documentElement.style.scrollBehavior = "auto";
         }
 
@@ -74,11 +74,11 @@ const { title } = Astro.props;
     >
       <ThemeSelector />
     </div>
-    <div class="crt-static"></div>
     <div class="noise-overlay"></div>
+    <div class="grunge-overlay"></div>
     <div class="matrix-bg"></div>
     <div
-      class="pt-18 crt-screen page-transition relative isolate z-10 min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
+      class="pt-18 page-transition relative z-10 min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
       style="contain: layout style;"
       id="main-content"
     >
@@ -187,7 +187,7 @@ const { title } = Astro.props;
 
 <style is:global>
   /* Z-index hierarchy:
-     - Background effects: 0-9 (CRT effects in crt-effects.css)
+     - Background effects: 0-9 (Overlay effects in crt-effects.css)
      - Main content: 10-19
      - Mobile nav: 30-39
      - Theme selector: 40-49
