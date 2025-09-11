@@ -1,8 +1,6 @@
 import eslintPluginAstro from "eslint-plugin-astro";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
 import tailwindPlugin from "eslint-plugin-tailwindcss";
 import prettierConfig from "eslint-config-prettier";
 
@@ -24,8 +22,6 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tseslint,
-      react: reactPlugin,
-      "react-hooks": reactHooksPlugin,
       tailwindcss: tailwindPlugin,
     },
     rules: {
@@ -44,12 +40,6 @@ export default [
         },
       ],
 
-      "react/prop-types": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-
       "tailwindcss/classnames-order": "warn",
       "tailwindcss/enforces-negative-arbitrary-values": "warn",
       "tailwindcss/enforces-shorthand": "warn",
@@ -61,9 +51,6 @@ export default [
       "no-var": "error",
     },
     settings: {
-      react: {
-        version: "detect",
-      },
       tailwindcss: {
         callees: ["cn", "clsx", "cva"],
         config: "./tailwind.config.js",
