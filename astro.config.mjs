@@ -29,4 +29,12 @@ export default defineConfig({
     }),
     compress(),
   ],
+
+  // Vite configuration for build-time replacements
+  vite: {
+    define: {
+      // Version based on build timestamp for cache busting
+      __BUILD_VERSION__: JSON.stringify(Date.now().toString()),
+    },
+  },
 });

@@ -8,7 +8,7 @@
   </div>
   {}
   <video id="cat-video" src="/media/catvideo.mp4" muted playsinline disablepictureinpicture></video>
-  <img id="cat-gif" src="/media/cat.gif" alt="Spinning cat" class="cat-gif" />
+  <img id="cat-gif" src="/media/cat.gif" alt="Spinning cat" class="cat-gif" loading="lazy" />
   {/* eslint-disable-next-line astro/jsx-a11y/media-has-caption */}
   <audio id="cat-audio" src="/media/cataudio.mp3"></audio>
   {/* eslint-disable-next-line astro/jsx-a11y/media-has-caption */}
@@ -22,7 +22,7 @@
     height: 100vh;
     top: 0;
     left: 0;
-    z-index: 99999999;
+    z-index: var(--z-max, 999);
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -43,7 +43,7 @@
     height: 100%;
     object-fit: cover;
     position: absolute;
-    z-index: 1;
+    z-index: calc(var(--z-max, 999) + 1);
     opacity: 0;
     animation: videoAppear 1s ease-in-out forwards;
     animation-delay: 8s;
@@ -55,7 +55,7 @@
     min-width: 400px;
     object-fit: cover;
     position: absolute;
-    z-index: 4;
+    z-index: calc(var(--z-max, 999) + 2);
     animation: catAppear 6s ease forwards;
   }
 
@@ -65,7 +65,7 @@
     width: 52px;
     height: 45px;
     border: 2px solid #00000060;
-    z-index: 10;
+    z-index: calc(var(--z-max, 999) + 3);
     cursor: pointer;
     text-align: center;
     place-items: center;
@@ -188,9 +188,9 @@
       this.container = document.getElementById("spinning-cat-container");
       this.exitBtn = document.getElementById("exit-btn");
       this.catGif = document.getElementById("cat-gif");
-      this.catVideo = document.getElementById("cat-video") as HTMLVideoElement;
-      this.catAudio = document.getElementById("cat-audio") as HTMLAudioElement;
-      this.oiiaAudio = document.getElementById("oiia-audio") as HTMLAudioElement;
+      this.catVideo = document.getElementById("cat-video") as HTMLVideoElement | null;
+      this.catAudio = document.getElementById("cat-audio") as HTMLAudioElement | null;
+      this.oiiaAudio = document.getElementById("oiia-audio") as HTMLAudioElement | null;
       this.timeoutId = null;
       this.escBtnTimeout = null;
       this.isRunning = false;
@@ -238,9 +238,7 @@
     handleStartSound() {
       if (this.oiiaAudio) {
         this.oiiaAudio.volume = 0.25;
-        this.oiiaAudio.play().catch((error) => {
-          console.error("Failed to play oiia audio:", error);
-        });
+        this.oiiaAudio.play().catch(() => {});
       }
     }
 
@@ -249,9 +247,7 @@
         if (this.catVideo && this.catAudio) {
           this.catAudio.volume = 0.25;
 
-          Promise.all([this.catAudio.play(), this.catVideo.play()]).catch((error) => {
-            console.error("Playback failed:", error);
-          });
+          Promise.all([this.catAudio.play(), this.catVideo.play()]).catch(() => {});
 
           this.timeoutId = setTimeout(() => {
             this.stop();

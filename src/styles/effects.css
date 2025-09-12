@@ -185,11 +185,11 @@ footer,
 }
 
 /* Theme-specific RGB values */
-[data-theme="green"] {
+[data-theme="green-phosphor"] {
   --bg-color-rgb: 0, 255, 0;
 }
 
-[data-theme="amber"] {
+[data-theme="amber-phosphor"] {
   --bg-color-rgb: 255, 191, 0;
 }
 
@@ -197,7 +197,7 @@ footer,
   --bg-color-rgb: 192, 192, 192;
 }
 
-[data-theme="doom"] {
+[data-theme="doom-red"] {
   --bg-color-rgb: 255, 0, 0;
 }
 

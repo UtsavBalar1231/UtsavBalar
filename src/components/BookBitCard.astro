@@ -78,17 +78,19 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     }
   }
 
-  .bookbit-card:hover {
-    border-color: var(--accent-primary);
-    border-left-color: var(--accent-primary);
-    background: rgba(var(--bg-color-rgb), 0.08);
-    backdrop-filter: blur(10px) saturate(1.2);
-    -webkit-backdrop-filter: blur(10px) saturate(1.2);
-    box-shadow:
-      0 0 15px rgba(var(--accent-primary-rgb), 0.15),
-      0 4px 12px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    transform: translateX(4px);
+  @media (hover: hover) {
+    .bookbit-card:hover {
+      border-color: var(--accent-primary);
+      border-left-color: var(--accent-primary);
+      background: rgba(var(--bg-color-rgb), 0.08);
+      backdrop-filter: blur(10px) saturate(1.2);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      box-shadow:
+        0 0 15px rgba(var(--accent-primary-rgb), 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      transform: translateX(4px);
+    }
   }
 
   .bookbit-header {

@@ -1,0 +1,90 @@
+---
+interface Props {
+  class?: string;
+  animated?: boolean;
+  animationDelay?: string;
+  hoverable?: boolean;
+  featured?: boolean;
+  borderLeft?: boolean;
+}
+
+const {
+  class: className = "",
+  animated = false,
+  animationDelay = "0s",
+  hoverable = true,
+  featured = false,
+  borderLeft = false,
+} = Astro.props;
+
+const classes = [
+  "base-card",
+  hoverable && "hoverable",
+  featured && "featured",
+  borderLeft && "border-left",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<div class:list={[classes]} style={animated ? `animation-delay: ${animationDelay}` : undefined}>
+  <slot />
+</div>
+
+<style>
+  .base-card {
+    padding: 1rem;
+    border: 1px solid rgba(var(--border-color-rgb), 0.5);
+    background: rgba(var(--bg-color-rgb), 0.05);
+    backdrop-filter: blur(8px) saturate(1.1);
+    -webkit-backdrop-filter: blur(8px) saturate(1.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .base-card.hoverable {
+    cursor: pointer;
+  }
+
+  .base-card.hoverable:hover {
+    border-color: var(--accent-primary);
+    background: rgba(var(--bg-color-rgb), 0.08);
+    backdrop-filter: blur(10px) saturate(1.2);
+    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    box-shadow:
+      0 0 10px rgba(var(--accent-primary-rgb), 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transform: translateY(-2px);
+  }
+
+  .base-card.featured {
+    border-left-width: 3px;
+    border-left-color: var(--accent-primary);
+  }
+
+  .base-card.border-left {
+    border-left-width: 2px;
+    border-left-color: transparent;
+  }
+
+  .base-card.border-left:hover {
+    border-left-color: var(--accent-primary);
+    transform: translateX(4px);
+  }
+
+  @media (hover: hover) {
+    .base-card.hoverable:hover {
+      transform: translateY(-2px);
+    }
+
+    .base-card.border-left:hover {
+      transform: translateX(4px);
+    }
+  }
+</style>

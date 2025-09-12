@@ -107,5 +107,7 @@
 [data-performance="true"] .performance-toggle,
 [data-performance="true"] button,
 [data-performance="true"] a {
-  transition: opacity 0.15s ease, color 0.15s ease !important;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease !important;
 }

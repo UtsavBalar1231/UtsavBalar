@@ -22,34 +22,23 @@ const { title } = Astro.props;
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#dbbc7f" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
     <script is:inline>
       (function () {
-        // Initialize theme
-        const stored = localStorage.getItem("selectedTheme");
-        const theme = stored || "monochrome";
-
+        const theme = localStorage.getItem("selectedTheme") || "monochrome";
         document.documentElement.setAttribute("data-theme", theme);
-
         if (document.body) {
           document.body.setAttribute("data-theme", theme);
         }
 
-        // Initialize performance mode
+        // Performance mode initialization
         const performanceStored = localStorage.getItem("performanceMode");
-        let performanceMode = false;
-        
-        if (performanceStored !== null) {
-          performanceMode = performanceStored === "true";
-        } else {
-          // Default: enabled on mobile, disabled on desktop
-          performanceMode = window.innerWidth < 768;
-        }
-        
+        const performanceMode =
+          performanceStored !== null ? performanceStored === "true" : window.innerWidth < 768;
+
         if (document.body) {
           document.body.setAttribute("data-performance", performanceMode.toString());
         }
@@ -72,8 +61,6 @@ const { title } = Astro.props;
       type="font/woff2"
       crossorigin
     />
-
-    <link rel="preload" href="/src/styles/theme.css" as="style" />
   </head>
   <body>
     <div class="noise-overlay" style="z-index: var(--z-noise);"></div>
@@ -107,7 +94,6 @@ const { title } = Astro.props;
         e.preventDefault();
 
         mainContent?.classList.add("page-transition-exit");
-
         mainContent?.classList.add("terminal-nav-transition");
 
         const delay = window.innerWidth < 768 ? 100 : 400;
@@ -165,20 +151,6 @@ const { title } = Astro.props;
       }
     }
   });
-
-  // Register Service Worker for offline support
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then(() => {
-          // Service Worker registered successfully
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
-    });
-  }
 
   // Lazy animations for desktop only
   document.addEventListener("DOMContentLoaded", () => {

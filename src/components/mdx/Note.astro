@@ -7,8 +7,7 @@ const { title = "Note" } = Astro.props;
 ---
 
 <div
-  class="group relative my-6 overflow-hidden rounded-md border-l-4 border-info shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out hover:border-l-[6px] hover:pl-[calc(1rem-2px)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
-  style="background: rgba(var(--bg-color-rgb), 0.04); backdrop-filter: blur(10px) saturate(1.1); -webkit-backdrop-filter: blur(10px) saturate(1.1);"
+  class="note-container group relative my-6 overflow-hidden rounded-md border-l-4 border-info shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out hover:border-l-[6px] hover:pl-[calc(1rem-2px)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
 >
   <div
     class="absolute right-0 top-0 h-32 w-32 -translate-y-12 translate-x-12 rounded-full bg-info opacity-5"
@@ -51,5 +50,10 @@ const { title = "Note" } = Astro.props;
 
   .note-content :global(code) {
     @apply rounded bg-[color-mix(in_srgb,var(--color-info)_10%,var(--bg-secondary))] px-[0.3em] py-[0.1em] font-mono text-[0.9em];
+  }
+  .note-container {
+    background: rgba(var(--bg-color-rgb), 0.04);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
   }
 </style>

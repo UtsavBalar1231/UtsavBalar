@@ -48,7 +48,10 @@ import { themes } from "../data/themes";
               <span class="theme-indicator" aria-hidden="true" />
               <span class="theme-name">{theme.label}</span>
             </div>
-            <div class="color-palette" data-theme-preview={theme.value}>
+            <div
+              class="color-palette"
+              data-theme-preview={theme.value.replace("-phosphor", "").replace("-red", "")}
+            >
               <span class="color-dot" data-color="red" title="Red" />
               <span class="color-dot" data-color="green" title="Green" />
               <span class="color-dot" data-color="yellow" title="Yellow" />
@@ -385,6 +388,8 @@ import { themes } from "../data/themes";
 </style>
 
 <script>
+  import { themeManager } from "../utils/themeManager";
+
   document.addEventListener("DOMContentLoaded", () => {
     const themeSelector = document.getElementById("theme-selector-btn");
     const themeDropdown = document.getElementById("theme-selector-dropdown");
@@ -392,41 +397,27 @@ import { themes } from "../data/themes";
     const currentThemeDisplay = document.getElementById("current-theme-display");
 
     if (!themeSelector || !themeDropdown) {
-      console.error("Theme selector elements not found:", { themeSelector, themeDropdown });
       return;
     }
 
-    const getCurrentTheme = (): string => localStorage.getItem("selectedTheme") || "green";
-
-    const getThemeLabel = (themeValue: string): string => {
-      const option = document.querySelector(`.theme-option[data-theme="${themeValue}"]`);
-      return option?.getAttribute("data-theme-label") || "Green Phosphor";
-    };
-
-    const setTheme = (theme: string): void => {
-      document.documentElement.setAttribute("data-theme", theme);
-      document.body.setAttribute("data-theme", theme);
-      localStorage.setItem("selectedTheme", theme);
+    const updateUI = () => {
+      const currentTheme = themeManager.getCurrentTheme();
 
       themeOptions.forEach((option) => {
-        const isActive = option.getAttribute("data-theme") === theme;
+        const isActive = option.getAttribute("data-theme") === currentTheme.value;
         option.classList.toggle("active", isActive);
       });
 
       if (currentThemeDisplay) {
-        currentThemeDisplay.textContent = getThemeLabel(theme);
+        currentThemeDisplay.textContent = currentTheme.label;
       }
     };
 
-    const currentTheme = getCurrentTheme();
-    themeOptions.forEach((option) => {
-      const isActive = option.getAttribute("data-theme") === currentTheme;
-      option.classList.toggle("active", isActive);
-    });
+    // Initialize UI with current theme
+    updateUI();
 
-    if (currentThemeDisplay) {
-      currentThemeDisplay.textContent = getThemeLabel(currentTheme);
-    }
+    // Subscribe to theme changes
+    themeManager.subscribe(updateUI);
 
     const toggleDropdown = (show?: boolean) => {
       if (show === undefined) {
@@ -463,7 +454,7 @@ import { themes } from "../data/themes";
         e.stopPropagation();
         const newTheme = option.getAttribute("data-theme");
         if (newTheme) {
-          setTheme(newTheme);
+          themeManager.setTheme(newTheme);
           toggleDropdown(false);
         }
       });

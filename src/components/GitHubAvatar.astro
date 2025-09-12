@@ -1,4 +1,6 @@
 ---
+import { API } from "../config/constants";
+
 const { width = 96, height = 96, class: className = "", useGithub = false } = Astro.props;
 
 const username = "UtsavBalar1231";
@@ -11,9 +13,9 @@ const randomSeed = Math.floor(Math.random() * 1000);
 if (useGithub) {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const timeoutId = setTimeout(() => controller.abort(), API.GITHUB_TIMEOUT);
 
-    const response = await fetch(`https://api.github.com/users/${username}`, {
+    const response = await fetch(`${API.GITHUB_USER}${username}`, {
       signal: controller.signal,
       headers: {
         Accept: "application/vnd.github.v3+json",
@@ -27,11 +29,9 @@ if (useGithub) {
       const userData = await response.json();
       avatarUrl = userData.avatar_url;
       name = userData.name || username;
-    } else {
-      console.error(`Failed to fetch GitHub user data: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching GitHub user data:", error);
+    // Silently fallback to default avatar
   }
 } else {
   avatarUrl = `https://cataas.com/cat/funny?width=${width}&height=${height}&s=${randomSeed}`;
@@ -41,7 +41,7 @@ if (useGithub) {
 const defaultAvatar = "/img/default-avatar.svg";
 ---
 
-<div class:list={`avatar-container ${className}`} style="width: 5rem; height: 5rem;">
+<div class:list={`avatar-container ${className}`}>
   {/* eslint-disable-next-line astro/jsx-a11y/no-noninteractive-element-interactions */}
   <img
     src={avatarUrl || defaultAvatar}
@@ -63,6 +63,8 @@ const defaultAvatar = "/img/default-avatar.svg";
     overflow: hidden;
     position: relative;
     aspect-ratio: 1 / 1;
+    width: 5rem;
+    height: 5rem;
   }
 
   @media (min-width: 640px) {

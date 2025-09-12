@@ -1,29 +1,14 @@
 export interface Theme {
   value: string;
   label: string;
+  shortLabel?: string;
 }
 
 export const themes: Theme[] = [
-  { value: "green", label: "Green Phosphor" },
-  { value: "amber", label: "Amber Phosphor" },
-  { value: "monochrome", label: "Monochrome" },
-  { value: "doom", label: "DOOM Red" },
-];
+  { value: "green-phosphor", label: "Green Phosphor", shortLabel: "GREEN-PHOSPHOR" },
+  { value: "amber-phosphor", label: "Amber Phosphor", shortLabel: "AMBER-PHOSPHOR" },
+  { value: "monochrome", label: "Monochrome", shortLabel: "MONO" },
+  { value: "doom-red", label: "DOOM Red", shortLabel: "DOOM-RED" },
+] as const;
 
-export function getTheme(value: string): Theme {
-  return themes.find((theme) => theme.value === value) || themes[0];
-}
-
-export function getCurrentTheme(): string {
-  if (typeof localStorage !== "undefined") {
-    return localStorage.getItem("theme") || "monochrome";
-  }
-  return "monochrome";
-}
-
-export function applyTheme(theme: string): void {
-  if (typeof document !== "undefined") {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }
-}
+export type ThemeValue = (typeof themes)[number]["value"];

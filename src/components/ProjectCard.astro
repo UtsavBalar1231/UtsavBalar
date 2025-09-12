@@ -10,50 +10,33 @@ export interface Props {
 
 const { title, description, tags, githubUrl, demoUrl, featured = false } = Astro.props;
 
+const tagCategories = {
+  green: ["c", "rust", "python", "javascript", "typescript", "c++", "java", "go", "ruby", "swift"],
+  cyan: ["react", "vue", "angular", "next", "astro", "svelte", "django", "flask", "express", "qt"],
+  red: ["kernel", "driver", "embedded", "linux", "aosp", "rom", "bsp", "bootloader"],
+  magenta: ["docker", "kubernetes", "git", "ci/cd", "jenkins", "qemu", "yocto", "buildroot"],
+  yellow: ["mongodb", "postgres", "mysql", "redis", "sqlite", "database", "sql"],
+};
+
+const tagColors = {
+  green: "text-term-bright-green border-term-bright-green hover:glow-bright-green",
+  cyan: "text-term-bright-cyan border-term-bright-cyan hover:glow-bright-cyan",
+  red: "text-term-bright-red border-term-bright-red hover:glow-bright-red",
+  magenta: "text-term-bright-magenta border-term-bright-magenta hover:glow-bright-magenta",
+  yellow: "text-term-bright-yellow border-term-bright-yellow hover:glow-bright-yellow",
+  blue: "text-term-bright-blue border-term-bright-blue hover:glow-bright-blue",
+};
+
 function getTagColorAndGlow(tag: string): string {
   const lowerTag = tag.toLowerCase();
 
-  if (
-    ["c", "rust", "python", "javascript", "typescript", "c++", "java", "go", "ruby", "swift"].some(
-      (lang) => lowerTag.includes(lang)
-    )
-  ) {
-    return "text-term-bright-green border-term-bright-green hover:glow-bright-green";
+  for (const [color, keywords] of Object.entries(tagCategories)) {
+    if (keywords.some((keyword) => lowerTag.includes(keyword))) {
+      return tagColors[color as keyof typeof tagColors];
+    }
   }
 
-  if (
-    ["react", "vue", "angular", "next", "astro", "svelte", "django", "flask", "express", "qt"].some(
-      (fw) => lowerTag.includes(fw)
-    )
-  ) {
-    return "text-term-bright-cyan border-term-bright-cyan hover:glow-bright-cyan";
-  }
-
-  if (
-    ["kernel", "driver", "embedded", "linux", "aosp", "rom", "bsp", "bootloader"].some((sys) =>
-      lowerTag.includes(sys)
-    )
-  ) {
-    return "text-term-bright-red border-term-bright-red hover:glow-bright-red";
-  }
-
-  if (
-    ["docker", "kubernetes", "git", "ci/cd", "jenkins", "qemu", "yocto", "buildroot"].some((tool) =>
-      lowerTag.includes(tool)
-    )
-  ) {
-    return "text-term-bright-magenta border-term-bright-magenta hover:glow-bright-magenta";
-  }
-
-  if (
-    ["mongodb", "postgres", "mysql", "redis", "sqlite", "database", "sql"].some((db) =>
-      lowerTag.includes(db)
-    )
-  ) {
-    return "text-term-bright-yellow border-term-bright-yellow hover:glow-bright-yellow";
-  }
-
-  return "text-term-bright-blue border-term-bright-blue hover:glow-bright-blue";
+  return tagColors.blue;
 }
 ---
 
@@ -77,8 +60,7 @@ function getTagColorAndGlow(tag: string): string {
     {
       tags.map((tag) => (
         <span
-          class:list={`border px-2 py-1 transition-all duration-200 font-ui-badge hover:scale-105 ${getTagColorAndGlow(tag)}`}
-          style="background: rgba(var(--bg-color-rgb), 0.06); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.01);"
+          class:list={`tag border px-2 py-1 transition-all duration-200 font-ui-badge hover:scale-105 ${getTagColorAndGlow(tag)}`}
         >
           {tag}
         </span>

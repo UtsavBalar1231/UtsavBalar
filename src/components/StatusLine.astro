@@ -4,7 +4,6 @@ import { themes } from "../data/themes";
 const currentPath = Astro.url.pathname;
 const currentYear = new Date().getFullYear();
 
-// Map paths to "file" names for vim-like display
 const pathMap: Record<string, string> = {
   "/": "~/index.html",
   "/about/": "~/about.html",
@@ -19,41 +18,48 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
 ---
 
 <div class="status-line">
-  <!-- Left Section -->
   <div class="status-left">
-    <!-- Mode Indicator -->
     <div class="status-mode">
       <span class="mode-text">NORMAL</span>
     </div>
-    
-    <!-- File Path -->
+
     <div class="status-file">
       <span class="file-path">{currentFile}</span>
       <span class="file-modified">[+]</span>
     </div>
-    
-    <!-- Git Branch -->
+
     <div class="status-git">
       <span class="git-branch"> main</span>
     </div>
   </div>
 
-  <!-- Center Section -->
   <div class="status-center">
-    <!-- Theme Selector -->
     <button
       id="theme-toggle"
       class="theme-toggle"
       aria-label="Change theme"
       title="Click to cycle themes"
     >
-      <span class="theme-label">[THEME: <span class="theme-name" id="current-theme-name">MONO</span>]</span>
+      <span class="theme-label"
+        >[THEME: <span class="theme-name" id="current-theme-name">MONO</span>]</span
+      >
     </button>
+
+    <div id="theme-menu" class="theme-menu hidden">
+      {
+        themes.map((theme) => (
+          <button class="theme-option" data-theme={theme.value} data-theme-label={theme.label}>
+            <span class="theme-option-name">{theme.label}</span>
+          </button>
+        ))
+      }
+    </div>
   </div>
 
-  <!-- Right Section -->
   <div class="status-right">
-    <!-- Performance Mode Toggle -->
+    <div class="status-year">
+      <span class="year-text">© {currentYear}</span>
+    </div>
     <div class="status-performance">
       <button
         id="performance-toggle"
@@ -61,37 +67,29 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
         aria-label="Toggle performance mode"
         title="Performance Mode: Disables visual effects for better performance"
       >
-        <svg class="performance-icon" id="performance-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <!-- Will be populated by JavaScript -->
+        <svg
+          class="performance-icon"
+          id="performance-icon"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
         </svg>
       </button>
     </div>
-    
-    <!-- File Type -->
+
     <div class="status-filetype">
       <span class="filetype">html</span>
     </div>
-    
+
     <!-- Position -->
     <div class="status-position">
       <span class="position-percent">100%</span>
       <span class="position-line">☰ 42:1</span>
     </div>
-  </div>
-
-  <!-- Theme Menu (hidden by default) -->
-  <div id="theme-menu" class="theme-menu hidden">
-    {
-      themes.map((theme) => (
-        <button
-          class="theme-option"
-          data-theme={theme.value}
-          data-theme-label={theme.label}
-        >
-          <span class="theme-option-name">{theme.label}</span>
-        </button>
-      ))
-    }
   </div>
 </div>
 
@@ -105,17 +103,17 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     bottom: 0;
     left: 0;
     right: 0;
-    height: 24px;
-    background: rgba(var(--bg-color-rgb), 0.85);
+    height: 28px;
+    background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(12px) saturate(1.2);
     -webkit-backdrop-filter: blur(12px) saturate(1.2);
-    border-top: 1px solid rgba(var(--bg-color-rgb), 0.3);
-    box-shadow: 
+    border-top: 1px solid rgba(var(--accent-primary-rgb), 0.3);
+    box-shadow:
       0 -2px 10px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
     z-index: var(--z-status-line, 25);
     font-family: DepartureMono, monospace;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: stretch;
     user-select: none;
@@ -135,24 +133,30 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
   }
 
   .status-left {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .status-center {
     display: flex;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
+    position: relative;
+    flex: 0 0 auto;
   }
 
   .status-right {
-    flex: 1;
+    flex: 1 1 auto;
     justify-content: flex-end;
+    min-width: 0;
+    overflow: hidden;
   }
 
   /* Mode Section */
   .status-mode {
     background: var(--color-accent-primary);
-    color: var(--color-bg-primary);
+    color: #000000;
     padding: 0 0.75rem;
     font-weight: bold;
     display: flex;
@@ -161,38 +165,19 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     position: relative;
   }
 
-  .status-mode::after {
-    content: '';
-    position: absolute;
-    right: -12px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 24px solid var(--color-accent-primary);
-    border-right: 12px solid transparent;
-  }
-
   /* File Section */
   .status-file {
-    padding: 0 0.75rem 0 1.25rem;
+    padding: 0 0.75rem;
     color: var(--color-text-primary);
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    background: var(--color-bg-secondary);
+    background: rgba(255, 255, 255, 0.05);
     height: 100%;
     position: relative;
-  }
-
-  .status-file::after {
-    content: '';
-    position: absolute;
-    right: -12px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 24px solid var(--color-bg-secondary);
-    border-right: 12px solid transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .file-modified {
@@ -202,7 +187,8 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
 
   /* Git Section */
   .status-git {
-    padding: 0 0.75rem 0 1.25rem;
+    padding: 0 0.75rem;
+    border-left: 1px solid var(--color-border);
     color: var(--term-bright-magenta);
     display: flex;
     align-items: center;
@@ -210,7 +196,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
   }
 
   .git-branch::before {
-    content: '';
+    content: "";
     margin-right: 0.25rem;
   }
 
@@ -225,10 +211,10 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     padding: 0.125rem 0.5rem;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.65rem;
+    font-size: 0.78rem;
     transition: all 0.15s ease;
     text-transform: uppercase;
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.02);
   }
@@ -237,7 +223,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     background: rgba(var(--accent-primary-rgb), 0.2);
     color: var(--color-accent-primary);
     border-color: rgba(var(--accent-primary-rgb), 0.4);
-    box-shadow: 
+    box-shadow:
       0 0 8px rgba(var(--accent-primary-rgb), 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
@@ -254,19 +240,9 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     display: flex;
     align-items: center;
     height: 100%;
-    background: var(--color-bg-secondary);
+    background: rgba(255, 255, 255, 0.05);
     position: relative;
-  }
-
-  .status-filetype::before {
-    content: '';
-    position: absolute;
-    left: -12px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 24px solid var(--color-bg-secondary);
-    border-left: 12px solid transparent;
+    border-left: 1px solid var(--color-border);
   }
 
   /* Performance Toggle Section */
@@ -275,19 +251,9 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     display: flex;
     align-items: center;
     height: 100%;
-    background: var(--color-bg-secondary);
+    background: rgba(255, 255, 255, 0.05);
     position: relative;
-  }
-
-  .status-performance::before {
-    content: '';
-    position: absolute;
-    left: -12px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 24px solid var(--color-bg-secondary);
-    border-left: 12px solid transparent;
+    border-left: 1px solid var(--color-border);
   }
 
   .performance-toggle {
@@ -306,13 +272,27 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     color: var(--color-accent-primary);
   }
 
-  .performance-toggle.active {
-    color: var(--term-bright-yellow);
-  }
+  /* Removed unused .active selector */
 
   .performance-icon {
     width: 14px;
     height: 14px;
+  }
+
+  /* Year Section */
+  .status-year {
+    padding: 0 0.75rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .year-text {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   /* Position Section */
@@ -323,87 +303,116 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     gap: 0.5rem;
     height: 100%;
     background: var(--color-accent-primary);
-    color: var(--color-bg-primary);
+    color: #000000;
     font-weight: bold;
     position: relative;
-  }
-
-  .status-position::before {
-    content: '';
-    position: absolute;
-    left: -12px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 24px solid var(--color-accent-primary);
-    border-left: 12px solid transparent;
+    border-left: 1px solid var(--color-border);
   }
 
   .position-percent {
-    font-size: 0.65rem;
+    font-size: 0.78rem;
   }
 
   .position-line {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
   }
 
-  /* Theme Menu */
+  /* Theme Menu - Terminal Style */
   .theme-menu {
     position: absolute;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-bottom: 0.5rem;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 3px;
-    padding: 0.25rem;
-    min-width: 150px;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+    background: #000000;
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 0;
+    padding: 0;
+    min-width: 180px;
+    box-shadow: none;
+    z-index: calc(var(--z-status-line, 25) + 1);
+  }
+
+  /* Add terminal-style border effect */
+  .theme-menu::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.3);
+    pointer-events: none;
+  }
+
+  /* Tablet-specific theme menu positioning */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .theme-menu {
+      position: fixed;
+      bottom: 28px; /* Position at statusline height */
+      left: auto;
+      right: 50%;
+      transform: translateX(50%);
+      max-height: 200px;
+      overflow-y: auto;
+      border-radius: 0;
+      box-shadow: none;
+    }
   }
 
   .theme-option {
     display: block;
     width: 100%;
-    padding: 0.25rem 0.5rem;
-    background: transparent;
+    padding: 0.375rem 0.75rem;
+    background: #000000;
     border: none;
+    border-bottom: 1px solid rgba(var(--accent-primary-rgb), 0.2);
     color: var(--color-text-secondary);
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     text-align: left;
     transition: all 0.15s ease;
     text-transform: uppercase;
   }
 
+  .theme-option:last-child {
+    border-bottom: none;
+  }
+
   .theme-option:hover {
-    background: var(--color-bg-secondary);
+    background: rgba(var(--accent-primary-rgb), 0.1);
     color: var(--color-accent-primary);
+    text-shadow: 0 0 2px var(--color-accent-primary);
   }
 
   /* Mobile adjustments */
   @media (max-width: 640px) {
+    .status-line {
+      height: 28px;
+      font-size: 0.94rem;
+    }
+
     .status-git,
-    .status-filetype {
-      display: none;
-    }
-
-    .status-file::after {
-      display: none;
-    }
-
-    .status-performance::before {
-      display: none;
-    }
-
-    .status-position::before {
+    .status-filetype,
+    .status-year {
       display: none;
     }
 
     .theme-toggle {
-      font-size: 0.6rem;
-      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.3rem;
+    }
+
+    .year-text {
+      font-size: 0.81rem;
+    }
+
+    .position-percent {
+      font-size: 0.81rem;
+    }
+
+    .position-line {
+      font-size: 0.88rem;
     }
 
     .status-mode {
@@ -425,6 +434,8 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
 </style>
 
 <script>
+  import { themeManager } from "../utils/themeManager";
+
   document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("theme-toggle");
     const themeMenu = document.getElementById("theme-menu");
@@ -432,69 +443,58 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     const themeOptions = document.querySelectorAll(".theme-option");
 
     if (!themeToggle || !themeMenu || !currentThemeName) {
-      console.error("StatusLine: Required elements not found");
       return;
     }
 
-    const themes = ["green", "amber", "monochrome", "doom"];
-    const themeLabels: Record<string, string> = {
-      green: "GREEN",
-      amber: "AMBER",
-      monochrome: "MONO",
-      doom: "DOOM",
-    };
+    const updateUI = () => {
+      const currentTheme = themeManager.getCurrentTheme();
+      currentThemeName.textContent = currentTheme.shortLabel || currentTheme.label;
 
-    const getCurrentTheme = (): string => {
-      return localStorage.getItem("selectedTheme") || "monochrome";
-    };
-
-    const setTheme = (theme: string): void => {
-      document.documentElement.setAttribute("data-theme", theme);
-      document.body.setAttribute("data-theme", theme);
-      localStorage.setItem("selectedTheme", theme);
-
-      // Update display
-      currentThemeName.textContent = themeLabels[theme] || theme.toUpperCase();
-
-      // Update active state in menu
       themeOptions.forEach((option) => {
-        const isActive = option.getAttribute("data-theme") === theme;
-        if (isActive) {
-          option.style.color = "var(--accent-primary)";
-          option.style.fontWeight = "bold";
-        } else {
-          option.style.color = "";
-          option.style.fontWeight = "";
-        }
+        const isActive = option.getAttribute("data-theme") === currentTheme.value;
+        option.classList.toggle("active", isActive);
       });
     };
 
-    // Initialize current theme
-    const currentTheme = getCurrentTheme();
-    setTheme(currentTheme);
+    // Initialize UI with current theme
+    updateUI();
 
-    // Cycle through themes on click
-    themeToggle.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    // Subscribe to theme changes
+    themeManager.subscribe(updateUI);
 
-      // Toggle menu on click
-      themeMenu.classList.toggle("hidden");
-    });
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-    // Handle theme selection from menu
+    if (isTouchDevice) {
+      themeToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        themeMenu.classList.toggle("hidden");
+      });
+    } else {
+      themeToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        themeManager.cycleTheme();
+      });
+
+      themeToggle.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        themeMenu.classList.toggle("hidden");
+      });
+    }
+
     themeOptions.forEach((option) => {
       option.addEventListener("click", (e) => {
         e.stopPropagation();
-        const theme = option.getAttribute("data-theme");
-        if (theme) {
-          setTheme(theme);
+        const themeValue = option.getAttribute("data-theme");
+        if (themeValue) {
+          themeManager.setTheme(themeValue);
           themeMenu.classList.add("hidden");
         }
       });
     });
 
-    // Close menu when clicking outside
     document.addEventListener("click", (e) => {
       if (
         e.target instanceof Node &&
@@ -505,18 +505,12 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
       }
     });
 
-    // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
-      // Alt+T to cycle theme
       if (e.altKey && e.key === "t") {
         e.preventDefault();
-        const current = getCurrentTheme();
-        const currentIndex = themes.indexOf(current);
-        const nextIndex = (currentIndex + 1) % themes.length;
-        setTheme(themes[nextIndex]);
+        themeManager.cycleTheme();
       }
 
-      // Escape to close menu
       if (e.key === "Escape") {
         themeMenu.classList.add("hidden");
       }
@@ -527,65 +521,49 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     const performanceIcon = document.getElementById("performance-icon");
 
     if (performanceToggle && performanceIcon) {
-      // SVG paths for icons
-      const lightningPath = "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z";
-      const sparklesPath = "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.035-.259a3.375 3.375 0 002.456-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z";
-
-      // Check if performance mode is enabled (default: true on mobile, false on desktop)
-      const getPerformanceMode = (): boolean => {
-        const stored = localStorage.getItem("performanceMode");
-        if (stored !== null) {
-          return stored === "true";
-        }
-        // Default: enabled on mobile, disabled on desktop
-        return window.innerWidth < 768;
+      const ICONS = {
+        lightning: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
+        sparkles:
+          "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.035-.259a3.375 3.375 0 002.456-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z",
       };
 
-      const setPerformanceMode = (enabled: boolean): void => {
+      const isPerformanceMode = () => {
+        const storedPerformanceMode = localStorage.getItem("performanceMode");
+        return storedPerformanceMode !== null
+          ? storedPerformanceMode === "true"
+          : window.innerWidth < 768;
+      };
+
+      const setPerformanceMode = (enabled: boolean) => {
         localStorage.setItem("performanceMode", enabled.toString());
         document.body.setAttribute("data-performance", enabled.toString());
-        
-        // Update icon
+
         const path = performanceIcon.querySelector("path");
-        if (path) {
-          path.setAttribute("d", enabled ? lightningPath : sparklesPath);
-        }
-        
-        // Update button state
-        if (enabled) {
-          performanceToggle.classList.add("active");
-          performanceToggle.setAttribute("title", "Performance Mode: ON - Click to enable visual effects");
-        } else {
-          performanceToggle.classList.remove("active");
-          performanceToggle.setAttribute("title", "Quality Mode: ON - Click to disable visual effects for better performance");
-        }
+        if (path) path.setAttribute("d", enabled ? ICONS.lightning : ICONS.sparkles);
+
+        performanceToggle.style.color = enabled ? "var(--term-bright-yellow)" : "";
+        performanceToggle.title = enabled
+          ? "Performance Mode: ON - Click to enable visual effects"
+          : "Quality Mode: ON - Click to disable visual effects";
       };
 
-      // Initialize performance mode
-      const initialMode = getPerformanceMode();
-      setPerformanceMode(initialMode);
-
-      // Add path element to SVG
       const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
       pathElement.setAttribute("stroke-linecap", "round");
       pathElement.setAttribute("stroke-linejoin", "round");
-      pathElement.setAttribute("d", initialMode ? lightningPath : sparklesPath);
       performanceIcon.appendChild(pathElement);
 
-      // Toggle performance mode on click
+      const initialMode = isPerformanceMode();
+      setPerformanceMode(initialMode);
+
       performanceToggle.addEventListener("click", (e) => {
         e.preventDefault();
-        e.stopPropagation();
-        const currentMode = getPerformanceMode();
-        setPerformanceMode(!currentMode);
+        setPerformanceMode(!isPerformanceMode());
       });
 
-      // Keyboard shortcut: Alt+P for performance toggle
       document.addEventListener("keydown", (e) => {
         if (e.altKey && e.key === "p") {
           e.preventDefault();
-          const currentMode = getPerformanceMode();
-          setPerformanceMode(!currentMode);
+          setPerformanceMode(!isPerformanceMode());
         }
       });
     }

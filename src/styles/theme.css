@@ -118,7 +118,7 @@
 }
 
 /* Green Phosphor Terminal (Classic Matrix/IBM) */
-[data-theme="green"] {
+[data-theme="green-phosphor"] {
   --color-bg-primary: #000000;
   --color-bg-secondary: #0a0a0a;
   --color-text-primary: #00ff00;
@@ -201,7 +201,7 @@
 }
 
 /* Amber Phosphor Terminal (Vintage Unix/VAX) */
-[data-theme="amber"] {
+[data-theme="amber-phosphor"] {
   --color-bg-primary: #000000;
   --color-bg-secondary: #0a0800;
   --color-text-primary: #ffb000;
@@ -369,7 +369,7 @@
 }
 
 /* DOOM Red Terminal (Classic DOOM/Hell aesthetic) */
-[data-theme="doom"] {
+[data-theme="doom-red"] {
   --color-bg-primary: #000000;
   --color-bg-secondary: #0a0000;
   --color-text-primary: #ff4100;
