@@ -53,7 +53,6 @@ export class WebGLDoomFire extends WebGLEffect {
   private framebuffer2: WebGLFramebuffer | null = null;
   private texture1: WebGLTexture | null = null;
   private texture2: WebGLTexture | null = null;
-  // private currentFramebuffer: number = 0; // For future ping-pong rendering
 
   constructor() {
     super({
@@ -221,7 +220,7 @@ export class WebGLDoomFire extends WebGLEffect {
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST); // Already NEAREST, good!
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
     this.textures.set("palette", this.paletteTexture);
   }
@@ -259,8 +258,8 @@ export class WebGLDoomFire extends WebGLEffect {
 
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST); // Changed to NEAREST for pixelation
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST); // Changed to NEAREST for pixelation
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
     this.textures.set("fire", this.fireTexture);
   }
@@ -335,7 +334,6 @@ export class WebGLDoomFire extends WebGLEffect {
     for (let x = 0; x < this.fireWidth; x++) {
       for (let y = 0; y < this.fireHeight - 1; y++) {
         const src = ((y + 1) * this.fireWidth + x) * 4;
-        // const dst = (y * this.fireWidth + x) * 4; // Not needed in current implementation
 
         // Get fire intensity from below
         let intensity = this.fireData[src];

@@ -29,7 +29,6 @@ export class WebGLLightningStorm extends WebGLEffect {
   // storm state
   private stormPhase = Math.random() * 1000;
   private stormIntensity = 0.5; // 0..1
-  private baseWind = 8; // px/sec baseline for cloud advection
   private lastTriggerTime = 0;
   private flashValue = 0;
 

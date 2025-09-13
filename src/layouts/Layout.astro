@@ -60,7 +60,6 @@ const { title } = Astro.props;
     <link rel="dns-prefetch" href="https://utsavbalar.in" />
     <link rel="preconnect" href="https://utsavbalar.in" />
 
-    <!-- External resource hints for performance -->
     <link rel="dns-prefetch" href="https://api.github.com" />
     <link rel="dns-prefetch" href="https://cataas.com" />
     <link rel="preconnect" href="https://api.github.com" crossorigin />
@@ -183,27 +182,15 @@ const { title } = Astro.props;
 </script>
 
 <style is:global>
-  /* Z-index hierarchy:
-     - Background effects: 0-9 (Overlay effects in crt-effects.css)
-     - Main content: 10-19
-     - Mobile nav: 30-39
-     - Theme selector: 40-49
-     - Dropdowns/modals: 50+ */
-
-  /* Browser-level styles that can't be easily done with Tailwind */
   html {
-    /* Prevent scroll chaining */
     overscroll-behavior-y: contain;
     overscroll-behavior-x: none;
   }
 
   body {
-    /* Improve mobile touch handling */
     touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
-    /* Prevent scroll chaining */
     overscroll-behavior: contain;
-    /* GPU acceleration */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
   }

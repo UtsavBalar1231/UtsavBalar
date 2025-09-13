@@ -1,6 +1,3 @@
-/* Simplified Overlay Effects - Aligned with richardapps-web */
-
-/* Performance toggle for effects */
 @media (prefers-reduced-motion: reduce) {
   .noise-overlay,
   .grunge-overlay,
@@ -12,11 +9,10 @@
 
 :root {
   --noise-opacity: 0.35;
-  --grunge-overlay-opacity: 0.055; /* Reduced by 50% from 0.11 */
+  --grunge-overlay-opacity: 0.055;
   --noise-speed: 0.3s;
 }
 
-/* Noise overlay - Simple animated texture */
 .noise-overlay {
   position: fixed;
   overflow: hidden;
@@ -39,7 +35,6 @@
   animation: noise-cycle var(--noise-speed, 0.3s) steps(4) infinite;
 }
 
-/* Grunge overlay for texture depth */
 .grunge-overlay {
   position: fixed;
   overflow: hidden;
@@ -59,7 +54,6 @@
   opacity: var(--grunge-overlay-opacity);
 }
 
-/* Noise texture animation - cycles through 4 noise patterns */
 @keyframes noise-cycle {
   0% {
     background-image: url("/noise-textures/noisy-texture-200x200-1.png");
@@ -75,14 +69,12 @@
   }
 }
 
-/* Ultra mode adjustments */
 @media (min-width: 2560px) {
   .grunge-overlay {
     opacity: calc(var(--grunge-overlay-opacity) * 0.5);
   }
 }
 
-/* Pause animations when page is not visible */
 @media screen {
   .noise-overlay[data-paused="true"],
   .grunge-overlay[data-paused="true"] {
@@ -90,7 +82,6 @@
   }
 }
 
-/* Performance Mode Overrides */
 [data-performance="true"] .noise-overlay,
 [data-performance="true"] .grunge-overlay,
 [data-performance="true"] .matrix-bg,
@@ -104,7 +95,6 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Keep essential transitions for usability */
 [data-performance="true"] .theme-toggle,
 [data-performance="true"] .performance-toggle,
 [data-performance="true"] button,

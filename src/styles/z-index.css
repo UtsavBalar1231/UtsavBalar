@@ -1,24 +1,19 @@
-/* Z-index hierarchy system for consistent stacking contexts */
-
 :root {
-  /* Z-index levels - centralized for consistency */
-  --z-background: 1; /* Background overlays (matrix-bg, noise, grunge) */
-  --z-doom-fire: 2; /* DOOM fire effect */
-  --z-noise: 4; /* Noise overlay */
-  --z-grunge: 5; /* Grunge overlay */
-  --z-content: 10; /* Main content */
-  --z-header: 20; /* Header/navigation */
-  --z-mobile-nav: 30; /* Mobile navigation */
-  --z-dropdown: 40; /* Dropdowns and overlays */
-  --z-theme-selector: 45; /* Theme selector button */
-  --z-theme-dropdown: 50; /* Theme selector dropdown */
-  --z-modal: 60; /* Modals */
-  --z-toast: 70; /* Toast notifications */
-  --z-tooltip: 80; /* Tooltips */
-  --z-max: 999; /* Maximum z-index for critical overlays */
+  --z-background: 1;
+  --z-doom-fire: 2;
+  --z-noise: 4;
+  --z-grunge: 5;
+  --z-content: 10;
+  --z-header: 20;
+  --z-mobile-nav: 30;
+  --z-dropdown: 40;
+  --z-theme-selector: 45;
+  --z-theme-dropdown: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+  --z-tooltip: 80;
+  --z-max: 999;
 }
-
-/* Apply standardized z-index values */
 .matrix-bg {
   z-index: var(--z-background);
 }

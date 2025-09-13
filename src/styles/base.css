@@ -1,5 +1,3 @@
-/* Base styles - Font declarations and Tailwind directives */
-
 /* Import Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
