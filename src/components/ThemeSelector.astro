@@ -390,7 +390,7 @@ import { themes } from "../data/themes";
 <script>
   import { themeManager } from "../utils/themeManager";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initializeThemeSelector() {
     const themeSelector = document.getElementById("theme-selector-btn");
     const themeDropdown = document.getElementById("theme-selector-dropdown");
     const themeOptions = document.querySelectorAll(".theme-option");
@@ -465,5 +465,11 @@ import { themes } from "../data/themes";
         toggleDropdown(false);
       }
     });
-  });
+  }
+
+  // Initialize on first load
+  document.addEventListener("DOMContentLoaded", initializeThemeSelector);
+
+  // Re-initialize after ViewTransitions
+  document.addEventListener("astro:page-load", initializeThemeSelector);
 </script>

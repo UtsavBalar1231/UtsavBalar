@@ -81,7 +81,8 @@ function setTheme(value: ThemeValue | string): void {
 function cycleTheme(): void {
   const current = getCurrentTheme();
   const currentIndex = themes.findIndex((t) => t.value === current.value);
-  const nextIndex = (currentIndex + 1) % themes.length;
+  // If theme not found in array, start from beginning
+  const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % themes.length;
   setTheme(themes[nextIndex].value);
 }
 

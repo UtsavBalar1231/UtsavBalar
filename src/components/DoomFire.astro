@@ -1,0 +1,41 @@
+---
+
+---
+
+<canvas id="doom-fire-canvas" class="doom-fire-canvas"></canvas>
+
+<style>
+  .doom-fire-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: screen;
+  }
+</style>
+
+<script>
+  import { WebGLDoomFire } from "@/utils/webglFire";
+
+  let fireEffect: WebGLDoomFire | null = null;
+
+  function initDoomFire() {
+    fireEffect = new WebGLDoomFire();
+    fireEffect.initialize();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDoomFire);
+  } else {
+    initDoomFire();
+  }
+
+  document.addEventListener("astro:page-load", initDoomFire);
+
+  document.addEventListener("astro:before-preparation", () => {
+    fireEffect?.cleanup();
+  });
+</script>

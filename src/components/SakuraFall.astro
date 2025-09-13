@@ -1,0 +1,42 @@
+---
+
+---
+
+<canvas id="sakura-fall-canvas" class="sakura-fall-canvas"></canvas>
+
+<style>
+  .sakura-fall-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: screen;
+    z-index: var(--z-background);
+  }
+</style>
+
+<script>
+  import { WebGLSakuraFall } from "@/utils/webglSakura";
+
+  let sakuraEffect: WebGLSakuraFall | null = null;
+
+  function initSakuraFall() {
+    sakuraEffect = new WebGLSakuraFall();
+    sakuraEffect.initialize();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSakuraFall);
+  } else {
+    initSakuraFall();
+  }
+
+  document.addEventListener("astro:page-load", initSakuraFall);
+
+  document.addEventListener("astro:before-preparation", () => {
+    sakuraEffect?.cleanup();
+  });
+</script>

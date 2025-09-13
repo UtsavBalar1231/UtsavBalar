@@ -3,6 +3,7 @@
 :root {
   /* Z-index levels - centralized for consistency */
   --z-background: 1; /* Background overlays (matrix-bg, noise, grunge) */
+  --z-doom-fire: 2; /* DOOM fire effect */
   --z-noise: 4; /* Noise overlay */
   --z-grunge: 5; /* Grunge overlay */
   --z-content: 10; /* Main content */
@@ -20,6 +21,10 @@
 /* Apply standardized z-index values */
 .matrix-bg {
   z-index: var(--z-background);
+}
+
+.doom-fire-canvas {
+  z-index: var(--z-doom-fire);
 }
 
 .noise-overlay {

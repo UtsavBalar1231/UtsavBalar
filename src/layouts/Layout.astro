@@ -1,9 +1,14 @@
 ---
 import "../styles/global.css";
+import { ViewTransitions } from "astro:transitions";
 import StatusLine from "../components/StatusLine.astro";
 import MobileNav from "../components/MobileNav.astro";
 import Nav from "../components/Nav.astro";
 import SpinningCat from "../components/SpinningCat.astro";
+import DoomFire from "../components/DoomFire.astro";
+import MatrixRain from "../components/MatrixRain.astro";
+import LightningStorm from "../components/LightningStorm.astro";
+import SakuraFall from "../components/SakuraFall.astro";
 
 interface Props {
   title: string;
@@ -27,7 +32,8 @@ const { title } = Astro.props;
     <title>{title}</title>
 
     <script is:inline>
-      (function () {
+      // Theme initialization function
+      function initializeTheme() {
         const theme = localStorage.getItem("selectedTheme") || "monochrome";
         document.documentElement.setAttribute("data-theme", theme);
         if (document.body) {
@@ -42,7 +48,13 @@ const { title } = Astro.props;
         if (document.body) {
           document.body.setAttribute("data-performance", performanceMode.toString());
         }
-      })();
+      }
+
+      // Run on initial page load
+      initializeTheme();
+
+      // Re-run after ViewTransitions navigation
+      document.addEventListener("astro:page-load", initializeTheme);
     </script>
 
     <link rel="dns-prefetch" href="https://utsavbalar.in" />
@@ -61,56 +73,55 @@ const { title } = Astro.props;
       type="font/woff2"
       crossorigin
     />
+    <ViewTransitions />
   </head>
   <body>
-    <div class="noise-overlay" style="z-index: var(--z-noise);"></div>
-    <div class="grunge-overlay" style="z-index: var(--z-grunge);"></div>
-    <div class="matrix-bg" style="z-index: var(--z-background);"></div>
+    <div class="noise-overlay" style="z-index: var(--z-noise);" transition:persist="noise"></div>
+    <div class="grunge-overlay" style="z-index: var(--z-grunge);" transition:persist="grunge"></div>
+    <MatrixRain transition:persist="matrix" />
+    <DoomFire transition:persist="fire" />
+    <LightningStorm transition:persist="storm" />
+    <SakuraFall transition:persist="sakura" />
     <div
-      class="pt-18 page-transition relative min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
+      class="pt-18 page-content relative min-h-screen p-4 max-md:pb-20 sm:p-6 md:p-8"
       style="contain: layout style;"
       id="main-content"
+      transition:animate="fade"
+      transition:name="main"
     >
       <header class="mb-8">
         <Nav />
       </header>
       <slot />
     </div>
-    <MobileNav />
-    <StatusLine />
-    <SpinningCat />
+    <MobileNav transition:persist="mobile-nav" />
+    <StatusLine transition:persist="status" />
+    <SpinningCat transition:persist="cat" />
   </body>
 </html>
 
 <script>
-  function initPageTransitions() {
+  // ViewTransitions event handling for terminal effects
+  document.addEventListener("astro:page-load", () => {
     const mainContent = document.getElementById("main-content");
+    mainContent?.classList.add("page-content-loaded");
+  });
 
-    mainContent?.classList.add("page-content-enter");
+  document.addEventListener("astro:before-preparation", () => {
+    const mainContent = document.getElementById("main-content");
+    mainContent?.classList.add("page-content-exiting");
+  });
 
-    document.addEventListener("click", (e) => {
-      const link = (e.target as HTMLElement)?.closest("a");
-      if (link && link.href && link.href.startsWith(window.location.origin) && !link.target) {
-        e.preventDefault();
+  document.addEventListener("astro:after-swap", () => {
+    const mainContent = document.getElementById("main-content");
+    mainContent?.classList.remove("page-content-exiting");
+    mainContent?.classList.add("page-content-entering");
+    setTimeout(() => {
+      mainContent?.classList.remove("page-content-entering");
+    }, 500);
+  });
 
-        mainContent?.classList.add("page-transition-exit");
-        mainContent?.classList.add("terminal-nav-transition");
-
-        const delay = window.innerWidth < 768 ? 100 : 400;
-        setTimeout(() => {
-          window.location.href = link.href;
-        }, delay);
-      }
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initPageTransitions);
-  } else {
-    initPageTransitions();
-  }
-
-  // Alt+1-7 keyboard navigation
+  // Alt+1-7 keyboard navigation with ViewTransitions
   document.addEventListener("keydown", (event) => {
     if (event.altKey) {
       let targetUrl = null;
@@ -139,15 +150,9 @@ const { title } = Astro.props;
           break;
       }
 
-      if (targetUrl) {
-        const mainContent = document.getElementById("main-content");
-        mainContent?.classList.add("page-transition-exit");
-        mainContent?.classList.add("terminal-nav-transition");
-
-        const delay = window.innerWidth < 768 ? 100 : 400;
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, delay);
+      if (targetUrl && targetUrl !== window.location.pathname) {
+        // Use standard navigation
+        window.location.href = targetUrl;
       }
     }
   });

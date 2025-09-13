@@ -3,7 +3,8 @@
 /* Performance toggle for effects */
 @media (prefers-reduced-motion: reduce) {
   .noise-overlay,
-  .grunge-overlay {
+  .grunge-overlay,
+  .doom-fire-canvas {
     animation: none !important;
     display: none !important;
   }
@@ -92,7 +93,8 @@
 /* Performance Mode Overrides */
 [data-performance="true"] .noise-overlay,
 [data-performance="true"] .grunge-overlay,
-[data-performance="true"] .matrix-bg {
+[data-performance="true"] .matrix-bg,
+[data-performance="true"] .doom-fire-canvas {
   display: none !important;
 }
 

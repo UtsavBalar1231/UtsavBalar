@@ -1,168 +1,127 @@
-/* Terminal-style page transition animations */
+/* Terminal-style page transition animations for Astro ViewTransitions */
 
-/* Simple terminal refresh animation */
-@keyframes terminal-refresh {
+/* Terminal animation for main content transitions */
+::view-transition-old(main) {
+  animation: terminal-exit 0.3s ease-in forwards;
+}
+
+::view-transition-new(main) {
+  animation: terminal-enter 0.3s ease-out forwards;
+}
+
+/* Terminal power-off effect */
+@keyframes terminal-exit {
   0% {
     opacity: 1;
+    transform: translateY(0) scale(1);
     filter: brightness(1);
   }
   50% {
-    opacity: 0.9;
-    filter: brightness(1.1);
+    opacity: 0.8;
+    transform: translateY(2px) scale(0.99);
+    filter: brightness(1.2);
   }
   100% {
-    opacity: 1;
-    filter: brightness(1);
-  }
-}
-
-/* Terminal scan line animation */
-@keyframes terminal-scan {
-  0% {
-    top: -100%;
-  }
-  100% {
-    top: 100%;
-  }
-}
-
-/* Page fade with terminal effect */
-@keyframes page-fade-in {
-  0% {
     opacity: 0;
-    filter: blur(2px) brightness(1.5);
-    transform: translateY(10px);
-  }
-  50% {
-    opacity: 0.5;
-    filter: blur(1px) brightness(1.2);
-    transform: translateY(5px);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0) brightness(1);
-    transform: translateY(0);
-  }
-}
-
-/* Typewriter effect for content */
-@keyframes typewriter {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
+    transform: translateY(10px) scale(0.98);
+    filter: brightness(0.8);
   }
 }
 
 /* Terminal power-on effect */
-@keyframes terminal-power-on {
+@keyframes terminal-enter {
   0% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(0.98);
+    filter: brightness(1.5);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-5px) scale(0.99);
+    filter: brightness(1.2);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
   }
 }
 
-/* Terminal power-off effect */
-@keyframes terminal-power-off {
-  0% {
+/* Quick flash animation for instant feedback */
+@keyframes terminal-flash {
+  0%,
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.95;
+    filter: brightness(1.1);
+  }
+}
+
+/* Scanline effect for terminal aesthetic */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
   }
   100% {
-    opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(100vh);
   }
 }
 
-/* Page transition container */
-.page-transition {
-  animation: terminal-power-on 0.4s ease-out;
+/* Page content states for ViewTransitions events */
+.page-content-loaded {
+  animation: terminal-flash 0.2s ease-out;
+}
+
+.page-content-exiting {
+  opacity: 0.9;
+  filter: brightness(1.05);
+  transition:
+    opacity 0.2s ease-out,
+    filter 0.2s ease-out;
+}
+
+.page-content-entering {
+  animation: terminal-flash 0.3s ease-out;
   position: relative;
 }
 
-.page-transition-exit {
-  animation: terminal-power-off 0.3s ease-in forwards;
-}
-
-.page-transition::before {
+/* Scanline overlay effect */
+.page-content-entering::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-  animation: terminal-scan 0.5s ease-out;
+  background: linear-gradient(to bottom, transparent, var(--accent-primary) 50%, transparent);
+  opacity: 0.5;
+  animation: scanline 0.5s linear;
   pointer-events: none;
   z-index: 100;
 }
 
-/* Content animations */
-.page-content-enter {
-  animation: page-fade-in 0.5s ease-out forwards;
+/* Default ViewTransitions styling with terminal theme */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
 }
 
-/* Terminal text effect on navigation */
-.terminal-nav-transition {
-  position: relative;
-  overflow: hidden;
+/* Preserve background effects during transitions */
+::view-transition-group(noise),
+::view-transition-group(grunge),
+::view-transition-group(matrix),
+::view-transition-group(fire),
+::view-transition-group(status),
+::view-transition-group(mobile-nav),
+::view-transition-group(cat) {
+  animation-duration: 0s;
 }
 
-.terminal-nav-transition::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(var(--accent-rgb), 0.03) 2px,
-    rgba(var(--accent-rgb), 0.03) 4px
-  );
-  animation: terminal-scan 0.3s linear;
-  pointer-events: none;
-}
-
-/* Glitch effect for quick transitions */
-@keyframes glitch-transition {
-  0%,
-  100% {
-    clip-path: inset(0 0 0 0);
-    transform: translate(0);
-  }
-  20% {
-    clip-path: inset(20% 0 30% 0);
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    clip-path: inset(50% 0 20% 0);
-    transform: translate(2px, -2px);
-  }
-  60% {
-    clip-path: inset(10% 0 60% 0);
-    transform: translate(-1px, 1px);
-  }
-  80% {
-    clip-path: inset(80% 0 5% 0);
-    transform: translate(1px, -1px);
-  }
-}
-
-/* Apply to main content areas */
-main {
-  position: relative;
-}
-
-main.transitioning {
-  animation: terminal-refresh 0.3s ease-out;
-}
-
-/* Navigation link transitions */
+/* Navigation link active state */
 .nav-link-active {
   position: relative;
 }
@@ -179,11 +138,7 @@ main.transitioning {
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.2;
+    opacity: 0.3;
   }
   100% {
     transform: scale(1);
@@ -193,10 +148,32 @@ main.transitioning {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .page-transition,
-  .page-content-enter,
-  .terminal-nav-transition::after,
-  main.transitioning {
-    animation: none;
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  .page-content-loaded,
+  .page-content-exiting,
+  .page-content-entering,
+  .page-content-entering::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Fallback for browsers without ViewTransitions support */
+@supports not selector(::view-transition-old(root)) {
+  .page-content {
+    animation: terminal-enter 0.3s ease-out;
+  }
+
+  /* Simple fade for non-supporting browsers */
+  a {
+    transition: opacity 0.2s ease;
+  }
+
+  a:active {
+    opacity: 0.8;
   }
 }

@@ -1,0 +1,94 @@
+---
+
+---
+
+<canvas id="lightning-storm-canvas" class="lightning-storm-canvas"></canvas>
+<div id="lightning-flash" class="lightning-flash"></div>
+
+<style>
+  /* eslint-disable astro/no-unused-css-selector */
+  .lightning-storm-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.8;
+    mix-blend-mode: screen;
+    z-index: var(--z-background);
+  }
+
+  .lightning-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 150, 0.6),
+      rgba(255, 220, 100, 0.2),
+      transparent
+    );
+    opacity: 0;
+    z-index: var(--z-background);
+    mix-blend-mode: screen;
+    transition: opacity 0.15s ease-out;
+  }
+
+  .lightning-flash.active {
+    opacity: 1;
+    transition: none;
+    animation: flashPulse 0.3s ease-out;
+  }
+
+  @keyframes flashPulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  /* eslint-enable astro/no-unused-css-selector */
+</style>
+
+<script>
+  import { WebGLLightningStorm } from "@/utils/webglLightning";
+
+  let lightningEffect: WebGLLightningStorm | null = null;
+
+  function initLightningStorm() {
+    lightningEffect = new WebGLLightningStorm();
+    lightningEffect.initialize();
+
+    // Handle flash overlay for WebGL lightning
+    const flashOverlay = document.getElementById("lightning-flash");
+    if (flashOverlay) {
+      // Listen for custom flash events from WebGL effect
+      document.addEventListener("lightning-flash", () => {
+        flashOverlay.classList.add("active");
+        setTimeout(() => {
+          flashOverlay.classList.remove("active");
+        }, 150);
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLightningStorm);
+  } else {
+    initLightningStorm();
+  }
+
+  document.addEventListener("astro:page-load", initLightningStorm);
+
+  document.addEventListener("astro:before-preparation", () => {
+    lightningEffect?.cleanup();
+  });
+</script>

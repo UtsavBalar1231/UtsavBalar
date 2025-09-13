@@ -88,7 +88,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     <!-- Position -->
     <div class="status-position">
       <span class="position-percent">100%</span>
-      <span class="position-line">☰ 42:1</span>
+      <span class="position-line">42:1</span>
     </div>
   </div>
 </div>
@@ -144,6 +144,8 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     padding: 0 0.5rem;
     position: relative;
     flex: 0 0 auto;
+    overflow: hidden;
+    height: 100%;
   }
 
   .status-right {
@@ -208,15 +210,19 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     border: 1px solid rgba(var(--bg-color-rgb), 0.2);
     border-radius: 2px;
     color: var(--color-text-secondary);
-    padding: 0.125rem 0.5rem;
+    padding: 0 0.5rem;
     cursor: pointer;
     font-family: inherit;
     font-size: 0.78rem;
+    line-height: 26px; /* 28px container - 2px for borders */
+    height: 26px;
     transition: all 0.15s ease;
     text-transform: uppercase;
     box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    display: inline-flex;
+    align-items: center;
   }
 
   .theme-toggle:hover {
@@ -392,6 +398,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
       font-size: 0.94rem;
     }
 
+    .status-mode,
     .status-git,
     .status-filetype,
     .status-year {
@@ -436,15 +443,53 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
 <script>
   import { themeManager } from "../utils/themeManager";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const themeToggle = document.getElementById("theme-toggle");
-    const themeMenu = document.getElementById("theme-menu");
-    const currentThemeName = document.getElementById("current-theme-name");
-    const themeOptions = document.querySelectorAll(".theme-option");
+  interface StatusLineElements {
+    themeToggle: HTMLElement;
+    themeMenu: HTMLElement;
+    currentThemeName: HTMLElement;
+    themeOptions: NodeListOf<Element>;
+    performanceToggle?: HTMLElement | null;
+    performanceIcon?: HTMLElement | null;
+  }
 
-    if (!themeToggle || !themeMenu || !currentThemeName) {
+  let cachedElements: StatusLineElements | null = null;
+
+  function getCachedElements(): StatusLineElements | null {
+    if (!cachedElements) {
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeMenu = document.getElementById("theme-menu");
+      const currentThemeName = document.getElementById("current-theme-name");
+      const themeOptions = document.querySelectorAll(".theme-option");
+      const performanceToggle = document.getElementById("performance-toggle");
+      const performanceIcon = document.getElementById("performance-icon");
+
+      if (!themeToggle || !themeMenu || !currentThemeName) {
+        return null;
+      }
+
+      cachedElements = {
+        themeToggle,
+        themeMenu,
+        currentThemeName,
+        themeOptions,
+        performanceToggle,
+        performanceIcon,
+      };
+    }
+    return cachedElements;
+  }
+
+  function initializeStatusLine() {
+    const elements = getCachedElements();
+    if (!elements) return;
+
+    const { themeToggle, themeMenu, currentThemeName, themeOptions } = elements;
+
+    // Check if already initialized to prevent duplicate event listeners
+    if (themeToggle.dataset.initialized === "true") {
       return;
     }
+    themeToggle.dataset.initialized = "true";
 
     const updateUI = () => {
       const currentTheme = themeManager.getCurrentTheme();
@@ -517,8 +562,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     });
 
     // Performance Mode Toggle
-    const performanceToggle = document.getElementById("performance-toggle");
-    const performanceIcon = document.getElementById("performance-icon");
+    const { performanceToggle, performanceIcon } = elements;
 
     if (performanceToggle && performanceIcon) {
       const ICONS = {
@@ -534,12 +578,16 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
           : window.innerWidth < 768;
       };
 
+      let pathElement: SVGPathElement | null = null;
+
       const setPerformanceMode = (enabled: boolean) => {
         localStorage.setItem("performanceMode", enabled.toString());
         document.body.setAttribute("data-performance", enabled.toString());
 
-        const path = performanceIcon.querySelector("path");
-        if (path) path.setAttribute("d", enabled ? ICONS.lightning : ICONS.sparkles);
+        if (!pathElement) {
+          pathElement = performanceIcon.querySelector("path");
+        }
+        if (pathElement) pathElement.setAttribute("d", enabled ? ICONS.lightning : ICONS.sparkles);
 
         performanceToggle.style.color = enabled ? "var(--term-bright-yellow)" : "";
         performanceToggle.title = enabled
@@ -547,10 +595,12 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
           : "Quality Mode: ON - Click to disable visual effects";
       };
 
-      const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      pathElement.setAttribute("stroke-linecap", "round");
-      pathElement.setAttribute("stroke-linejoin", "round");
-      performanceIcon.appendChild(pathElement);
+      if (!performanceIcon.querySelector("path")) {
+        pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        pathElement.setAttribute("stroke-linecap", "round");
+        pathElement.setAttribute("stroke-linejoin", "round");
+        performanceIcon.appendChild(pathElement);
+      }
 
       const initialMode = isPerformanceMode();
       setPerformanceMode(initialMode);
@@ -567,5 +617,17 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
         }
       });
     }
+  }
+
+  // Initialize on first load
+  document.addEventListener("DOMContentLoaded", () => {
+    cachedElements = null;
+    initializeStatusLine();
+  });
+
+  // Re-initialize after ViewTransitions
+  document.addEventListener("astro:page-load", () => {
+    cachedElements = null;
+    initializeStatusLine();
   });
 </script>
