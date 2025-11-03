@@ -48,8 +48,11 @@ export class WebGLLightningStorm extends WebGLEffect {
 
   protected getShaders(): ShaderSource {
     // Dummy shaders since we use separate programs for lightning and flash
+    // Note: These must declare uniforms that base class expects, even if unused
     const dummyVertex = `
     attribute vec2 a_pos;
+    uniform float u_time;
+    uniform vec2 u_resolution;
     void main() {
       gl_Position = vec4(a_pos, 0.0, 1.0);
     }
@@ -57,6 +60,8 @@ export class WebGLLightningStorm extends WebGLEffect {
 
     const dummyFragment = `
     precision mediump float;
+    uniform float u_time;
+    uniform vec2 u_resolution;
     void main() {
       gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
     }
