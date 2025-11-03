@@ -114,14 +114,10 @@ const { title } = Astro.props;
   document.addEventListener("astro:after-swap", () => {
     const mainContent = document.getElementById("main-content");
     mainContent?.classList.remove("page-content-exiting");
-    mainContent?.classList.add("page-content-entering");
-    setTimeout(() => {
-      mainContent?.classList.remove("page-content-entering");
-    }, 500);
   });
 
   // Alt+1-7 keyboard navigation with ViewTransitions
-  document.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", async (event) => {
     if (event.altKey) {
       let targetUrl = null;
 
@@ -150,8 +146,10 @@ const { title } = Astro.props;
       }
 
       if (targetUrl && targetUrl !== window.location.pathname) {
-        // Use standard navigation
-        window.location.href = targetUrl;
+        event.preventDefault();
+        // Use ViewTransitions navigate() for smooth transitions
+        const { navigate } = await import("astro:transitions/client");
+        navigate(targetUrl);
       }
     }
   });
