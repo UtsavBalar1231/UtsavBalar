@@ -75,11 +75,11 @@ export class WebGLDoomFire extends WebGLEffect {
       varying vec2 v_texCoord;
       
       void main() {
-        // Map position to bottom 80% of viewport
-        // Flip Y and scale: fire starts from bottom and goes up 80%
+        // Map position to full viewport
+        // Flip Y: fire starts from bottom and goes to top
         vec2 adjustedPos = a_position;
-        // Flip Y coordinate so fire starts from bottom, then scale to 80% height
-        adjustedPos.y = (1.0 - a_position.y) * 0.8;
+        // Flip Y coordinate so fire starts from bottom
+        adjustedPos.y = (1.0 - a_position.y);
         
         // Convert to clip space (-1 to 1)
         gl_Position = vec4(adjustedPos.x * 2.0 - 1.0, adjustedPos.y * 2.0 - 1.0, 0.0, 1.0);
@@ -105,8 +105,8 @@ export class WebGLDoomFire extends WebGLEffect {
       void main() {
         vec2 uv = v_texCoord;
         
-        // Height-based fadeout for top edge
-        float heightFade = 1.0 - smoothstep(0.7, 1.0, uv.y);
+        // Height-based fadeout for top edge (subtle fade at very top)
+        float heightFade = 1.0 - smoothstep(0.85, 1.0, uv.y);
         
         // Fire propagation simulation
         float fireValue = 0.0;
