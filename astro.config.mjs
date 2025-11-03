@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 import compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   output: "static",
@@ -16,9 +16,6 @@ export default defineConfig({
   },
 
   integrations: [
-    tailwind({
-      applyBaseStyles: false, // Prevent Tailwind from applying its reset to avoid conflicts
-    }),
     sitemap(),
     mdx({
       syntaxHighlight: "shiki",
@@ -30,8 +27,9 @@ export default defineConfig({
     compress(),
   ],
 
-  // Vite configuration for build-time replacements
+  // Vite configuration for build-time replacements and Tailwind v4
   vite: {
+    plugins: [tailwindcss()],
     define: {
       // Version based on build timestamp for cache busting
       __BUILD_VERSION__: JSON.stringify(Date.now().toString()),

@@ -37,19 +37,33 @@ const { title = "Note" } = Astro.props;
 <style>
   /* Global styles for nested content */
   .note-content :global(p) {
-    @apply mb-3;
+    margin-bottom: 0.75rem;
   }
 
   .note-content :global(p:last-child) {
-    @apply mb-0;
+    margin-bottom: 0;
   }
 
   .note-content :global(a) {
-    @apply text-info underline decoration-1 underline-offset-2 hover:decoration-2;
+    color: var(--info);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .note-content :global(a:hover) {
+    text-decoration-thickness: 2px;
   }
 
   .note-content :global(code) {
-    @apply rounded bg-[color-mix(in_srgb,var(--color-info)_10%,var(--bg-secondary))] px-[0.3em] py-[0.1em] font-mono text-[0.9em];
+    border-radius: 0.25rem;
+    background-color: color-mix(in srgb, var(--color-info) 10%, var(--bg-secondary));
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    font-family: monospace;
+    font-size: 0.9em;
   }
   .note-container {
     background: rgba(var(--bg-color-rgb), 0.04);

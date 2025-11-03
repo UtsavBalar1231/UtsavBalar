@@ -1,7 +1,13 @@
 /* Apply theme-aware colors to code blocks */
 pre.astro-code {
   /* Base styling */
-  @apply mb-4 overflow-x-auto rounded-lg p-4 font-mono text-[0.9rem] leading-relaxed;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  line-height: 1.625;
   background-color: var(--bg-secondary) !important;
   border: 1px solid var(--border-color) !important;
 }

@@ -1,7 +1,6 @@
 import eslintPluginAstro from "eslint-plugin-astro";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import tailwindPlugin from "eslint-plugin-tailwindcss";
 import prettierConfig from "eslint-config-prettier";
 
 export default [
@@ -22,7 +21,6 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tseslint,
-      tailwindcss: tailwindPlugin,
     },
     rules: {
       "@typescript-eslint/no-unused-vars": [
@@ -40,21 +38,10 @@ export default [
         },
       ],
 
-      "tailwindcss/classnames-order": "warn",
-      "tailwindcss/enforces-negative-arbitrary-values": "warn",
-      "tailwindcss/enforces-shorthand": "warn",
-      "tailwindcss/no-contradicting-classname": "error",
-
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-debugger": "warn",
       "prefer-const": "error",
       "no-var": "error",
-    },
-    settings: {
-      tailwindcss: {
-        callees: ["cn", "clsx", "cva"],
-        config: "./tailwind.config.js",
-      },
     },
   },
   ...eslintPluginAstro.configs["flat/recommended"],

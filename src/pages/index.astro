@@ -7,7 +7,7 @@ import Footer from "../components/Footer.astro";
 
 <Layout title="Utsav Balar - Portfolio">
   <main class="container mx-auto px-2 sm:px-4 md:max-w-6xl lg:px-8">
-    <div class="terminal-card animate-fade-in p-4 sm:p-6 md:p-8">
+    <div class="terminal-card p-4 sm:p-6 md:p-8 animate-fade-in">
       <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
         <div class="profile-section">
           <Profile />
@@ -36,10 +36,6 @@ import Footer from "../components/Footer.astro";
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 120px);
-  }
-
-  .terminal-card {
-    @apply animate-fade-in;
   }
 
   @media (max-width: 767px) {

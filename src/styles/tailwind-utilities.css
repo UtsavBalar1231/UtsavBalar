@@ -1,0 +1,248 @@
+/**
+ * Tailwind v4 Custom Utilities
+ * Migrated from tailwind.config.js plugin
+ */
+
+@layer utilities {
+  /* Typography System Utilities */
+
+  /* Core Typography Classes for DepartureMono usage */
+  .font-ui {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+  }
+
+  .font-ui-heading {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .font-ui-nav {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .font-ui-interactive {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+    letter-spacing: 0.05em;
+  }
+
+  .font-ui-badge {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  .font-ui-prompt {
+    font-family: DepartureMono, monospace;
+    font-display: swap;
+    font-weight: bold;
+  }
+
+  .font-content {
+    font-family: monospace;
+    line-height: 1.6;
+  }
+
+  .font-code {
+    font-family: monospace;
+    font-size: 0.95em;
+  }
+
+  /* Terminal Glow Utilities */
+
+  /* Generic terminal glows */
+  .terminal-text-glow {
+    text-shadow: 0 0 5px var(--terminal-glow);
+  }
+
+  .terminal-text-glow-intense {
+    text-shadow: 0 0 10px var(--terminal-glow-intense);
+  }
+
+  /* Color-specific glow utilities - subtle text glow */
+  .glow-red {
+    text-shadow: 0 0 3px var(--glow-red);
+  }
+
+  .glow-green {
+    text-shadow: 0 0 3px var(--glow-green);
+  }
+
+  .glow-yellow {
+    text-shadow: 0 0 3px var(--glow-yellow);
+  }
+
+  .glow-blue {
+    text-shadow: 0 0 3px var(--glow-blue);
+  }
+
+  .glow-magenta {
+    text-shadow: 0 0 3px var(--glow-magenta);
+  }
+
+  .glow-cyan {
+    text-shadow: 0 0 3px var(--glow-cyan);
+  }
+
+  .glow-white {
+    text-shadow: 0 0 3px var(--glow-white);
+  }
+
+  /* Bright color glows - subtle */
+  .glow-bright-red {
+    text-shadow: 0 0 4px var(--glow-bright-red);
+  }
+
+  .glow-bright-green {
+    text-shadow: 0 0 4px var(--glow-bright-green);
+  }
+
+  .glow-bright-yellow {
+    text-shadow: 0 0 4px var(--glow-bright-yellow);
+  }
+
+  .glow-bright-blue {
+    text-shadow: 0 0 4px var(--glow-bright-blue);
+  }
+
+  .glow-bright-magenta {
+    text-shadow: 0 0 4px var(--glow-bright-magenta);
+  }
+
+  .glow-bright-cyan {
+    text-shadow: 0 0 4px var(--glow-bright-cyan);
+  }
+
+  .glow-bright-white {
+    text-shadow: 0 0 4px var(--glow-bright-white);
+  }
+
+  /* Intense glow variants */
+  .glow-red-intense {
+    text-shadow:
+      0 0 5px var(--glow-red),
+      0 0 10px var(--glow-red);
+  }
+
+  .glow-green-intense {
+    text-shadow:
+      0 0 5px var(--glow-green),
+      0 0 10px var(--glow-green);
+  }
+
+  .glow-yellow-intense {
+    text-shadow:
+      0 0 5px var(--glow-yellow),
+      0 0 10px var(--glow-yellow);
+  }
+
+  .glow-blue-intense {
+    text-shadow:
+      0 0 5px var(--glow-blue),
+      0 0 10px var(--glow-blue);
+  }
+
+  .glow-magenta-intense {
+    text-shadow:
+      0 0 5px var(--glow-magenta),
+      0 0 10px var(--glow-magenta);
+  }
+
+  .glow-cyan-intense {
+    text-shadow:
+      0 0 5px var(--glow-cyan),
+      0 0 10px var(--glow-cyan);
+  }
+
+  /* Bright intense glows */
+  .glow-bright-red-intense {
+    text-shadow:
+      0 0 6px var(--glow-bright-red),
+      0 0 12px var(--glow-bright-red);
+  }
+
+  .glow-bright-green-intense {
+    text-shadow:
+      0 0 6px var(--glow-bright-green),
+      0 0 12px var(--glow-bright-green);
+  }
+
+  .glow-bright-yellow-intense {
+    text-shadow:
+      0 0 6px var(--glow-bright-yellow),
+      0 0 12px var(--glow-bright-yellow);
+  }
+
+  .glow-bright-cyan-intense {
+    text-shadow:
+      0 0 6px var(--glow-bright-cyan),
+      0 0 12px var(--glow-bright-cyan);
+  }
+
+  /* Terminal Prompt Utilities */
+  .terminal-prompt::before {
+    content: "$ ";
+    color: var(--accent-primary);
+    font-weight: bold;
+  }
+
+  .terminal-cursor::after {
+    content: "_";
+    animation: blink 1.2s step-end infinite;
+    color: var(--accent-primary);
+    font-weight: bold;
+  }
+
+  /* Retro Font Utilities */
+  .retro-header {
+    font-family: DepartureMono, monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .retro-prompt {
+    font-family: DepartureMono, monospace;
+  }
+
+  .retro-prompt::before {
+    content: "> ";
+    color: var(--accent-primary);
+  }
+
+  .retro-nav {
+    font-family: DepartureMono, monospace;
+    letter-spacing: 0.1em;
+  }
+
+  .retro-error {
+    font-family: DepartureMono, monospace;
+    color: var(--color-error);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Animation Utilities */
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  .animate-glitch {
+    animation: glitch 2.5s infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-in;
+  }
+
+  .animate-typing {
+    animation: typing 2s steps(40, end);
+  }
+}

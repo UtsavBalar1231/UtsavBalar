@@ -37,24 +37,39 @@ const { title = "Warning" } = Astro.props;
 <style>
   /* Global styles for nested content */
   .warning-content :global(p) {
-    @apply mb-3;
+    margin-bottom: 0.75rem;
   }
 
   .warning-content :global(p:last-child) {
-    @apply mb-0;
+    margin-bottom: 0;
   }
 
   .warning-content :global(strong),
   .warning-content :global(b) {
-    @apply font-semibold text-warning;
+    font-weight: 600;
+    color: var(--warning);
   }
 
   .warning-content :global(a) {
-    @apply text-warning underline decoration-1 underline-offset-2 hover:decoration-2;
+    color: var(--warning);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .warning-content :global(a:hover) {
+    text-decoration-thickness: 2px;
   }
 
   .warning-content :global(code) {
-    @apply rounded bg-[color-mix(in_srgb,var(--color-warning)_10%,var(--bg-secondary))] px-[0.3em] py-[0.1em] font-mono text-[0.9em];
+    border-radius: 0.25rem;
+    background-color: color-mix(in srgb, var(--color-warning) 10%, var(--bg-secondary));
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    font-family: monospace;
+    font-size: 0.9em;
   }
   .warning-container {
     background: rgba(var(--bg-color-rgb), 0.04);

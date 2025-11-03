@@ -59,7 +59,7 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-card {
-    @apply p-4;
+    padding: 1rem;
     border: 1px solid rgba(var(--border-color-rgb), 0.5);
     background: rgba(var(--bg-color-rgb), 0.05);
     backdrop-filter: blur(8px) saturate(1.1);
@@ -86,11 +86,15 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-header {
-    @apply mb-3 flex items-center justify-between;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .tutorial-number {
-    @apply text-lg font-bold;
+    font-size: 1.125rem;
+    font-weight: bold;
     color: var(--accent-primary);
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -98,7 +102,11 @@ const difficultyColors: Record<string, string> = {
   }
 
   .difficulty-badge {
-    @apply px-2 py-1 text-xs;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -127,7 +135,9 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-title {
-    @apply mb-2 text-base font-bold;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
     color: var(--text-primary);
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -136,13 +146,17 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-description {
-    @apply mb-3 text-sm;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.5;
   }
 
   .tutorial-meta {
-    @apply mb-3 flex gap-4 text-xs;
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     font-family: monospace;
   }
@@ -160,11 +174,18 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-tags {
-    @apply mb-3 flex flex-wrap gap-2;
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .tag {
-    @apply px-2 py-1 text-xs;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
     background: rgba(var(--bg-color-rgb), 0.06);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -204,7 +225,10 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-action {
-    @apply flex items-center justify-between pt-3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--border-color);
     color: var(--accent-primary);
     font-family: DepartureMono, monospace;
@@ -223,25 +247,25 @@ const difficultyColors: Record<string, string> = {
 
   @media (max-width: 640px) {
     .tutorial-card {
-      @apply p-3;
+      padding: 0.75rem;
     }
 
     .tutorial-title {
-      @apply text-sm;
+      font-size: 0.875rem;
     }
 
     .tutorial-description {
-      @apply text-xs;
+      font-size: 0.75rem;
     }
 
     .tutorial-number {
-      @apply text-base;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 375px) {
     .tutorial-card {
-      @apply p-2;
+      padding: 0.5rem;
     }
 
     .tutorial-title {
@@ -253,17 +277,19 @@ const difficultyColors: Record<string, string> = {
     }
 
     .tutorial-number {
-      @apply text-sm;
+      font-size: 0.875rem;
     }
 
     .difficulty-badge {
       font-size: 0.6rem;
-      @apply px-1;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
     }
 
     .tag {
       font-size: 0.6rem;
-      @apply px-1;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
     }
 
     .tutorial-action {

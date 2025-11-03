@@ -51,7 +51,8 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 
 <style>
   .bookbit-card {
-    @apply p-5 transition-all duration-300;
+    padding: 1.25rem;
+    transition: all 300ms;
     border: 1px solid rgba(var(--border-color-rgb), 0.5);
     background: rgba(var(--bg-color-rgb), 0.05);
     backdrop-filter: blur(8px) saturate(1.1);
@@ -94,13 +95,17 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
   }
 
   .bookbit-header {
-    @apply mb-4 flex items-center justify-between;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding-bottom: 0.5rem;
     border-bottom: 1px dashed rgba(var(--border-color-rgb), 0.3);
   }
 
   .bookbit-number {
-    @apply text-sm font-bold;
+    font-size: 0.875rem;
+    font-weight: bold;
     color: var(--text-secondary);
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -109,12 +114,12 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 
   .number-symbol {
     color: var(--accent-primary);
-    @apply mr-1;
+    margin-right: 0.25rem;
     font-size: 1.1rem;
   }
 
   .page-reference {
-    @apply text-xs;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -124,11 +129,12 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 
   .page-label {
     color: var(--accent-primary);
-    @apply mr-1;
+    margin-right: 0.25rem;
   }
 
   .bookbit-text {
-    @apply mb-4 block;
+    margin-bottom: 1rem;
+    display: block;
     color: var(--text-primary);
     font-family: monospace;
     line-height: 1.7;
@@ -166,12 +172,15 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
   }
 
   .bookbit-footer {
-    @apply pt-3;
+    padding-top: 0.75rem;
     border-top: 1px dashed rgba(var(--border-color-rgb), 0.3);
   }
 
   .book-info {
-    @apply flex items-center gap-2 text-sm;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -243,7 +252,7 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
   /* Mobile responsive adjustments */
   @media (max-width: 640px) {
     .bookbit-card {
-      @apply p-4;
+      padding: 1rem;
     }
 
     .bookbit-text {

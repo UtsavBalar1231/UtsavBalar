@@ -1,7 +1,5 @@
-/* Import Tailwind CSS directives */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Tailwind CSS v4 */
+@import "tailwindcss";
 
 /* Font Face Declarations */
 
@@ -22,12 +20,16 @@
 
 @layer base {
   * {
-    @apply m-0 box-border p-0;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
   }
 
   /* Base body and html styles */
   html {
-    @apply scroll-smooth font-mono transition-all duration-300 ease-in-out;
+    scroll-behavior: smooth;
+    font-family: monospace;
+    transition: all 300ms ease-in-out;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
     /* Prevent dynamic height changes */
@@ -36,7 +38,10 @@
   }
 
   body {
-    @apply bg-black font-mono text-sm text-text-primary sm:text-base;
+    background-color: black;
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: var(--text-primary);
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     /* Improve touch handling */
@@ -49,11 +54,17 @@
     isolation: isolate;
   }
 
+  @media (min-width: 640px) {
+    body {
+      font-size: 1rem;
+    }
+  }
+
   /* Responsive breakpoint optimizations */
   @media (max-width: 640px) {
     html,
     body {
-      @apply w-full;
+      width: 100%;
     }
   }
 
@@ -66,7 +77,9 @@
   /* Smooth transitions between breakpoints */
   @media (prefers-reduced-motion: no-preference) {
     * {
-      @apply transition-[padding,margin] duration-300 ease-in-out;
+      transition-property: padding, margin;
+      transition-duration: 300ms;
+      transition-timing-function: ease-in-out;
     }
   }
 
@@ -89,7 +102,8 @@
 
   /* Global overflow controls */
   * {
-    @apply box-border max-w-full;
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   img,
@@ -97,16 +111,19 @@
   iframe,
   embed,
   object {
-    @apply h-auto max-w-full;
+    height: auto;
+    max-width: 100%;
   }
 
   pre,
   code {
-    @apply max-w-full overflow-x-auto break-words;
+    max-width: 100%;
+    overflow-x: auto;
+    word-break: break-word;
   }
 
   main {
-    @apply relative;
+    position: relative;
   }
 
   /* CSS Containment for better performance */
@@ -137,7 +154,7 @@
 
 /* Global link hover effects */
 a {
-  @apply transition-all duration-200;
+  transition: all 200ms;
   position: relative;
 }
 
@@ -147,26 +164,45 @@ a:hover {
 
 /* Global Focus Styles for Accessibility */
 *:focus-visible {
-  @apply rounded-sm outline-2 outline-offset-2 outline-primary;
+  border-radius: 0.125rem;
+  outline-width: 2px;
+  outline-offset: 2px;
+  outline-color: var(--primary);
 }
 
 button:focus-visible,
 a:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary;
+  outline-width: 2px;
+  outline-offset: 2px;
+  outline-color: var(--primary);
 }
 
 /* Skip to main content link for screen readers */
 .skip-to-main {
-  @apply absolute left-[-9999px] z-[999] bg-black p-4 text-text-primary no-underline;
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  background-color: black;
+  padding: 1rem;
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
 .skip-to-main:focus {
-  @apply left-1/2 top-0 -translate-x-1/2;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
 }
 
 /* Inline code styling (not part of Shiki) */
 code:not(pre code) {
-  @apply rounded bg-gray-800 px-[0.4rem] py-[0.2rem] font-mono;
+  border-radius: 0.25rem;
+  background-color: rgb(31 41 55);
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  font-family: monospace;
 }
 
 /* Material Symbols Configuration */
@@ -190,29 +226,33 @@ code:not(pre code) {
 
 /* Icon size variations */
 .icon-sm {
-  @apply text-[18px];
+  font-size: 18px;
 }
 
 .icon-md {
-  @apply text-2xl;
+  font-size: 1.5rem;
 }
 
 .icon-lg {
-  @apply text-4xl;
+  font-size: 2.25rem;
 }
 
 /* Scrolling utilities */
 .scroll-margin-top {
-  @apply scroll-mt-8;
+  scroll-margin-top: 2rem;
 }
 
 .scroll-padding {
-  @apply scroll-pt-8;
+  scroll-padding-top: 2rem;
 }
 
 /* Theme dot styles */
 .theme-dot {
-  @apply mr-2 inline-block h-3 w-3 rounded-full;
+  margin-right: 0.5rem;
+  display: inline-block;
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 9999px;
 }
 
 .theme-dot-green {

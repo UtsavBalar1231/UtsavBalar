@@ -204,40 +204,49 @@ const displayLanguage = langMap[language] || language.toUpperCase();
 
   /* Button state styles that can't be done with Tailwind inline */
   .copy-button.copied {
-    @apply border-success bg-success text-black;
+    border-color: var(--success);
+    background-color: var(--success);
+    color: black;
   }
 
   .copy-button svg {
-    @apply h-4 w-4;
+    height: 1rem;
+    width: 1rem;
   }
 
   /* Scrollbar styling for code blocks */
   .code-content::-webkit-scrollbar,
   .terminal-content::-webkit-scrollbar {
-    @apply h-2;
+    height: 0.5rem;
   }
 
   .code-content::-webkit-scrollbar-track {
-    @apply bg-gray-800;
+    background-color: rgb(31 41 55);
   }
 
   .terminal-content::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    background-color: transparent;
   }
 
   .code-content::-webkit-scrollbar-thumb,
   .terminal-content::-webkit-scrollbar-thumb {
-    @apply rounded bg-gray-600;
+    border-radius: 0.25rem;
+    background-color: rgb(75 85 99);
   }
 
   .code-content::-webkit-scrollbar-thumb:hover,
   .terminal-content::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary;
+    background-color: var(--primary);
   }
 
   /* Line highlighting (if needed) */
   .highlight-line {
-    @apply -mx-4 block bg-white/10 px-4;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    display: block;
+    background-color: rgb(255 255 255 / 0.1);
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   /* Terminal-specific styles */
@@ -246,40 +255,54 @@ const displayLanguage = langMap[language] || language.toUpperCase();
   }
 
   .terminal-content :global(pre) {
-    @apply m-0 overflow-x-auto whitespace-pre !bg-transparent p-0;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre;
+    background-color: transparent !important;
+    padding: 0;
     word-wrap: normal;
   }
 
   .terminal-content :global(code) {
-    @apply block min-w-max font-mono;
+    display: block;
+    min-width: max-content;
+    font-family: monospace;
     tab-size: 2;
   }
 
   /* Mobile-specific styles for terminal */
   @media (max-width: 768px) {
     .terminal-content {
-      @apply p-3 text-xs;
+      padding: 0.75rem;
+      font-size: 0.75rem;
     }
 
     .terminal-content :global(code) {
-      @apply text-xs;
+      font-size: 0.75rem;
     }
   }
 
   /* Styling for command lines in terminal */
   .terminal-content :global(pre code span.line:has(span:first-child:is(.comment))) {
-    @apply text-text-secondary;
+    color: var(--text-secondary);
   }
 
   /* Styling for terminal lines */
   .terminal-content :global(pre code span.line) {
-    @apply relative inline-block w-full;
+    position: relative;
+    display: inline-block;
+    width: 100%;
   }
 
   /* Add cursor animation to last line in terminal mode */
   .terminal-content.with-cursor :global(pre code span.line:last-child)::after {
     content: "";
-    @apply relative ml-1 inline-block h-[1.5em] w-[0.5em] opacity-80;
+    position: relative;
+    margin-left: 0.25rem;
+    display: inline-block;
+    height: 1.5em;
+    width: 0.5em;
+    opacity: 0.8;
     background-color: var(--term-bright-green);
     animation: cursor-blink 1.2s infinite;
     vertical-align: text-bottom;

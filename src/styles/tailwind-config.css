@@ -1,0 +1,221 @@
+/**
+ * Tailwind v4 Theme Configuration
+ * Migrated from tailwind.config.js extend block
+ */
+
+@theme {
+  /* Custom Colors - CSS Variable Mappings */
+  --color-primary: var(--accent-primary);
+  --color-secondary: var(--accent-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-black: var(--bg-primary);
+  --color-gray-600: var(--border-color);
+  --color-gray-700: rgba(var(--border-color-rgb), 0.8);
+  --color-gray-800: var(--bg-secondary);
+  --color-gray-400: var(--text-secondary);
+  --color-gray-100: var(--text-primary);
+
+  /* Extended Semantic Colors */
+  --color-error: var(--color-error);
+  --color-warning: var(--color-warning);
+  --color-success: var(--color-success);
+  --color-info: var(--color-info);
+
+  /* Neutral Shades */
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+
+  /* Terminal Glow Colors */
+  --color-terminal-glow: var(--terminal-glow);
+  --color-terminal-glow-intense: var(--terminal-glow-intense);
+
+  /* 16-Color Terminal Palette */
+  --color-term-black: var(--term-black);
+  --color-term-red: var(--term-red);
+  --color-term-green: var(--term-green);
+  --color-term-yellow: var(--term-yellow);
+  --color-term-blue: var(--term-blue);
+  --color-term-magenta: var(--term-magenta);
+  --color-term-cyan: var(--term-cyan);
+  --color-term-white: var(--term-white);
+  --color-term-bright-black: var(--term-bright-black);
+  --color-term-bright-red: var(--term-bright-red);
+  --color-term-bright-green: var(--term-bright-green);
+  --color-term-bright-yellow: var(--term-bright-yellow);
+  --color-term-bright-blue: var(--term-bright-blue);
+  --color-term-bright-magenta: var(--term-bright-magenta);
+  --color-term-bright-cyan: var(--term-bright-cyan);
+  --color-term-bright-white: var(--term-bright-white);
+
+  /* Background Colors */
+  --color-bg-terminal: var(--bg-primary);
+  --color-bg-terminal-secondary: var(--bg-secondary);
+
+  /* Text Colors */
+  --color-text-terminal: var(--text-primary);
+  --color-text-terminal-secondary: var(--text-secondary);
+
+  /* Border Colors */
+  --color-border-terminal: var(--border-color);
+
+  /* Custom Opacity Values */
+  --opacity-crt-scanline: var(--crt-scanline-opacity);
+  --opacity-crt-static: var(--crt-static-opacity);
+
+  /* Custom Font Sizes */
+  --font-size-xs: 0.85rem;
+  --font-size-xs--line-height: 1rem;
+  --font-size-sm: 0.95rem;
+  --font-size-sm--line-height: 1.15rem;
+  --font-size-base: 1.1rem;
+  --font-size-base--line-height: 1.4rem;
+  --font-size-lg: 1.2rem;
+  --font-size-lg--line-height: 1.5rem;
+  --font-size-xl: 1.35rem;
+  --font-size-xl--line-height: 1.6rem;
+  --font-size-2xl: 1.6rem;
+  --font-size-2xl--line-height: 1.75rem;
+  --font-size-3xl: 1.95rem;
+  --font-size-3xl--line-height: 2rem;
+  --font-size-4xl: 2.35rem;
+  --font-size-4xl--line-height: 2.25rem;
+  --font-size-5xl: 3.15rem;
+  --font-size-5xl--line-height: 1;
+  --font-size-6xl: 3.95rem;
+  --font-size-6xl--line-height: 1;
+  --font-size-7xl: 4.75rem;
+  --font-size-7xl--line-height: 1;
+  --font-size-8xl: 6.25rem;
+  --font-size-8xl--line-height: 1;
+  --font-size-9xl: 8.5rem;
+  --font-size-9xl--line-height: 1;
+
+  /* Font Families */
+  --font-family-mono: monospace;
+  --font-family-retro: DepartureMono, monospace;
+
+  /* Custom Animations */
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-glitch: glitch 2.5s infinite;
+  --animate-fade-in: fadeIn 1s ease-in;
+  --animate-typing: typing 2s steps(40, end);
+
+  /* Box Shadows */
+  --shadow-terminal:
+    0 0 20px rgba(var(--border-color-rgb), 0.1), 0 0 40px rgba(var(--border-color-rgb), 0.05),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  --shadow-terminal-hover:
+    0 10px 30px rgba(0, 0, 0, 0.3), 0 0 30px rgba(var(--border-color-rgb), 0.1);
+  --shadow-terminal-glow: 0 0 20px var(--terminal-glow);
+  --shadow-crt: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-crt-hover: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+  /* Background Images */
+  --background-image-scanline: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+  --background-image-scanline-heavy: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  --background-image-matrix-rain: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(var(--border-color-rgb), 0.03) 2px,
+    rgba(var(--border-color-rgb), 0.03) 4px
+  );
+  --background-image-terminal-gradient: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(var(--border-color-rgb), 0.05) 100%
+  );
+
+  /* Background Sizes */
+  --background-size-scanline: 100% 4px;
+  --background-size-scanline-heavy: 100% 2px;
+}
+
+/* Keyframes - these need to be in regular CSS, not @theme */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glitch {
+  0%,
+  100% {
+    text-shadow:
+      0.08em 0 0 rgba(255, 0, 0, 0.85),
+      -0.08em -0.03em 0 rgba(0, 255, 0, 0.85),
+      0.03em 0.08em 0 rgba(0, 0, 255, 0.85);
+  }
+  15% {
+    text-shadow:
+      -0.08em -0.03em 0 rgba(255, 0, 0, 0.85),
+      0.03em 0.03em 0 rgba(0, 255, 0, 0.85),
+      -0.08em -0.08em 0 rgba(0, 0, 255, 0.85);
+  }
+  30% {
+    text-shadow:
+      0.08em 0.03em 0 rgba(255, 0, 0, 0.85),
+      -0.03em -0.08em 0 rgba(0, 255, 0, 0.85),
+      0.05em 0.05em 0 rgba(0, 0, 255, 0.85);
+  }
+  50% {
+    text-shadow:
+      0.03em 0.08em 0 rgba(255, 0, 0, 0.85),
+      0.08em 0 0 rgba(0, 255, 0, 0.85),
+      0 -0.08em 0 rgba(0, 0, 255, 0.85);
+  }
+  70% {
+    text-shadow:
+      -0.03em 0.05em 0 rgba(255, 0, 0, 0.85),
+      0.05em -0.03em 0 rgba(0, 255, 0, 0.85),
+      -0.08em 0.03em 0 rgba(0, 0, 0, 0.85);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -29,10 +29,10 @@ const groupedBooks = Object.values(bookBitsByBook);
 
 <Layout title="Bits from Books">
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
-    <div class="terminal-card">
+    <div class="terminal-card animate-fade-in p-6 sm:p-8">
       <header class="mb-8">
         <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
-          <span class="prompt font-ui-prompt">$</span> Bits from Books
+          <span class="prompt font-ui-prompt mr-2">$</span> Bits from Books
         </h1>
         <p class="text-sm font-content" style="color: var(--text-secondary);">
           Thought-provoking excerpts and passages from books that left an impression.
@@ -50,7 +50,7 @@ const groupedBooks = Object.values(bookBitsByBook);
               {bookGroup.author && bookGroup.author !== "" && " - "}
               <span class="book-name">{bookGroup.book}</span>
             </h2>
-            <div class="bits-grid">
+            <div class="bits-grid grid gap-4">
               {bookGroup.bits.map((bit, index) => (
                 <BookBitCard {...bit} bookIndex={groupIndex} bitIndex={index} />
               ))}
@@ -61,7 +61,7 @@ const groupedBooks = Object.values(bookBitsByBook);
 
       {
         bookBits.length === 0 && (
-          <div class="empty-state">
+          <div class="empty-state py-12 text-center">
             <p>No book excerpts available yet. Check back soon!</p>
           </div>
         )
@@ -72,21 +72,14 @@ const groupedBooks = Object.values(bookBitsByBook);
 </Layout>
 
 <style>
-  .terminal-card {
-    @apply animate-fade-in p-6 sm:p-8;
-  }
-
   .prompt {
     color: var(--accent-primary);
-    @apply mr-2;
-  }
-
-  .book-section {
-    @apply mb-8;
   }
 
   .book-title {
-    @apply mb-4 text-lg font-bold;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 700;
     color: var(--text-primary);
     font-family: "DepartureMono", monospace;
     position: relative;
@@ -104,7 +97,6 @@ const groupedBooks = Object.values(bookBitsByBook);
   }
 
   .bits-grid {
-    @apply grid gap-4;
     grid-template-columns: 1fr;
   }
 
@@ -123,7 +115,6 @@ const groupedBooks = Object.values(bookBitsByBook);
   }
 
   .empty-state {
-    @apply py-12 text-center;
     color: var(--text-secondary);
     font-family: monospace;
   }

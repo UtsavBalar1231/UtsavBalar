@@ -45,7 +45,7 @@ const professionalTutorials = tutorialsList.filter(
 
 <Layout title="Tutorials">
   <main class="container mx-auto px-2 py-4 sm:px-4 sm:py-6 md:max-w-6xl md:py-8 lg:px-8">
-    <div class="terminal-card">
+    <div class="terminal-card animate-fade-in p-6 sm:p-8">
       <header class="mb-8">
         <h1 class="mb-4 text-xl font-bold font-ui-heading" style="color: var(--text-primary);">
           <span class="prompt font-ui-prompt">$</span> Tutorials
@@ -129,23 +129,22 @@ const professionalTutorials = tutorialsList.filter(
 </Layout>
 
 <style>
-  .terminal-card {
-    @apply animate-fade-in p-6 sm:p-8;
-  }
-
   .prompt {
     color: var(--accent-primary);
-    @apply mr-2;
+    margin-right: 0.5rem;
   }
 
   .section-title {
-    @apply mb-4 text-lg font-bold;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: bold;
     color: var(--text-primary);
     font-family: "DepartureMono", monospace;
   }
 
   .tutorials-grid {
-    @apply grid gap-4;
+    display: grid;
+    gap: 1rem;
     grid-template-columns: 1fr;
   }
 
@@ -162,7 +161,9 @@ const professionalTutorials = tutorialsList.filter(
   }
 
   .empty-state {
-    @apply py-12 text-center;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    text-align: center;
     color: var(--text-secondary);
     font-family: monospace;
   }
