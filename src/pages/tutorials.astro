@@ -4,7 +4,10 @@ import TutorialCard from "../components/TutorialCard.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 
-const tutorials = await getCollection("tutorials");
+// Filter out draft tutorials in production builds
+const tutorials = await getCollection("tutorials", ({ data }: CollectionEntry<"tutorials">) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
 
 // Sort tutorials by their slug number
 const sortedTutorials = tutorials.sort(

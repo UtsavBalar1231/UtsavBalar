@@ -1,3 +1,4 @@
+/* Accessibility: Disable animated background overlays for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .noise-overlay,
   .grunge-overlay,

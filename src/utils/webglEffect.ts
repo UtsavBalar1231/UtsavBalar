@@ -43,10 +43,9 @@ export abstract class WebGLEffect {
 
   constructor(config: WebGLEffectConfig) {
     this.config = config;
-    // Default to 24 FPS for cinematic feel
     this.frameInterval = 1000 / (config.targetFPS || 24);
 
-    // Bind event handlers once in constructor
+    // Bind once to prevent memory leaks from addEventListener/removeEventListener mismatch
     this.boundHandleResize = this.handleResize.bind(this);
     this.boundCleanup = this.cleanup.bind(this);
     this.boundAnimate = this.animate.bind(this);
@@ -82,10 +81,8 @@ export abstract class WebGLEffect {
       return;
     }
 
-    // Enable required extensions
     this.enableExtensions();
 
-    // Setup shaders and geometry
     if (!this.initializeShaders()) {
       console.error("Failed to initialize shaders");
       return;

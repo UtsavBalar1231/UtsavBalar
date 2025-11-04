@@ -7,6 +7,8 @@ const { title = "Note" } = Astro.props;
 ---
 
 <div
+  role="note"
+  aria-label={`Note: ${title}`}
   class="note-container group relative my-6 overflow-hidden rounded-md border-l-4 border-info shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out hover:border-l-[6px] hover:pl-[calc(1rem-2px)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
 >
   <div

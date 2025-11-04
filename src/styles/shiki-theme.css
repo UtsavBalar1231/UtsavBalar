@@ -137,17 +137,3 @@ pre.astro-code {
     }
   }
 }
-
-/* Light theme adjustments - for better contrast */
-[data-theme="gruvbox-light-hard"],
-[data-theme="catppuccin-latte"],
-[data-theme="everforest-light"] {
-  pre.astro-code {
-    /* Adjust colors for better contrast in light themes */
-    :global(.comment),
-    :global(.punctuation.definition.comment),
-    :global(.string.comment) {
-      color: color-mix(in srgb, var(--text-secondary) 70%, black);
-    }
-  }
-}

@@ -14,9 +14,21 @@ export abstract class VisualEffect {
   protected observers: MutationObserver[] = [];
   protected config: VisualEffectConfig;
 
+  // Store bound function references to prevent memory leaks
+  private boundHandleResize: () => void;
+  private boundHandleContextLost: (event: Event) => void;
+  private boundHandleContextRestored: () => void;
+  private boundCleanup: () => void;
+
   constructor(config: VisualEffectConfig) {
     this.config = config;
     this.frameInterval = 1000 / (config.targetFPS || 30);
+
+    // Bind event handlers once in constructor
+    this.boundHandleResize = this.handleResize.bind(this);
+    this.boundHandleContextLost = this.handleContextLost.bind(this);
+    this.boundHandleContextRestored = this.handleContextRestored.bind(this);
+    this.boundCleanup = this.cleanup.bind(this);
   }
 
   protected abstract shouldShow(): boolean;
@@ -48,12 +60,12 @@ export abstract class VisualEffect {
   }
 
   protected setupEventListeners(): void {
-    window.addEventListener("resize", this.handleResize.bind(this));
+    window.addEventListener("resize", this.boundHandleResize);
 
-    this.canvas?.addEventListener("contextlost", this.handleContextLost.bind(this));
-    this.canvas?.addEventListener("contextrestored", this.handleContextRestored.bind(this));
+    this.canvas?.addEventListener("contextlost", this.boundHandleContextLost);
+    this.canvas?.addEventListener("contextrestored", this.boundHandleContextRestored);
 
-    document.addEventListener("astro:before-preparation", this.cleanup.bind(this));
+    document.addEventListener("astro:before-preparation", this.boundCleanup);
   }
 
   protected setupObservers(): void {
@@ -144,14 +156,14 @@ export abstract class VisualEffect {
     this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
 
-    window.removeEventListener("resize", this.handleResize.bind(this));
+    window.removeEventListener("resize", this.boundHandleResize);
 
     if (this.canvas) {
-      this.canvas.removeEventListener("contextlost", this.handleContextLost.bind(this));
-      this.canvas.removeEventListener("contextrestored", this.handleContextRestored.bind(this));
+      this.canvas.removeEventListener("contextlost", this.boundHandleContextLost);
+      this.canvas.removeEventListener("contextrestored", this.boundHandleContextRestored);
     }
 
-    document.removeEventListener("astro:before-preparation", this.cleanup.bind(this));
+    document.removeEventListener("astro:before-preparation", this.boundCleanup);
   }
 
   protected checkPerformanceMode(): boolean {

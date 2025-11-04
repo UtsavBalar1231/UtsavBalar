@@ -63,7 +63,7 @@
     position: absolute;
     width: 52px;
     height: 45px;
-    border: 2px solid #00000060;
+    border: 2px solid rgba(0, 0, 0, 0.38);
     z-index: calc(var(--z-max, 999) + 3);
     cursor: pointer;
     text-align: center;
@@ -71,8 +71,8 @@
     border-radius: 4px;
     left: 50%;
     transform: translateX(-50%);
-    background: #0000007f;
-    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--term-bright-white);
     opacity: 0;
     animation: btnAppear 0.4s ease-in-out forwards;
     animation-delay: 1s;
@@ -93,7 +93,7 @@
   }
 
   .exit-btn:hover {
-    background: black;
+    background: var(--term-black);
   }
 
   .exit-btn:active {
@@ -139,34 +139,34 @@
       background: transparent;
     }
     10% {
-      background: #ff5733;
+      background: var(--term-bright-red);
     }
     20% {
-      background: #ff4500;
+      background: var(--term-red);
     }
     30% {
-      background: #00fd0a;
+      background: var(--term-bright-green);
     }
     40% {
-      background: #33c1ff;
+      background: var(--term-bright-cyan);
     }
     50% {
-      background: #ffd700;
+      background: var(--term-bright-yellow);
     }
     60% {
-      background: #8a2be2;
+      background: var(--term-bright-magenta);
     }
     70% {
-      background: #ff1493;
+      background: var(--term-magenta);
     }
     80% {
-      background: #adff2f;
+      background: var(--term-yellow);
     }
     90% {
-      background: #ff6347;
+      background: var(--color-error);
     }
     100% {
-      background: #00fd0a;
+      background: var(--color-success);
     }
   }
 </style>
@@ -248,6 +248,7 @@
 
           Promise.all([this.catAudio.play(), this.catVideo.play()]).catch(() => {});
 
+          // Auto-stop after video duration (64 seconds / 64000ms)
           this.timeoutId = setTimeout(() => {
             this.stop();
           }, 64000);

@@ -226,13 +226,22 @@ footer,
   }
 }
 
-/* Reduced motion preferences */
+/* Accessibility: Disable transitions and hover effects for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   button,
   .btn,
   a.btn,
-  details summary {
+  details summary,
+  .social-link,
+  .skill-item {
     transition: none;
+  }
+
+  /* Remove hover transforms */
+  button:hover,
+  .btn:hover,
+  a.btn:hover {
+    transform: none;
   }
 }
 

@@ -110,6 +110,7 @@
   }
 }
 
+/* Accessibility: Disable page transitions and navigation animations for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
   ::view-transition-new(*) {
@@ -120,6 +121,10 @@
   .page-content-exiting {
     animation: none !important;
     transition: none !important;
+  }
+
+  .nav-link-active::before {
+    animation: none !important;
   }
 }
 

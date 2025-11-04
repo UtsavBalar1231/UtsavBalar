@@ -17,24 +17,24 @@ Engineered and implemented custom device drivers for the **PamirAI Distiller 2**
 <details>
 <summary><strong>Technical Details</strong></summary>
 
-1. **Audio Codec Driver**: 
+1. **Audio Codec Driver**:
 	- Developed a driver for the TLV320AIC3204 I2C audio codec with deterministic initialization sequence
 	- Implemented granular volume control and input gain adjustment via userspace interface
-	- Integrated sysfs-based configuration interface allowing runtime codec parameter modification
+	- Exposed sysfs attributes for runtime codec parameter configuration
 
-2. **Soundcard Driver**: 
+2. **Soundcard Driver**:
 	- Architected an ALSA-compliant soundcard driver exposing the I2C audio codec to the Linux sound subsystem
 	- Implemented full-duplex PCM playback and capture functionality with configurable sample rates and bit depths
 
 3. **UART-Based IPC Protocol**:
-	- Engineered a lightweight binary communication protocol (4-byte fixed-size packet format) for efficient data exchange between the Linux host processor and RP2040 microcontroller
-	- Implemented robust error detection through checksum validation to ensure data integrity
-	- Designed a comprehensive command set supporting input event handling, LED control, power management, diagnostics, and system management functions
+	- Developed 4-byte fixed-size packet format for data exchange between Linux host and RP2040 microcontroller
+	- Implemented CRC8 checksum validation on all packets
+	- Designed command set supporting input events, LED control, power management, diagnostics, and system management
 
 4. **Serio-Based Input Driver**:
 	- Developed a serio-based input driver interfacing with the Linux input subsystem for event processing from the RP2040 microcontroller
 	- Implemented dual protocol support: line-based (decimal representation of button states) and raw protocol (direct byte representation)
-	- Optimized interrupt handling and event debouncing for reliable input processing
+	- Added interrupt-driven handling and 50ms debounce timer for button events
 </details>
 
 **[View GitHub Repository](https://github.com/UtsavBalar1231/linux/tree/rpi-6.12.y)**
@@ -45,7 +45,7 @@ Engineered and implemented custom device drivers for the **PamirAI Distiller 2**
 
 > *User interface for AI-driven embedded systems*
 
-Designed and implemented a Qt-based application for **PamirAI**, a startup specializing in AI-driven solutions. The application seamlessly integrates with MCP-based AI modules and provides a responsive, efficient interface for monitoring and controlling Edge AI hardware.
+Designed and implemented a Qt-based application for **PamirAI**, a startup specializing in AI-driven solutions. The application integrates with MCP-based AI modules via gRPC and renders at 60fps on 1080p displays for monitoring and controlling Edge AI hardware.
 
 <details>
 <summary><strong>Technical Details</strong></summary>

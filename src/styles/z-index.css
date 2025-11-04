@@ -1,17 +1,30 @@
 :root {
+  /* Background layers (1-5) */
   --z-background: 1;
   --z-doom-fire: 2;
   --z-noise: 4;
   --z-grunge: 5;
+
+  /* CRT visual effects (9-11) */
+  --z-crt-scanlines: 9;
+  --z-crt-overlay: 11;
+
+  /* Main content (10+) */
   --z-content: 10;
   --z-header: 20;
   --z-mobile-nav: 30;
+
+  /* Interactive overlays (40+) */
   --z-dropdown: 40;
   --z-theme-selector: 45;
   --z-theme-dropdown: 50;
+
+  /* Notifications & modals (60+) */
   --z-modal: 60;
   --z-toast: 70;
   --z-tooltip: 80;
+
+  /* Maximum z-index */
   --z-max: 999;
 }
 .matrix-bg {

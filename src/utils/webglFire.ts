@@ -42,8 +42,8 @@ const FIRE_PALETTE = [
 ];
 
 export class WebGLDoomFire extends WebGLEffect {
-  private fireWidth: number = 80; // Optimized for performance while maintaining pixelated aesthetic
-  private fireHeight: number = 50; // Reduced CPU workload by 75%
+  private fireWidth: number = 80; // 80x50 grid keeps per-frame CPU work under 2ms on low-end hardware
+  private fireHeight: number = 50;
   private fireTexture: WebGLTexture | null = null;
   private paletteTexture: WebGLTexture | null = null;
   private fireData: Uint8Array | null = null;
@@ -57,7 +57,7 @@ export class WebGLDoomFire extends WebGLEffect {
   constructor() {
     super({
       canvasId: "doom-fire-canvas",
-      targetFPS: 24, // Film-standard 24fps for cinematic fire flickering
+      targetFPS: 24, // 24fps matches target framerate for other WebGL effects
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
@@ -163,7 +163,6 @@ export class WebGLDoomFire extends WebGLEffect {
   protected setupGeometry(): void {
     if (!this.gl || !this.program) return;
 
-    // Create fullscreen quad
     const quadVertices = new Float32Array([
       0,
       0, // Bottom left
@@ -177,13 +176,10 @@ export class WebGLDoomFire extends WebGLEffect {
 
     this.createBuffer("quad", quadVertices);
 
-    // Create palette texture
     this.createPaletteTexture();
-
-    // Create fire data texture
     this.initializeFireTexture();
 
-    // Setup ping-pong framebuffers for fire simulation
+    // Ping-pong buffers enable GPU-based fire propagation without read-back stalls
     this.setupFramebuffers();
   }
 

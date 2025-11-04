@@ -16,7 +16,7 @@ interface SakuraPetal {
 
 export class WebGLSakuraFall extends WebGLEffect {
   private petals: SakuraPetal[] = [];
-  private petalCount: number = 150; // Optimized for performance (50% reduction)
+  private petalCount: number = 150; // 150 petals * 24 bytes = 3.6KB instance buffer
   private particleData: Float32Array | null = null;
 
   // Additional uniforms
@@ -25,7 +25,7 @@ export class WebGLSakuraFall extends WebGLEffect {
   constructor() {
     super({
       canvasId: "sakura-fall-canvas",
-      targetFPS: 30, // Slightly smoother 30fps for organic petal motion
+      targetFPS: 30, // 30fps: physics timestep for petal falling/rotation simulation
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
@@ -146,7 +146,6 @@ export class WebGLSakuraFall extends WebGLEffect {
   protected setupGeometry(): void {
     if (!this.gl || !this.program) return;
 
-    // Create quad vertices for petal rendering
     const quadVertices = new Float32Array([
       -0.5,
       -0.5, // Bottom left
@@ -159,18 +158,9 @@ export class WebGLSakuraFall extends WebGLEffect {
     ]);
 
     this.createBuffer("quad", quadVertices);
-
-    // Create petal texture
     this.createPetalTexture();
 
-    // Get additional uniform locations
     this.windUniform = this.gl.getUniformLocation(this.program, "u_wind");
-
-    // Get attribute locations for instancing
-    // const instancePosAttr = this.gl.getAttribLocation(this.program, 'a_instancePosition');
-    // const instanceRotAttr = this.gl.getAttribLocation(this.program, 'a_instanceRotation');
-
-    // Initialize petals
     this.initializePetals();
   }
 

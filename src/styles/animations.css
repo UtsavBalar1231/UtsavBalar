@@ -45,44 +45,6 @@ h6 {
   }
 }
 
-@keyframes barrel-pulse {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-@keyframes scan-moving {
-  0% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-@keyframes scan-bar {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(calc(100% + 100%));
-  }
-}
-
-@keyframes phosphor-flicker {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.98;
-  }
-}
-
 @keyframes phosphor-pulse {
   0%,
   100% {
@@ -90,93 +52,6 @@ h6 {
   }
   50% {
     filter: brightness(1.1);
-  }
-}
-
-@keyframes interference {
-  0%,
-  40%,
-  100% {
-    opacity: 0.03;
-  }
-  10% {
-    opacity: 0.06;
-  }
-  30% {
-    opacity: 0.01;
-  }
-  50% {
-    opacity: 0.05;
-  }
-  60% {
-    opacity: 0.02;
-  }
-  90% {
-    opacity: 0.04;
-  }
-}
-
-@keyframes static-shift {
-  0% {
-    background-position:
-      0 0,
-      0 0;
-  }
-  20% {
-    background-position:
-      -3px 0,
-      -5px -5px;
-  }
-  40% {
-    background-position:
-      3px 0,
-      5px 5px;
-  }
-  60% {
-    background-position:
-      0 -3px,
-      0 -5px;
-  }
-  80% {
-    background-position:
-      0 3px,
-      0 5px;
-  }
-  100% {
-    background-position:
-      0 0,
-      0 0;
-  }
-}
-
-@keyframes voltage-flicker {
-  0%,
-  100% {
-    filter: brightness(1) contrast(1);
-  }
-  92% {
-    filter: brightness(1) contrast(1);
-  }
-  93% {
-    filter: brightness(0.9) contrast(0.9);
-  }
-  94% {
-    filter: brightness(1.1) contrast(1.1);
-  }
-  95% {
-    filter: brightness(0.95) contrast(0.95);
-  }
-  96% {
-    filter: brightness(1) contrast(1);
-  }
-}
-
-@keyframes pixel-drift {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(2px, 2px);
   }
 }
 
@@ -351,8 +226,9 @@ h6 {
   }
 }
 
-/* Accessibility - reduce motion */
+/* Accessibility: Disable glitch animations and header effects for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  /* Disable interactive glitch effects */
   .glitch-hover:hover,
   .glitch-hover:active,
   .glitch-hover:focus,
@@ -366,6 +242,27 @@ h6 {
   .glitch-subtle-hover:active,
   .glitch-subtle-hover:focus {
     animation: none;
+  }
+
+  /* Disable header phosphor glow animation */
+  h1,
+  h2 {
+    animation: none;
+  }
+
+  /* Disable legacy animation classes */
+  .fade-in,
+  .glitch-text:hover,
+  .typing-text {
+    animation: none;
+  }
+
+  /* Disable lazy load animations */
+  .animate-ready,
+  .animate-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

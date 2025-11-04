@@ -25,13 +25,12 @@ export class WebGLMatrixRain extends WebGLEffect {
 
   // Attribute locations
   private instancePositionAttribute: number = -1;
-  // private instanceCharAttribute: number = -1; // Currently using position.z for char index
   private instanceBrightnessAttribute: number = -1;
 
   constructor() {
     super({
       canvasId: "matrix-rain-canvas",
-      targetFPS: 24, // Classic cinematic 24fps for film-like digital rain
+      targetFPS: 24, // 24fps matches other WebGL effect framerates
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
@@ -133,7 +132,6 @@ export class WebGLMatrixRain extends WebGLEffect {
 
     // Get additional attribute locations
     this.instancePositionAttribute = this.gl.getAttribLocation(this.program, "a_instancePosition");
-    // this.instanceCharAttribute = this.gl.getAttribLocation(this.program, 'a_instanceChar');
     this.instanceBrightnessAttribute = this.gl.getAttribLocation(
       this.program,
       "a_instanceBrightness"
