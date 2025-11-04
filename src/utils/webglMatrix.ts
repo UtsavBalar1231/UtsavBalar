@@ -44,10 +44,12 @@ export class WebGLMatrixRain extends WebGLEffect {
 
   protected getShaders(): ShaderSource {
     const vertex = `
+      precision mediump float;
+
       attribute vec2 a_position;
       attribute vec3 a_instancePosition; // x, y, charIndex
       attribute float a_instanceBrightness;
-      
+
       uniform vec2 u_resolution;
       uniform float u_time;
       uniform float u_charSize;

@@ -16,7 +16,7 @@ interface SakuraPetal {
 
 export class WebGLSakuraFall extends WebGLEffect {
   private petals: SakuraPetal[] = [];
-  private petalCount: number = 300; // Reduced for larger petals
+  private petalCount: number = 150; // Optimized for performance (50% reduction)
   private particleData: Float32Array | null = null;
 
   // Additional uniforms
@@ -38,10 +38,12 @@ export class WebGLSakuraFall extends WebGLEffect {
 
   protected getShaders(): ShaderSource {
     const vertex = `
+      precision mediump float;
+
       attribute vec2 a_position;
       attribute vec3 a_instancePosition; // x, y, z (depth)
       attribute vec3 a_instanceRotation; // rotation, size, opacity
-      
+
       uniform vec2 u_resolution;
       uniform float u_time;
       uniform vec2 u_wind;
@@ -310,9 +312,7 @@ export class WebGLSakuraFall extends WebGLEffect {
     const ext = this.getInstancedArraysExt();
     if (!ext) return;
 
-    // Enable depth testing for proper layering
-    this.gl.enable(this.gl.DEPTH_TEST);
-    this.gl.depthFunc(this.gl.LEQUAL);
+    // Depth testing removed for better performance - using painter's algorithm via z-based opacity
 
     // Bind quad geometry
     const quadBuffer = this.buffers.get("quad");
@@ -357,9 +357,6 @@ export class WebGLSakuraFall extends WebGLEffect {
     const instanceRotAttr = this.gl.getAttribLocation(this.program, "a_instanceRotation");
     ext.vertexAttribDivisorANGLE(instancePosAttr, 0);
     ext.vertexAttribDivisorANGLE(instanceRotAttr, 0);
-
-    // Disable depth testing
-    this.gl.disable(this.gl.DEPTH_TEST);
   }
 
   protected handleResize(): void {

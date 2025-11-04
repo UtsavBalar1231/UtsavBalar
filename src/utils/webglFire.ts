@@ -42,8 +42,8 @@ const FIRE_PALETTE = [
 ];
 
 export class WebGLDoomFire extends WebGLEffect {
-  private fireWidth: number = 160; // Reduced from 320 for more pixelated look
-  private fireHeight: number = 100; // Reduced from 200 for more pixelated look
+  private fireWidth: number = 80; // Optimized for performance while maintaining pixelated aesthetic
+  private fireHeight: number = 50; // Reduced CPU workload by 75%
   private fireTexture: WebGLTexture | null = null;
   private paletteTexture: WebGLTexture | null = null;
   private fireData: Uint8Array | null = null;

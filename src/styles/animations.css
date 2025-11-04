@@ -1,11 +1,17 @@
-/* Terminal glow for headers with phosphor persistence */
+/* Terminal glow for headers with phosphor persistence - limited to h1/h2 for performance */
 h1,
-h2,
+h2 {
+  animation: phosphor-glow 2s ease-in-out infinite alternate;
+}
+
+/* Smaller headers get static glow without animation */
 h3,
 h4,
 h5,
 h6 {
-  animation: phosphor-glow 2s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 12px currentColor;
 }
 
 /* Keyframe Animations */

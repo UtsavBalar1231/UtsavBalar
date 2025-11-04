@@ -35,7 +35,7 @@ export class WebGLLightningStorm extends WebGLEffect {
   constructor() {
     super({
       canvasId: "lightning-storm-canvas",
-      targetFPS: 60,
+      targetFPS: 30, // Reduced from 60 for better performance
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
@@ -50,6 +50,7 @@ export class WebGLLightningStorm extends WebGLEffect {
     // Dummy shaders since we use separate programs for lightning and flash
     // Note: These must declare uniforms that base class expects, even if unused
     const dummyVertex = `
+    precision mediump float;
     attribute vec2 a_pos;
     uniform float u_time;
     uniform vec2 u_resolution;

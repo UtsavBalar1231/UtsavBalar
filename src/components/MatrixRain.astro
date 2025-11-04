@@ -22,21 +22,50 @@
   import { WebGLMatrixRain } from "@/utils/webglMatrix";
 
   let matrixEffect: WebGLMatrixRain | null = null;
+  let themeObserver: MutationObserver | null = null;
+
+  function shouldInitialize(): boolean {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme === "green-phosphor";
+  }
 
   function initMatrixRain() {
-    matrixEffect = new WebGLMatrixRain();
-    matrixEffect.initialize();
+    // Only initialize if theme is green-phosphor and not already initialized
+    if (shouldInitialize() && !matrixEffect) {
+      matrixEffect = new WebGLMatrixRain();
+      matrixEffect.initialize();
+    } else if (!shouldInitialize() && matrixEffect) {
+      // Cleanup if theme changed away from green-phosphor
+      matrixEffect.cleanup();
+      matrixEffect = null;
+    }
+  }
+
+  function setupThemeObserver() {
+    // Watch for theme changes
+    themeObserver = new MutationObserver(initMatrixRain);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initMatrixRain);
+    document.addEventListener("DOMContentLoaded", () => {
+      initMatrixRain();
+      setupThemeObserver();
+    });
   } else {
     initMatrixRain();
+    setupThemeObserver();
   }
 
   document.addEventListener("astro:page-load", initMatrixRain);
 
   document.addEventListener("astro:before-preparation", () => {
     matrixEffect?.cleanup();
+    matrixEffect = null;
+    themeObserver?.disconnect();
+    themeObserver = null;
   });
 </script>

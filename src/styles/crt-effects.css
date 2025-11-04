@@ -10,7 +10,7 @@
 :root {
   --noise-opacity: 0.35;
   --grunge-overlay-opacity: 0.055;
-  --noise-speed: 0.3s;
+  --noise-speed: 1s; /* Increased from 0.3s for better performance (70% reduction in repaints) */
 }
 
 .noise-overlay {

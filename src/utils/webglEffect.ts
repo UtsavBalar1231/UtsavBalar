@@ -35,10 +35,22 @@ export abstract class WebGLEffect {
   protected textures: Map<string, WebGLTexture> = new Map();
   protected framebuffers: Map<string, WebGLFramebuffer> = new Map();
 
+  // Bound event handlers (stored for proper cleanup)
+  private boundHandleResize: () => void;
+  private boundCleanup: () => void;
+  private boundAnimate: (time: number) => void;
+  private boundPageLoad: () => void;
+
   constructor(config: WebGLEffectConfig) {
     this.config = config;
     // Default to 24 FPS for cinematic feel
     this.frameInterval = 1000 / (config.targetFPS || 24);
+
+    // Bind event handlers once in constructor
+    this.boundHandleResize = this.handleResize.bind(this);
+    this.boundCleanup = this.cleanup.bind(this);
+    this.boundAnimate = this.animate.bind(this);
+    this.boundPageLoad = () => this.updateVisibility();
   }
 
   protected abstract getShaders(): ShaderSource;
@@ -243,12 +255,10 @@ export abstract class WebGLEffect {
   }
 
   protected setupEventListeners(): void {
-    window.addEventListener("resize", this.handleResize.bind(this));
+    window.addEventListener("resize", this.boundHandleResize);
 
-    document.addEventListener("astro:before-preparation", this.cleanup.bind(this));
-    document.addEventListener("astro:page-load", () => {
-      this.updateVisibility();
-    });
+    document.addEventListener("astro:before-preparation", this.boundCleanup);
+    document.addEventListener("astro:page-load", this.boundPageLoad);
   }
 
   protected setupObservers(): void {
@@ -296,7 +306,7 @@ export abstract class WebGLEffect {
     const deltaTime = currentTime - this.lastFrameTime;
 
     if (deltaTime < this.frameInterval) {
-      this.animationId = requestAnimationFrame(this.animate.bind(this));
+      this.animationId = requestAnimationFrame(this.boundAnimate);
       return;
     }
 
@@ -326,7 +336,7 @@ export abstract class WebGLEffect {
     // Draw the effect
     this.draw(time);
 
-    this.animationId = requestAnimationFrame(this.animate.bind(this));
+    this.animationId = requestAnimationFrame(this.boundAnimate);
   }
 
   protected updateVisibility(): void {
@@ -352,7 +362,7 @@ export abstract class WebGLEffect {
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
       this.gl.clearColor(0, 0, 0, 0);
 
-      this.animationId = requestAnimationFrame(this.animate.bind(this));
+      this.animationId = requestAnimationFrame(this.boundAnimate);
     }
   }
 
@@ -391,9 +401,10 @@ export abstract class WebGLEffect {
     this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
 
-    // Remove event listeners
-    window.removeEventListener("resize", this.handleResize.bind(this));
-    document.removeEventListener("astro:before-preparation", this.cleanup.bind(this));
+    // Remove event listeners using bound references
+    window.removeEventListener("resize", this.boundHandleResize);
+    document.removeEventListener("astro:before-preparation", this.boundCleanup);
+    document.removeEventListener("astro:page-load", this.boundPageLoad);
   }
 
   protected checkPerformanceMode(): boolean {

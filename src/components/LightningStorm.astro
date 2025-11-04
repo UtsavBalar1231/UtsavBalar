@@ -62,33 +62,71 @@
   import { WebGLLightningStorm } from "@/utils/webglLightning";
 
   let lightningEffect: WebGLLightningStorm | null = null;
+  let themeObserver: MutationObserver | null = null;
+  let flashHandler: ((event: Event) => void) | null = null;
+
+  function shouldInitialize(): boolean {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme === "amber-phosphor";
+  }
 
   function initLightningStorm() {
-    lightningEffect = new WebGLLightningStorm();
-    lightningEffect.initialize();
+    // Only initialize if theme is amber-phosphor and not already initialized
+    if (shouldInitialize() && !lightningEffect) {
+      lightningEffect = new WebGLLightningStorm();
+      lightningEffect.initialize();
 
-    // Handle flash overlay for WebGL lightning
-    const flashOverlay = document.getElementById("lightning-flash");
-    if (flashOverlay) {
-      // Listen for custom flash events from WebGL effect
-      document.addEventListener("lightning-flash", () => {
-        flashOverlay.classList.add("active");
-        setTimeout(() => {
-          flashOverlay.classList.remove("active");
-        }, 150);
-      });
+      // Handle flash overlay for WebGL lightning
+      const flashOverlay = document.getElementById("lightning-flash");
+      if (flashOverlay && !flashHandler) {
+        flashHandler = () => {
+          flashOverlay.classList.add("active");
+          setTimeout(() => {
+            flashOverlay.classList.remove("active");
+          }, 150);
+        };
+        document.addEventListener("lightning-flash", flashHandler);
+      }
+    } else if (!shouldInitialize() && lightningEffect) {
+      // Cleanup if theme changed away from amber-phosphor
+      lightningEffect.cleanup();
+      lightningEffect = null;
+      if (flashHandler) {
+        document.removeEventListener("lightning-flash", flashHandler);
+        flashHandler = null;
+      }
     }
   }
 
+  function setupThemeObserver() {
+    // Watch for theme changes
+    themeObserver = new MutationObserver(initLightningStorm);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initLightningStorm);
+    document.addEventListener("DOMContentLoaded", () => {
+      initLightningStorm();
+      setupThemeObserver();
+    });
   } else {
     initLightningStorm();
+    setupThemeObserver();
   }
 
   document.addEventListener("astro:page-load", initLightningStorm);
 
   document.addEventListener("astro:before-preparation", () => {
     lightningEffect?.cleanup();
+    lightningEffect = null;
+    if (flashHandler) {
+      document.removeEventListener("lightning-flash", flashHandler);
+      flashHandler = null;
+    }
+    themeObserver?.disconnect();
+    themeObserver = null;
   });
 </script>

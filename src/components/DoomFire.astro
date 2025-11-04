@@ -21,21 +21,50 @@
   import { WebGLDoomFire } from "@/utils/webglFire";
 
   let fireEffect: WebGLDoomFire | null = null;
+  let themeObserver: MutationObserver | null = null;
+
+  function shouldInitialize(): boolean {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme === "doom-red";
+  }
 
   function initDoomFire() {
-    fireEffect = new WebGLDoomFire();
-    fireEffect.initialize();
+    // Only initialize if theme is doom-red and not already initialized
+    if (shouldInitialize() && !fireEffect) {
+      fireEffect = new WebGLDoomFire();
+      fireEffect.initialize();
+    } else if (!shouldInitialize() && fireEffect) {
+      // Cleanup if theme changed away from doom-red
+      fireEffect.cleanup();
+      fireEffect = null;
+    }
+  }
+
+  function setupThemeObserver() {
+    // Watch for theme changes
+    themeObserver = new MutationObserver(initDoomFire);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initDoomFire);
+    document.addEventListener("DOMContentLoaded", () => {
+      initDoomFire();
+      setupThemeObserver();
+    });
   } else {
     initDoomFire();
+    setupThemeObserver();
   }
 
   document.addEventListener("astro:page-load", initDoomFire);
 
   document.addEventListener("astro:before-preparation", () => {
     fireEffect?.cleanup();
+    fireEffect = null;
+    themeObserver?.disconnect();
+    themeObserver = null;
   });
 </script>

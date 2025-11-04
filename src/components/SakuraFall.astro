@@ -22,21 +22,50 @@
   import { WebGLSakuraFall } from "@/utils/webglSakura";
 
   let sakuraEffect: WebGLSakuraFall | null = null;
+  let themeObserver: MutationObserver | null = null;
+
+  function shouldInitialize(): boolean {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme === "monochrome";
+  }
 
   function initSakuraFall() {
-    sakuraEffect = new WebGLSakuraFall();
-    sakuraEffect.initialize();
+    // Only initialize if theme is monochrome and not already initialized
+    if (shouldInitialize() && !sakuraEffect) {
+      sakuraEffect = new WebGLSakuraFall();
+      sakuraEffect.initialize();
+    } else if (!shouldInitialize() && sakuraEffect) {
+      // Cleanup if theme changed away from monochrome
+      sakuraEffect.cleanup();
+      sakuraEffect = null;
+    }
+  }
+
+  function setupThemeObserver() {
+    // Watch for theme changes
+    themeObserver = new MutationObserver(initSakuraFall);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSakuraFall);
+    document.addEventListener("DOMContentLoaded", () => {
+      initSakuraFall();
+      setupThemeObserver();
+    });
   } else {
     initSakuraFall();
+    setupThemeObserver();
   }
 
   document.addEventListener("astro:page-load", initSakuraFall);
 
   document.addEventListener("astro:before-preparation", () => {
     sakuraEffect?.cleanup();
+    sakuraEffect = null;
+    themeObserver?.disconnect();
+    themeObserver = null;
   });
 </script>
