@@ -62,6 +62,13 @@ export default [
     },
   },
   {
+    // Disable unused CSS selector rule for LightningStorm - class is dynamically added via JS
+    files: ["**/LightningStorm.astro"],
+    rules: {
+      "astro/no-unused-css-selector": "off",
+    },
+  },
+  {
     files: ["**/*.mdx"],
     languageOptions: {
       parser: tsParser,
