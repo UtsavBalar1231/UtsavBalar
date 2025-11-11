@@ -50,6 +50,12 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
+  /* RGB variants for semantic colors */
+  --error-rgb: 255, 85, 85;
+  --warning-rgb: 255, 255, 85;
+  --success-rgb: 85, 255, 85;
+  --info-rgb: 85, 255, 255;
+
   /* Color-specific glow effects (default) - reduced text intensity by 50% */
   --glow-black: rgba(0, 0, 0, 0.075);
   --glow-red: rgba(170, 0, 0, 0.075);
@@ -165,6 +171,12 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
+  /* RGB variants for semantic colors */
+  --error-rgb: 255, 0, 0;
+  --warning-rgb: 255, 255, 0;
+  --success-rgb: 0, 255, 0;
+  --info-rgb: 0, 255, 255;
+
   /* Color-specific glow effects - Green Phosphor - reduced by 50% */
   --glow-black: rgba(0, 0, 0, 0.075);
   --glow-red: rgba(205, 0, 0, 0.075);
@@ -251,6 +263,12 @@
   --color-warning: var(--term-bright-yellow);
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
+
+  /* RGB variants for semantic colors */
+  --error-rgb: 255, 102, 68;
+  --warning-rgb: 255, 176, 0;
+  --success-rgb: 187, 255, 0;
+  --info-rgb: 0, 204, 255;
 
   /* Color-specific glow effects - Amber Phosphor - reduced by 50% */
   --glow-black: rgba(0, 0, 0, 0.075);
@@ -339,6 +357,12 @@
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
 
+  /* RGB variants for semantic colors */
+  --error-rgb: 255, 85, 85;
+  --warning-rgb: 255, 255, 85;
+  --success-rgb: 85, 255, 85;
+  --info-rgb: 85, 255, 255;
+
   /* Color-specific glow effects - Monochrome - reduced by 50% */
   --glow-black: rgba(0, 0, 0, 0.075);
   --glow-red: rgba(170, 0, 0, 0.075);
@@ -425,6 +449,12 @@
   --color-warning: var(--term-bright-yellow);
   --color-success: var(--term-bright-green);
   --color-info: var(--term-bright-cyan);
+
+  /* RGB variants for semantic colors */
+  --error-rgb: 255, 65, 0;
+  --warning-rgb: 255, 136, 0;
+  --success-rgb: 138, 226, 52;
+  --info-rgb: 52, 226, 226;
 
   /* Color-specific glow effects - DOOM Hell Fire - reduced by 50% */
   --glow-black: rgba(0, 0, 0, 0.075);
