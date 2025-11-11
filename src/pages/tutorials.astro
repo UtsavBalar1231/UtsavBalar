@@ -4,12 +4,10 @@ import TutorialCard from "../components/TutorialCard.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 
-// Filter out draft tutorials in production builds
 const tutorials = await getCollection("tutorials", ({ data }: CollectionEntry<"tutorials">) => {
   return import.meta.env.PROD ? !data.draft : true;
 });
 
-// Sort tutorials by their slug number
 const sortedTutorials = tutorials.sort(
   (a: CollectionEntry<"tutorials">, b: CollectionEntry<"tutorials">) => {
     const numA = parseInt(a.slug.match(/\d+/)?.[0] || "0");
@@ -18,7 +16,6 @@ const sortedTutorials = tutorials.sort(
   }
 );
 
-// Map tutorials with additional metadata
 const tutorialsList = sortedTutorials.map(
   (tutorial: CollectionEntry<"tutorials">, index: number) => ({
     number: index + 1,
@@ -31,7 +28,6 @@ const tutorialsList = sortedTutorials.map(
   })
 );
 
-// Group tutorials by difficulty (using lowercase from schema)
 const beginnerTutorials = tutorialsList.filter(
   (t: (typeof tutorialsList)[0]) => t.difficulty === "beginner"
 );

@@ -30,7 +30,6 @@ class BufferPool {
 
   constructor(gl: WebGL2RenderingContext, poolSize: number = 16) {
     this.gl = gl;
-    // Pre-allocate buffer pool
     for (let i = 0; i < poolSize; i++) {
       const buffer = gl.createBuffer();
       if (buffer) {
@@ -47,24 +46,19 @@ class BufferPool {
    * Returns [buffer, actualSize] tuple
    */
   acquire(data: Float32Array): [WebGLBuffer | null, number] {
-    // Find a buffer with sufficient capacity
     const entryIndex = this.availableBuffers.findIndex((e) => e.maxSize >= data.byteLength);
     let entry: BufferPoolEntry | undefined;
 
     if (entryIndex >= 0) {
-      // Found suitable buffer, remove from pool
       entry = this.availableBuffers.splice(entryIndex, 1)[0];
     } else if (this.availableBuffers.length > 0) {
-      // Use any available buffer and resize it
       entry = this.availableBuffers.pop()!;
     } else {
-      // Pool exhausted, allocate new buffer
       const buffer = this.gl.createBuffer();
       if (!buffer) return [null, 0];
       entry = { buffer, maxSize: 0 };
     }
 
-    // Upload data to buffer
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffer);
     if (entry.maxSize < data.byteLength) {
       // Need to allocate new GPU storage
@@ -84,7 +78,6 @@ class BufferPool {
   release(buffer: WebGLBuffer | null, maxSize: number): void {
     if (!buffer) return;
 
-    // Return buffer to available pool
     this.availableBuffers.push({
       buffer,
       maxSize,
@@ -103,11 +96,9 @@ class BufferPool {
 }
 
 export class WebGLLightningStorm extends WebGLEffect {
-  // lightning bolts
   private lightningBolts: LightningBolt[] = [];
   private maxBolts = 8;
 
-  // Buffer pool for efficient geometry management
   private bufferPool: BufferPool | null = null;
 
   private lightningProgram: WebGLProgram | null = null;
@@ -123,7 +114,6 @@ export class WebGLLightningStorm extends WebGLEffect {
   private flashPosAttr: number = -1;
   private quadBuffer: WebGLBuffer | null = null;
 
-  // storm state
   private stormPhase = Math.random() * 1000;
   private stormIntensity = 0.5; // 0..1
   private lastTriggerTime = 0;
@@ -185,17 +175,12 @@ void main() {
   protected setupGeometry(): void {
     if (!this.gl || !this.program || !this.canvas) return;
 
-    // Initialize buffer pool (16 pre-allocated buffers)
     this.bufferPool = new BufferPool(this.gl, 16);
 
-    // create fullscreen quad for flash overlay
     const quad = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
     this.quadBuffer = this.createBuffer("flashQuad", quad);
 
-    // compile lightning shader program
     this.setupLightningShader();
-
-    // compile flash shader program
     this.setupFlashShader();
   }
 
@@ -231,16 +216,16 @@ void main(){
       this.gl.FRAGMENT_SHADER
     );
     if (!vs || !fs) return;
-    const p = this.gl.createProgram();
-    if (!p) return;
-    this.gl.attachShader(p, vs);
-    this.gl.attachShader(p, fs);
-    this.gl.linkProgram(p);
-    if (!this.gl.getProgramParameter(p, this.gl.LINK_STATUS)) {
-      console.error("Lightning shader link failed", this.gl.getProgramInfoLog(p));
+    const program = this.gl.createProgram();
+    if (!program) return;
+    this.gl.attachShader(program, vs);
+    this.gl.attachShader(program, fs);
+    this.gl.linkProgram(program);
+    if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
+      console.error("Lightning shader link failed", this.gl.getProgramInfoLog(program));
       return;
     }
-    this.lightningProgram = p;
+    this.lightningProgram = program;
 
     // Setup UBO for lightning program (bind to same binding point as main program)
     const blockIndex = this.gl.getUniformBlockIndex(this.lightningProgram, "CommonUniforms");
@@ -249,8 +234,8 @@ void main(){
     }
 
     // Cache uniform locations for lightning program (non-UBO uniforms only)
-    this.lightningUniforms.color = this.gl.getUniformLocation(p, "u_color");
-    this.lightningUniforms.opacity = this.gl.getUniformLocation(p, "u_opacity");
+    this.lightningUniforms.color = this.gl.getUniformLocation(program, "u_color");
+    this.lightningUniforms.opacity = this.gl.getUniformLocation(program, "u_opacity");
 
     this.gl.deleteShader(vs);
     this.gl.deleteShader(fs);
@@ -283,20 +268,19 @@ void main(){
       this.gl.FRAGMENT_SHADER
     );
     if (!vs || !fs) return;
-    const p = this.gl.createProgram();
-    if (!p) return;
-    this.gl.attachShader(p, vs);
-    this.gl.attachShader(p, fs);
-    this.gl.linkProgram(p);
-    if (!this.gl.getProgramParameter(p, this.gl.LINK_STATUS)) {
-      console.error("Flash shader link failed", this.gl.getProgramInfoLog(p));
+    const program = this.gl.createProgram();
+    if (!program) return;
+    this.gl.attachShader(program, vs);
+    this.gl.attachShader(program, fs);
+    this.gl.linkProgram(program);
+    if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
+      console.error("Flash shader link failed", this.gl.getProgramInfoLog(program));
       return;
     }
-    this.flashProgram = p;
+    this.flashProgram = program;
 
-    // Cache uniform locations for flash program
-    this.flashUniforms.flash = this.gl.getUniformLocation(p, "u_flash");
-    this.flashUniforms.color = this.gl.getUniformLocation(p, "u_color");
+    this.flashUniforms.flash = this.gl.getUniformLocation(program, "u_flash");
+    this.flashUniforms.color = this.gl.getUniformLocation(program, "u_color");
 
     this.gl.deleteShader(vs);
     this.gl.deleteShader(fs);
@@ -370,7 +354,7 @@ void main(){
 
     // Acquire buffer from pool and upload vertices (done once, never updated)
     const [buffer, bufferSize] = this.bufferPool.acquire(pts);
-    if (!buffer) return; // Failed to acquire buffer
+    if (!buffer) return;
 
     const now = performance.now();
     const bolt: LightningBolt = {
@@ -390,7 +374,6 @@ void main(){
       bolt.pulses.push(i * (0.06 + Math.random() * 0.08));
     }
 
-    // Release oldest bolt's buffer if at capacity
     if (this.lightningBolts.length >= this.maxBolts) {
       const oldBolt = this.lightningBolts.shift();
       if (oldBolt && this.bufferPool) {
@@ -404,11 +387,9 @@ void main(){
   }
 
   private updateStorm(dt: number) {
-    // Simple storm intensity variation
     this.stormPhase += dt * 0.001;
     this.stormIntensity = 0.5 + Math.sin(this.stormPhase) * 0.3 + Math.random() * 0.1;
 
-    // Lightning triggering based on storm intensity
     const baseChance = 0.001 + this.stormIntensity * 0.008;
     if (Math.random() < baseChance) {
       this.triggerLightningCluster();
@@ -421,7 +402,6 @@ void main(){
       }
     }
 
-    // Decay flash value
     this.flashValue *= 0.86;
     if (this.flashValue < 0.01) this.flashValue = 0;
   }
@@ -431,7 +411,6 @@ void main(){
     const dt = Math.min(0.04, 1 / 60);
     this.updateStorm(dt);
 
-    // GL state
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     this.gl.clearColor(0.01, 0.02, 0.03, 0.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -454,7 +433,6 @@ void main(){
         const age = (performance.now() - bolt.createdAt) / 1000;
         const lifeFrac = age / bolt.life;
 
-        // Remove expired bolts and release their buffers
         if (lifeFrac > 1.0) {
           if (this.bufferPool) {
             this.bufferPool.release(bolt.buffer, bolt.bufferSize);
@@ -472,10 +450,9 @@ void main(){
           this.gl.vertexAttribPointer(this.lightningPosAttr, 2, this.gl.FLOAT, false, 0, 0);
         }
 
-        // Calculate pulse-based opacity
         let pulseMul = 0.6;
-        for (const p of bolt.pulses) {
-          const dtPulse = Math.abs(age - p);
+        for (const pulseTime of bolt.pulses) {
+          const dtPulse = Math.abs(age - pulseTime);
           pulseMul = Math.max(pulseMul, Math.max(0.0, 1.0 - dtPulse * 30.0));
         }
         const baseOpacity = (1.0 - lifeFrac) * bolt.intensity * pulseMul;
@@ -503,7 +480,6 @@ void main(){
     if (this.flashValue > 0.003 && this.flashProgram && this.quadBuffer) {
       this.gl.useProgram(this.flashProgram);
 
-      // Use cached uniform locations
       if (this.flashUniforms.flash)
         this.gl.uniform1f(this.flashUniforms.flash, Math.min(1.0, this.flashValue));
       if (this.flashUniforms.color) this.gl.uniform3f(this.flashUniforms.color, 1.0, 0.98, 0.9);
@@ -525,7 +501,6 @@ void main(){
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     }
 
-    // occasional lightning trigger
     if (Math.random() < 0.0006 + this.stormIntensity * 0.0012) {
       const now = performance.now();
       if (now - this.lastTriggerTime > 150) {
@@ -540,19 +515,16 @@ void main(){
   }
 
   public cleanup(): void {
-    // Release all active bolt buffers back to pool
     if (this.bufferPool) {
       for (const bolt of this.lightningBolts) {
         this.bufferPool.release(bolt.buffer, bolt.bufferSize);
       }
       this.lightningBolts = [];
 
-      // Cleanup the buffer pool
       this.bufferPool.cleanup();
       this.bufferPool = null;
     }
 
-    // Call parent cleanup
     super.cleanup();
   }
 }

@@ -221,11 +221,9 @@ export abstract class WebGLEffect {
     this.gl.deleteShader(vertexShader);
     this.gl.deleteShader(fragmentShader);
 
-    // Get and cache common uniform locations
     this.timeUniform = this.getUniformLocation("u_time");
     this.resolutionUniform = this.getUniformLocation("u_resolution");
 
-    // Get and cache common attribute locations
     this.positionAttribute = this.getAttributeLocation("a_position");
 
     return true;
@@ -235,12 +233,10 @@ export abstract class WebGLEffect {
   protected getUniformLocation(name: string): WebGLUniformLocation | null {
     if (!this.gl || !this.program) return null;
 
-    // Check cache first
     if (this.uniformLocations.has(name)) {
       return this.uniformLocations.get(name)!;
     }
 
-    // Get location and cache it
     const location = this.gl.getUniformLocation(this.program, name);
     if (location) {
       this.uniformLocations.set(name, location);
@@ -253,12 +249,10 @@ export abstract class WebGLEffect {
   protected getAttributeLocation(name: string): number {
     if (!this.gl || !this.program) return -1;
 
-    // Check cache first
     if (this.attributeLocations.has(name)) {
       return this.attributeLocations.get(name)!;
     }
 
-    // Get location and cache it
     const location = this.gl.getAttribLocation(this.program, name);
     this.attributeLocations.set(name, location);
 
@@ -277,7 +271,6 @@ export abstract class WebGLEffect {
   protected setupUBO(): void {
     if (!this.gl || !this.program) return;
 
-    // Create uniform buffer
     this.uniformBuffer = this.gl.createBuffer();
     if (!this.uniformBuffer) {
       console.error("Failed to create uniform buffer");
@@ -287,24 +280,17 @@ export abstract class WebGLEffect {
     // Allocate buffer data (16 bytes for std140 layout)
     this.uniformBufferData = new Float32Array(4); // 4 floats = 16 bytes
 
-    // Initialize buffer on GPU
     this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, this.uniformBuffer);
     this.gl.bufferData(this.gl.UNIFORM_BUFFER, this.uniformBufferData, this.gl.DYNAMIC_DRAW);
 
-    // Get uniform block index
     const blockIndex = this.gl.getUniformBlockIndex(this.program, "CommonUniforms");
     if (blockIndex === this.gl.INVALID_INDEX) {
       console.warn("CommonUniforms block not found in shader - ensure shader uses uniform block");
       return;
     }
 
-    // Bind uniform block to binding point 0
     this.gl.uniformBlockBinding(this.program, blockIndex, 0);
-
-    // Bind buffer to binding point 0
     this.gl.bindBufferBase(this.gl.UNIFORM_BUFFER, 0, this.uniformBuffer);
-
-    // Unbind
     this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, null);
   }
 
@@ -321,7 +307,6 @@ export abstract class WebGLEffect {
     this.uniformBufferData[2] = time; // u_time
     this.uniformBufferData[3] = 0; // padding
 
-    // Upload to GPU
     this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, this.uniformBuffer);
     this.gl.bufferSubData(this.gl.UNIFORM_BUFFER, 0, this.uniformBufferData);
     this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, null);
@@ -360,13 +345,11 @@ export abstract class WebGLEffect {
     // Use new texture unit management (Phase 6)
     this.bindTextureToUnit(texture, 0);
 
-    // Set texture parameters
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
 
-    // Upload texture data
     this.gl.texImage2D(
       this.gl.TEXTURE_2D,
       0,
@@ -393,7 +376,6 @@ export abstract class WebGLEffect {
     const framebuffer = this.gl.createFramebuffer();
     if (!framebuffer) return null;
 
-    // Create texture for framebuffer
     const texture = this.createTexture(`${name}_texture`, width, height);
     if (!texture) return null;
 
@@ -434,7 +416,7 @@ export abstract class WebGLEffect {
       this.observerDebounceTimer = window.setTimeout(() => {
         this.updateVisibility();
         this.observerDebounceTimer = 0;
-      }, 150); // 150ms debounce
+      }, 150);
     };
 
     const htmlObserver = new MutationObserver(debouncedUpdateVisibility);
@@ -488,9 +470,8 @@ export abstract class WebGLEffect {
 
     if (!this.gl || !this.program) return;
 
-    const time = (currentTime - this.startTime) * 0.001; // Convert to seconds
+    const time = (currentTime - this.startTime) * 0.001;
 
-    // Clear canvas
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
     // Use shader program with state caching (Phase 6)
@@ -511,7 +492,6 @@ export abstract class WebGLEffect {
       }
     }
 
-    // Draw the effect
     this.draw(time);
 
     this.animationId = requestAnimationFrame(this.boundAnimate);
@@ -558,10 +538,8 @@ export abstract class WebGLEffect {
 
     this.isDestroying = true;
 
-    // Stop animation loop
     this.stop();
 
-    // Clear debounce timer if any
     if (this.observerDebounceTimer) {
       clearTimeout(this.observerDebounceTimer);
       this.observerDebounceTimer = 0;
@@ -569,42 +547,34 @@ export abstract class WebGLEffect {
 
     // Clean up WebGL resources
     if (this.gl) {
-      // Delete VAO
       if (this.vao) {
         this.gl.deleteVertexArray(this.vao);
         this.vao = null;
       }
 
-      // Delete UBO
       if (this.uniformBuffer) {
         this.gl.deleteBuffer(this.uniformBuffer);
         this.uniformBuffer = null;
         this.uniformBufferData = null;
       }
 
-      // Delete buffers
       this.buffers.forEach((buffer) => this.gl!.deleteBuffer(buffer));
       this.buffers.clear();
 
-      // Delete textures
       this.textures.forEach((texture) => this.gl!.deleteTexture(texture));
       this.textures.clear();
 
-      // Delete framebuffers
       this.framebuffers.forEach((framebuffer) => this.gl!.deleteFramebuffer(framebuffer));
       this.framebuffers.clear();
 
-      // Delete program
       if (this.program) {
         this.gl.deleteProgram(this.program);
         this.program = null;
       }
 
-      // Clear location caches
       this.uniformLocations.clear();
       this.attributeLocations.clear();
 
-      // Clear state cache (Phase 6)
       this.clearStateCache();
 
       // Null out references to allow garbage collection
@@ -614,10 +584,8 @@ export abstract class WebGLEffect {
       this.gl = null;
     }
 
-    // Null out canvas reference
     this.canvas = null;
 
-    // Clean up observers
     this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
 
@@ -653,10 +621,8 @@ export abstract class WebGLEffect {
     // Check if buffer needs to be resized
     const currentSize = this.gl.getBufferParameter(bufferTarget, this.gl.BUFFER_SIZE);
     if (currentSize !== data.byteLength) {
-      // Recreate buffer with new size
       this.gl.bufferData(bufferTarget, data, this.gl.DYNAMIC_DRAW);
     } else {
-      // Update existing buffer
       this.gl.bufferSubData(bufferTarget, 0, data);
     }
   }
@@ -675,7 +641,6 @@ export abstract class WebGLEffect {
     // Query actual max texture units (typically 16-32 in WebGL 2.0)
     this.maxTextureUnits = this.gl.getParameter(this.gl.MAX_TEXTURE_IMAGE_UNITS);
 
-    // Initialize all units as null (unbound)
     for (let i = 0; i < this.maxTextureUnits; i++) {
       this.textureUnits.set(i, null);
     }
@@ -693,13 +658,11 @@ export abstract class WebGLEffect {
   protected allocateTextureUnit(texture: WebGLTexture): number | null {
     if (!this.gl) return null;
 
-    // Check if texture already has a unit
     const existingUnit = this.textureToUnit.get(texture);
     if (existingUnit !== undefined) {
       return existingUnit;
     }
 
-    // Find next free unit
     for (let i = 0; i < this.maxTextureUnits; i++) {
       const unit = (this.nextFreeTextureUnit + i) % this.maxTextureUnits;
       if (this.textureUnits.get(unit) === null) {
@@ -753,10 +716,8 @@ export abstract class WebGLEffect {
       this.currentState.activeTextureUnit = unit;
     }
 
-    // Bind texture
     this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
-    // Update tracking
     if (texture) {
       this.textureUnits.set(unit, texture);
       this.textureToUnit.set(texture, unit);
@@ -817,7 +778,6 @@ export abstract class WebGLEffect {
     this.currentState.program = null;
     this.currentState.activeTextureUnit = 0;
 
-    // Clear texture unit tracking
     this.textureUnits.clear();
     this.textureToUnit.clear();
     this.nextFreeTextureUnit = 0;
@@ -836,7 +796,7 @@ export abstract class WebGLEffect {
     if (!this.gl) return;
 
     if (this.currentState.vao === vao) {
-      return; // Already bound
+      return;
     }
 
     this.gl.bindVertexArray(vao);
@@ -853,7 +813,7 @@ export abstract class WebGLEffect {
     if (!this.gl) return;
 
     if (this.currentState.framebuffer === framebuffer) {
-      return; // Already bound
+      return;
     }
 
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer);
@@ -870,7 +830,7 @@ export abstract class WebGLEffect {
     if (!this.gl) return;
 
     if (this.currentState.renderbuffer === renderbuffer) {
-      return; // Already bound
+      return;
     }
 
     this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, renderbuffer);
@@ -891,7 +851,6 @@ export abstract class WebGLEffect {
     const src = srcFactor ?? this.gl.SRC_ALPHA;
     const dst = dstFactor ?? this.gl.ONE_MINUS_SRC_ALPHA;
 
-    // Check if blend enable state needs to change
     if (this.currentState.blendEnabled !== enabled) {
       if (enabled) {
         this.gl.enable(this.gl.BLEND);
@@ -901,7 +860,6 @@ export abstract class WebGLEffect {
       this.currentState.blendEnabled = enabled;
     }
 
-    // Check if blend function needs to change
     if (
       enabled &&
       (this.currentState.blendSrcFactor !== src || this.currentState.blendDstFactor !== dst)
@@ -924,7 +882,6 @@ export abstract class WebGLEffect {
 
     const depthFunc = func ?? this.gl.LESS;
 
-    // Check if depth test enable state needs to change
     if (this.currentState.depthTestEnabled !== enabled) {
       if (enabled) {
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -934,7 +891,6 @@ export abstract class WebGLEffect {
       this.currentState.depthTestEnabled = enabled;
     }
 
-    // Check if depth function needs to change
     if (enabled && this.currentState.depthFunc !== depthFunc) {
       this.gl.depthFunc(depthFunc);
       this.currentState.depthFunc = depthFunc;
@@ -953,7 +909,6 @@ export abstract class WebGLEffect {
 
     const cullFace = face ?? this.gl.BACK;
 
-    // Check if cull face enable state needs to change
     if (this.currentState.cullFaceEnabled !== enabled) {
       if (enabled) {
         this.gl.enable(this.gl.CULL_FACE);
@@ -963,7 +918,6 @@ export abstract class WebGLEffect {
       this.currentState.cullFaceEnabled = enabled;
     }
 
-    // Check if cull face needs to change
     if (enabled && this.currentState.cullFace !== cullFace) {
       this.gl.cullFace(cullFace);
       this.currentState.cullFace = cullFace;
@@ -990,7 +944,7 @@ export abstract class WebGLEffect {
       current.width === width &&
       current.height === height
     ) {
-      return; // Already set
+      return;
     }
 
     this.gl.viewport(x, y, width, height);
@@ -1007,7 +961,7 @@ export abstract class WebGLEffect {
     if (!this.gl) return;
 
     if (this.currentState.program === program) {
-      return; // Already using this program
+      return;
     }
 
     this.gl.useProgram(program);
@@ -1057,7 +1011,6 @@ export abstract class WebGLEffect {
 
     this.bindTextureToUnit(texture, 0);
 
-    // Set texture parameters
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
@@ -1068,7 +1021,7 @@ export abstract class WebGLEffect {
     this.gl.texImage2D(
       this.gl.TEXTURE_2D,
       0,
-      this.gl.SRGB8_ALPHA8, // Internal format (sRGB)
+      this.gl.SRGB8_ALPHA8,
       width,
       height,
       0,
@@ -1105,7 +1058,6 @@ export abstract class WebGLEffect {
     const framebuffer = this.gl.createFramebuffer();
     if (!framebuffer) return null;
 
-    // Create sRGB texture for framebuffer
     const texture = this.createSRGBTexture(`${name}_texture`, width, height);
     if (!texture) return null;
 

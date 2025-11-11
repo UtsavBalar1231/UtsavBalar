@@ -6,7 +6,6 @@ import { getMdxBookBits } from "../data/mdxBookBitsParser";
 
 const bookBits = await getMdxBookBits();
 
-// Group book bits by book
 const bookBitsByBook = bookBits.reduce(
   (acc, bit) => {
     const bookKey = `${bit.author} - ${bit.book}`;
@@ -23,7 +22,6 @@ const bookBitsByBook = bookBits.reduce(
   {} as Record<string, { author: string; book: string; bits: typeof bookBits }>
 );
 
-// Convert to array for easier iteration
 const groupedBooks = Object.values(bookBitsByBook);
 ---
 

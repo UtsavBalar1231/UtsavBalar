@@ -1,7 +1,6 @@
 /* ============================================
    CARD BASE STYLES
    Shared styles for all card components
-   Extracted to eliminate duplication across:
    - BaseCard, BookBitCard, ProjectCard, QuoteCard, TutorialCard
    ============================================ */
 
@@ -126,43 +125,5 @@
 
   .card-base-hoverable::before {
     animation: none !important;
-  }
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-
-/* Slide-in animation (used inline with animation-delay) */
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Terminal cursor blink */
-@keyframes cursor-blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* Scan line animation */
-@keyframes scan-line {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
   }
 }

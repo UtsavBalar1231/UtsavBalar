@@ -11,7 +11,6 @@ export interface Props {
 
 const { id, text, author, book, page, bookIndex = 0, bitIndex = 0 } = Astro.props;
 
-// Create staggered animation delays
 const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 ---
 

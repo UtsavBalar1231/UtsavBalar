@@ -485,7 +485,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     return cachedElements;
   }
 
-  function initializeStatusLine() {
+  function bindStatusLineEvents() {
     const elements = getCachedElements();
     if (!elements) return;
 
@@ -497,7 +497,7 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     }
     themeToggle.dataset.initialized = "true";
 
-    const updateUI = () => {
+    const syncThemeDisplay = () => {
       const currentTheme = themeManager.getCurrentTheme();
       currentThemeName.textContent = currentTheme.shortLabel || currentTheme.label;
 
@@ -508,10 +508,10 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     };
 
     // Initialize UI with current theme
-    updateUI();
+    syncThemeDisplay();
 
     // Subscribe to theme changes
-    themeManager.subscribe(updateUI);
+    themeManager.subscribe(syncThemeDisplay);
 
     const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
@@ -628,12 +628,12 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
   // Initialize on first load
   document.addEventListener("DOMContentLoaded", () => {
     cachedElements = null;
-    initializeStatusLine();
+    bindStatusLineEvents();
   });
 
   // Re-initialize after ViewTransitions
   document.addEventListener("astro:page-load", () => {
     cachedElements = null;
-    initializeStatusLine();
+    bindStatusLineEvents();
   });
 </script>

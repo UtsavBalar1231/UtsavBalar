@@ -1,6 +1,5 @@
 /**
  * Device capability detection for performance optimization
- * Detects hardware capabilities to auto-enable performance mode on low-end devices
  */
 
 export interface DeviceCapabilities {
@@ -121,7 +120,7 @@ export async function getBatteryLevel(): Promise<number | null> {
 /**
  * Detect if device is low-end based on hardware specs
  */
-export function isLowEndDevice(): boolean {
+export function meetsLowEndThresholds(): boolean {
   const cores = getCPUCores();
   const memory = getDeviceMemory();
   const gpuTier = getGPUTier();
@@ -170,7 +169,7 @@ export async function shouldEnablePerformanceMode(): Promise<boolean> {
   }
 
   // Auto-enable for low-end devices
-  if (isLowEndDevice()) {
+  if (meetsLowEndThresholds()) {
     return true;
   }
 
@@ -196,7 +195,7 @@ export async function getDeviceCapabilities(): Promise<DeviceCapabilities> {
   const cores = getCPUCores();
   const memory = getDeviceMemory();
   const isMobile = isMobileViewport();
-  const isLowEnd = isLowEndDevice();
+  const isLowEnd = meetsLowEndThresholds();
   const batteryLevel = await getBatteryLevel();
   const gpuTier = getGPUTier();
 
@@ -218,24 +217,22 @@ export function getRecommendedFPS(): number {
   const isMobile = isMobileViewport();
 
   if (gpuTier === "high" && !isMobile) {
-    return 30; // Desktop with high-end GPU: full quality
+    return 30; // Desktop high-end GPU
   }
 
   if (gpuTier === "high" && isMobile) {
-    return 24; // High-end mobile: good quality
+    return 24; // Mobile high-end GPU
   }
 
   if (gpuTier === "mid") {
-    return 20; // Mid-tier: balanced
+    return 20; // Mid-tier GPU
   }
 
-  // Low-end or unknown
-  return 15; // Low FPS for battery/performance
+  return 15; // Low-end GPU
 }
 
 /**
  * Get formatted device capabilities for debugging
- * Returns an object that can be logged or inspected
  */
 export async function getDeviceCapabilitiesForLogging(): Promise<
   Record<string, string | number | boolean>

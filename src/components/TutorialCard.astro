@@ -12,7 +12,6 @@ export interface Props {
 
 const { number, title, description, difficulty, duration, tags, url, index = 0 } = Astro.props;
 
-// Create staggered animation delay
 const animationDelay = `${index * 0.1}s`;
 
 const displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);

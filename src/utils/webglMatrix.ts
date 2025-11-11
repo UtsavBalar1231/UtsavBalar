@@ -128,15 +128,13 @@ void main() {
     out_display = vec2(newCharIndex, in_display.y);
   }
 
-  // Calculate particle Y position (column Y + offset)
   float particleY = newColumnY + particleIndex * u_charSize;
 
   // Calculate brightness (fade from head to tail)
   float brightness = particleIndex == 0.0 ? 1.0 : max(0.0, 1.0 - particleIndex / length);
 
-  // Output updated state
   out_position = vec2(in_position.x, particleY);
-  out_display.y = brightness; // Update brightness
+  out_display.y = brightness;
   out_column = vec4(newColumnY, speed, length, particleIndex);
 }
 `;
@@ -149,7 +147,6 @@ void main() {
 }
 `;
 
-    // Compile shaders
     const vs = this.compileShader(updateVertex, this.gl.VERTEX_SHADER);
     const fs = this.compileShader(updateFragment, this.gl.FRAGMENT_SHADER);
     if (!vs || !fs) {
@@ -157,7 +154,6 @@ void main() {
       return;
     }
 
-    // Create program with Transform Feedback
     this.updateProgram = this.gl.createProgram();
     if (!this.updateProgram) {
       console.error("Failed to create Matrix Rain update program");
@@ -167,7 +163,6 @@ void main() {
     this.gl.attachShader(this.updateProgram, vs);
     this.gl.attachShader(this.updateProgram, fs);
 
-    // Specify Transform Feedback varyings
     this.gl.transformFeedbackVaryings(
       this.updateProgram,
       ["out_position", "out_display", "out_column"],
@@ -186,13 +181,11 @@ void main() {
       return;
     }
 
-    // Setup UBO for update program
     const blockIndex = this.gl.getUniformBlockIndex(this.updateProgram, "CommonUniforms");
     if (blockIndex !== this.gl.INVALID_INDEX) {
       this.gl.uniformBlockBinding(this.updateProgram, blockIndex, 0);
     }
 
-    // Cleanup
     this.gl.deleteShader(vs);
     this.gl.deleteShader(fs);
   }
@@ -219,10 +212,7 @@ out float v_charIndex;
 out vec2 v_texCoord;
 
 void main() {
-  // Calculate character position
   vec2 position = a_position * u_charSize + a_instancePosition.xy;
-
-  // Convert to clip space
   vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
 
   gl_Position = vec4(clipSpace, 0.0, 1.0);
@@ -253,18 +243,14 @@ in vec2 v_texCoord;
 out vec4 fragColor;
 
 void main() {
-  // Calculate which character to display
   float charOffset = v_charIndex / u_charCount;
   vec2 texCoord = vec2(v_texCoord.x / u_charCount + charOffset, v_texCoord.y);
 
-  // Sample character texture
   vec4 charColor = texture(u_charTexture, texCoord);
 
-  // Apply green phosphor color with brightness
   float green = 100.0 + v_brightness * 155.0;
   vec3 color = vec3(0.0, green / 255.0, 0.0);
 
-  // Fade based on brightness
   float alpha = charColor.a * v_brightness;
 
   // Add slight glow for bright characters
@@ -282,62 +268,44 @@ void main() {
   protected setupGeometry(): void {
     if (!this.gl || !this.program) return;
 
-    // Create quad vertices for character rendering
-    const quadVertices = new Float32Array([
-      -0.5,
-      -0.5, // Bottom left
-      0.5,
-      -0.5, // Bottom right
-      -0.5,
-      0.5, // Top left
-      0.5,
-      0.5, // Top right
-    ]);
+    const quadVertices = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
 
     this.createBuffer("quad", quadVertices);
 
-    // Create character texture atlas
     this.createCharacterTexture();
 
-    // Get and cache additional attribute locations
     this.instancePositionAttribute = this.getAttributeLocation("a_instancePosition");
     this.instanceBrightnessAttribute = this.getAttributeLocation("a_instanceBrightness");
 
-    // Create Transform Feedback update program
     this.createUpdateProgram();
 
-    // Initialize columns with Transform Feedback buffers
     this.initializeColumns();
   }
 
   private createCharacterTexture(): void {
     if (!this.gl) return;
 
-    // Create canvas for rendering characters
     const charCanvas = document.createElement("canvas");
     const charCtx = charCanvas.getContext("2d");
     if (!charCtx) return;
 
-    // Setup canvas for character atlas
     const charWidth = 32;
     const charHeight = 32;
     charCanvas.width = charWidth * CHAR_ARRAY.length;
     charCanvas.height = charHeight;
 
-    // Configure font - increased size for better visibility
+    // Increased size for better visibility
     charCtx.font = '28px "DepartureMono Nerd Font", monospace';
     charCtx.textAlign = "center";
     charCtx.textBaseline = "middle";
     charCtx.fillStyle = "white";
 
-    // Render each character
-    CHAR_ARRAY.forEach((char, i) => {
-      const x = i * charWidth + charWidth / 2;
+    CHAR_ARRAY.forEach((char, charIndex) => {
+      const x = charIndex * charWidth + charWidth / 2;
       const y = charHeight / 2;
       charCtx.fillText(char, x, y);
     });
 
-    // Create WebGL texture from canvas
     const texture = this.gl.createTexture();
     if (!texture) return;
 
@@ -351,7 +319,6 @@ void main() {
       charCanvas
     );
 
-    // Set texture parameters
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
@@ -366,7 +333,6 @@ void main() {
     this.columnCount = Math.floor(this.canvas.width / this.charSize);
     this.columns = [];
 
-    // Calculate total particles needed
     this.totalParticles = this.columnCount * this.particlesPerColumn;
 
     // Allocate particle data buffer for Transform Feedback
@@ -378,9 +344,9 @@ void main() {
 
     let particleIndex = 0;
 
-    for (let i = 0; i < this.columnCount; i++) {
+    for (let colIndex = 0; colIndex < this.columnCount; colIndex++) {
       const column: MatrixColumn = {
-        x: i * this.charSize,
+        x: colIndex * this.charSize,
         y: Math.random() * -this.canvas.height,
         speed: 0.5 + Math.random() * 1.5,
         length: Math.floor(Math.random() * this.maxDropLength) + 10,
@@ -388,19 +354,17 @@ void main() {
         brightness: 1.0,
       };
 
-      // Initialize character indices
-      for (let j = 0; j < column.length; j++) {
+      for (let charIdx = 0; charIdx < column.length; charIdx++) {
         column.chars.push(Math.floor(Math.random() * CHAR_ARRAY.length));
       }
 
       this.columns.push(column);
 
-      // Pack particle data for this column's particles
-      for (let j = 0; j < this.particlesPerColumn; j++) {
+      for (let particleIdx = 0; particleIdx < this.particlesPerColumn; particleIdx++) {
         const baseIndex = particleIndex * 8;
-        const particleY = column.y + j * this.charSize;
-        const charIndex = j < column.chars.length ? column.chars[j] : 0;
-        const brightness = j === 0 ? 1.0 : Math.max(0, 1.0 - j / column.length);
+        const particleY = column.y + particleIdx * this.charSize;
+        const charIndex = particleIdx < column.chars.length ? column.chars[particleIdx] : 0;
+        const brightness = particleIdx === 0 ? 1.0 : Math.max(0, 1.0 - particleIdx / column.length);
 
         // position (x, y)
         this.particleData[baseIndex + 0] = column.x;
@@ -414,13 +378,12 @@ void main() {
         this.particleData[baseIndex + 4] = column.y;
         this.particleData[baseIndex + 5] = column.speed;
         this.particleData[baseIndex + 6] = column.length;
-        this.particleData[baseIndex + 7] = j; // particleIndexInColumn
+        this.particleData[baseIndex + 7] = particleIdx;
 
         particleIndex++;
       }
     }
 
-    // Create Transform Feedback ping-pong buffers
     this.tfBufferA = this.gl.createBuffer();
     this.tfBufferB = this.gl.createBuffer();
 
@@ -429,21 +392,17 @@ void main() {
       return;
     }
 
-    // Initialize buffer A with particle data
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferA);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData, this.gl.DYNAMIC_COPY);
 
-    // Initialize buffer B (same size)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferB);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData.byteLength, this.gl.DYNAMIC_COPY);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
 
-    // Set initial ping-pong state
     this.currentReadBuffer = this.tfBufferA;
     this.currentWriteBuffer = this.tfBufferB;
 
-    // Store render program pointer
     this.renderProgram = this.program;
   }
 
@@ -463,31 +422,27 @@ void main() {
 
     this.gl.useProgram(this.updateProgram);
 
-    // Bind input buffer (read)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
 
-    // Setup vertex attributes for update shader (8 floats per particle, 32 bytes stride)
     const inPosLoc = this.gl.getAttribLocation(this.updateProgram, "in_position");
     const inDisplayLoc = this.gl.getAttribLocation(this.updateProgram, "in_display");
     const inColumnLoc = this.gl.getAttribLocation(this.updateProgram, "in_column");
 
     this.gl.enableVertexAttribArray(inPosLoc);
-    this.gl.vertexAttribPointer(inPosLoc, 2, this.gl.FLOAT, false, 32, 0); // offset 0
+    this.gl.vertexAttribPointer(inPosLoc, 2, this.gl.FLOAT, false, 32, 0);
 
     this.gl.enableVertexAttribArray(inDisplayLoc);
-    this.gl.vertexAttribPointer(inDisplayLoc, 2, this.gl.FLOAT, false, 32, 8); // offset 8
+    this.gl.vertexAttribPointer(inDisplayLoc, 2, this.gl.FLOAT, false, 32, 8);
 
     this.gl.enableVertexAttribArray(inColumnLoc);
-    this.gl.vertexAttribPointer(inColumnLoc, 4, this.gl.FLOAT, false, 32, 16); // offset 16
+    this.gl.vertexAttribPointer(inColumnLoc, 4, this.gl.FLOAT, false, 32, 16);
 
-    // Set update uniforms
     const charSizeLoc = this.gl.getUniformLocation(this.updateProgram, "u_charSize");
     if (charSizeLoc) this.gl.uniform1f(charSizeLoc, this.charSize);
 
     const charCountLoc = this.gl.getUniformLocation(this.updateProgram, "u_charCount");
     if (charCountLoc) this.gl.uniform1f(charCountLoc, CHAR_ARRAY.length);
 
-    // Bind Transform Feedback output buffer (write)
     this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.currentWriteBuffer);
 
     // Perform Transform Feedback update (no rendering)
@@ -497,18 +452,16 @@ void main() {
     this.gl.endTransformFeedback();
     this.gl.disable(this.gl.RASTERIZER_DISCARD);
 
-    // Unbind Transform Feedback buffer
     this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
 
-    // Cleanup update attributes
     this.gl.disableVertexAttribArray(inPosLoc);
     this.gl.disableVertexAttribArray(inDisplayLoc);
     this.gl.disableVertexAttribArray(inColumnLoc);
 
     // Swap ping-pong buffers for next frame
-    const temp = this.currentReadBuffer;
+    const previousReadBuffer = this.currentReadBuffer;
     this.currentReadBuffer = this.currentWriteBuffer;
-    this.currentWriteBuffer = temp;
+    this.currentWriteBuffer = previousReadBuffer;
 
     // ========================================
     // PASS 2: RENDER PASS
@@ -516,7 +469,6 @@ void main() {
 
     this.gl.useProgram(this.renderProgram);
 
-    // Bind quad geometry
     const quadBuffer = this.buffers.get("quad");
     if (quadBuffer) {
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, quadBuffer);
@@ -532,14 +484,13 @@ void main() {
     // Buffer layout: position(2), display(2), column(4)
     // So: a_instancePosition reads position(2) + display.x(1), a_instanceBrightness reads display.y(1)
     this.gl.enableVertexAttribArray(this.instancePositionAttribute);
-    this.gl.vertexAttribPointer(this.instancePositionAttribute, 3, this.gl.FLOAT, false, 32, 0); // x, y, charIndex
+    this.gl.vertexAttribPointer(this.instancePositionAttribute, 3, this.gl.FLOAT, false, 32, 0);
     this.gl.vertexAttribDivisor(this.instancePositionAttribute, 1);
 
     this.gl.enableVertexAttribArray(this.instanceBrightnessAttribute);
-    this.gl.vertexAttribPointer(this.instanceBrightnessAttribute, 1, this.gl.FLOAT, false, 32, 12); // brightness at offset 12
+    this.gl.vertexAttribPointer(this.instanceBrightnessAttribute, 1, this.gl.FLOAT, false, 32, 12);
     this.gl.vertexAttribDivisor(this.instanceBrightnessAttribute, 1);
 
-    // Bind character texture
     const charTexture = this.textures.get("characters");
     if (charTexture) {
       this.gl.activeTexture(this.gl.TEXTURE0);
@@ -548,29 +499,24 @@ void main() {
       if (textureLocation) this.gl.uniform1i(textureLocation, 0);
     }
 
-    // Set render uniforms
     const charSizeLocation = this.getUniformLocation("u_charSize");
     if (charSizeLocation) this.gl.uniform1f(charSizeLocation, this.charSize);
 
     const charCountLocation = this.getUniformLocation("u_charCount");
     if (charCountLocation) this.gl.uniform1f(charCountLocation, CHAR_ARRAY.length);
 
-    // Draw all particles with instancing
     this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.totalParticles);
 
-    // Reset divisors
     this.gl.vertexAttribDivisor(this.instancePositionAttribute, 0);
     this.gl.vertexAttribDivisor(this.instanceBrightnessAttribute, 0);
   }
 
   protected handleResize(): void {
     super.handleResize();
-    // Reinitialize columns on resize
     this.initializeColumns();
   }
 
   public cleanup(): void {
-    // Delete Transform Feedback buffers
     if (this.gl) {
       if (this.tfBufferA) {
         this.gl.deleteBuffer(this.tfBufferA);
@@ -581,21 +527,18 @@ void main() {
         this.tfBufferB = null;
       }
 
-      // Delete update program
       if (this.updateProgram) {
         this.gl.deleteProgram(this.updateProgram);
         this.updateProgram = null;
       }
     }
 
-    // Clear references
     this.currentReadBuffer = null;
     this.currentWriteBuffer = null;
     this.renderProgram = null;
     this.particleData = null;
     this.columns = [];
 
-    // Call parent cleanup
     super.cleanup();
   }
 }

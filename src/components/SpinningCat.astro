@@ -215,11 +215,11 @@
       });
 
       this.catGif?.addEventListener("animationstart", () => {
-        this.handleStartSound();
+        this.playIntroSound();
       });
 
       this.catGif?.addEventListener("animationend", () => {
-        this.handleAnimationEnd();
+        this.startVideoPlayback();
       });
     }
 
@@ -237,14 +237,14 @@
       }, 3000);
     }
 
-    handleStartSound() {
+    playIntroSound() {
       if (this.oiiaAudio) {
         this.oiiaAudio.volume = 0.25;
         this.oiiaAudio.play().catch(() => {});
       }
     }
 
-    handleAnimationEnd() {
+    startVideoPlayback() {
       setTimeout(() => {
         if (this.catVideo && this.catAudio) {
           this.catAudio.volume = 0.25;

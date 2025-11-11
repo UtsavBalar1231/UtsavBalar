@@ -6,10 +6,8 @@ import { getMdxQuotes } from "../data/mdxQuotesParser";
 
 const quotes = await getMdxQuotes();
 
-// Shuffle quotes for variety on each page load
 const shuffledQuotes = [...quotes].sort(() => Math.random() - 0.5);
 
-// Group quotes for display
 const featuredQuotes = shuffledQuotes.slice(0, 3);
 const remainingQuotes = shuffledQuotes.slice(3);
 ---

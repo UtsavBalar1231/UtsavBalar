@@ -89,7 +89,6 @@ out vec4 out_constants;    // Pass through unchanged
 out vec4 out_physics;      // Pass through unchanged
 
 void main() {
-  // Extract constants
   float size = in_constants.x;
   float opacity = in_constants.y;
   float rotationSpeed = in_constants.z;
@@ -99,35 +98,28 @@ void main() {
   float swaySpeed = in_physics.y;
   float swayAmount = in_physics.z;
 
-  // Calculate depth factor for parallax
   float depthFactor = 0.5 + in_position.z * 0.5;
 
-  // Update Y position (falling)
   float newY = in_position.y + fallSpeed * depthFactor * u_deltaTime;
 
-  // Calculate sway (affects X)
   float sway = sin(newY * swaySpeed + swayPhase) * swayAmount;
   float newX = in_position.x + sway * 0.02 * u_deltaTime + u_wind.x * depthFactor * u_deltaTime;
 
-  // Update rotation
   float newRotation = in_rotation + rotationSpeed * u_deltaTime;
 
   // Boundary wrapping
-  // Reset if below screen
   if (newY > u_resolution.y + 50.0) {
     newY = -50.0 - mod(u_time * 100.0 + float(gl_VertexID), 200.0);  // Pseudo-random offset
     newX = mod(u_time * 200.0 + float(gl_VertexID) * 13.37, u_resolution.x + 200.0) - 100.0;
     newRotation = mod(u_time + float(gl_VertexID) * 0.123, 6.28318);  // Random rotation
   }
 
-  // Horizontal wrapping
   if (newX < -100.0) {
     newX = u_resolution.x + 100.0;
   } else if (newX > u_resolution.x + 100.0) {
     newX = -100.0;
   }
 
-  // Output updated state
   out_position = vec3(newX, newY, in_position.z);  // Z (depth) never changes
   out_rotation = newRotation;
   out_constants = in_constants;  // Pass through
@@ -144,7 +136,6 @@ void main() {
 }
 `;
 
-    // Compile shaders
     const vs = this.compileShader(updateVertex, this.gl.VERTEX_SHADER);
     const fs = this.compileShader(updateFragment, this.gl.FRAGMENT_SHADER);
     if (!vs || !fs) {
@@ -152,7 +143,6 @@ void main() {
       return;
     }
 
-    // Create program with Transform Feedback varyings
     this.updateProgram = this.gl.createProgram();
     if (!this.updateProgram) {
       console.error("Failed to create update program");
@@ -171,7 +161,6 @@ void main() {
 
     this.gl.linkProgram(this.updateProgram);
 
-    // Check link status
     if (!this.gl.getProgramParameter(this.updateProgram, this.gl.LINK_STATUS)) {
       console.error("Update program link error:", this.gl.getProgramInfoLog(this.updateProgram));
       this.gl.deleteProgram(this.updateProgram);
@@ -179,7 +168,6 @@ void main() {
       return;
     }
 
-    // Get uniform locations for update program
     this.updateWindUniform = this.gl.getUniformLocation(this.updateProgram, "u_wind");
 
     // Setup UBO for update program (bind to same binding point as render program)
@@ -188,7 +176,6 @@ void main() {
       this.gl.uniformBlockBinding(this.updateProgram, blockIndex, 0);
     }
 
-    // Cleanup
     this.gl.deleteShader(vs);
     this.gl.deleteShader(fs);
   }
@@ -216,7 +203,6 @@ out vec2 v_texCoord;
 out float v_depth;
 
 void main() {
-  // Apply rotation
   float rotation = a_instanceRotation.x;
   float size = a_instanceRotation.y;
   float opacity = a_instanceRotation.z;
@@ -224,22 +210,17 @@ void main() {
   // Calculate sway for rendering (visual effect only, physics handled in update shader)
   float swayX = sin(a_instancePosition.y * 0.01 + u_time * 2.0) * 20.0;
 
-  // Rotation matrix
   float c = cos(rotation);
   float s = sin(rotation);
   mat2 rotMatrix = mat2(c, -s, s, c);
 
-  // Apply rotation and scale to vertex position
   vec2 rotatedPos = rotMatrix * (a_position * size);
 
-  // Add instance position and sway
   vec2 position = rotatedPos + a_instancePosition.xy + vec2(swayX + u_wind.x * 10.0, 0.0);
 
-  // Apply parallax based on depth
   float parallaxScale = 0.5 + a_instancePosition.z * 0.5;
   position *= parallaxScale;
 
-  // Convert to clip space
   vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
 
   gl_Position = vec4(clipSpace, a_instancePosition.z * 0.1, 1.0);
@@ -269,39 +250,30 @@ in float v_depth;
 out vec4 fragColor;
 
 void main() {
-  // Sample petal texture
   vec4 texColor = texture(u_petalTexture, v_texCoord);
 
-  // Distance from center for petal shape
   float dist = length(v_texCoord - 0.5) * 2.0;
 
-  // Create petal shape using distance field
   float petalShape = 1.0 - smoothstep(0.3, 0.5, dist);
 
-  // Add inner detail
   float innerDetail = 1.0 - smoothstep(0.0, 0.2, dist);
   petalShape += innerDetail * 0.3;
 
-  // Create 5-petal flower shape
   vec2 centered = v_texCoord - 0.5;
   float angle = atan(centered.y, centered.x);
   float petalPattern = sin(angle * 5.0) * 0.5 + 0.5;
   petalShape *= petalPattern;
 
-  // Monochrome white to light gray gradient
   vec3 color = mix(
     vec3(0.9, 0.9, 0.9),  // Light gray
     vec3(1.0, 1.0, 1.0),  // White
     petalShape
   );
 
-  // Add subtle depth-based shading
   color *= 0.8 + v_depth * 0.2;
 
-  // Apply opacity with shape
   float alpha = petalShape * v_opacity * texColor.a;
 
-  // Add subtle glow for closer petals
   if (v_depth > 0.7) {
     alpha *= 1.2;
     color *= 1.1;
@@ -333,17 +305,14 @@ void main() {
 
     this.windUniform = this.gl.getUniformLocation(this.program, "u_wind");
 
-    // Create Transform Feedback update program
     this.createUpdateProgram();
 
-    // Initialize particle data with Transform Feedback buffers
     this.initializePetals();
   }
 
   private createPetalTexture(): void {
     if (!this.gl) return;
 
-    // Create canvas for petal texture
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -351,7 +320,6 @@ void main() {
     canvas.width = 512; // Larger texture for bigger petals
     canvas.height = 512;
 
-    // Create radial gradient for petal
     const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
     gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
     gradient.addColorStop(0.5, "rgba(245, 245, 245, 0.9)");
@@ -360,7 +328,6 @@ void main() {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 512, 512);
 
-    // Create texture from canvas
     const texture = this.gl.createTexture();
     if (!texture) return;
 
@@ -374,7 +341,6 @@ void main() {
       canvas
     );
 
-    // Set texture parameters
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
@@ -414,7 +380,6 @@ void main() {
 
       this.petals.push(petal);
 
-      // Pack particle data into buffer (12 floats per particle)
       const baseIndex = i * 12;
       this.particleData[baseIndex + 0] = petal.x; // position.x
       this.particleData[baseIndex + 1] = petal.y; // position.y
@@ -439,7 +404,6 @@ void main() {
       return;
     }
 
-    // Initialize buffer A with particle data
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferA);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData, this.gl.DYNAMIC_COPY);
 
@@ -449,7 +413,6 @@ void main() {
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
 
-    // Set initial ping-pong state
     this.currentReadBuffer = this.tfBufferA;
     this.currentWriteBuffer = this.tfBufferB;
 
@@ -479,7 +442,6 @@ void main() {
 
     this.gl.useProgram(this.updateProgram);
 
-    // Bind input buffer (read)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
 
     // Setup vertex attributes for update shader (12 floats per particle, 48 bytes stride)
@@ -500,7 +462,6 @@ void main() {
     this.gl.enableVertexAttribArray(inPhysicsLoc);
     this.gl.vertexAttribPointer(inPhysicsLoc, 4, this.gl.FLOAT, false, 48, 32); // offset 32
 
-    // Set update uniforms
     if (this.updateWindUniform) {
       this.gl.uniform2f(this.updateWindUniform, windX, windY);
     }
@@ -510,7 +471,6 @@ void main() {
       this.gl.uniform1f(deltaTimeLoc, deltaTime);
     }
 
-    // Bind Transform Feedback output buffer (write)
     this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.currentWriteBuffer);
 
     // Perform Transform Feedback update (no rendering)
@@ -520,19 +480,17 @@ void main() {
     this.gl.endTransformFeedback();
     this.gl.disable(this.gl.RASTERIZER_DISCARD);
 
-    // Unbind Transform Feedback buffer
     this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
 
-    // Cleanup update attributes
     this.gl.disableVertexAttribArray(inPositionLoc);
     this.gl.disableVertexAttribArray(inRotationLoc);
     this.gl.disableVertexAttribArray(inConstantsLoc);
     this.gl.disableVertexAttribArray(inPhysicsLoc);
 
     // Swap ping-pong buffers for next frame
-    const temp = this.currentReadBuffer;
+    const bufferSwap = this.currentReadBuffer;
     this.currentReadBuffer = this.currentWriteBuffer;
-    this.currentWriteBuffer = temp;
+    this.currentWriteBuffer = bufferSwap;
 
     // ========================================
     // PASS 2: RENDER PASS
@@ -540,7 +498,6 @@ void main() {
 
     this.gl.useProgram(this.renderProgram);
 
-    // Bind quad geometry
     const quadBuffer = this.buffers.get("quad");
     if (quadBuffer) {
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, quadBuffer);
@@ -566,12 +523,10 @@ void main() {
     this.gl.vertexAttribPointer(instanceRotAttr, 3, this.gl.FLOAT, false, 48, 12); // rotation + size + opacity at offset 12, 16, 20
     this.gl.vertexAttribDivisor(instanceRotAttr, 1);
 
-    // Set render uniforms
     if (this.windUniform) {
       this.gl.uniform2f(this.windUniform, windX, windY);
     }
 
-    // Bind petal texture
     const petalTexture = this.textures.get("petal");
     if (petalTexture) {
       this.gl.activeTexture(this.gl.TEXTURE0);
@@ -580,22 +535,18 @@ void main() {
       if (textureLocation) this.gl.uniform1i(textureLocation, 0);
     }
 
-    // Draw all petals with instancing
     this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.petalCount);
 
-    // Reset divisors
     this.gl.vertexAttribDivisor(instancePosAttr, 0);
     this.gl.vertexAttribDivisor(instanceRotAttr, 0);
   }
 
   protected handleResize(): void {
     super.handleResize();
-    // Reinitialize petals on resize
     this.initializePetals();
   }
 
   public cleanup(): void {
-    // Delete Transform Feedback buffers
     if (this.gl) {
       if (this.tfBufferA) {
         this.gl.deleteBuffer(this.tfBufferA);
@@ -606,20 +557,17 @@ void main() {
         this.tfBufferB = null;
       }
 
-      // Delete update program
       if (this.updateProgram) {
         this.gl.deleteProgram(this.updateProgram);
         this.updateProgram = null;
       }
     }
 
-    // Clear references
     this.currentReadBuffer = null;
     this.currentWriteBuffer = null;
     this.renderProgram = null;
     this.particleData = null;
 
-    // Call parent cleanup
     super.cleanup();
   }
 }
