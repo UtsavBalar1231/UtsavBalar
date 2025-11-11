@@ -30,10 +30,10 @@
   background-blend-mode: multiply;
   background: url("/noise-textures/noisy-texture-200x200-1.png");
   filter: contrast(1.2) brightness(0.9) sepia(0.3) saturate(1.2)
-    hue-rotate(var(--noise-hue-rotate, 90deg));
+    hue-rotate(var(--noise-hue-rotate));
   opacity: var(--noise-opacity);
 
-  animation: noise-cycle var(--noise-speed, 0.3s) steps(4) infinite;
+  animation: noise-cycle var(--noise-speed) steps(4) infinite;
 }
 
 .grunge-overlay {
