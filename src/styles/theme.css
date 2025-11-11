@@ -111,6 +111,9 @@
   --warning: var(--color-warning);
   --success: var(--color-success);
   --info: var(--color-info);
+
+  /* Terminal text color (used by resume and tutorials) */
+  --term-text: var(--text-primary);
 }
 
 /* Green Phosphor Terminal (Classic Matrix/IBM) */
@@ -194,6 +197,9 @@
   --glow-bright-blue-rgb: 92, 92, 255;
   --glow-bright-magenta-rgb: 255, 0, 255;
   --glow-bright-cyan-rgb: 0, 255, 255;
+
+  /* Terminal text color (used by resume and tutorials) */
+  --term-text: var(--color-text-primary);
 }
 
 /* Amber Phosphor Terminal (Vintage Unix/VAX) */
@@ -278,6 +284,9 @@
   --glow-bright-blue-rgb: 0, 153, 255;
   --glow-bright-magenta-rgb: 255, 102, 204;
   --glow-bright-cyan-rgb: 0, 204, 255;
+
+  /* Terminal text color (used by resume and tutorials) */
+  --term-text: var(--color-text-primary);
 }
 
 /* Monochrome Terminal (Classic White on Black) */
@@ -362,6 +371,9 @@
   --glow-bright-blue-rgb: 85, 85, 255;
   --glow-bright-magenta-rgb: 255, 85, 255;
   --glow-bright-cyan-rgb: 85, 255, 255;
+
+  /* Terminal text color (used by resume and tutorials) */
+  --term-text: var(--color-text-primary);
 }
 
 /* DOOM Red Terminal (Classic DOOM/Hell aesthetic) */
@@ -446,4 +458,7 @@
   --glow-bright-blue-rgb: 114, 159, 207;
   --glow-bright-magenta-rgb: 173, 127, 168;
   --glow-bright-cyan-rgb: 52, 226, 226;
+
+  /* Terminal text color (used by resume and tutorials) */
+  --term-text: var(--color-text-primary);
 }

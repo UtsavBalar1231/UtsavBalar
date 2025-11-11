@@ -13,6 +13,7 @@
   --z-content: 10;
   --z-header: 20;
   --z-mobile-nav: 30;
+  --z-status-line: 35;
 
   /* Interactive overlays (40+) */
   --z-dropdown: 40;
