@@ -43,12 +43,8 @@
     font-size: 0.875rem;
     color: var(--text-primary);
     overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
     /* Improve touch handling */
     touch-action: manipulation;
-    /* GPU acceleration for smoother scrolling */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
     /* Create stacking context */
     position: relative;
     isolation: isolate;
@@ -203,7 +199,6 @@ code:not(pre code) {
 pre {
   max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.3);
 }

@@ -25,10 +25,14 @@ function loadTheme(): Theme {
     return getThemeByValue(DEFAULT_THEME);
   }
 
-  const storedThemeValue = localStorage.getItem(STORAGE_KEY);
-  if (storedThemeValue) {
-    const foundTheme = getThemeByValue(storedThemeValue);
-    if (foundTheme) return foundTheme;
+  try {
+    const storedThemeValue = localStorage.getItem(STORAGE_KEY);
+    if (storedThemeValue) {
+      const foundTheme = getThemeByValue(storedThemeValue);
+      if (foundTheme) return foundTheme;
+    }
+  } catch (e) {
+    console.warn("localStorage unavailable:", e);
   }
 
   return getThemeByValue(DEFAULT_THEME);
@@ -50,7 +54,12 @@ function applyTheme(theme: Theme): void {
 
   document.documentElement.setAttribute("data-theme", theme.value);
   document.body.setAttribute("data-theme", theme.value);
-  localStorage.setItem(STORAGE_KEY, theme.value);
+
+  try {
+    localStorage.setItem(STORAGE_KEY, theme.value);
+  } catch (e) {
+    console.warn("localStorage unavailable:", e);
+  }
 
   updateMetaTheme(theme);
   notifyListeners(theme);

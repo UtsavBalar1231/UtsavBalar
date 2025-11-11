@@ -44,30 +44,16 @@ export function isMobileViewport(): boolean {
 export function getGPUTier(): "high" | "mid" | "low" {
   try {
     const canvas = document.createElement("canvas");
-    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    const gl = canvas.getContext("webgl");
 
     if (!gl) {
       return "low";
     }
 
-    let renderer: string;
-
-    // Try standard RENDERER parameter first (modern Firefox, Chrome 123+)
-    try {
-      renderer = (gl as WebGLRenderingContext)
-        .getParameter((gl as WebGLRenderingContext).RENDERER)
-        .toLowerCase();
-    } catch {
-      // Fall back to WEBGL_debug_renderer_info extension (older browsers)
-      const debugInfo = (gl as WebGLRenderingContext).getExtension("WEBGL_debug_renderer_info");
-      if (!debugInfo) {
-        return "mid";
-      }
-
-      renderer = (gl as WebGLRenderingContext)
-        .getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
-        .toLowerCase();
-    }
+    // Get GPU renderer string (Safari 16+, Chrome 90+, Firefox 88+ support RENDERER directly)
+    const renderer = (gl as WebGLRenderingContext)
+      .getParameter((gl as WebGLRenderingContext).RENDERER)
+      .toLowerCase();
 
     // High-end GPUs
     if (

@@ -105,7 +105,6 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
     height: 28px;
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
     border-top: 1px solid rgba(var(--accent-primary-rgb), 0.3);
     box-shadow:
       0 -2px 10px rgba(0, 0, 0, 0.1),
@@ -213,7 +212,6 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
   .theme-toggle {
     background: rgba(var(--bg-color-rgb), 0.1);
     backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(var(--bg-color-rgb), 0.2);
     border-radius: 2px;
     color: var(--color-text-secondary);
@@ -578,16 +576,25 @@ const currentFile = pathMap[currentPath] || "~" + currentPath.replace(/\/$/, "")
       };
 
       const isPerformanceMode = () => {
-        const storedPerformanceMode = localStorage.getItem("performanceMode");
-        return storedPerformanceMode !== null
-          ? storedPerformanceMode === "true"
-          : window.innerWidth < 768;
+        try {
+          const storedPerformanceMode = localStorage.getItem("performanceMode");
+          return storedPerformanceMode !== null
+            ? storedPerformanceMode === "true"
+            : window.innerWidth < 768;
+        } catch (e) {
+          console.warn("localStorage unavailable:", e);
+          return window.innerWidth < 768;
+        }
       };
 
       let pathElement: SVGPathElement | null = null;
 
       const setPerformanceMode = (enabled: boolean) => {
-        localStorage.setItem("performanceMode", enabled.toString());
+        try {
+          localStorage.setItem("performanceMode", enabled.toString());
+        } catch (e) {
+          console.warn("localStorage unavailable:", e);
+        }
         document.body.setAttribute("data-performance", enabled.toString());
 
         if (!pathElement) {

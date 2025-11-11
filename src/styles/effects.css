@@ -26,8 +26,6 @@ body {
 .glass-effect {
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation))
     brightness(var(--glass-brightness));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation))
-    brightness(var(--glass-brightness));
 }
 
 /* Navigation - transparent, no glass */
@@ -36,7 +34,6 @@ nav,
 header {
   background: transparent;
   backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 /* Cards and content containers */
@@ -48,7 +45,6 @@ header {
   position: relative;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid rgba(var(--bg-color-rgb), 0.6);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
@@ -60,7 +56,6 @@ header {
 .project-card:hover,
 .tutorial-card:hover {
   backdrop-filter: blur(calc(var(--glass-blur) * 1.2)) saturate(1.15);
-  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.2)) saturate(1.15);
   border-color: rgba(var(--bg-color-rgb), 0.25);
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.12),
@@ -103,7 +98,6 @@ code,
 .code-block {
   background: rgba(var(--bg-color-rgb), 0.05);
   backdrop-filter: blur(calc(var(--glass-blur) * 0.75));
-  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.75));
   border: 1px solid rgba(var(--bg-color-rgb), 0.08);
 }
 
@@ -113,7 +107,6 @@ button,
 a.btn {
   background: rgba(var(--bg-color-rgb), 0.08);
   backdrop-filter: blur(calc(var(--glass-blur) * 0.75)) saturate(1.1);
-  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.75)) saturate(1.1);
   border: 1px solid rgba(var(--bg-color-rgb), 0.15);
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.05),
@@ -126,7 +119,6 @@ button:hover,
 a.btn:hover {
   background: rgba(var(--bg-color-rgb), 0.15);
   backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
   border-color: rgba(var(--bg-color-rgb), 0.25);
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.08),
@@ -139,7 +131,6 @@ a.btn:hover {
 [data-theme-selector] {
   background: rgba(var(--bg-color-rgb), 0.15);
   backdrop-filter: blur(10px) saturate(1.2) brightness(1.05);
-  -webkit-backdrop-filter: blur(10px) saturate(1.2) brightness(1.05);
   border: 1px solid rgba(var(--bg-color-rgb), 0.2);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.15),
@@ -152,7 +143,6 @@ footer,
 .footer {
   background: transparent;
   backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   border-top: 1px solid rgba(var(--bg-color-rgb), 0.08);
 }
 
@@ -222,7 +212,6 @@ footer,
   .tutorial-card,
   .content-card {
     backdrop-filter: blur(12px) saturate(1.15);
-    -webkit-backdrop-filter: blur(12px) saturate(1.15);
   }
 }
 
@@ -258,14 +247,12 @@ footer,
   .content-card,
   .tabs {
     backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
   }
 
   .terminal-card:hover,
   .project-card:hover,
   .tutorial-card:hover {
     backdrop-filter: blur(4px) saturate(1.1);
-    -webkit-backdrop-filter: blur(4px) saturate(1.1);
   }
 
   .tag {
@@ -276,22 +263,18 @@ footer,
   code,
   .code-block {
     backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
   }
 
   .quote-card {
     backdrop-filter: blur(3px) saturate(1.1);
-    -webkit-backdrop-filter: blur(3px) saturate(1.1);
   }
 
   .book-card {
     backdrop-filter: blur(4px) saturate(1.2);
-    -webkit-backdrop-filter: blur(4px) saturate(1.2);
   }
 
   .skills-grid {
     backdrop-filter: blur(5px) saturate(1.2) brightness(1.05);
-    -webkit-backdrop-filter: blur(5px) saturate(1.2) brightness(1.05);
   }
 }
 
@@ -306,7 +289,6 @@ footer,
 [data-performance="true"] code,
 [data-performance="true"] .code-block {
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 /* Simplify backgrounds in performance mode */

@@ -11,7 +11,6 @@
   border: 1px solid rgba(var(--border-color-rgb), 0.5);
   background: rgba(var(--bg-color-rgb), 0.05);
   backdrop-filter: blur(8px) saturate(1.1);
-  -webkit-backdrop-filter: blur(8px) saturate(1.1);
   position: relative;
   overflow: hidden;
   box-shadow:
@@ -58,7 +57,6 @@
     border-left-color: var(--accent-primary);
     background: rgba(var(--bg-color-rgb), 0.08);
     backdrop-filter: blur(10px) saturate(1.2);
-    -webkit-backdrop-filter: blur(10px) saturate(1.2);
     box-shadow:
       0 0 15px rgba(var(--accent-primary-rgb), 0.15),
       0 4px 12px rgba(0, 0, 0, 0.06),

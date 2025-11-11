@@ -8,6 +8,7 @@ import DoomFire from "../components/DoomFire.astro";
 import MatrixRain from "../components/MatrixRain.astro";
 import LightningStorm from "../components/LightningStorm.astro";
 import SakuraFall from "../components/SakuraFall.astro";
+import BrowserWarning from "../components/BrowserWarning.astro";
 
 interface Props {
   title: string;
@@ -128,6 +129,7 @@ const { title } = Astro.props;
     <link rel="preconnect" href="https://cataas.com" crossorigin />
   </head>
   <body>
+    <BrowserWarning />
     <div class="noise-overlay" style="z-index: var(--z-noise);" transition:persist="noise"></div>
     <div class="grunge-overlay" style="z-index: var(--z-grunge);" transition:persist="grunge"></div>
     <MatrixRain transition:persist="matrix" />
@@ -263,9 +265,6 @@ const { title } = Astro.props;
 
   body {
     touch-action: pan-y;
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
   }
 </style>
