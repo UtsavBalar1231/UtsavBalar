@@ -23,6 +23,16 @@ export class WebGLMatrixRain extends WebGLEffect {
   private particlesPerColumn: number = 30;
   private totalParticles: number = 0;
 
+  // Transform Feedback ping-pong buffers
+  private tfBufferA: WebGLBuffer | null = null;
+  private tfBufferB: WebGLBuffer | null = null;
+  private currentReadBuffer: WebGLBuffer | null = null;
+  private currentWriteBuffer: WebGLBuffer | null = null;
+
+  // Separate programs for update (TF) and render
+  private updateProgram: WebGLProgram | null = null;
+  private renderProgram: WebGLProgram | null = null;
+
   // Attribute locations
   private instancePositionAttribute: number = -1;
   private instanceBrightnessAttribute: number = -1;
@@ -34,6 +44,9 @@ export class WebGLMatrixRain extends WebGLEffect {
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
+
+    // Enable UBO for common uniforms
+    this.useUBO = true;
   }
 
   protected shouldShow(): boolean {
@@ -41,71 +54,227 @@ export class WebGLMatrixRain extends WebGLEffect {
     return theme === "green-phosphor";
   }
 
+  /**
+   * Create Transform Feedback update program for Matrix Rain
+   * Handles column falling, character randomization, and brightness calculation
+   */
+  private createUpdateProgram(): void {
+    if (!this.gl) return;
+
+    // Particle data: 8 floats per particle (32 bytes)
+    // - vec2 position (x, y screen position)
+    // - vec2 display (charIndex, brightness)
+    // - vec4 column (columnY, speed, length, particleIndexInColumn)
+    const updateVertex = `#version 300 es
+precision mediump float;
+
+// Input: current particle state
+in vec2 in_position;      // x, y
+in vec2 in_display;       // charIndex, brightness
+in vec4 in_column;        // columnY, speed, length, particleIndex
+
+// Common uniforms via UBO
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;
+  float u_time;
+  float _padding;
+};
+
+uniform float u_charSize;
+uniform float u_charCount;
+
+// Output: updated particle state (Transform Feedback)
+out vec2 out_position;
+out vec2 out_display;
+out vec4 out_column;
+
+// Hash function for pseudo-random numbers
+float hash(float n) {
+  return fract(sin(n) * 43758.5453123);
+}
+
+void main() {
+  float columnY = in_column.x;
+  float speed = in_column.y;
+  float length = in_column.z;
+  float particleIndex = in_column.w;
+
+  // Update column Y position
+  float newColumnY = columnY + speed * u_charSize;
+
+  // Check if column is off screen (with extra margin for full length)
+  float offScreenThreshold = u_resolution.y + length * u_charSize;
+
+  // Reset column if off screen
+  if (newColumnY > offScreenThreshold) {
+    // Reset to top with random offset
+    float resetSeed = u_time + in_position.x;
+    newColumnY = -length * u_charSize - hash(resetSeed) * 100.0;
+
+    // Randomize all characters in this column when it resets
+    float newCharIndex = floor(hash(resetSeed + particleIndex * 17.3) * u_charCount);
+    out_display = vec2(newCharIndex, in_display.y);
+  } else {
+    // Occasionally randomize character (1% chance per frame)
+    float randomSeed = u_time * 60.0 + float(gl_VertexID) * 0.123;
+    float shouldRandomize = step(0.99, hash(randomSeed));
+
+    float newCharIndex = mix(
+      in_display.x,
+      floor(hash(randomSeed + 7.89) * u_charCount),
+      shouldRandomize
+    );
+
+    out_display = vec2(newCharIndex, in_display.y);
+  }
+
+  // Calculate particle Y position (column Y + offset)
+  float particleY = newColumnY + particleIndex * u_charSize;
+
+  // Calculate brightness (fade from head to tail)
+  float brightness = particleIndex == 0.0 ? 1.0 : max(0.0, 1.0 - particleIndex / length);
+
+  // Output updated state
+  out_position = vec2(in_position.x, particleY);
+  out_display.y = brightness; // Update brightness
+  out_column = vec4(newColumnY, speed, length, particleIndex);
+}
+`;
+
+    const updateFragment = `#version 300 es
+precision mediump float;
+out vec4 fragColor;
+void main() {
+  fragColor = vec4(1.0);  // Never rendered
+}
+`;
+
+    // Compile shaders
+    const vs = this.compileShader(updateVertex, this.gl.VERTEX_SHADER);
+    const fs = this.compileShader(updateFragment, this.gl.FRAGMENT_SHADER);
+    if (!vs || !fs) {
+      console.error("Failed to create Matrix Rain update shaders");
+      return;
+    }
+
+    // Create program with Transform Feedback
+    this.updateProgram = this.gl.createProgram();
+    if (!this.updateProgram) {
+      console.error("Failed to create Matrix Rain update program");
+      return;
+    }
+
+    this.gl.attachShader(this.updateProgram, vs);
+    this.gl.attachShader(this.updateProgram, fs);
+
+    // Specify Transform Feedback varyings
+    this.gl.transformFeedbackVaryings(
+      this.updateProgram,
+      ["out_position", "out_display", "out_column"],
+      this.gl.INTERLEAVED_ATTRIBS
+    );
+
+    this.gl.linkProgram(this.updateProgram);
+
+    if (!this.gl.getProgramParameter(this.updateProgram, this.gl.LINK_STATUS)) {
+      console.error(
+        "Matrix Rain update program link error:",
+        this.gl.getProgramInfoLog(this.updateProgram)
+      );
+      this.gl.deleteProgram(this.updateProgram);
+      this.updateProgram = null;
+      return;
+    }
+
+    // Setup UBO for update program
+    const blockIndex = this.gl.getUniformBlockIndex(this.updateProgram, "CommonUniforms");
+    if (blockIndex !== this.gl.INVALID_INDEX) {
+      this.gl.uniformBlockBinding(this.updateProgram, blockIndex, 0);
+    }
+
+    // Cleanup
+    this.gl.deleteShader(vs);
+    this.gl.deleteShader(fs);
+  }
+
   protected getShaders(): ShaderSource {
-    const vertex = `
-      precision mediump float;
+    const vertex = `#version 300 es
+precision mediump float;
 
-      attribute vec2 a_position;
-      attribute vec3 a_instancePosition; // x, y, charIndex
-      attribute float a_instanceBrightness;
+in vec2 a_position;
+in vec3 a_instancePosition; // x, y, charIndex
+in float a_instanceBrightness;
 
-      uniform vec2 u_resolution;
-      uniform float u_time;
-      uniform float u_charSize;
-      
-      varying float v_brightness;
-      varying float v_charIndex;
-      varying vec2 v_texCoord;
-      
-      void main() {
-        // Calculate character position
-        vec2 position = a_position * u_charSize + a_instancePosition.xy;
-        
-        // Convert to clip space
-        vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
-        
-        gl_Position = vec4(clipSpace, 0.0, 1.0);
-        
-        v_brightness = a_instanceBrightness;
-        v_charIndex = a_instancePosition.z;
-        v_texCoord = a_position + 0.5; // Convert from -0.5,0.5 to 0,1
-      }
-    `;
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
 
-    const fragment = `
-      precision mediump float;
-      
-      uniform sampler2D u_charTexture;
-      uniform float u_time;
-      uniform float u_charCount;
-      
-      varying float v_brightness;
-      varying float v_charIndex;
-      varying vec2 v_texCoord;
-      
-      void main() {
-        // Calculate which character to display
-        float charOffset = v_charIndex / u_charCount;
-        vec2 texCoord = vec2(v_texCoord.x / u_charCount + charOffset, v_texCoord.y);
-        
-        // Sample character texture
-        vec4 charColor = texture2D(u_charTexture, texCoord);
-        
-        // Apply green phosphor color with brightness
-        float green = 100.0 + v_brightness * 155.0;
-        vec3 color = vec3(0.0, green / 255.0, 0.0);
-        
-        // Fade based on brightness
-        float alpha = charColor.a * v_brightness;
-        
-        // Add slight glow for bright characters
-        if (v_brightness > 0.8) {
-          alpha *= 1.2;
-        }
-        
-        gl_FragColor = vec4(color * charColor.rgb, alpha);
-      }
-    `;
+uniform float u_charSize;
+
+out float v_brightness;
+out float v_charIndex;
+out vec2 v_texCoord;
+
+void main() {
+  // Calculate character position
+  vec2 position = a_position * u_charSize + a_instancePosition.xy;
+
+  // Convert to clip space
+  vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
+
+  gl_Position = vec4(clipSpace, 0.0, 1.0);
+
+  v_brightness = a_instanceBrightness;
+  v_charIndex = a_instancePosition.z;
+  v_texCoord = a_position + 0.5; // Convert from -0.5,0.5 to 0,1
+}
+`;
+
+    const fragment = `#version 300 es
+precision mediump float;
+
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
+
+uniform sampler2D u_charTexture;
+uniform float u_charCount;
+
+in float v_brightness;
+in float v_charIndex;
+in vec2 v_texCoord;
+
+out vec4 fragColor;
+
+void main() {
+  // Calculate which character to display
+  float charOffset = v_charIndex / u_charCount;
+  vec2 texCoord = vec2(v_texCoord.x / u_charCount + charOffset, v_texCoord.y);
+
+  // Sample character texture
+  vec4 charColor = texture(u_charTexture, texCoord);
+
+  // Apply green phosphor color with brightness
+  float green = 100.0 + v_brightness * 155.0;
+  vec3 color = vec3(0.0, green / 255.0, 0.0);
+
+  // Fade based on brightness
+  float alpha = charColor.a * v_brightness;
+
+  // Add slight glow for bright characters
+  if (v_brightness > 0.8) {
+    alpha *= 1.2;
+  }
+
+  fragColor = vec4(color * charColor.rgb, alpha);
+}
+`;
 
     return { vertex, fragment };
   }
@@ -130,14 +299,14 @@ export class WebGLMatrixRain extends WebGLEffect {
     // Create character texture atlas
     this.createCharacterTexture();
 
-    // Get additional attribute locations
-    this.instancePositionAttribute = this.gl.getAttribLocation(this.program, "a_instancePosition");
-    this.instanceBrightnessAttribute = this.gl.getAttribLocation(
-      this.program,
-      "a_instanceBrightness"
-    );
+    // Get and cache additional attribute locations
+    this.instancePositionAttribute = this.getAttributeLocation("a_instancePosition");
+    this.instanceBrightnessAttribute = this.getAttributeLocation("a_instanceBrightness");
 
-    // Initialize columns
+    // Create Transform Feedback update program
+    this.createUpdateProgram();
+
+    // Initialize columns with Transform Feedback buffers
     this.initializeColumns();
   }
 
@@ -192,10 +361,22 @@ export class WebGLMatrixRain extends WebGLEffect {
   }
 
   private initializeColumns(): void {
-    if (!this.canvas) return;
+    if (!this.canvas || !this.gl) return;
 
     this.columnCount = Math.floor(this.canvas.width / this.charSize);
     this.columns = [];
+
+    // Calculate total particles needed
+    this.totalParticles = this.columnCount * this.particlesPerColumn;
+
+    // Allocate particle data buffer for Transform Feedback
+    // 8 floats per particle (32 bytes):
+    // - vec2 position (x, y)
+    // - vec2 display (charIndex, brightness)
+    // - vec4 column (columnY, speed, length, particleIndexInColumn)
+    this.particleData = new Float32Array(this.totalParticles * 8);
+
+    let particleIndex = 0;
 
     for (let i = 0; i < this.columnCount; i++) {
       const column: MatrixColumn = {
@@ -213,82 +394,127 @@ export class WebGLMatrixRain extends WebGLEffect {
       }
 
       this.columns.push(column);
-    }
 
-    // Calculate total particles needed
-    this.totalParticles = this.columnCount * this.particlesPerColumn;
+      // Pack particle data for this column's particles
+      for (let j = 0; j < this.particlesPerColumn; j++) {
+        const baseIndex = particleIndex * 8;
+        const particleY = column.y + j * this.charSize;
+        const charIndex = j < column.chars.length ? column.chars[j] : 0;
+        const brightness = j === 0 ? 1.0 : Math.max(0, 1.0 - j / column.length);
 
-    // Allocate particle data buffer (x, y, charIndex, brightness per particle)
-    this.particleData = new Float32Array(this.totalParticles * 4);
+        // position (x, y)
+        this.particleData[baseIndex + 0] = column.x;
+        this.particleData[baseIndex + 1] = particleY;
 
-    // Create instance buffer
-    this.createInstanceBuffer("particles", this.particleData);
-  }
+        // display (charIndex, brightness)
+        this.particleData[baseIndex + 2] = charIndex;
+        this.particleData[baseIndex + 3] = brightness;
 
-  private updateParticles(_time: number): void {
-    if (!this.particleData || !this.canvas) return;
-
-    let particleIndex = 0;
-
-    for (let i = 0; i < this.columns.length; i++) {
-      const column = this.columns[i];
-
-      // Update column position
-      column.y += column.speed * this.charSize;
-
-      // Reset column if it goes off screen
-      if (column.y > this.canvas.height + column.length * this.charSize) {
-        column.y = -column.length * this.charSize;
-
-        // Randomize characters
-        for (let j = 0; j < column.chars.length; j++) {
-          column.chars[j] = Math.floor(Math.random() * CHAR_ARRAY.length);
-        }
-      }
-
-      // Update characters occasionally
-      for (let j = 0; j < column.chars.length; j++) {
-        if (Math.random() < 0.01) {
-          column.chars[j] = Math.floor(Math.random() * CHAR_ARRAY.length);
-        }
-      }
-
-      // Write particle data for this column
-      for (let j = 0; j < this.particlesPerColumn && j < column.length; j++) {
-        const baseIndex = particleIndex * 4;
-        const charY = column.y + j * this.charSize;
-
-        // Only render if on screen
-        if (charY > -this.charSize && charY < this.canvas.height + this.charSize) {
-          this.particleData[baseIndex] = column.x; // x position
-          this.particleData[baseIndex + 1] = charY; // y position
-          this.particleData[baseIndex + 2] = column.chars[j % column.chars.length]; // char index
-
-          // Calculate brightness (fade from head to tail)
-          const brightness = j === 0 ? 1.0 : Math.max(0, 1.0 - j / column.length);
-          this.particleData[baseIndex + 3] = brightness;
-        } else {
-          // Set off-screen particles to invisible
-          this.particleData[baseIndex + 3] = 0;
-        }
+        // column (columnY, speed, length, particleIndex)
+        this.particleData[baseIndex + 4] = column.y;
+        this.particleData[baseIndex + 5] = column.speed;
+        this.particleData[baseIndex + 6] = column.length;
+        this.particleData[baseIndex + 7] = j; // particleIndexInColumn
 
         particleIndex++;
       }
     }
 
-    // Update GPU buffer
-    this.updateBuffer("particles", this.particleData);
+    // Create Transform Feedback ping-pong buffers
+    this.tfBufferA = this.gl.createBuffer();
+    this.tfBufferB = this.gl.createBuffer();
+
+    if (!this.tfBufferA || !this.tfBufferB) {
+      console.error("Failed to create Matrix Rain Transform Feedback buffers");
+      return;
+    }
+
+    // Initialize buffer A with particle data
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferA);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData, this.gl.DYNAMIC_COPY);
+
+    // Initialize buffer B (same size)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferB);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData.byteLength, this.gl.DYNAMIC_COPY);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+
+    // Set initial ping-pong state
+    this.currentReadBuffer = this.tfBufferA;
+    this.currentWriteBuffer = this.tfBufferB;
+
+    // Store render program pointer
+    this.renderProgram = this.program;
   }
 
-  protected draw(time: number): void {
-    if (!this.gl || !this.program) return;
+  protected draw(_time: number): void {
+    if (
+      !this.gl ||
+      !this.renderProgram ||
+      !this.updateProgram ||
+      !this.currentReadBuffer ||
+      !this.currentWriteBuffer
+    )
+      return;
 
-    // Update particle positions
-    this.updateParticles(time);
+    // ========================================
+    // PASS 1: UPDATE PASS (Transform Feedback)
+    // ========================================
 
-    // Get instanced arrays extension
-    const ext = this.getInstancedArraysExt();
-    if (!ext) return;
+    this.gl.useProgram(this.updateProgram);
+
+    // Bind input buffer (read)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
+
+    // Setup vertex attributes for update shader (8 floats per particle, 32 bytes stride)
+    const inPosLoc = this.gl.getAttribLocation(this.updateProgram, "in_position");
+    const inDisplayLoc = this.gl.getAttribLocation(this.updateProgram, "in_display");
+    const inColumnLoc = this.gl.getAttribLocation(this.updateProgram, "in_column");
+
+    this.gl.enableVertexAttribArray(inPosLoc);
+    this.gl.vertexAttribPointer(inPosLoc, 2, this.gl.FLOAT, false, 32, 0); // offset 0
+
+    this.gl.enableVertexAttribArray(inDisplayLoc);
+    this.gl.vertexAttribPointer(inDisplayLoc, 2, this.gl.FLOAT, false, 32, 8); // offset 8
+
+    this.gl.enableVertexAttribArray(inColumnLoc);
+    this.gl.vertexAttribPointer(inColumnLoc, 4, this.gl.FLOAT, false, 32, 16); // offset 16
+
+    // Set update uniforms
+    const charSizeLoc = this.gl.getUniformLocation(this.updateProgram, "u_charSize");
+    if (charSizeLoc) this.gl.uniform1f(charSizeLoc, this.charSize);
+
+    const charCountLoc = this.gl.getUniformLocation(this.updateProgram, "u_charCount");
+    if (charCountLoc) this.gl.uniform1f(charCountLoc, CHAR_ARRAY.length);
+
+    // Bind Transform Feedback output buffer (write)
+    this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.currentWriteBuffer);
+
+    // Perform Transform Feedback update (no rendering)
+    this.gl.enable(this.gl.RASTERIZER_DISCARD);
+    this.gl.beginTransformFeedback(this.gl.POINTS);
+    this.gl.drawArrays(this.gl.POINTS, 0, this.totalParticles);
+    this.gl.endTransformFeedback();
+    this.gl.disable(this.gl.RASTERIZER_DISCARD);
+
+    // Unbind Transform Feedback buffer
+    this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
+
+    // Cleanup update attributes
+    this.gl.disableVertexAttribArray(inPosLoc);
+    this.gl.disableVertexAttribArray(inDisplayLoc);
+    this.gl.disableVertexAttribArray(inColumnLoc);
+
+    // Swap ping-pong buffers for next frame
+    const temp = this.currentReadBuffer;
+    this.currentReadBuffer = this.currentWriteBuffer;
+    this.currentWriteBuffer = temp;
+
+    // ========================================
+    // PASS 2: RENDER PASS
+    // ========================================
+
+    this.gl.useProgram(this.renderProgram);
 
     // Bind quad geometry
     const quadBuffer = this.buffers.get("quad");
@@ -298,55 +524,78 @@ export class WebGLMatrixRain extends WebGLEffect {
       this.gl.vertexAttribPointer(this.positionAttribute, 2, this.gl.FLOAT, false, 0, 0);
     }
 
-    // Bind instance data
-    const particleBuffer = this.buffers.get("particles");
-    if (particleBuffer) {
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, particleBuffer);
+    // Bind UPDATED particle data (from currentReadBuffer)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
 
-      // Setup instance attributes
-      this.gl.enableVertexAttribArray(this.instancePositionAttribute);
-      this.gl.vertexAttribPointer(this.instancePositionAttribute, 3, this.gl.FLOAT, false, 16, 0);
-      ext.vertexAttribDivisorANGLE(this.instancePositionAttribute, 1);
+    // Setup instance attributes for render shader
+    // Render shader expects: vec3 a_instancePosition (x, y, charIndex) and float a_instanceBrightness
+    // Buffer layout: position(2), display(2), column(4)
+    // So: a_instancePosition reads position(2) + display.x(1), a_instanceBrightness reads display.y(1)
+    this.gl.enableVertexAttribArray(this.instancePositionAttribute);
+    this.gl.vertexAttribPointer(this.instancePositionAttribute, 3, this.gl.FLOAT, false, 32, 0); // x, y, charIndex
+    this.gl.vertexAttribDivisor(this.instancePositionAttribute, 1);
 
-      this.gl.enableVertexAttribArray(this.instanceBrightnessAttribute);
-      this.gl.vertexAttribPointer(
-        this.instanceBrightnessAttribute,
-        1,
-        this.gl.FLOAT,
-        false,
-        16,
-        12
-      );
-      ext.vertexAttribDivisorANGLE(this.instanceBrightnessAttribute, 1);
-    }
+    this.gl.enableVertexAttribArray(this.instanceBrightnessAttribute);
+    this.gl.vertexAttribPointer(this.instanceBrightnessAttribute, 1, this.gl.FLOAT, false, 32, 12); // brightness at offset 12
+    this.gl.vertexAttribDivisor(this.instanceBrightnessAttribute, 1);
 
     // Bind character texture
     const charTexture = this.textures.get("characters");
     if (charTexture) {
       this.gl.activeTexture(this.gl.TEXTURE0);
       this.gl.bindTexture(this.gl.TEXTURE_2D, charTexture);
-      const textureLocation = this.gl.getUniformLocation(this.program, "u_charTexture");
-      this.gl.uniform1i(textureLocation, 0);
+      const textureLocation = this.getUniformLocation("u_charTexture");
+      if (textureLocation) this.gl.uniform1i(textureLocation, 0);
     }
 
-    // Set additional uniforms
-    const charSizeLocation = this.gl.getUniformLocation(this.program, "u_charSize");
-    this.gl.uniform1f(charSizeLocation, this.charSize);
+    // Set render uniforms
+    const charSizeLocation = this.getUniformLocation("u_charSize");
+    if (charSizeLocation) this.gl.uniform1f(charSizeLocation, this.charSize);
 
-    const charCountLocation = this.gl.getUniformLocation(this.program, "u_charCount");
-    this.gl.uniform1f(charCountLocation, CHAR_ARRAY.length);
+    const charCountLocation = this.getUniformLocation("u_charCount");
+    if (charCountLocation) this.gl.uniform1f(charCountLocation, CHAR_ARRAY.length);
 
     // Draw all particles with instancing
-    ext.drawArraysInstancedANGLE(this.gl.TRIANGLE_STRIP, 0, 4, this.totalParticles);
+    this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.totalParticles);
 
     // Reset divisors
-    ext.vertexAttribDivisorANGLE(this.instancePositionAttribute, 0);
-    ext.vertexAttribDivisorANGLE(this.instanceBrightnessAttribute, 0);
+    this.gl.vertexAttribDivisor(this.instancePositionAttribute, 0);
+    this.gl.vertexAttribDivisor(this.instanceBrightnessAttribute, 0);
   }
 
   protected handleResize(): void {
     super.handleResize();
     // Reinitialize columns on resize
     this.initializeColumns();
+  }
+
+  public cleanup(): void {
+    // Delete Transform Feedback buffers
+    if (this.gl) {
+      if (this.tfBufferA) {
+        this.gl.deleteBuffer(this.tfBufferA);
+        this.tfBufferA = null;
+      }
+      if (this.tfBufferB) {
+        this.gl.deleteBuffer(this.tfBufferB);
+        this.tfBufferB = null;
+      }
+
+      // Delete update program
+      if (this.updateProgram) {
+        this.gl.deleteProgram(this.updateProgram);
+        this.updateProgram = null;
+      }
+    }
+
+    // Clear references
+    this.currentReadBuffer = null;
+    this.currentWriteBuffer = null;
+    this.renderProgram = null;
+    this.particleData = null;
+    this.columns = [];
+
+    // Call parent cleanup
+    super.cleanup();
   }
 }

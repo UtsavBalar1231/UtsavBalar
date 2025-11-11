@@ -3,6 +3,8 @@ import { WebGLEffect, type ShaderSource } from "./webglEffect";
 interface LightningBolt {
   vertices: Float32Array; // [x,y,...]
   vertexCount: number;
+  buffer: WebGLBuffer | null; // Dedicated buffer for this bolt (from pool)
+  bufferSize: number; // Size of allocated buffer data
   life: number; // seconds left
   intensity: number;
   color: [number, number, number];
@@ -10,10 +12,103 @@ interface LightningBolt {
   pulses: number[]; // times relative to createdAt when pulses happen
 }
 
+/**
+ * Buffer pool entry for efficient buffer reuse
+ */
+interface BufferPoolEntry {
+  buffer: WebGLBuffer;
+  maxSize: number; // Maximum data size this buffer can hold
+}
+
+/**
+ * Buffer pool for efficient WebGL buffer management
+ * Reuses WebGL buffers across frames to avoid gl.createBuffer() calls
+ */
+class BufferPool {
+  private availableBuffers: BufferPoolEntry[] = [];
+  private gl: WebGL2RenderingContext;
+
+  constructor(gl: WebGL2RenderingContext, poolSize: number = 16) {
+    this.gl = gl;
+    // Pre-allocate buffer pool
+    for (let i = 0; i < poolSize; i++) {
+      const buffer = gl.createBuffer();
+      if (buffer) {
+        this.availableBuffers.push({
+          buffer,
+          maxSize: 0,
+        });
+      }
+    }
+  }
+
+  /**
+   * Acquire a buffer from the pool and upload data
+   * Returns [buffer, actualSize] tuple
+   */
+  acquire(data: Float32Array): [WebGLBuffer | null, number] {
+    // Find a buffer with sufficient capacity
+    const entryIndex = this.availableBuffers.findIndex((e) => e.maxSize >= data.byteLength);
+    let entry: BufferPoolEntry | undefined;
+
+    if (entryIndex >= 0) {
+      // Found suitable buffer, remove from pool
+      entry = this.availableBuffers.splice(entryIndex, 1)[0];
+    } else if (this.availableBuffers.length > 0) {
+      // Use any available buffer and resize it
+      entry = this.availableBuffers.pop()!;
+    } else {
+      // Pool exhausted, allocate new buffer
+      const buffer = this.gl.createBuffer();
+      if (!buffer) return [null, 0];
+      entry = { buffer, maxSize: 0 };
+    }
+
+    // Upload data to buffer
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffer);
+    if (entry.maxSize < data.byteLength) {
+      // Need to allocate new GPU storage
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+      entry.maxSize = data.byteLength;
+    } else {
+      // Reuse existing storage via bufferSubData (avoids reallocation)
+      this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, data);
+    }
+
+    return [entry.buffer, entry.maxSize];
+  }
+
+  /**
+   * Release a buffer back to the pool for reuse
+   */
+  release(buffer: WebGLBuffer | null, maxSize: number): void {
+    if (!buffer) return;
+
+    // Return buffer to available pool
+    this.availableBuffers.push({
+      buffer,
+      maxSize,
+    });
+  }
+
+  /**
+   * Cleanup all buffers in the pool
+   */
+  cleanup(): void {
+    for (const entry of this.availableBuffers) {
+      this.gl.deleteBuffer(entry.buffer);
+    }
+    this.availableBuffers = [];
+  }
+}
+
 export class WebGLLightningStorm extends WebGLEffect {
   // lightning bolts
   private lightningBolts: LightningBolt[] = [];
   private maxBolts = 8;
+
+  // Buffer pool for efficient geometry management
+  private bufferPool: BufferPool | null = null;
 
   private lightningProgram: WebGLProgram | null = null;
   private lightningUniforms: {
@@ -22,8 +117,10 @@ export class WebGLLightningStorm extends WebGLEffect {
     color?: WebGLUniformLocation | null;
     opacity?: WebGLUniformLocation | null;
   } = {};
+  private lightningPosAttr: number = -1;
 
   private flashProgram: WebGLProgram | null = null;
+  private flashPosAttr: number = -1;
   private quadBuffer: WebGLBuffer | null = null;
 
   // storm state
@@ -35,10 +132,13 @@ export class WebGLLightningStorm extends WebGLEffect {
   constructor() {
     super({
       canvasId: "lightning-storm-canvas",
-      targetFPS: 30, // Reduced from 60 for better performance
+      targetFPS: 30, // Reduced from 60 to limit draw calls and buffer updates
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
+
+    // Enable UBO for common uniforms
+    this.useUBO = true;
   }
 
   protected shouldShow(): boolean {
@@ -48,25 +148,34 @@ export class WebGLLightningStorm extends WebGLEffect {
 
   protected getShaders(): ShaderSource {
     // Dummy shaders since we use separate programs for lightning and flash
-    // Note: These must declare uniforms that base class expects, even if unused
-    const dummyVertex = `
-    precision mediump float;
-    attribute vec2 a_pos;
-    uniform float u_time;
-    uniform vec2 u_resolution;
-    void main() {
-      gl_Position = vec4(a_pos, 0.0, 1.0);
-    }
-  `;
+    // Note: Uses UBO for common uniforms like other effects
+    const dummyVertex = `#version 300 es
+precision mediump float;
+in vec2 a_position;
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
 
-    const dummyFragment = `
-    precision mediump float;
-    uniform float u_time;
-    uniform vec2 u_resolution;
-    void main() {
-      gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-    }
-  `;
+    const dummyFragment = `#version 300 es
+precision mediump float;
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
+out vec4 fragColor;
+void main() {
+  fragColor = vec4(0.0, 0.0, 0.0, 0.0);
+}
+`;
 
     return {
       vertex: dummyVertex,
@@ -75,6 +184,9 @@ export class WebGLLightningStorm extends WebGLEffect {
   }
   protected setupGeometry(): void {
     if (!this.gl || !this.program || !this.canvas) return;
+
+    // Initialize buffer pool (16 pre-allocated buffers)
+    this.bufferPool = new BufferPool(this.gl, 16);
 
     // create fullscreen quad for flash overlay
     const quad = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
@@ -90,26 +202,32 @@ export class WebGLLightningStorm extends WebGLEffect {
   private setupLightningShader() {
     if (!this.gl) return;
     const vs = this.compileShader(
-      `
-      attribute vec2 a_pos;
-      uniform vec2 u_resolution;
-      uniform float u_time;
-      void main(){
-        vec2 clip = ((a_pos / u_resolution) * 2.0 - 1.0) * vec2(1.0, -1.0);
-        gl_Position = vec4(clip, 0.0, 1.0);
-      }
-    `,
+      `#version 300 es
+precision mediump float;
+in vec2 a_pos;
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
+void main(){
+  vec2 clip = ((a_pos / u_resolution) * 2.0 - 1.0) * vec2(1.0, -1.0);
+  gl_Position = vec4(clip, 0.0, 1.0);
+}
+`,
       this.gl.VERTEX_SHADER
     );
     const fs = this.compileShader(
-      `
-      precision mediump float;
-      uniform vec3 u_color;
-      uniform float u_opacity;
-      void main(){
-        gl_FragColor = vec4(u_color, u_opacity);
-      }
-    `,
+      `#version 300 es
+precision mediump float;
+uniform vec3 u_color;
+uniform float u_opacity;
+out vec4 fragColor;
+void main(){
+  fragColor = vec4(u_color, u_opacity);
+}
+`,
       this.gl.FRAGMENT_SHADER
     );
     if (!vs || !fs) return;
@@ -123,8 +241,14 @@ export class WebGLLightningStorm extends WebGLEffect {
       return;
     }
     this.lightningProgram = p;
-    this.lightningUniforms.resolution = this.gl.getUniformLocation(p, "u_resolution");
-    this.lightningUniforms.time = this.gl.getUniformLocation(p, "u_time");
+
+    // Setup UBO for lightning program (bind to same binding point as main program)
+    const blockIndex = this.gl.getUniformBlockIndex(this.lightningProgram, "CommonUniforms");
+    if (blockIndex !== this.gl.INVALID_INDEX) {
+      this.gl.uniformBlockBinding(this.lightningProgram, blockIndex, 0);
+    }
+
+    // Cache uniform locations for lightning program (non-UBO uniforms only)
     this.lightningUniforms.color = this.gl.getUniformLocation(p, "u_color");
     this.lightningUniforms.opacity = this.gl.getUniformLocation(p, "u_opacity");
 
@@ -132,24 +256,30 @@ export class WebGLLightningStorm extends WebGLEffect {
     this.gl.deleteShader(fs);
   }
 
+  private flashUniforms: {
+    flash?: WebGLUniformLocation | null;
+    color?: WebGLUniformLocation | null;
+  } = {};
+
   private setupFlashShader() {
     if (!this.gl) return;
     const vs = this.compileShader(
-      `
-      attribute vec2 a_pos;
-      void main(){ gl_Position = vec4(a_pos,0,1); }
-    `,
+      `#version 300 es
+in vec2 a_pos;
+void main(){ gl_Position = vec4(a_pos,0,1); }
+`,
       this.gl.VERTEX_SHADER
     );
     const fs = this.compileShader(
-      `
-      precision mediump float;
-      uniform float u_flash;
-      uniform vec3 u_color;
-      void main(){
-        gl_FragColor = vec4(u_color, u_flash * 0.9);
-      }
-    `,
+      `#version 300 es
+precision mediump float;
+uniform float u_flash;
+uniform vec3 u_color;
+out vec4 fragColor;
+void main(){
+  fragColor = vec4(u_color, u_flash * 0.9);
+}
+`,
       this.gl.FRAGMENT_SHADER
     );
     if (!vs || !fs) return;
@@ -163,6 +293,11 @@ export class WebGLLightningStorm extends WebGLEffect {
       return;
     }
     this.flashProgram = p;
+
+    // Cache uniform locations for flash program
+    this.flashUniforms.flash = this.gl.getUniformLocation(p, "u_flash");
+    this.flashUniforms.color = this.gl.getUniformLocation(p, "u_color");
+
     this.gl.deleteShader(vs);
     this.gl.deleteShader(fs);
   }
@@ -224,7 +359,7 @@ export class WebGLLightningStorm extends WebGLEffect {
   }
 
   private triggerLightningCluster() {
-    if (!this.canvas) return;
+    if (!this.canvas || !this.bufferPool) return;
     const w = this.canvas.width;
     const strikeX = Math.random() * w;
     const startY = -50 + Math.random() * 60;
@@ -233,10 +368,16 @@ export class WebGLLightningStorm extends WebGLEffect {
 
     const pts = this.generateBolt(strikeX, startY, endX, endY, 6, 220);
 
+    // Acquire buffer from pool and upload vertices (done once, never updated)
+    const [buffer, bufferSize] = this.bufferPool.acquire(pts);
+    if (!buffer) return; // Failed to acquire buffer
+
     const now = performance.now();
     const bolt: LightningBolt = {
       vertices: pts,
       vertexCount: pts.length / 2,
+      buffer: buffer,
+      bufferSize: bufferSize,
       life: 0.9 + Math.random() * 0.9,
       intensity: 0.8 + Math.random() * 0.6,
       color: [1.0, 0.98, 0.85],
@@ -249,7 +390,13 @@ export class WebGLLightningStorm extends WebGLEffect {
       bolt.pulses.push(i * (0.06 + Math.random() * 0.08));
     }
 
-    if (this.lightningBolts.length >= this.maxBolts) this.lightningBolts.shift();
+    // Release oldest bolt's buffer if at capacity
+    if (this.lightningBolts.length >= this.maxBolts) {
+      const oldBolt = this.lightningBolts.shift();
+      if (oldBolt && this.bufferPool) {
+        this.bufferPool.release(oldBolt.buffer, oldBolt.bufferSize);
+      }
+    }
     this.lightningBolts.push(bolt);
 
     this.flashValue = Math.max(this.flashValue, 0.9 * bolt.intensity);
@@ -279,9 +426,8 @@ export class WebGLLightningStorm extends WebGLEffect {
     if (this.flashValue < 0.01) this.flashValue = 0;
   }
 
-  protected draw(timeMs: number): void {
+  protected draw(_timeMs: number): void {
     if (!this.gl || !this.canvas) return;
-    const t = timeMs / 1000; // seconds
     const dt = Math.min(0.04, 1 / 60);
     this.updateStorm(dt);
 
@@ -296,37 +442,37 @@ export class WebGLLightningStorm extends WebGLEffect {
     if (this.lightningBolts.length > 0 && this.lightningProgram) {
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE);
       this.gl.useProgram(this.lightningProgram);
-      if (this.lightningUniforms.resolution)
-        this.gl.uniform2f(this.lightningUniforms.resolution, this.canvas.width, this.canvas.height);
-      if (this.lightningUniforms.time) this.gl.uniform1f(this.lightningUniforms.time, t);
+      // Note: u_resolution and u_time are now provided via UBO (bound in setupLightningShader)
+
+      // Cache attribute location for lightning program (once per program)
+      if (this.lightningPosAttr < 0) {
+        this.lightningPosAttr = this.gl.getAttribLocation(this.lightningProgram, "a_pos");
+      }
 
       for (let i = this.lightningBolts.length - 1; i >= 0; i--) {
         const bolt = this.lightningBolts[i];
         const age = (performance.now() - bolt.createdAt) / 1000;
         const lifeFrac = age / bolt.life;
+
+        // Remove expired bolts and release their buffers
         if (lifeFrac > 1.0) {
+          if (this.bufferPool) {
+            this.bufferPool.release(bolt.buffer, bolt.bufferSize);
+          }
           this.lightningBolts.splice(i, 1);
           continue;
         }
 
-        const requiredSize = bolt.vertices.length;
-        const currentBuffer = this.buffers.get("lightning");
-        if (!currentBuffer || bolt.vertices.length > 1024) {
-          const newSize = Math.min(Math.ceil(requiredSize * 1.2), 8192);
-          this.createBuffer("lightning", new Float32Array(newSize));
+        // Use bolt's pre-allocated buffer (no upload needed!)
+        if (!bolt.buffer) continue;
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, bolt.buffer);
+
+        if (this.lightningPosAttr >= 0) {
+          this.gl.enableVertexAttribArray(this.lightningPosAttr);
+          this.gl.vertexAttribPointer(this.lightningPosAttr, 2, this.gl.FLOAT, false, 0, 0);
         }
 
-        this.updateBuffer("lightning", bolt.vertices);
-        const lightningBuffer = this.buffers.get("lightning");
-        if (!lightningBuffer) continue;
-
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, lightningBuffer);
-        const posAttr = this.gl.getAttribLocation(this.lightningProgram, "a_pos");
-        if (posAttr >= 0) {
-          this.gl.enableVertexAttribArray(posAttr);
-          this.gl.vertexAttribPointer(posAttr, 2, this.gl.FLOAT, false, 0, 0);
-        }
-
+        // Calculate pulse-based opacity
         let pulseMul = 0.6;
         for (const p of bolt.pulses) {
           const dtPulse = Math.abs(age - p);
@@ -334,6 +480,7 @@ export class WebGLLightningStorm extends WebGLEffect {
         }
         const baseOpacity = (1.0 - lifeFrac) * bolt.intensity * pulseMul;
 
+        // Draw bolt with glow effect (two passes)
         if (this.lightningUniforms.color)
           this.gl.uniform3fv(this.lightningUniforms.color, bolt.color);
         if (this.lightningUniforms.opacity)
@@ -346,7 +493,7 @@ export class WebGLLightningStorm extends WebGLEffect {
         this.gl.lineWidth(2.0);
         this.gl.drawArrays(this.gl.LINE_STRIP, 0, bolt.vertexCount);
 
-        if (posAttr >= 0) this.gl.disableVertexAttribArray(posAttr);
+        if (this.lightningPosAttr >= 0) this.gl.disableVertexAttribArray(this.lightningPosAttr);
       }
 
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
@@ -355,20 +502,26 @@ export class WebGLLightningStorm extends WebGLEffect {
     // --- FLASH OVERLAY ---
     if (this.flashValue > 0.003 && this.flashProgram && this.quadBuffer) {
       this.gl.useProgram(this.flashProgram);
-      const flashLoc = this.gl.getUniformLocation(this.flashProgram, "u_flash");
-      const colorLoc = this.gl.getUniformLocation(this.flashProgram, "u_color");
-      if (flashLoc) this.gl.uniform1f(flashLoc, Math.min(1.0, this.flashValue));
-      if (colorLoc) this.gl.uniform3f(colorLoc, 1.0, 0.98, 0.9);
+
+      // Use cached uniform locations
+      if (this.flashUniforms.flash)
+        this.gl.uniform1f(this.flashUniforms.flash, Math.min(1.0, this.flashValue));
+      if (this.flashUniforms.color) this.gl.uniform3f(this.flashUniforms.color, 1.0, 0.98, 0.9);
 
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.quadBuffer);
-      const pos = this.gl.getAttribLocation(this.flashProgram, "a_pos");
-      if (pos >= 0) {
-        this.gl.enableVertexAttribArray(pos);
-        this.gl.vertexAttribPointer(pos, 2, this.gl.FLOAT, false, 0, 0);
+
+      // Cache attribute location for flash program (once per program)
+      if (this.flashPosAttr < 0) {
+        this.flashPosAttr = this.gl.getAttribLocation(this.flashProgram, "a_pos");
+      }
+
+      if (this.flashPosAttr >= 0) {
+        this.gl.enableVertexAttribArray(this.flashPosAttr);
+        this.gl.vertexAttribPointer(this.flashPosAttr, 2, this.gl.FLOAT, false, 0, 0);
       }
       this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-      if (pos >= 0) this.gl.disableVertexAttribArray(pos);
+      if (this.flashPosAttr >= 0) this.gl.disableVertexAttribArray(this.flashPosAttr);
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     }
 
@@ -384,5 +537,22 @@ export class WebGLLightningStorm extends WebGLEffect {
   protected handleResize(): void {
     super.handleResize();
     // nothing cloud-specific to reinitialize; quad covers viewport
+  }
+
+  public cleanup(): void {
+    // Release all active bolt buffers back to pool
+    if (this.bufferPool) {
+      for (const bolt of this.lightningBolts) {
+        this.bufferPool.release(bolt.buffer, bolt.bufferSize);
+      }
+      this.lightningBolts = [];
+
+      // Cleanup the buffer pool
+      this.bufferPool.cleanup();
+      this.bufferPool = null;
+    }
+
+    // Call parent cleanup
+    super.cleanup();
   }
 }

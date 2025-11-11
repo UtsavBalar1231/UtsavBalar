@@ -12,6 +12,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+    touch-action: none;
     opacity: 0.4;
     mix-blend-mode: screen;
   }
@@ -19,30 +20,113 @@
 
 <script>
   import { WebGLDoomFire } from "@/utils/webglFire";
+  import { getRecommendedFPS, getBatteryLevel } from "@/utils/deviceDetection";
+  import { hasTargetFPS, hasIsRunning, hasStartMethod, hasStopMethod } from "@/types/webglEffect";
 
   let fireEffect: WebGLDoomFire | null = null;
   let themeObserver: MutationObserver | null = null;
+  let intersectionObserver: IntersectionObserver | null = null;
+  let batteryCheckInterval: number | null = null;
+  let isInitializing = false;
+  let debounceTimer: number | null = null;
 
   function shouldInitialize(): boolean {
     const theme = document.documentElement.getAttribute("data-theme");
     return theme === "doom-red";
   }
 
-  function initDoomFire() {
-    // Only initialize if theme is doom-red and not already initialized
-    if (shouldInitialize() && !fireEffect) {
-      fireEffect = new WebGLDoomFire();
-      fireEffect.initialize();
-    } else if (!shouldInitialize() && fireEffect) {
-      // Cleanup if theme changed away from doom-red
-      fireEffect.cleanup();
-      fireEffect = null;
+  async function initDoomFire() {
+    // Prevent concurrent initialization/cleanup
+    if (isInitializing) {
+      return;
+    }
+
+    isInitializing = true;
+
+    try {
+      if (shouldInitialize() && !fireEffect) {
+        const recommendedFPS = getRecommendedFPS();
+
+        fireEffect = new WebGLDoomFire();
+        fireEffect.initialize();
+
+        if (hasTargetFPS(fireEffect)) {
+          fireEffect.targetFPS = recommendedFPS;
+        }
+
+        setupIntersectionObserver();
+        setupBatteryMonitoring();
+      } else if (!shouldInitialize() && fireEffect) {
+        cleanupObservers();
+        fireEffect.cleanup();
+        fireEffect = null;
+      }
+    } finally {
+      isInitializing = false;
     }
   }
 
+  function setupIntersectionObserver() {
+    const canvas = document.getElementById("doom-fire-canvas");
+    if (!canvas || !fireEffect) return;
+
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (hasIsRunning(fireEffect)) {
+            if (entry.isIntersecting) {
+              if (hasStartMethod(fireEffect)) {
+                fireEffect.start();
+              }
+            } else {
+              if (hasStopMethod(fireEffect)) {
+                fireEffect.stop();
+              }
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    intersectionObserver.observe(canvas);
+  }
+
+  async function setupBatteryMonitoring() {
+    batteryCheckInterval = window.setInterval(async () => {
+      const batteryLevel = await getBatteryLevel();
+      if (batteryLevel !== null && batteryLevel < 15) {
+        if (hasStopMethod(fireEffect)) {
+          fireEffect.stop();
+        }
+      }
+    }, 30000);
+  }
+
+  function cleanupObservers() {
+    if (intersectionObserver) {
+      intersectionObserver.disconnect();
+      intersectionObserver = null;
+    }
+    if (batteryCheckInterval !== null) {
+      clearInterval(batteryCheckInterval);
+      batteryCheckInterval = null;
+    }
+  }
+
+  function debouncedInitDoomFire() {
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
+    }
+
+    debounceTimer = window.setTimeout(() => {
+      initDoomFire();
+      debounceTimer = null;
+    }, 150); // 150ms debounce to match base class
+  }
+
   function setupThemeObserver() {
-    // Watch for theme changes
-    themeObserver = new MutationObserver(initDoomFire);
+    themeObserver = new MutationObserver(debouncedInitDoomFire);
     themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["data-theme"],
@@ -62,6 +146,12 @@
   document.addEventListener("astro:page-load", initDoomFire);
 
   document.addEventListener("astro:before-preparation", () => {
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+
+    cleanupObservers();
     fireEffect?.cleanup();
     fireEffect = null;
     themeObserver?.disconnect();

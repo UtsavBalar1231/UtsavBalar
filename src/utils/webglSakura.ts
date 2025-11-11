@@ -16,11 +16,22 @@ interface SakuraPetal {
 
 export class WebGLSakuraFall extends WebGLEffect {
   private petals: SakuraPetal[] = [];
-  private petalCount: number = 150; // 150 petals * 24 bytes = 3.6KB instance buffer
+  private petalCount: number = 150; // 150 petals * 48 bytes = 7.2KB instance buffer (TF)
   private particleData: Float32Array | null = null;
+
+  // Transform Feedback ping-pong buffers
+  private tfBufferA: WebGLBuffer | null = null;
+  private tfBufferB: WebGLBuffer | null = null;
+  private currentReadBuffer: WebGLBuffer | null = null;
+  private currentWriteBuffer: WebGLBuffer | null = null;
+
+  // Separate programs for update (TF) and render
+  private updateProgram: WebGLProgram | null = null;
+  private renderProgram: WebGLProgram | null = null;
 
   // Additional uniforms
   private windUniform: WebGLUniformLocation | null = null;
+  private updateWindUniform: WebGLUniformLocation | null = null;
 
   constructor() {
     super({
@@ -29,6 +40,9 @@ export class WebGLSakuraFall extends WebGLEffect {
       themeAttribute: "data-theme",
       performanceAttribute: "data-performance",
     });
+
+    // Enable UBO for common uniforms
+    this.useUBO = true;
   }
 
   protected shouldShow(): boolean {
@@ -36,109 +50,266 @@ export class WebGLSakuraFall extends WebGLEffect {
     return theme === "monochrome";
   }
 
+  /**
+   * Create Transform Feedback update program
+   * This shader reads particle state from input buffer and writes updated state to output buffer
+   */
+  private createUpdateProgram(): void {
+    if (!this.gl) return;
+
+    // Update vertex shader - performs physics simulation on GPU
+    // Particle data: 12 floats per particle
+    // - vec3 position (x, y, z)
+    // - float rotation
+    // - vec4 constants (size, opacity, rotationSpeed, fallSpeed)
+    // - vec4 physics (swayPhase, swaySpeed, swayAmount, depthFactor)
+    const updateVertex = `#version 300 es
+precision mediump float;
+
+// Input: current particle state (from buffer)
+in vec3 in_position;        // x, y, z (depth)
+in float in_rotation;       // current rotation
+in vec4 in_constants;       // size, opacity, rotationSpeed, fallSpeed
+in vec4 in_physics;         // swayPhase, swaySpeed, swayAmount, unused
+
+// Common uniforms via UBO
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;
+  float u_time;
+  float _padding;
+};
+
+uniform vec2 u_wind;
+uniform float u_deltaTime;  // Frame delta for consistent physics
+
+// Output: updated particle state (to buffer via Transform Feedback)
+out vec3 out_position;
+out float out_rotation;
+out vec4 out_constants;    // Pass through unchanged
+out vec4 out_physics;      // Pass through unchanged
+
+void main() {
+  // Extract constants
+  float size = in_constants.x;
+  float opacity = in_constants.y;
+  float rotationSpeed = in_constants.z;
+  float fallSpeed = in_constants.w;
+
+  float swayPhase = in_physics.x;
+  float swaySpeed = in_physics.y;
+  float swayAmount = in_physics.z;
+
+  // Calculate depth factor for parallax
+  float depthFactor = 0.5 + in_position.z * 0.5;
+
+  // Update Y position (falling)
+  float newY = in_position.y + fallSpeed * depthFactor * u_deltaTime;
+
+  // Calculate sway (affects X)
+  float sway = sin(newY * swaySpeed + swayPhase) * swayAmount;
+  float newX = in_position.x + sway * 0.02 * u_deltaTime + u_wind.x * depthFactor * u_deltaTime;
+
+  // Update rotation
+  float newRotation = in_rotation + rotationSpeed * u_deltaTime;
+
+  // Boundary wrapping
+  // Reset if below screen
+  if (newY > u_resolution.y + 50.0) {
+    newY = -50.0 - mod(u_time * 100.0 + float(gl_VertexID), 200.0);  // Pseudo-random offset
+    newX = mod(u_time * 200.0 + float(gl_VertexID) * 13.37, u_resolution.x + 200.0) - 100.0;
+    newRotation = mod(u_time + float(gl_VertexID) * 0.123, 6.28318);  // Random rotation
+  }
+
+  // Horizontal wrapping
+  if (newX < -100.0) {
+    newX = u_resolution.x + 100.0;
+  } else if (newX > u_resolution.x + 100.0) {
+    newX = -100.0;
+  }
+
+  // Output updated state
+  out_position = vec3(newX, newY, in_position.z);  // Z (depth) never changes
+  out_rotation = newRotation;
+  out_constants = in_constants;  // Pass through
+  out_physics = in_physics;      // Pass through
+}
+`;
+
+    // Update fragment shader - not used (rasterizer discarded) but required
+    const updateFragment = `#version 300 es
+precision mediump float;
+out vec4 fragColor;
+void main() {
+  fragColor = vec4(1.0);  // Never rendered
+}
+`;
+
+    // Compile shaders
+    const vs = this.compileShader(updateVertex, this.gl.VERTEX_SHADER);
+    const fs = this.compileShader(updateFragment, this.gl.FRAGMENT_SHADER);
+    if (!vs || !fs) {
+      console.error("Failed to create update shaders");
+      return;
+    }
+
+    // Create program with Transform Feedback varyings
+    this.updateProgram = this.gl.createProgram();
+    if (!this.updateProgram) {
+      console.error("Failed to create update program");
+      return;
+    }
+
+    this.gl.attachShader(this.updateProgram, vs);
+    this.gl.attachShader(this.updateProgram, fs);
+
+    // Specify Transform Feedback varyings (must match output order)
+    this.gl.transformFeedbackVaryings(
+      this.updateProgram,
+      ["out_position", "out_rotation", "out_constants", "out_physics"],
+      this.gl.INTERLEAVED_ATTRIBS
+    );
+
+    this.gl.linkProgram(this.updateProgram);
+
+    // Check link status
+    if (!this.gl.getProgramParameter(this.updateProgram, this.gl.LINK_STATUS)) {
+      console.error("Update program link error:", this.gl.getProgramInfoLog(this.updateProgram));
+      this.gl.deleteProgram(this.updateProgram);
+      this.updateProgram = null;
+      return;
+    }
+
+    // Get uniform locations for update program
+    this.updateWindUniform = this.gl.getUniformLocation(this.updateProgram, "u_wind");
+
+    // Setup UBO for update program (bind to same binding point as render program)
+    const blockIndex = this.gl.getUniformBlockIndex(this.updateProgram, "CommonUniforms");
+    if (blockIndex !== this.gl.INVALID_INDEX) {
+      this.gl.uniformBlockBinding(this.updateProgram, blockIndex, 0);
+    }
+
+    // Cleanup
+    this.gl.deleteShader(vs);
+    this.gl.deleteShader(fs);
+  }
+
   protected getShaders(): ShaderSource {
-    const vertex = `
-      precision mediump float;
+    // RENDER shaders - display particles (unchanged from original)
+    const vertex = `#version 300 es
+precision mediump float;
 
-      attribute vec2 a_position;
-      attribute vec3 a_instancePosition; // x, y, z (depth)
-      attribute vec3 a_instanceRotation; // rotation, size, opacity
+in vec2 a_position;
+in vec3 a_instancePosition; // x, y, z (depth)
+in vec3 a_instanceRotation; // rotation, size, opacity
 
-      uniform vec2 u_resolution;
-      uniform float u_time;
-      uniform vec2 u_wind;
-      
-      varying float v_opacity;
-      varying vec2 v_texCoord;
-      varying float v_depth;
-      
-      void main() {
-        // Apply rotation
-        float rotation = a_instanceRotation.x + u_time * 0.5;
-        float size = a_instanceRotation.y;
-        float opacity = a_instanceRotation.z;
-        
-        // Calculate sway
-        float swayX = sin(a_instancePosition.y * 0.01 + u_time * 2.0) * 20.0;
-        
-        // Rotation matrix
-        float c = cos(rotation);
-        float s = sin(rotation);
-        mat2 rotMatrix = mat2(c, -s, s, c);
-        
-        // Apply rotation and scale to vertex position
-        vec2 rotatedPos = rotMatrix * (a_position * size);
-        
-        // Add instance position and sway
-        vec2 position = rotatedPos + a_instancePosition.xy + vec2(swayX + u_wind.x * 10.0, 0.0);
-        
-        // Apply parallax based on depth
-        float parallaxScale = 0.5 + a_instancePosition.z * 0.5;
-        position *= parallaxScale;
-        
-        // Convert to clip space
-        vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
-        
-        gl_Position = vec4(clipSpace, a_instancePosition.z * 0.1, 1.0);
-        
-        v_opacity = opacity * (0.5 + a_instancePosition.z * 0.5);
-        v_texCoord = a_position + 0.5;
-        v_depth = a_instancePosition.z;
-      }
-    `;
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
 
-    const fragment = `
-      precision mediump float;
-      
-      uniform sampler2D u_petalTexture;
-      uniform float u_time;
-      
-      varying float v_opacity;
-      varying vec2 v_texCoord;
-      varying float v_depth;
-      
-      void main() {
-        // Sample petal texture
-        vec4 texColor = texture2D(u_petalTexture, v_texCoord);
-        
-        // Distance from center for petal shape
-        float dist = length(v_texCoord - 0.5) * 2.0;
-        
-        // Create petal shape using distance field
-        float petalShape = 1.0 - smoothstep(0.3, 0.5, dist);
-        
-        // Add inner detail
-        float innerDetail = 1.0 - smoothstep(0.0, 0.2, dist);
-        petalShape += innerDetail * 0.3;
-        
-        // Create 5-petal flower shape
-        vec2 centered = v_texCoord - 0.5;
-        float angle = atan(centered.y, centered.x);
-        float petalPattern = sin(angle * 5.0) * 0.5 + 0.5;
-        petalShape *= petalPattern;
-        
-        // Monochrome white to light gray gradient
-        vec3 color = mix(
-          vec3(0.9, 0.9, 0.9),  // Light gray
-          vec3(1.0, 1.0, 1.0),  // White
-          petalShape
-        );
-        
-        // Add subtle depth-based shading
-        color *= 0.8 + v_depth * 0.2;
-        
-        // Apply opacity with shape
-        float alpha = petalShape * v_opacity * texColor.a;
-        
-        // Add subtle glow for closer petals
-        if (v_depth > 0.7) {
-          alpha *= 1.2;
-          color *= 1.1;
-        }
-        
-        gl_FragColor = vec4(color, alpha);
-      }
-    `;
+uniform vec2 u_wind;
+
+out float v_opacity;
+out vec2 v_texCoord;
+out float v_depth;
+
+void main() {
+  // Apply rotation
+  float rotation = a_instanceRotation.x;
+  float size = a_instanceRotation.y;
+  float opacity = a_instanceRotation.z;
+
+  // Calculate sway for rendering (visual effect only, physics handled in update shader)
+  float swayX = sin(a_instancePosition.y * 0.01 + u_time * 2.0) * 20.0;
+
+  // Rotation matrix
+  float c = cos(rotation);
+  float s = sin(rotation);
+  mat2 rotMatrix = mat2(c, -s, s, c);
+
+  // Apply rotation and scale to vertex position
+  vec2 rotatedPos = rotMatrix * (a_position * size);
+
+  // Add instance position and sway
+  vec2 position = rotatedPos + a_instancePosition.xy + vec2(swayX + u_wind.x * 10.0, 0.0);
+
+  // Apply parallax based on depth
+  float parallaxScale = 0.5 + a_instancePosition.z * 0.5;
+  position *= parallaxScale;
+
+  // Convert to clip space
+  vec2 clipSpace = ((position / u_resolution) * 2.0 - 1.0) * vec2(1, -1);
+
+  gl_Position = vec4(clipSpace, a_instancePosition.z * 0.1, 1.0);
+
+  v_opacity = opacity * (0.5 + a_instancePosition.z * 0.5);
+  v_texCoord = a_position + 0.5;
+  v_depth = a_instancePosition.z;
+}
+`;
+
+    const fragment = `#version 300 es
+precision mediump float;
+
+// Common uniforms via UBO (std140 layout)
+layout(std140) uniform CommonUniforms {
+  vec2 u_resolution;  // offset 0, 8 bytes
+  float u_time;        // offset 8, 4 bytes
+  float _padding;      // offset 12, 4 bytes (alignment)
+};
+
+uniform sampler2D u_petalTexture;
+
+in float v_opacity;
+in vec2 v_texCoord;
+in float v_depth;
+
+out vec4 fragColor;
+
+void main() {
+  // Sample petal texture
+  vec4 texColor = texture(u_petalTexture, v_texCoord);
+
+  // Distance from center for petal shape
+  float dist = length(v_texCoord - 0.5) * 2.0;
+
+  // Create petal shape using distance field
+  float petalShape = 1.0 - smoothstep(0.3, 0.5, dist);
+
+  // Add inner detail
+  float innerDetail = 1.0 - smoothstep(0.0, 0.2, dist);
+  petalShape += innerDetail * 0.3;
+
+  // Create 5-petal flower shape
+  vec2 centered = v_texCoord - 0.5;
+  float angle = atan(centered.y, centered.x);
+  float petalPattern = sin(angle * 5.0) * 0.5 + 0.5;
+  petalShape *= petalPattern;
+
+  // Monochrome white to light gray gradient
+  vec3 color = mix(
+    vec3(0.9, 0.9, 0.9),  // Light gray
+    vec3(1.0, 1.0, 1.0),  // White
+    petalShape
+  );
+
+  // Add subtle depth-based shading
+  color *= 0.8 + v_depth * 0.2;
+
+  // Apply opacity with shape
+  float alpha = petalShape * v_opacity * texColor.a;
+
+  // Add subtle glow for closer petals
+  if (v_depth > 0.7) {
+    alpha *= 1.2;
+    color *= 1.1;
+  }
+
+  fragColor = vec4(color, alpha);
+}
+`;
 
     return { vertex, fragment };
   }
@@ -161,6 +332,11 @@ export class WebGLSakuraFall extends WebGLEffect {
     this.createPetalTexture();
 
     this.windUniform = this.gl.getUniformLocation(this.program, "u_wind");
+
+    // Create Transform Feedback update program
+    this.createUpdateProgram();
+
+    // Initialize particle data with Transform Feedback buffers
     this.initializePetals();
   }
 
@@ -208,101 +384,161 @@ export class WebGLSakuraFall extends WebGLEffect {
   }
 
   private initializePetals(): void {
-    if (!this.canvas) return;
+    if (!this.canvas || !this.gl) return;
 
     this.petals = [];
+
+    // Allocate particle data buffer for Transform Feedback
+    // 12 floats per petal:
+    // - vec3 position (x, y, z) = 3 floats
+    // - float rotation = 1 float
+    // - vec4 constants (size, opacity, rotationSpeed, fallSpeed) = 4 floats
+    // - vec4 physics (swayPhase, swaySpeed, swayAmount, unused) = 4 floats
+    // Total: 48 bytes per particle
+    this.particleData = new Float32Array(this.petalCount * 12);
 
     for (let i = 0; i < this.petalCount; i++) {
       const petal: SakuraPetal = {
         x: Math.random() * (this.canvas.width + 200) - 100,
         y: Math.random() * this.canvas.height * 2 - this.canvas.height,
         z: Math.random(), // 0 = far, 1 = near
-        size: (Math.random() * 20 + 20) * (0.5 + Math.random() * 0.5), // Increased from 10-25 to 20-40
+        size: (Math.random() * 20 + 20) * (0.5 + Math.random() * 0.5), // 20-40px
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.02,
-        fallSpeed: Math.random() * 1.2 + 0.4, // Slightly slower for larger petals
+        fallSpeed: Math.random() * 1.2 + 0.4,
         swayPhase: Math.random() * Math.PI * 2,
         swaySpeed: Math.random() * 0.02 + 0.01,
-        swayAmount: Math.random() * 40 + 30, // More sway for larger petals
-        opacity: Math.random() * 0.5 + 0.4, // Slightly more opaque
+        swayAmount: Math.random() * 40 + 30,
+        opacity: Math.random() * 0.5 + 0.4,
       };
 
       this.petals.push(petal);
+
+      // Pack particle data into buffer (12 floats per particle)
+      const baseIndex = i * 12;
+      this.particleData[baseIndex + 0] = petal.x; // position.x
+      this.particleData[baseIndex + 1] = petal.y; // position.y
+      this.particleData[baseIndex + 2] = petal.z; // position.z
+      this.particleData[baseIndex + 3] = petal.rotation; // rotation
+      this.particleData[baseIndex + 4] = petal.size; // constants.x (size)
+      this.particleData[baseIndex + 5] = petal.opacity; // constants.y (opacity)
+      this.particleData[baseIndex + 6] = petal.rotationSpeed; // constants.z
+      this.particleData[baseIndex + 7] = petal.fallSpeed; // constants.w
+      this.particleData[baseIndex + 8] = petal.swayPhase; // physics.x
+      this.particleData[baseIndex + 9] = petal.swaySpeed; // physics.y
+      this.particleData[baseIndex + 10] = petal.swayAmount; // physics.z
+      this.particleData[baseIndex + 11] = 0.0; // physics.w (unused)
     }
 
-    // Allocate particle data buffer
-    // 6 floats per petal: x, y, z, rotation, size, opacity
-    this.particleData = new Float32Array(this.petalCount * 6);
+    // Create Transform Feedback ping-pong buffers
+    this.tfBufferA = this.gl.createBuffer();
+    this.tfBufferB = this.gl.createBuffer();
 
-    // Create instance buffer
-    this.createInstanceBuffer("petals", this.particleData);
-  }
-
-  private updatePetals(time: number): void {
-    if (!this.particleData || !this.canvas) return;
-
-    // Calculate wind effect
-    const windX = Math.sin(time * 0.5) * 0.3;
-    const windY = Math.cos(time * 0.3) * 0.1;
-
-    for (let i = 0; i < this.petals.length; i++) {
-      const petal = this.petals[i];
-
-      // Update position
-      const depthFactor = 0.5 + petal.z * 0.5;
-      petal.y += petal.fallSpeed * depthFactor;
-
-      // Apply sway
-      const sway = Math.sin(petal.y * petal.swaySpeed + petal.swayPhase) * petal.swayAmount;
-      petal.x += sway * 0.02 + windX * depthFactor;
-
-      // Update rotation
-      petal.rotation += petal.rotationSpeed;
-
-      // Reset petal if it goes off screen
-      if (petal.y > this.canvas.height + 50) {
-        petal.y = -50 - Math.random() * 200;
-        petal.x = Math.random() * (this.canvas.width + 200) - 100;
-        petal.rotation = Math.random() * Math.PI * 2;
-      }
-
-      // Wrap horizontally
-      if (petal.x < -100) {
-        petal.x = this.canvas.width + 100;
-      } else if (petal.x > this.canvas.width + 100) {
-        petal.x = -100;
-      }
-
-      // Update particle data
-      const baseIndex = i * 6;
-      this.particleData[baseIndex] = petal.x;
-      this.particleData[baseIndex + 1] = petal.y;
-      this.particleData[baseIndex + 2] = petal.z;
-      this.particleData[baseIndex + 3] = petal.rotation;
-      this.particleData[baseIndex + 4] = petal.size;
-      this.particleData[baseIndex + 5] = petal.opacity;
+    if (!this.tfBufferA || !this.tfBufferB) {
+      console.error("Failed to create Transform Feedback buffers");
+      return;
     }
 
-    // Update GPU buffer
-    this.updateBuffer("petals", this.particleData);
+    // Initialize buffer A with particle data
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferA);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData, this.gl.DYNAMIC_COPY);
 
-    // Update wind uniform
-    if (this.gl && this.program && this.windUniform) {
-      this.gl.uniform2f(this.windUniform, windX, windY);
-    }
+    // Initialize buffer B (same size, will be filled by Transform Feedback)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.tfBufferB);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.particleData.byteLength, this.gl.DYNAMIC_COPY);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+
+    // Set initial ping-pong state
+    this.currentReadBuffer = this.tfBufferA;
+    this.currentWriteBuffer = this.tfBufferB;
+
+    // Store render program pointer for later use
+    this.renderProgram = this.program;
   }
 
   protected draw(time: number): void {
-    if (!this.gl || !this.program) return;
+    if (
+      !this.gl ||
+      !this.renderProgram ||
+      !this.updateProgram ||
+      !this.currentReadBuffer ||
+      !this.currentWriteBuffer
+    )
+      return;
 
-    // Update petal positions
-    this.updatePetals(time);
+    const deltaTime = 1.0; // Fixed timestep for consistent physics at 30fps
 
-    // Get instanced arrays extension
-    const ext = this.getInstancedArraysExt();
-    if (!ext) return;
+    // Calculate wind effect (same formula as before)
+    const windX = Math.sin(time * 0.5) * 0.3;
+    const windY = Math.cos(time * 0.3) * 0.1;
 
-    // Depth testing removed for better performance - using painter's algorithm via z-based opacity
+    // ========================================
+    // PASS 1: UPDATE PASS (Transform Feedback)
+    // ========================================
+
+    this.gl.useProgram(this.updateProgram);
+
+    // Bind input buffer (read)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
+
+    // Setup vertex attributes for update shader (12 floats per particle, 48 bytes stride)
+    const inPositionLoc = this.gl.getAttribLocation(this.updateProgram, "in_position");
+    const inRotationLoc = this.gl.getAttribLocation(this.updateProgram, "in_rotation");
+    const inConstantsLoc = this.gl.getAttribLocation(this.updateProgram, "in_constants");
+    const inPhysicsLoc = this.gl.getAttribLocation(this.updateProgram, "in_physics");
+
+    this.gl.enableVertexAttribArray(inPositionLoc);
+    this.gl.vertexAttribPointer(inPositionLoc, 3, this.gl.FLOAT, false, 48, 0); // offset 0
+
+    this.gl.enableVertexAttribArray(inRotationLoc);
+    this.gl.vertexAttribPointer(inRotationLoc, 1, this.gl.FLOAT, false, 48, 12); // offset 12
+
+    this.gl.enableVertexAttribArray(inConstantsLoc);
+    this.gl.vertexAttribPointer(inConstantsLoc, 4, this.gl.FLOAT, false, 48, 16); // offset 16
+
+    this.gl.enableVertexAttribArray(inPhysicsLoc);
+    this.gl.vertexAttribPointer(inPhysicsLoc, 4, this.gl.FLOAT, false, 48, 32); // offset 32
+
+    // Set update uniforms
+    if (this.updateWindUniform) {
+      this.gl.uniform2f(this.updateWindUniform, windX, windY);
+    }
+
+    const deltaTimeLoc = this.gl.getUniformLocation(this.updateProgram, "u_deltaTime");
+    if (deltaTimeLoc) {
+      this.gl.uniform1f(deltaTimeLoc, deltaTime);
+    }
+
+    // Bind Transform Feedback output buffer (write)
+    this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.currentWriteBuffer);
+
+    // Perform Transform Feedback update (no rendering)
+    this.gl.enable(this.gl.RASTERIZER_DISCARD);
+    this.gl.beginTransformFeedback(this.gl.POINTS);
+    this.gl.drawArrays(this.gl.POINTS, 0, this.petalCount);
+    this.gl.endTransformFeedback();
+    this.gl.disable(this.gl.RASTERIZER_DISCARD);
+
+    // Unbind Transform Feedback buffer
+    this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
+
+    // Cleanup update attributes
+    this.gl.disableVertexAttribArray(inPositionLoc);
+    this.gl.disableVertexAttribArray(inRotationLoc);
+    this.gl.disableVertexAttribArray(inConstantsLoc);
+    this.gl.disableVertexAttribArray(inPhysicsLoc);
+
+    // Swap ping-pong buffers for next frame
+    const temp = this.currentReadBuffer;
+    this.currentReadBuffer = this.currentWriteBuffer;
+    this.currentWriteBuffer = temp;
+
+    // ========================================
+    // PASS 2: RENDER PASS
+    // ========================================
+
+    this.gl.useProgram(this.renderProgram);
 
     // Bind quad geometry
     const quadBuffer = this.buffers.get("quad");
@@ -312,22 +548,27 @@ export class WebGLSakuraFall extends WebGLEffect {
       this.gl.vertexAttribPointer(this.positionAttribute, 2, this.gl.FLOAT, false, 0, 0);
     }
 
-    // Bind instance data
-    const petalBuffer = this.buffers.get("petals");
-    if (petalBuffer) {
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, petalBuffer);
+    // Bind UPDATED particle data (from currentReadBuffer which now has new data)
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.currentReadBuffer);
 
-      // Setup instance attributes
-      const instancePosAttr = this.gl.getAttribLocation(this.program, "a_instancePosition");
-      const instanceRotAttr = this.gl.getAttribLocation(this.program, "a_instanceRotation");
+    // Setup instance attributes for render shader
+    // Render shader expects: vec3 a_instancePosition (x,y,z) and vec3 a_instanceRotation (rotation, size, opacity)
+    // Buffer layout: position(3), rotation(1), constants(4), physics(4)
+    // So: a_instancePosition reads position(3), a_instanceRotation reads rotation(1) + first 2 of constants
+    const instancePosAttr = this.getAttributeLocation("a_instancePosition");
+    const instanceRotAttr = this.getAttributeLocation("a_instanceRotation");
 
-      this.gl.enableVertexAttribArray(instancePosAttr);
-      this.gl.vertexAttribPointer(instancePosAttr, 3, this.gl.FLOAT, false, 24, 0);
-      ext.vertexAttribDivisorANGLE(instancePosAttr, 1);
+    this.gl.enableVertexAttribArray(instancePosAttr);
+    this.gl.vertexAttribPointer(instancePosAttr, 3, this.gl.FLOAT, false, 48, 0); // position at offset 0
+    this.gl.vertexAttribDivisor(instancePosAttr, 1);
 
-      this.gl.enableVertexAttribArray(instanceRotAttr);
-      this.gl.vertexAttribPointer(instanceRotAttr, 3, this.gl.FLOAT, false, 24, 12);
-      ext.vertexAttribDivisorANGLE(instanceRotAttr, 1);
+    this.gl.enableVertexAttribArray(instanceRotAttr);
+    this.gl.vertexAttribPointer(instanceRotAttr, 3, this.gl.FLOAT, false, 48, 12); // rotation + size + opacity at offset 12, 16, 20
+    this.gl.vertexAttribDivisor(instanceRotAttr, 1);
+
+    // Set render uniforms
+    if (this.windUniform) {
+      this.gl.uniform2f(this.windUniform, windX, windY);
     }
 
     // Bind petal texture
@@ -335,23 +576,50 @@ export class WebGLSakuraFall extends WebGLEffect {
     if (petalTexture) {
       this.gl.activeTexture(this.gl.TEXTURE0);
       this.gl.bindTexture(this.gl.TEXTURE_2D, petalTexture);
-      const textureLocation = this.gl.getUniformLocation(this.program, "u_petalTexture");
-      this.gl.uniform1i(textureLocation, 0);
+      const textureLocation = this.getUniformLocation("u_petalTexture");
+      if (textureLocation) this.gl.uniform1i(textureLocation, 0);
     }
 
     // Draw all petals with instancing
-    ext.drawArraysInstancedANGLE(this.gl.TRIANGLE_STRIP, 0, 4, this.petalCount);
+    this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.petalCount);
 
     // Reset divisors
-    const instancePosAttr = this.gl.getAttribLocation(this.program, "a_instancePosition");
-    const instanceRotAttr = this.gl.getAttribLocation(this.program, "a_instanceRotation");
-    ext.vertexAttribDivisorANGLE(instancePosAttr, 0);
-    ext.vertexAttribDivisorANGLE(instanceRotAttr, 0);
+    this.gl.vertexAttribDivisor(instancePosAttr, 0);
+    this.gl.vertexAttribDivisor(instanceRotAttr, 0);
   }
 
   protected handleResize(): void {
     super.handleResize();
     // Reinitialize petals on resize
     this.initializePetals();
+  }
+
+  public cleanup(): void {
+    // Delete Transform Feedback buffers
+    if (this.gl) {
+      if (this.tfBufferA) {
+        this.gl.deleteBuffer(this.tfBufferA);
+        this.tfBufferA = null;
+      }
+      if (this.tfBufferB) {
+        this.gl.deleteBuffer(this.tfBufferB);
+        this.tfBufferB = null;
+      }
+
+      // Delete update program
+      if (this.updateProgram) {
+        this.gl.deleteProgram(this.updateProgram);
+        this.updateProgram = null;
+      }
+    }
+
+    // Clear references
+    this.currentReadBuffer = null;
+    this.currentWriteBuffer = null;
+    this.renderProgram = null;
+    this.particleData = null;
+
+    // Call parent cleanup
+    super.cleanup();
   }
 }
