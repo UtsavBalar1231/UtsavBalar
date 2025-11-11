@@ -31,99 +31,43 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <script is:inline>
-      // Theme colors mapping for meta theme-color tag
-      const themeColors = {
-        "green-phosphor": "#00ff00",
-        "amber-phosphor": "#ffb000",
-        monochrome: "#ffffff",
-        "doom-red": "#ff4100",
-      };
+    <!-- Speculation Rules API for prefetching and prerendering -->
+    <script
+      type="speculationrules"
+      set:html={JSON.stringify({
+        prefetch: [
+          {
+            source: "list",
+            urls: ["/about/", "/projects/", "/quotes/", "/bookbits/", "/resume/", "/tutorials/"],
+          },
+        ],
+        prerender: [{ where: { href_matches: "/tutorials/*" }, eagerness: "moderate" }],
+      })}
+    />
 
-      // Update theme-color meta tag
-      function updateThemeColor(theme) {
-        const color = themeColors[theme] || themeColors["monochrome"];
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-          metaThemeColor.setAttribute("content", color);
-        }
-      }
-
-      // Theme initialization function
-      async function applyStoredTheme() {
-        const theme = localStorage.getItem("selectedTheme") || "monochrome";
-        document.documentElement.setAttribute("data-theme", theme);
-        if (document.body) {
-          document.body.setAttribute("data-theme", theme);
-          // Force browser reflow to ensure CSS variables recompute before view transition completes
-          void document.body.offsetHeight;
-        }
-
-        // Update browser theme color
-        updateThemeColor(theme);
-
-        // Performance mode initialization with device detection
-        const performanceStored = localStorage.getItem("performanceMode");
-        let performanceMode = false;
-
-        if (performanceStored !== null) {
-          // User has explicitly set preference
-          performanceMode = performanceStored === "true";
-        } else {
-          // Auto-detect based on device capabilities
-          performanceMode = await shouldEnablePerformanceMode();
-        }
-
-        if (document.body) {
-          document.body.setAttribute("data-performance", performanceMode.toString());
-        }
-      }
-
-      // Device detection utilities (inlined for performance)
-      async function shouldEnablePerformanceMode() {
-        // Auto-enable for mobile viewport
-        if (window.innerWidth < 768) {
-          return true;
-        }
-
-        // Auto-enable for low-end devices
-        const cores = navigator.hardwareConcurrency || 4;
-        const memory = navigator.deviceMemory;
-
-        if (cores < 4 || (memory !== undefined && memory < 4)) {
-          return true;
-        }
-
-        // Check battery level
-        try {
-          if ("getBattery" in navigator) {
-            const battery = await navigator.getBattery();
-            const batteryLevel = Math.round(battery.level * 100);
-            if (batteryLevel < 15) {
-              return true;
-            }
-          }
-        } catch (e) {
-          console.warn("Battery API unavailable:", e);
-        }
-
-        return false;
-      }
-
-      // Run on initial page load
-      applyStoredTheme();
-
-      // Re-run after view transition navigation
-      document.addEventListener("astro:page-load", applyStoredTheme);
-
-      // Listen for theme changes
-      window.addEventListener("themeChanged", (event) => {
-        updateThemeColor(event.detail.theme);
-      });
-    </script>
-
+    <!-- Critical resource hints -->
     <link rel="dns-prefetch" href="https://utsavbalar.in" />
     <link rel="preconnect" href="https://utsavbalar.in" />
+
+    <!-- Critical font preload with high priority -->
+    <link
+      rel="preload"
+      href="/fonts/DepartureMono/DepartureMonoNerdFontMono-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+
+    <!-- Non-critical texture preloads with low priority -->
+    <link rel="preload" href="/noise-textures/noisy-texture-200x200-1.png" as="image" fetchpriority="low" />
+    <link rel="preload" href="/grunge.webp" as="image" fetchpriority="low" />
+
+    <!-- Theme initialization (must run before body renders) -->
+    <script is:inline src="/scripts/theme-init.js"></script>
+
+    <!-- Keyboard navigation -->
+    <script is:inline src="/scripts/keyboard-nav.js"></script>
 
     <link rel="dns-prefetch" href="https://api.github.com" />
     <link rel="dns-prefetch" href="https://cataas.com" />
@@ -132,15 +76,15 @@ const { title } = Astro.props;
   </head>
   <body>
     <BrowserWarning />
-    <div class="noise-overlay" style="z-index: var(--z-noise);" transition:persist="noise"></div>
-    <div class="grunge-overlay" style="z-index: var(--z-grunge);" transition:persist="grunge"></div>
+    <div class="noise-overlay" transition:persist="noise"></div>
+    <div class="grunge-overlay" transition:persist="grunge"></div>
     <MatrixRain transition:persist="matrix" />
     <DoomFire transition:persist="fire" />
     <LightningStorm transition:persist="storm" />
     <SakuraFall transition:persist="sakura" />
     <div
       class="pt-18 page-content relative min-h-screen p-4 max-md:pb-21 sm:p-6 md:p-8"
-      style="contain: layout style;"
+      style="contain: layout style paint; contain-intrinsic-size: 100vw 100vh;"
       id="main-content"
       transition:animate="fade"
       transition:name="main"
@@ -162,6 +106,10 @@ const { title } = Astro.props;
   document.addEventListener("astro:page-load", () => {
     const mainContent = document.getElementById("main-content");
     mainContent?.classList.add("page-content-loaded");
+    // Remove the class after animation completes (200ms) to prevent accumulation
+    setTimeout(() => {
+      mainContent?.classList.remove("page-content-loaded");
+    }, 250);
   });
 
   document.addEventListener("astro:before-preparation", () => {
@@ -172,44 +120,6 @@ const { title } = Astro.props;
   document.addEventListener("astro:after-swap", () => {
     const mainContent = document.getElementById("main-content");
     mainContent?.classList.remove("page-content-exiting");
-  });
-
-  // Alt+1-7 keyboard navigation with ViewTransitions
-  document.addEventListener("keydown", async (event) => {
-    if (event.altKey) {
-      let targetUrl = null;
-
-      switch (event.key) {
-        case "1":
-          targetUrl = "/";
-          break;
-        case "2":
-          targetUrl = "/about/";
-          break;
-        case "3":
-          targetUrl = "/projects/";
-          break;
-        case "4":
-          targetUrl = "/quotes/";
-          break;
-        case "5":
-          targetUrl = "/bookbits/";
-          break;
-        case "6":
-          targetUrl = "/resume/";
-          break;
-        case "7":
-          targetUrl = "/tutorials/";
-          break;
-      }
-
-      if (targetUrl && targetUrl !== window.location.pathname) {
-        event.preventDefault();
-        // Use ViewTransitions navigate() for animated page changes
-        const { navigate } = await import("astro:transitions/client");
-        navigate(targetUrl);
-      }
-    }
   });
 
   // Lazy animations for desktop only
@@ -250,10 +160,7 @@ const { title } = Astro.props;
     }
   }
 
-  // Run on initial load
-  document.addEventListener("DOMContentLoaded", setupLazyAnimations);
-
-  // Run on Astro view transitions
+  // Run on initial load and view transitions
   document.addEventListener("astro:page-load", setupLazyAnimations);
 </script>
 

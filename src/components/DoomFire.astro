@@ -1,8 +1,9 @@
 ---
-
+import WebGLFallback from "@components/WebGLFallback.astro";
 ---
 
 <canvas id="doom-fire-canvas" class="doom-fire-canvas"></canvas>
+<WebGLFallback show={false} />
 
 <style>
   .doom-fire-canvas {
@@ -15,6 +16,8 @@
     touch-action: none;
     opacity: 0.4;
     mix-blend-mode: screen;
+    contain: strict;
+    contain-intrinsic-size: 100vw 100vh;
   }
 </style>
 
@@ -29,6 +32,7 @@
   let batteryCheckInterval: number | null = null;
   let isInitializing = false;
   let debounceTimer: number | null = null;
+  let webgl2Unsupported = false;
 
   function shouldInitialize(): boolean {
     const theme = document.documentElement.getAttribute("data-theme");
@@ -44,11 +48,22 @@
     isInitializing = true;
 
     try {
-      if (shouldInitialize() && !fireEffect) {
+      if (shouldInitialize() && !fireEffect && !webgl2Unsupported) {
         const recommendedFPS = getRecommendedFPS();
 
         fireEffect = new WebGLDoomFire();
-        fireEffect.initialize();
+        try {
+          fireEffect.initialize();
+        } catch (error) {
+          console.error("WebGL 2.0 initialization failed:", error);
+          webgl2Unsupported = true;
+          const canvas = document.getElementById("doom-fire-canvas");
+          const fallback = document.querySelector(".webgl-fallback");
+          if (canvas) canvas.style.display = "none";
+          if (fallback) (fallback as HTMLElement).style.display = "block";
+          fireEffect = null;
+          return;
+        }
 
         if (hasTargetFPS(fireEffect)) {
           fireEffect.targetFPS = recommendedFPS;

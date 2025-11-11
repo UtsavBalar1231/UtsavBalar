@@ -145,9 +145,8 @@ export abstract class WebGLEffect {
     this.gl = this.canvas.getContext("webgl2", contextOptions) as WebGL2RenderingContext | null;
 
     if (!this.gl) {
-      console.error(`WebGL not supported for canvas "${this.config.canvasId}"`);
       this.isInitializing = false;
-      return;
+      throw new Error("WebGL 2.0 is required but not supported by your browser");
     }
 
     // Initialize texture unit management (Phase 6)

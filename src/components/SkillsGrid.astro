@@ -1,44 +1,5 @@
 ---
-const skills = [
-  // Proficient
-  { name: "C", level: "proficient" },
-  { name: "Rust", level: "proficient" },
-  { name: "Bash", level: "proficient" },
-  { name: "AWK", level: "proficient" },
-  { name: "Python", level: "proficient" },
-  { name: "Embedded Linux", level: "proficient" },
-  { name: "Linux Kernel Dev", level: "proficient" },
-  { name: "BSP Engineering", level: "proficient" },
-  { name: "Device Drivers", level: "proficient" },
-  { name: "Git", level: "proficient" },
-  { name: "AOSP", level: "proficient" },
-  { name: "Custom ROM Development", level: "proficient" },
-
-  // Semi-Proficient
-  { name: "Yocto/Buildroot Project", level: "semi-proficient" },
-  { name: "Git Actions", level: "semi-proficient" },
-  { name: "U-Boot", level: "semi-proficient" },
-  { name: "Apt/Rpm/Arch Package Management", level: "semi-proficient" },
-  { name: "ARM Architecture", level: "semi-proficient" },
-
-  // Familiar
-  { name: "C++", level: "familiar" },
-  { name: "Modern Web Stack", level: "familiar" },
-  { name: "MongoDB", level: "familiar" },
-  { name: "Figma", level: "familiar" },
-  { name: "Qt QML", level: "familiar" },
-  { name: "MicroPython", level: "familiar" },
-];
-
-const tools = [
-  "GCC/Clang Cross-Compiler",
-  "GDB",
-  "QEMU",
-  "Docker",
-  "Travis CI",
-  "Drone CI",
-  "Jenkins",
-];
+import { skills, tools } from "@data/skills";
 
 const hashString = (str: string): number => {
   let hash = 0;
@@ -138,6 +99,8 @@ const getMEM = (level: string, skillName: string): string => {
 
 <style>
   .terminal-output {
+    container-type: inline-size;
+    container-name: skills-grid;
     font-family: monospace;
     color: var(--text-primary);
   }
@@ -218,8 +181,8 @@ const getMEM = (level: string, skillName: string): string => {
     margin-left: 0.5rem;
   }
 
-  /* Mobile responsiveness */
-  @media (max-width: 640px) {
+  /* Responsive adjustments based on component size */
+  @container skills-grid (max-width: 640px) {
     .ps-header,
     .ps-line {
       font-size: 0.75rem;

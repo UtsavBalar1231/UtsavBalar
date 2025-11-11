@@ -1,11 +1,13 @@
 ::view-transition-old(main) {
   animation: terminal-exit 0.09s linear forwards;
   will-change: filter, opacity;
+  background-color: var(--bg-primary);
 }
 
 ::view-transition-new(main) {
   animation: terminal-enter 0.12s ease-out forwards;
   will-change: filter, opacity;
+  background-color: var(--bg-primary);
 }
 
 @keyframes terminal-exit {
@@ -15,15 +17,15 @@
   }
   25% {
     opacity: 0.9;
-    filter: brightness(0.8);
+    filter: brightness(1);
   }
   50% {
     opacity: 0.7;
-    filter: brightness(1.2);
+    filter: brightness(1);
   }
   75% {
     opacity: 0.4;
-    filter: brightness(0.9);
+    filter: brightness(1);
   }
   100% {
     opacity: 0;
@@ -34,11 +36,11 @@
 @keyframes terminal-enter {
   0% {
     opacity: 0;
-    filter: brightness(1.4);
+    filter: brightness(1);
   }
   50% {
     opacity: 0.7;
-    filter: brightness(1.2);
+    filter: brightness(1);
   }
   100% {
     opacity: 1;
@@ -54,7 +56,7 @@
   }
   50% {
     opacity: 0.95;
-    filter: brightness(1.1);
+    filter: brightness(1);
   }
 }
 
@@ -64,7 +66,7 @@
 
 .page-content-exiting {
   opacity: 0.9;
-  filter: brightness(1.05);
+  filter: none;
   transition:
     opacity 0.2s ease-out,
     filter 0.2s ease-out;
@@ -74,6 +76,11 @@
 ::view-transition-new(root) {
   animation-duration: 0.3s;
   animation-timing-function: ease-in-out;
+  background-color: var(--bg-primary);
+}
+
+::view-transition-group(root) {
+  background-color: var(--bg-primary);
 }
 
 ::view-transition-group(noise),

@@ -44,15 +44,15 @@ export function isMobileViewport(): boolean {
 export function getGPUTier(): "high" | "mid" | "low" {
   try {
     const canvas = document.createElement("canvas");
-    const gl = canvas.getContext("webgl");
+    const gl = canvas.getContext("webgl2");
 
     if (!gl) {
       return "low";
     }
 
     // Get GPU renderer string (Safari 16+, Chrome 90+, Firefox 88+ support RENDERER directly)
-    const renderer = (gl as WebGLRenderingContext)
-      .getParameter((gl as WebGLRenderingContext).RENDERER)
+    const renderer = (gl as WebGL2RenderingContext)
+      .getParameter((gl as WebGL2RenderingContext).RENDERER)
       .toLowerCase();
 
     // High-end GPUs
@@ -91,16 +91,7 @@ export function getGPUTier(): "high" | "mid" | "low" {
  * Get current battery level (0-100) or null if unavailable
  */
 export async function getBatteryLevel(): Promise<number | null> {
-  try {
-    if (navigator.getBattery) {
-      const battery = await navigator.getBattery();
-      return Math.round(battery.level * 100);
-    }
-    return null;
-  } catch (error) {
-    console.warn("Battery API unavailable:", error);
-    return null;
-  }
+  return null;
 }
 
 /**

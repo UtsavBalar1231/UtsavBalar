@@ -1,13 +1,5 @@
 ---
-const navLinks = [
-  { href: "/", text: "Home", icon: "~" },
-  { href: "/about/", text: "About", icon: "&" },
-  { href: "/projects/", text: "Projects", icon: ">" },
-  { href: "/quotes/", text: "Quotes", icon: "%" },
-  { href: "/bookbits/", text: "Bits", icon: "$" },
-  { href: "/resume/", text: "Resume", icon: "@" },
-  { href: "/tutorials/", text: "Learn", icon: "#" },
-];
+import { navigation } from "@data/navigation";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -15,14 +7,14 @@ const currentPath = Astro.url.pathname;
 <nav class="mobile-nav">
   <ul>
     {
-      navLinks.map((link) => {
+      navigation.map((link) => {
         const isActive =
           currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href));
         return (
           <li>
             <a href={link.href} class:list={isActive ? "active" : ""}>
-              <span class="icon">{link.icon}</span>
-              <span class="label">{link.text}</span>
+              <span class="icon">{link.mobileIcon}</span>
+              <span class="label">{link.mobileText}</span>
             </a>
           </li>
         );
@@ -32,124 +24,125 @@ const currentPath = Astro.url.pathname;
 </nav>
 
 <style>
-  .mobile-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(var(--bg-color-rgb), 0.08);
-    backdrop-filter: blur(10px) saturate(1.1);
-    border-top: 1px solid rgba(var(--border-color-rgb), 0.5);
-    z-index: var(--z-mobile-nav);
-    display: none;
-    padding: 0.5rem 0;
-    min-height: 56px;
-    height: calc(56px + env(safe-area-inset-bottom));
-    box-shadow:
-      0 -2px 8px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    width: 100%;
-    box-sizing: border-box;
-    contain: layout style paint;
-    will-change: auto;
-  }
-
-  @media (max-width: 767px) {
+  @layer modals {
     .mobile-nav {
-      display: block;
-    }
-  }
-
-  ul {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-  }
-
-  li {
-    flex: 1;
-  }
-
-  a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text-secondary);
-    padding: 0.5rem 0.25rem;
-    min-height: 44px;
-    min-width: 44px;
-    transition: color 0.1s ease;
-    position: relative;
-    will-change: auto;
-  }
-
-  @media (hover: hover) {
-    a:hover {
-      color: var(--accent-primary);
-      animation: crt-link-glitch 3s ease-in-out infinite;
-    }
-  }
-
-  a.active {
-    color: var(--accent-primary);
-  }
-
-  a.active::before {
-    content: "";
-    position: absolute;
-    top: -0.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2rem;
-    height: 2px;
-    background-color: var(--accent-primary);
-    border-radius: 1px;
-  }
-
-  .icon {
-    font-size: 1.25rem;
-    margin-bottom: 0.2rem;
-    display: block;
-    font-weight: bold;
-    font-family: DepartureMono, monospace;
-  }
-
-  .label {
-    font-family: DepartureMono, monospace;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 700;
-  }
-
-  a:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: -2px;
-    border-radius: 0.25rem;
-  }
-
-  a:active {
-    transform: scale(0.95);
-  }
-
-  @media (max-width: 320px) {
-    .icon {
-      font-size: 1.125rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(var(--bg-color-rgb), 0.08);
+      backdrop-filter: blur(10px) saturate(1.1);
+      border-top: 1px solid rgba(var(--border-color-rgb), 0.5);
+      display: none;
+      padding: 0.5rem 0;
+      min-height: 56px;
+      height: calc(56px + env(safe-area-inset-bottom));
+      box-shadow:
+        0 -2px 8px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+      width: 100%;
+      box-sizing: border-box;
+      contain: strict;
+      contain-intrinsic-size: 100vw 56px;
     }
 
-    .label {
-      font-size: 0.75rem;
+    @media (max-width: 767px) {
+      .mobile-nav {
+        display: block;
+      }
+    }
+
+    ul {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+
+    li {
+      flex: 1;
     }
 
     a {
-      padding: 0.375rem 0.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.25rem;
       min-height: 44px;
+      min-width: 44px;
+      transition: color 0.1s ease;
+      position: relative;
+    }
+
+    @media (hover: hover) {
+      a:hover {
+        color: var(--accent-primary);
+        animation: crt-link-glitch 3s ease-in-out infinite;
+      }
+    }
+
+    a.active {
+      color: var(--accent-primary);
+    }
+
+    a.active::before {
+      content: "";
+      position: absolute;
+      top: -0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2rem;
+      height: 2px;
+      background-color: var(--accent-primary);
+      border-radius: 1px;
+    }
+
+    .icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.2rem;
+      display: block;
+      font-weight: bold;
+      font-family: DepartureMono, monospace;
+    }
+
+    .label {
+      font-family: DepartureMono, monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: -2px;
+      border-radius: 0.25rem;
+    }
+
+    a:active {
+      transform: scale(0.95);
+      will-change: transform;
+    }
+
+    @media (max-width: 320px) {
+      .icon {
+        font-size: 1.125rem;
+      }
+
+      .label {
+        font-size: 0.75rem;
+      }
+
+      a {
+        padding: 0.375rem 0.25rem;
+        min-height: 44px;
+      }
     }
   }
 </style>

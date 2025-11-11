@@ -9,12 +9,6 @@ export default defineConfig({
   trailingSlash: "always",
   site: "https://utsavbalar.in",
 
-  // Enable prefetching for faster navigation
-  prefetch: {
-    prefetchAll: false,
-    defaultStrategy: "hover",
-  },
-
   integrations: [
     sitemap(),
     mdx({

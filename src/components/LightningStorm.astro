@@ -1,9 +1,10 @@
 ---
-
+import WebGLFallback from "@components/WebGLFallback.astro";
 ---
 
 <canvas id="lightning-storm-canvas" class="lightning-storm-canvas"></canvas>
 <div id="lightning-flash" class="lightning-flash"></div>
+<WebGLFallback show={false} />
 
 <style>
   /* eslint-disable astro/no-unused-css-selector */
@@ -17,7 +18,8 @@
     touch-action: none;
     opacity: 0.8;
     mix-blend-mode: screen;
-    z-index: var(--z-background);
+    contain: strict;
+    contain-intrinsic-size: 100vw 100vh;
   }
 
   .lightning-flash {
@@ -34,7 +36,6 @@
       transparent
     );
     opacity: 0;
-    z-index: var(--z-background);
     mix-blend-mode: screen;
     transition: opacity 0.15s ease-out;
   }
@@ -73,6 +74,7 @@
   let debounceTimer: number | null = null;
   let intersectionObserver: IntersectionObserver | null = null;
   let batteryCheckInterval: number | null = null;
+  let webgl2Unsupported = false;
 
   function shouldInitialize(): boolean {
     const theme = document.documentElement.getAttribute("data-theme");
@@ -88,10 +90,21 @@
     isInitializing = true;
 
     try {
-      if (shouldInitialize() && !lightningEffect) {
+      if (shouldInitialize() && !lightningEffect && !webgl2Unsupported) {
         const recommendedFPS = getRecommendedFPS();
         lightningEffect = new WebGLLightningStorm();
-        lightningEffect.initialize();
+        try {
+          lightningEffect.initialize();
+        } catch (error) {
+          console.error("WebGL 2.0 initialization failed:", error);
+          webgl2Unsupported = true;
+          const canvas = document.getElementById("lightning-storm-canvas");
+          const fallback = document.querySelector(".webgl-fallback");
+          if (canvas) canvas.style.display = "none";
+          if (fallback) (fallback as HTMLElement).style.display = "block";
+          lightningEffect = null;
+          return;
+        }
         if (hasTargetFPS(lightningEffect)) {
           lightningEffect.targetFPS = recommendedFPS;
         }

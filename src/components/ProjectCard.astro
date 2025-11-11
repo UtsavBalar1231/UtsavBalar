@@ -1,4 +1,6 @@
 ---
+import { getTagColor } from "@data/tagCategories";
+
 export interface Props {
   title: string;
   description: string;
@@ -12,35 +14,6 @@ export interface Props {
 const { title, description, tags, githubUrl, demoUrl, featured = false, index = 0 } = Astro.props;
 
 const animationDelay = `${index * 0.1}s`;
-
-const tagCategories = {
-  green: ["c", "rust", "python", "javascript", "typescript", "c++", "java", "go", "ruby", "swift"],
-  cyan: ["react", "vue", "angular", "next", "astro", "svelte", "django", "flask", "express", "qt"],
-  red: ["kernel", "driver", "embedded", "linux", "aosp", "rom", "bsp", "bootloader"],
-  magenta: ["docker", "kubernetes", "git", "ci/cd", "jenkins", "qemu", "yocto", "buildroot"],
-  yellow: ["mongodb", "postgres", "mysql", "redis", "sqlite", "database", "sql"],
-};
-
-const tagColors = {
-  green: "tag-green",
-  cyan: "tag-cyan",
-  red: "tag-red",
-  magenta: "tag-magenta",
-  yellow: "tag-yellow",
-  blue: "tag-blue",
-};
-
-function getTagColor(tag: string): string {
-  const lowerTag = tag.toLowerCase();
-
-  for (const [color, keywords] of Object.entries(tagCategories)) {
-    if (keywords.some((keyword) => lowerTag.includes(keyword))) {
-      return tagColors[color as keyof typeof tagColors];
-    }
-  }
-
-  return tagColors.blue;
-}
 ---
 
 <div
@@ -94,6 +67,11 @@ function getTagColor(tag: string): string {
 </div>
 
 <style>
+  .card-base {
+    container-type: inline-size;
+    container-name: project-card;
+  }
+
   /* ProjectCard-specific header layout */
   .project-header {
     display: flex;
@@ -236,8 +214,8 @@ function getTagColor(tag: string): string {
     }
   }
 
-  /* Mobile responsive adjustments */
-  @media (max-width: 640px) {
+  /* Responsive adjustments based on component size */
+  @container project-card (max-width: 640px) {
     .project-title {
       font-size: 1rem;
     }

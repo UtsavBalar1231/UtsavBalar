@@ -15,159 +15,157 @@
 </div>
 
 <style>
-  .cat-container {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: var(--z-max);
-    -webkit-user-select: none;
-    user-select: none;
-    animation: bgFlicker 1s forwards;
-    animation-delay: 4s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-      env(safe-area-inset-left);
-  }
+  @layer modals {
+    .cat-container {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      -webkit-user-select: none;
+      user-select: none;
+      animation: bgFlicker 1s forwards;
+      animation-delay: 4s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+        env(safe-area-inset-left);
+    }
 
-  .cat-container.hidden {
-    display: none;
-  }
+    .cat-container.hidden {
+      display: none;
+    }
 
-  .cat-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    z-index: calc(var(--z-max) + 1);
-    opacity: 0;
-    animation: videoAppear 1s ease-in-out forwards;
-    animation-delay: 8s;
-  }
-
-  .cat-gif {
-    will-change: opacity, transform;
-    width: 20%;
-    min-width: min(400px, 90vw);
-    max-width: 90vw;
-    object-fit: cover;
-    position: absolute;
-    z-index: calc(var(--z-max) + 2);
-    animation: catAppear 6s ease forwards;
-  }
-
-  .exit-btn {
-    display: grid;
-    position: absolute;
-    width: 52px;
-    height: 45px;
-    border: 2px solid rgba(0, 0, 0, 0.38);
-    z-index: calc(var(--z-max) + 3);
-    cursor: pointer;
-    text-align: center;
-    place-items: center;
-    border-radius: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--term-bright-white);
-    opacity: 0;
-    animation: btnAppear 0.4s ease-in-out forwards;
-    animation-delay: 1s;
-    transition: ease-in-out 0.3s;
-    top: calc(1rem + env(safe-area-inset-top));
-  }
-
-  .exit-btn span {
-    position: relative;
-    left: 1px;
-    font-family: var(--font-mono);
-  }
-
-  .exit-btn.hide {
-    opacity: 1;
-    top: -3rem;
-    transition: ease-in-out 0.3s;
-  }
-
-  .exit-btn:hover {
-    background: var(--term-black);
-  }
-
-  .exit-btn:active {
-    width: 47px;
-    height: 43px;
-  }
-
-  @keyframes catAppear {
-    0% {
+    .cat-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
       opacity: 0;
+      animation: videoAppear 1s ease-in-out forwards;
+      animation-delay: 8s;
     }
-    20% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
 
-  @keyframes btnAppear {
-    0% {
-      opacity: 0;
+    .cat-gif {
+      will-change: opacity, transform;
+      width: 20%;
+      min-width: min(400px, 90vw);
+      max-width: 90vw;
+      object-fit: cover;
+      position: absolute;
+      animation: catAppear 6s ease forwards;
     }
-    100% {
-      opacity: 1;
-    }
-  }
 
-  @keyframes videoAppear {
-    0% {
+    .exit-btn {
+      display: grid;
+      position: absolute;
+      width: 52px;
+      height: 45px;
+      border: 2px solid rgba(0, 0, 0, 0.38);
+      cursor: pointer;
+      text-align: center;
+      place-items: center;
+      border-radius: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: var(--term-bright-white);
       opacity: 0;
+      animation: btnAppear 0.4s ease-in-out forwards;
+      animation-delay: 1s;
+      transition: ease-in-out 0.3s;
+      top: calc(1rem + env(safe-area-inset-top));
     }
-    100% {
-      opacity: 1;
-    }
-  }
 
-  @keyframes bgFlicker {
-    0% {
-      background: transparent;
+    .exit-btn span {
+      position: relative;
+      left: 1px;
+      font-family: var(--font-mono);
     }
-    10% {
-      background: var(--term-bright-red);
+
+    .exit-btn.hide {
+      opacity: 1;
+      top: -3rem;
+      transition: ease-in-out 0.3s;
     }
-    20% {
-      background: var(--term-red);
+
+    .exit-btn:hover {
+      background: var(--term-black);
     }
-    30% {
-      background: var(--term-bright-green);
+
+    .exit-btn:active {
+      width: 47px;
+      height: 43px;
     }
-    40% {
-      background: var(--term-bright-cyan);
+
+    @keyframes catAppear {
+      0% {
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
     }
-    50% {
-      background: var(--term-bright-yellow);
+
+    @keyframes btnAppear {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
     }
-    60% {
-      background: var(--term-bright-magenta);
+
+    @keyframes videoAppear {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
     }
-    70% {
-      background: var(--term-magenta);
-    }
-    80% {
-      background: var(--term-yellow);
-    }
-    90% {
-      background: var(--color-error);
-    }
-    100% {
-      background: var(--color-success);
+
+    @keyframes bgFlicker {
+      0% {
+        background: transparent;
+      }
+      10% {
+        background: var(--term-bright-red);
+      }
+      20% {
+        background: var(--term-red);
+      }
+      30% {
+        background: var(--term-bright-green);
+      }
+      40% {
+        background: var(--term-bright-cyan);
+      }
+      50% {
+        background: var(--term-bright-yellow);
+      }
+      60% {
+        background: var(--term-bright-magenta);
+      }
+      70% {
+        background: var(--term-magenta);
+      }
+      80% {
+        background: var(--term-yellow);
+      }
+      90% {
+        background: var(--color-error);
+      }
+      100% {
+        background: var(--color-success);
+      }
     }
   }
 </style>
@@ -313,7 +311,7 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     new SpinningCatManager();
   });
 </script>

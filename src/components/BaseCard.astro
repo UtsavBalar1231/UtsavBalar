@@ -14,21 +14,17 @@ const {
   hoverable = true,
   featured = false,
 } = Astro.props;
-
-const classes = [
-  "card-base",
-  "card-base-default",
-  "glitch-border-hover",
-  hoverable && "card-base-hoverable",
-  featured && "card-base-featured",
-  className,
-]
-  .filter(Boolean)
-  .join(" ");
 ---
 
 <div
-  class:list={[classes]}
+  class:list={[
+    "card-base",
+    "card-base-default",
+    "glitch-border-hover",
+    hoverable && "card-base-hoverable",
+    featured && "card-base-featured",
+    className,
+  ]}
   style={animated
     ? `animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`
     : undefined}
@@ -47,6 +43,11 @@ const classes = [
 </div>
 
 <style>
+  .card-base {
+    container-type: inline-size;
+    container-name: card;
+  }
+
   /* Terminal cursor and CRT glitch effects (component-specific targeting) */
   @media (hover: hover) {
     .card-base-hoverable:hover .card-content::after {

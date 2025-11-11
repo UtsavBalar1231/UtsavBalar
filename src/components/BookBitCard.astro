@@ -52,6 +52,11 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 </div>
 
 <style>
+  .card-base {
+    container-type: inline-size;
+    container-name: bookbit-card;
+  }
+
   /* BookBitCard-specific header layout */
   .bookbit-header {
     display: flex;
@@ -169,8 +174,8 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     }
   }
 
-  /* Mobile responsive adjustments */
-  @media (max-width: 640px) {
+  /* Responsive adjustments based on component size */
+  @container bookbit-card (max-width: 640px) {
     .bookbit-text {
       font-size: 0.875rem;
     }

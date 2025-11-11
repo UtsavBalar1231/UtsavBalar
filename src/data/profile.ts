@@ -3,6 +3,7 @@ export interface Profile {
   title: string;
   location: string;
   description: string;
+  github: string;
 }
 
 export const profile: Profile = {
@@ -11,4 +12,5 @@ export const profile: Profile = {
   location: "Gujarat, India",
   description:
     "Passionate Linux kernel and BSP engineer with expertise in embedded systems, custom ROM development, and FOSS contributions. Currently pursuing a Master's in Computer Science while working as a freelance Linux Kernel Developer.",
+  github: "UtsavBalar1231",
 };

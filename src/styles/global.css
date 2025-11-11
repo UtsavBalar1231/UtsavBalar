@@ -1,12 +1,40 @@
-@import "./theme.css";
-@import "./base.css";
-@import "./tailwind-config.css";
-@import "./tailwind-utilities.css";
-@import "./tailwind-components.css";
-@import "./z-index.css";
-@import "./card-base.css";
-@import "./crt-effects.css";
-@import "./effects.css";
-@import "./animations.css";
-@import "./shiki-theme.css";
-@import "./page-transitions.css";
+/* Define cascade layer hierarchy (lowest to highest stacking) */
+@layer reset, base, theme, components, effects, crt, overlays, modals;
+
+/* Reset layer - Tailwind base styles */
+@layer reset {
+  @import "@styles/tailwind-config.css";
+  @import "@styles/tailwind-utilities.css";
+  @import "@styles/tailwind-components.css";
+}
+
+/* Base layer - Foundational elements */
+@layer base {
+  @import "@styles/base.css";
+}
+
+/* Theme layer - CSS custom properties for all themes */
+@layer theme {
+  @import "@styles/theme.css";
+}
+
+/* Components layer - Reusable component styles */
+@layer components {
+  @import "@styles/card-base.css";
+  @import "@styles/shiki-theme.css";
+}
+
+/* Effects layer - Animations and visual effects */
+@layer effects {
+  @import "@styles/effects.css";
+  @import "@styles/animations.css";
+  @import "@styles/page-transitions.css";
+}
+
+/* CRT layer - Screen overlays (noise, scanlines, grunge) */
+@layer crt {
+  @import "@styles/crt-effects.css";
+}
+
+/* Overlays and Modals layers defined in components */
+/* See: Nav.astro (@layer overlays), MobileNav.astro (@layer modals), ThemeSelector.astro (@layer overlays) */

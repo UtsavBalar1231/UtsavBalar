@@ -1,8 +1,9 @@
 ---
-
+import WebGLFallback from "@components/WebGLFallback.astro";
 ---
 
 <canvas id="matrix-rain-canvas" class="matrix-rain-canvas"></canvas>
+<WebGLFallback show={false} />
 
 <style>
   .matrix-rain-canvas {
@@ -15,7 +16,8 @@
     touch-action: none;
     opacity: 0.35;
     mix-blend-mode: screen;
-    z-index: var(--z-background);
+    contain: strict;
+    contain-intrinsic-size: 100vw 100vh;
   }
 </style>
 
@@ -30,6 +32,7 @@
   let batteryCheckInterval: number | null = null;
   let isInitializing = false;
   let debounceTimer: number | null = null;
+  let webgl2Unsupported = false;
 
   function shouldInitialize(): boolean {
     const theme = document.documentElement.getAttribute("data-theme");
@@ -45,10 +48,21 @@
     isInitializing = true;
 
     try {
-      if (shouldInitialize() && !matrixEffect) {
+      if (shouldInitialize() && !matrixEffect && !webgl2Unsupported) {
         const recommendedFPS = getRecommendedFPS();
         matrixEffect = new WebGLMatrixRain();
-        matrixEffect.initialize();
+        try {
+          matrixEffect.initialize();
+        } catch (error) {
+          console.error("WebGL 2.0 initialization failed:", error);
+          webgl2Unsupported = true;
+          const canvas = document.getElementById("matrix-rain-canvas");
+          const fallback = document.querySelector(".webgl-fallback");
+          if (canvas) canvas.style.display = "none";
+          if (fallback) (fallback as HTMLElement).style.display = "block";
+          matrixEffect = null;
+          return;
+        }
         if (hasTargetFPS(matrixEffect)) {
           matrixEffect.targetFPS = recommendedFPS;
         }

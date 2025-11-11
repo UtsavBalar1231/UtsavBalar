@@ -35,6 +35,7 @@
     /* Prevent dynamic height changes */
     position: relative;
     isolation: isolate;
+    background-color: var(--bg-primary);
   }
 
   body {
@@ -199,10 +200,12 @@ code:not(pre code) {
 pre {
   max-width: 100%;
   overflow-x: auto;
+  /* Modern standard properties (95%+ support) */
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.3);
 }
 
+/* Webkit fallback for older Chrome/Safari */
 pre::-webkit-scrollbar {
   height: 6px;
 }

@@ -1,9 +1,10 @@
 ---
 import { API } from "../config/constants";
+import { profile } from "@data/profile";
 
 const { width = 96, height = 96, class: className = "", useGithub = false } = Astro.props;
 
-const username = "UtsavBalar1231";
+const username = profile.github;
 
 let avatarUrl = "";
 let name = "";

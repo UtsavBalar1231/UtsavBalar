@@ -1,4 +1,6 @@
 ---
+import { getDifficultyConfig, type DifficultyLevel } from "@data/difficultyLevels";
+
 export interface Props {
   number: number;
   title: string;
@@ -14,14 +16,7 @@ const { number, title, description, difficulty, duration, tags, url, index = 0 }
 
 const animationDelay = `${index * 0.1}s`;
 
-const displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-
-const difficultyColors: Record<string, string> = {
-  beginner: "difficulty-beginner",
-  intermediate: "difficulty-intermediate",
-  advanced: "difficulty-advanced",
-  professional: "difficulty-professional",
-};
+const difficultyConfig = getDifficultyConfig(difficulty as DifficultyLevel);
 ---
 
 <a href={url} class="tutorial-card-link">
@@ -31,8 +26,8 @@ const difficultyColors: Record<string, string> = {
   >
     <div class="card-section-header tutorial-header">
       <span class="tutorial-number">#{number.toString().padStart(2, "0")}</span>
-      <span class:list={`difficulty-badge ${difficultyColors[difficulty]}`}>
-        {displayDifficulty}
+      <span class:list={`difficulty-badge ${difficultyConfig.cssClass}`}>
+        {difficultyConfig.label}
       </span>
     </div>
 
@@ -63,6 +58,11 @@ const difficultyColors: Record<string, string> = {
 </a>
 
 <style>
+  .card-base {
+    container-type: inline-size;
+    container-name: tutorial-card;
+  }
+
   /* Tutorial link wrapper */
   .tutorial-card-link {
     text-decoration: none;
@@ -242,8 +242,8 @@ const difficultyColors: Record<string, string> = {
     }
   }
 
-  /* Mobile responsive adjustments */
-  @media (max-width: 640px) {
+  /* Responsive adjustments based on component size */
+  @container tutorial-card (max-width: 640px) {
     .tutorial-title {
       font-size: 0.875rem;
     }
@@ -271,7 +271,7 @@ const difficultyColors: Record<string, string> = {
     }
   }
 
-  @media (max-width: 375px) {
+  @container tutorial-card (max-width: 375px) {
     .tutorial-title {
       font-size: 0.8rem;
     }

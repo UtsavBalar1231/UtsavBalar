@@ -69,6 +69,13 @@ export default [
     },
   },
   {
+    // Allow set:html in Layout.astro for Speculation Rules API (safe with JSON.stringify)
+    files: ["**/layouts/Layout.astro"],
+    rules: {
+      "astro/no-set-html-directive": "off",
+    },
+  },
+  {
     files: ["**/*.mdx"],
     languageOptions: {
       parser: tsParser,

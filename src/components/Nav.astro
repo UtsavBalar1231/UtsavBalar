@@ -1,13 +1,5 @@
 ---
-const navLinks = [
-  { href: "/", text: "Home", color: "term-bright-green" },
-  { href: "/about/", text: "About", color: "term-bright-cyan" },
-  { href: "/projects/", text: "Projects", color: "term-bright-yellow" },
-  { href: "/quotes/", text: "Quotes", color: "term-bright-blue" },
-  { href: "/bookbits/", text: "Bits", color: "term-bright-magenta" },
-  { href: "/resume/", text: "Resume", color: "term-bright-red" },
-  { href: "/tutorials/", text: "Tutorials", color: "term-bright-yellow" },
-];
+import { navigation } from "@data/navigation";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -15,7 +7,7 @@ const currentPath = Astro.url.pathname;
 <nav class="hidden md:block">
   <ul class="m-0 flex list-none flex-wrap justify-center gap-6 p-0 lg:gap-8">
     {
-      navLinks.map((link) => {
+      navigation.map((link) => {
         const isActive =
           currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href));
         return (
@@ -24,18 +16,18 @@ const currentPath = Astro.url.pathname;
               href={link.href}
               class:list={`nav-link rounded px-2 py-1 no-underline transition-all duration-200 ease-in-out font-ui-nav hover:bg-terminal-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                 isActive
-                  ? `text-${link.color} font-bold`
-                  : `hover:text-${link.color} text-text-primary`
+                  ? `text-${link.desktopColor} font-bold`
+                  : `hover:text-${link.desktopColor} text-text-primary`
               }`}
             >
               <span
-                class:list={`bracket ${isActive ? `text-${link.color}` : "text-term-bright-black"}`}
+                class:list={`bracket ${isActive ? `text-${link.desktopColor}` : "text-term-bright-black"}`}
               >
                 [
               </span>
               <span class="nav-text">{link.text}</span>
               <span
-                class:list={`bracket ${isActive ? `text-${link.color}` : "text-term-bright-black"}`}
+                class:list={`bracket ${isActive ? `text-${link.desktopColor}` : "text-term-bright-black"}`}
               >
                 ]
               </span>

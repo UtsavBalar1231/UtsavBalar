@@ -17,8 +17,9 @@ export function detectBrowser(): BrowserInfo {
   const ua = navigator.userAgent;
 
   // Edge detection (check first since it contains "Chrome")
-  if (/Edg\/(\d+)/.test(ua)) {
-    const version = parseInt(RegExp.$1, 10);
+  const edgeMatch = ua.match(/Edg\/(\d+)/);
+  if (edgeMatch) {
+    const version = parseInt(edgeMatch[1], 10);
     return {
       name: "Edge",
       version,
@@ -27,8 +28,9 @@ export function detectBrowser(): BrowserInfo {
   }
 
   // Chrome detection
-  if (/Chrome\/(\d+)/.test(ua) && !/Edg\//.test(ua)) {
-    const version = parseInt(RegExp.$1, 10);
+  const chromeMatch = ua.match(/Chrome\/(\d+)/);
+  if (chromeMatch && !/Edg\//.test(ua)) {
+    const version = parseInt(chromeMatch[1], 10);
     return {
       name: "Chrome",
       version,
@@ -37,8 +39,9 @@ export function detectBrowser(): BrowserInfo {
   }
 
   // Firefox detection
-  if (/Firefox\/(\d+)/.test(ua)) {
-    const version = parseInt(RegExp.$1, 10);
+  const firefoxMatch = ua.match(/Firefox\/(\d+)/);
+  if (firefoxMatch) {
+    const version = parseInt(firefoxMatch[1], 10);
     return {
       name: "Firefox",
       version,
@@ -47,8 +50,9 @@ export function detectBrowser(): BrowserInfo {
   }
 
   // Safari detection (check for Version/xx.x)
-  if (/Safari\//.test(ua) && /Version\/(\d+)/.test(ua)) {
-    const version = parseInt(RegExp.$1, 10);
+  const safariMatch = ua.match(/Version\/(\d+)/);
+  if (/Safari\//.test(ua) && safariMatch) {
+    const version = parseInt(safariMatch[1], 10);
     return {
       name: "Safari",
       version,
