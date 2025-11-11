@@ -13,79 +13,49 @@ const typingDelay = `${id * 0.1}s`;
 ---
 
 <div
-  class:list={["quote-card glitch-border-hover", { "quote-featured": featured }]}
-  style={`animation-delay: ${typingDelay}`}
+  class:list={[
+    "card-base",
+    "card-base-default",
+    "card-base-hoverable",
+    "glitch-border-hover",
+    featured && "card-base-featured",
+    featured && "quote-featured",
+  ]}
+  style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${typingDelay}; opacity: 0;`}
 >
-  <div class="quote-number">
-    <span class="number-prefix">#</span>{id.toString().padStart(2, "0")}
+  <div class="card-section-header quote-header">
+    <div class="quote-number">
+      <span class="number-prefix">#</span>{id.toString().padStart(2, "0")}
+    </div>
   </div>
 
-  <blockquote class="quote-text">
+  <blockquote class="card-section-content quote-content">
     <span class="quote-mark quote-mark-open">"</span>
-    <span class="quote-content">{text}</span>
+    <span class="quote-text">{text}</span>
     <span class="quote-mark quote-mark-close">"</span>
   </blockquote>
 
-  <div class="quote-author">
-    <span class="author-prefix">—</span>
-    <span class="author-name">{author}</span>
+  <div class="card-section-footer quote-footer">
+    <div class="quote-author">
+      <span class="author-prefix">—</span>
+      <span class="author-name">{author}</span>
+    </div>
   </div>
 </div>
 
 <style>
-  .quote-card {
-    padding: 1rem;
-    transition: all 300ms;
-    border: 1px solid rgba(var(--border-color-rgb), 0.5);
-    background: rgba(var(--bg-color-rgb), 0.05);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-    cursor: default;
+  /* QuoteCard-specific content styling */
+  .quote-content {
+    display: block;
+    color: var(--text-primary);
+    font-family: monospace;
+    line-height: 1.6;
+    font-size: 0.9rem;
     position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    animation: fade-in 0.5s ease-out forwards;
-    opacity: 0;
   }
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (hover: hover) {
-    .quote-card:hover {
-      border-color: var(--accent-primary);
-      background: rgba(var(--bg-color-rgb), 0.08);
-      backdrop-filter: blur(10px) saturate(1.2);
-      -webkit-backdrop-filter: blur(10px) saturate(1.2);
-      box-shadow:
-        0 0 10px rgba(var(--accent-primary-rgb), 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-      transform: translateY(-2px);
-    }
-  }
-
-  .quote-featured {
-    border-left-width: 3px;
-    border-left-color: var(--accent-primary);
-  }
-
-  .quote-featured .quote-number {
-    color: var(--accent-primary);
-  }
-
+  /* Quote number styling */
   .quote-number {
-    margin-bottom: 0.75rem;
     font-size: 0.875rem;
     font-weight: bold;
     color: var(--text-secondary);
@@ -95,21 +65,16 @@ const typingDelay = `${id * 0.1}s`;
     opacity: 0.7;
   }
 
+  .quote-featured .quote-number {
+    color: var(--accent-primary);
+  }
+
   .number-prefix {
     color: var(--accent-primary);
     margin-right: 0.25rem;
   }
 
-  .quote-text {
-    margin-bottom: 1rem;
-    display: block;
-    color: var(--text-primary);
-    font-family: monospace;
-    line-height: 1.6;
-    font-size: 0.9rem;
-    position: relative;
-  }
-
+  /* Quote marks styling */
   .quote-mark {
     color: var(--accent-primary);
     font-size: 1.2rem;
@@ -126,10 +91,11 @@ const typingDelay = `${id * 0.1}s`;
     margin-left: 0.25rem;
   }
 
-  .quote-content {
+  .quote-text {
     font-style: italic;
   }
 
+  /* Quote author styling */
   .quote-author {
     display: flex;
     align-items: center;
@@ -150,59 +116,24 @@ const typingDelay = `${id * 0.1}s`;
     font-weight: 500;
   }
 
-  /* Typing effect on hover */
-  .quote-card:hover .quote-content::after {
-    content: "_";
-    animation: blink 1s infinite;
-    color: var(--accent-primary);
-    font-weight: bold;
-  }
+  /* Terminal cursor and CRT glitch effects (component-specific targeting) */
+  @media (hover: hover) {
+    .card-base-hoverable:hover .quote-text::after {
+      content: "▊";
+      animation: cursor-blink 1s infinite;
+      color: var(--accent-primary);
+      font-weight: bold;
+      margin-left: 2px;
+    }
 
-  @keyframes blink {
-    0%,
-    50% {
-      opacity: 1;
-    }
-    51%,
-    100% {
-      opacity: 0;
-    }
-  }
-
-  /* Glitch effect on hover */
-  .quote-card:hover .quote-text {
-    animation: glitch-text 0.3s ease-in-out;
-  }
-
-  @keyframes glitch-text {
-    0%,
-    100% {
-      text-shadow: none;
-    }
-    25% {
-      text-shadow:
-        -1px 0 var(--term-bright-red),
-        1px 0 var(--term-bright-cyan);
-    }
-    50% {
-      text-shadow:
-        1px 0 var(--term-bright-green),
-        -1px 0 var(--term-bright-magenta);
-    }
-    75% {
-      text-shadow:
-        -1px 0 var(--term-bright-yellow),
-        1px 0 var(--term-bright-blue);
+    .card-base-hoverable:hover .quote-content {
+      animation: crt-text-glitch 0.5s ease-in-out;
     }
   }
 
   /* Mobile responsive adjustments */
   @media (max-width: 640px) {
-    .quote-card {
-      padding: 0.75rem;
-    }
-
-    .quote-text {
+    .quote-content {
       font-size: 0.85rem;
     }
 

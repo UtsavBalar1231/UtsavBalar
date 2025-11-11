@@ -15,8 +15,11 @@ const { id, text, author, book, page, bookIndex = 0, bitIndex = 0 } = Astro.prop
 const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 ---
 
-<div class="bookbit-card glitch-border-hover" style={`animation-delay: ${animationDelay}`}>
-  <div class="bookbit-header">
+<div
+  class:list={["card-base", "card-base-default", "card-base-hoverable", "glitch-border-hover"]}
+  style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`}
+>
+  <div class="card-section-header bookbit-header">
     <span class="bookbit-number">
       <span class="number-symbol">§</span>{id.toString().padStart(3, "0")}
     </span>
@@ -26,7 +29,7 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     </span>
   </div>
 
-  <blockquote class="bookbit-text">
+  <blockquote class="card-section-content bookbit-text">
     <div class="quote-wrapper">
       <span class="quote-mark quote-mark-open">❝</span>
       <p class="quote-content">{text}</p>
@@ -34,7 +37,7 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     </div>
   </blockquote>
 
-  <div class="bookbit-footer">
+  <div class="card-section-footer bookbit-footer">
     <div class="book-info">
       {
         author && author !== "" && (
@@ -50,57 +53,11 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
 </div>
 
 <style>
-  .bookbit-card {
-    padding: 1.25rem;
-    transition: all 300ms;
-    border: 1px solid rgba(var(--border-color-rgb), 0.5);
-    background: rgba(var(--bg-color-rgb), 0.05);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-    cursor: default;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    animation: slide-in 0.6s ease-out forwards;
-    opacity: 0;
-    border-left: 2px solid transparent;
-  }
-
-  @keyframes slide-in {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @media (hover: hover) {
-    .bookbit-card:hover {
-      border-color: var(--accent-primary);
-      border-left-color: var(--accent-primary);
-      background: rgba(var(--bg-color-rgb), 0.08);
-      backdrop-filter: blur(10px) saturate(1.2);
-      -webkit-backdrop-filter: blur(10px) saturate(1.2);
-      box-shadow:
-        0 0 15px rgba(var(--accent-primary-rgb), 0.15),
-        0 4px 12px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-      transform: translateX(4px);
-    }
-  }
-
+  /* BookBitCard-specific header layout */
   .bookbit-header {
-    margin-bottom: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed rgba(var(--border-color-rgb), 0.3);
   }
 
   .bookbit-number {
@@ -132,8 +89,8 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     margin-right: 0.25rem;
   }
 
+  /* BookBitCard-specific text content styling */
   .bookbit-text {
-    margin-bottom: 1rem;
     display: block;
     color: var(--text-primary);
     font-family: monospace;
@@ -171,11 +128,7 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     hyphens: auto;
   }
 
-  .bookbit-footer {
-    padding-top: 0.75rem;
-    border-top: 1px dashed rgba(var(--border-color-rgb), 0.3);
-  }
-
+  /* Book info styling */
   .book-info {
     display: flex;
     align-items: center;
@@ -202,65 +155,33 @@ const animationDelay = `${bookIndex * 0.1 + bitIndex * 0.05}s`;
     font-weight: 600;
   }
 
-  /* Terminal cursor effect on hover */
-  .bookbit-card:hover .quote-content::after {
-    content: "▊";
-    animation: cursor-blink 1s infinite;
-    color: var(--accent-primary);
-    font-weight: bold;
-    margin-left: 2px;
-  }
-
-  @keyframes cursor-blink {
-    0%,
-    49% {
-      opacity: 1;
+  /* Terminal cursor and CRT glitch effects (component-specific targeting) */
+  @media (hover: hover) {
+    .card-base-hoverable:hover .quote-content::after {
+      content: "▊";
+      animation: cursor-blink 1s infinite;
+      color: var(--accent-primary);
+      font-weight: bold;
+      margin-left: 2px;
     }
-    50%,
-    100% {
-      opacity: 0;
-    }
-  }
 
-  /* Subtle scan line effect on hover */
-  .bookbit-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .bookbit-card:hover::before {
-    opacity: 0.5;
-    animation: scan-line 2s linear infinite;
-  }
-
-  @keyframes scan-line {
-    0% {
-      left: -100%;
-    }
-    100% {
-      left: 100%;
+    .card-base-hoverable:hover .quote-content {
+      animation: crt-text-glitch 0.5s ease-in-out;
     }
   }
 
   /* Mobile responsive adjustments */
   @media (max-width: 640px) {
-    .bookbit-card {
-      padding: 1rem;
-    }
-
     .bookbit-text {
       font-size: 0.875rem;
     }
 
     .quote-wrapper {
       padding: 0 1rem;
+    }
+
+    .quote-content {
+      text-align: left;
     }
 
     .book-info {

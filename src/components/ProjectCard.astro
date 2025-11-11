@@ -6,9 +6,13 @@ export interface Props {
   githubUrl?: string;
   demoUrl?: string;
   featured?: boolean;
+  index?: number;
 }
 
-const { title, description, tags, githubUrl, demoUrl, featured = false } = Astro.props;
+const { title, description, tags, githubUrl, demoUrl, featured = false, index = 0 } = Astro.props;
+
+// Create staggered animation delay
+const animationDelay = `${index * 0.1}s`;
 
 const tagCategories = {
   green: ["c", "rust", "python", "javascript", "typescript", "c++", "java", "go", "ruby", "swift"],
@@ -19,15 +23,15 @@ const tagCategories = {
 };
 
 const tagColors = {
-  green: "text-term-bright-green border-term-bright-green hover:glow-bright-green",
-  cyan: "text-term-bright-cyan border-term-bright-cyan hover:glow-bright-cyan",
-  red: "text-term-bright-red border-term-bright-red hover:glow-bright-red",
-  magenta: "text-term-bright-magenta border-term-bright-magenta hover:glow-bright-magenta",
-  yellow: "text-term-bright-yellow border-term-bright-yellow hover:glow-bright-yellow",
-  blue: "text-term-bright-blue border-term-bright-blue hover:glow-bright-blue",
+  green: "tag-green",
+  cyan: "tag-cyan",
+  red: "tag-red",
+  magenta: "tag-magenta",
+  yellow: "tag-yellow",
+  blue: "tag-blue",
 };
 
-function getTagColorAndGlow(tag: string): string {
+function getTagColor(tag: string): string {
   const lowerTag = tag.toLowerCase();
 
   for (const [color, keywords] of Object.entries(tagCategories)) {
@@ -42,82 +46,223 @@ function getTagColorAndGlow(tag: string): string {
 
 <div
   class:list={[
-    "project-card-container mb-6 border p-4 transition-all duration-300 hover:border-primary max-sm:p-3",
-    { "border-l-[3px] border-l-primary": featured },
+    "card-base",
+    "card-base-default",
+    "card-base-hoverable",
+    "glitch-border-hover",
+    featured && "card-base-featured",
   ]}
+  style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`}
 >
-  <div class="mb-3 flex items-start justify-between">
-    <h3 class="text-lg font-bold text-terminal font-ui-heading max-sm:text-base">
-      <span class="mr-2 text-primary font-ui-prompt">&gt;</span>
+  <div class="card-section-header project-header">
+    <h3 class="project-title">
+      <span class="title-prompt">&gt;</span>
       {title}
     </h3>
-    {featured && <span class="bg-primary px-2 py-1 text-black font-ui-badge">Featured</span>}
+    {featured && <span class="featured-badge">Featured</span>}
   </div>
 
-  <p class="mb-4 text-sm leading-relaxed text-terminal-secondary font-content">{description}</p>
+  <div class="card-section-content project-content">
+    <p class="project-description">{description}</p>
 
-  <div class="mb-4 flex flex-wrap gap-2">
-    {
-      tags.map((tag) => (
-        <span
-          class:list={`tag border px-2 py-1 transition-all duration-200 font-ui-badge hover:scale-105 ${getTagColorAndGlow(tag)}`}
-        >
-          {tag}
-        </span>
-      ))
-    }
+    <div class="project-tags">
+      {tags.map((tag) => <span class:list={`tag ${getTagColor(tag)}`}>{tag}</span>)}
+    </div>
   </div>
 
-  <div class="flex gap-4">
-    {
-      githubUrl && (
-        <a
-          href={githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="glitch-subtle-hover text-sm text-term-bright-green no-underline transition-all duration-200 font-ui-interactive hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
-        >
-          <span class="text-term-bright-black">[</span>
-          GitHub
-          <span class="text-term-bright-black">]</span>
-        </a>
-      )
-    }
-    {
-      demoUrl && (
-        <a
-          href={demoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="glitch-subtle-hover text-sm text-term-bright-magenta no-underline transition-all duration-200 font-ui-interactive hover:text-term-bright-cyan hover:underline hover:glow-bright-cyan"
-        >
-          <span class="text-term-bright-black">[</span>
-          Demo
-          <span class="text-term-bright-black">]</span>
-        </a>
-      )
-    }
+  <div class="card-section-footer project-footer">
+    <div class="project-links">
+      {
+        githubUrl && (
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="project-link">
+            <span class="link-bracket">[</span>
+            GitHub
+            <span class="link-bracket">]</span>
+          </a>
+        )
+      }
+      {
+        demoUrl && (
+          <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="project-link demo">
+            <span class="link-bracket">[</span>
+            Demo
+            <span class="link-bracket">]</span>
+          </a>
+        )
+      }
+    </div>
   </div>
 </div>
 
 <style>
-  .project-card-container {
-    background: rgba(var(--bg-color-rgb), 0.05);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-    border-color: rgba(var(--border-color-rgb), 0.5);
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  /* ProjectCard-specific header layout */
+  .project-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
-  .project-card-container:hover {
-    background: rgba(var(--bg-color-rgb), 0.08);
-    backdrop-filter: blur(10px) saturate(1.2);
-    -webkit-backdrop-filter: blur(10px) saturate(1.2);
-    box-shadow:
-      0 0 8px rgba(var(--border-color-rgb), 0.2),
-      0 4px 12px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  .project-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+
+  .title-prompt {
+    margin-right: 0.5rem;
+    color: var(--accent-primary);
+  }
+
+  .featured-badge {
+    padding: 0.25rem 0.5rem;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    font-size: 0.75rem;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .project-description {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ProjectCard tag system */
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid;
+    transition: all 0.2s ease;
+    font-weight: 600;
+  }
+
+  .tag-green {
+    color: var(--term-bright-green);
+    border-color: var(--term-bright-green);
+  }
+
+  .tag-cyan {
+    color: var(--term-bright-cyan);
+    border-color: var(--term-bright-cyan);
+  }
+
+  .tag-red {
+    color: var(--term-bright-red);
+    border-color: var(--term-bright-red);
+  }
+
+  .tag-magenta {
+    color: var(--term-bright-magenta);
+    border-color: var(--term-bright-magenta);
+  }
+
+  .tag-yellow {
+    color: var(--term-bright-yellow);
+    border-color: var(--term-bright-yellow);
+  }
+
+  .tag-blue {
+    color: var(--term-bright-blue);
+    border-color: var(--term-bright-blue);
+  }
+
+  /* ProjectCard links */
+  .project-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .project-link {
+    font-size: 0.875rem;
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--term-bright-green);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .project-link.demo {
+    color: var(--term-bright-magenta);
+  }
+
+  .link-bracket {
+    color: var(--text-secondary);
+    opacity: 0.7;
+  }
+
+  /* Terminal cursor and CRT glitch effects (component-specific targeting) */
+  @media (hover: hover) {
+    .card-base-hoverable:hover .project-description::after {
+      content: "▊";
+      animation: cursor-blink 1s infinite;
+      color: var(--accent-primary);
+      font-weight: bold;
+      margin-left: 2px;
+    }
+
+    .card-base-hoverable:hover .project-content {
+      animation: crt-text-glitch 0.5s ease-in-out;
+    }
+
+    .tag:hover {
+      transform: scale(1.05);
+    }
+
+    .project-link:hover {
+      color: var(--term-bright-cyan);
+      text-decoration: underline;
+    }
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 640px) {
+    .project-title {
+      font-size: 1rem;
+    }
+
+    .project-description {
+      font-size: 0.75rem;
+    }
+
+    .featured-badge {
+      font-size: 0.625rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .tag {
+      font-size: 0.625rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .project-link {
+      font-size: 0.75rem;
+    }
+
+    .project-links {
+      gap: 1.5rem;
+    }
   }
 </style>

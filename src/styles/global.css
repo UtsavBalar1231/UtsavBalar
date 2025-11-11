@@ -4,6 +4,7 @@
 @import "./tailwind-utilities.css";
 @import "./tailwind-components.css";
 @import "./z-index.css";
+@import "./card-base.css";
 @import "./crt-effects.css";
 @import "./effects.css";
 @import "./animations.css";

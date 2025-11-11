@@ -7,86 +7,71 @@ export interface Props {
   duration: string;
   tags: string[];
   url: string;
+  index?: number;
 }
 
-const { number, title, description, difficulty, duration, tags, url } = Astro.props;
+const { number, title, description, difficulty, duration, tags, url, index = 0 } = Astro.props;
+
+// Create staggered animation delay
+const animationDelay = `${index * 0.1}s`;
 
 const displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
 const difficultyColors: Record<string, string> = {
-  beginner: "beginner",
-  intermediate: "intermediate",
-  advanced: "advanced",
-  professional: "professional",
+  beginner: "difficulty-beginner",
+  intermediate: "difficulty-intermediate",
+  advanced: "difficulty-advanced",
+  professional: "difficulty-professional",
 };
 ---
 
 <a href={url} class="tutorial-card-link">
-  <div class="tutorial-card glitch-border-hover">
-    <div class="tutorial-header">
+  <div
+    class:list={["card-base", "card-base-pointer", "card-base-hoverable", "glitch-border-hover"]}
+    style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`}
+  >
+    <div class="card-section-header tutorial-header">
       <span class="tutorial-number">#{number.toString().padStart(2, "0")}</span>
       <span class:list={`difficulty-badge ${difficultyColors[difficulty]}`}>
         {displayDifficulty}
       </span>
     </div>
 
-    <h3 class="tutorial-title">{title}</h3>
+    <div class="card-section-content tutorial-content">
+      <h3 class="tutorial-title">{title}</h3>
 
-    <p class="tutorial-description">{description}</p>
+      <p class="tutorial-description">{description}</p>
 
-    <div class="tutorial-meta">
-      <div class="tutorial-duration">
-        <span class="meta-label">Duration:</span>
-        <span class="meta-value">{duration}</span>
+      <div class="tutorial-meta">
+        <div class="meta-item">
+          <span class="meta-label">Duration:</span>
+          <span class="meta-value">{duration}</span>
+        </div>
+      </div>
+
+      <div class="tutorial-tags">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
       </div>
     </div>
 
-    <div class="tutorial-tags">
-      {tags.map((tag) => <span class="tag">{tag}</span>)}
-    </div>
-
-    <div class="tutorial-action">
-      <span class="action-text">Read Tutorial</span>
-      <span class="action-arrow">→</span>
+    <div class="card-section-footer tutorial-footer">
+      <div class="tutorial-action">
+        <span class="action-text">Read Tutorial</span>
+        <span class="action-arrow">→</span>
+      </div>
     </div>
   </div>
 </a>
 
 <style>
+  /* Tutorial link wrapper */
   .tutorial-card-link {
     text-decoration: none;
     display: block;
   }
 
-  .tutorial-card {
-    padding: 1rem;
-    border: 1px solid rgba(var(--border-color-rgb), 0.5);
-    background: rgba(var(--bg-color-rgb), 0.05);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  }
-
-  @media (hover: hover) {
-    .tutorial-card:hover {
-      border-color: var(--accent-primary);
-      background: rgba(var(--bg-color-rgb), 0.08);
-      backdrop-filter: blur(10px) saturate(1.2);
-      -webkit-backdrop-filter: blur(10px) saturate(1.2);
-      box-shadow:
-        0 0 10px rgba(var(--accent-primary-rgb), 0.3),
-        0 4px 12px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-      transform: translateY(-2px);
-    }
-  }
-
+  /* TutorialCard-specific header layout */
   .tutorial-header {
-    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -101,11 +86,9 @@ const difficultyColors: Record<string, string> = {
     letter-spacing: 0.1em;
   }
 
+  /* Difficulty badge system */
   .difficulty-badge {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
@@ -114,28 +97,28 @@ const difficultyColors: Record<string, string> = {
     font-weight: 600;
   }
 
-  .difficulty-badge.beginner {
+  .difficulty-beginner {
     border-color: var(--success);
     color: var(--success);
   }
 
-  .difficulty-badge.intermediate {
+  .difficulty-intermediate {
     border-color: var(--warning);
     color: var(--warning);
   }
 
-  .difficulty-badge.advanced {
+  .difficulty-advanced {
     border-color: var(--error);
     color: var(--error);
   }
 
-  .difficulty-badge.professional {
+  .difficulty-professional {
     border-color: var(--accent-primary);
     color: var(--accent-primary);
   }
 
   .tutorial-title {
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem 0;
     font-size: 1rem;
     font-weight: bold;
     color: var(--text-primary);
@@ -146,19 +129,24 @@ const difficultyColors: Record<string, string> = {
   }
 
   .tutorial-description {
-    margin-bottom: 0.75rem;
+    margin: 0 0 0.75rem 0;
     font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.5;
   }
 
+  /* Tutorial meta information */
   .tutorial-meta {
     margin-bottom: 0.75rem;
     display: flex;
     gap: 1rem;
+  }
+
+  .meta-item {
+    display: flex;
+    gap: 0.5rem;
     font-size: 0.75rem;
     color: var(--text-secondary);
-    font-family: monospace;
   }
 
   .meta-label {
@@ -173,18 +161,15 @@ const difficultyColors: Record<string, string> = {
     font-family: monospace;
   }
 
+  /* Tutorial tags with 4n color cycling */
   .tutorial-tags {
-    margin-bottom: 0.75rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
   .tag {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     background: rgba(var(--bg-color-rgb), 0.06);
     backdrop-filter: blur(4px);
@@ -219,17 +204,11 @@ const difficultyColors: Record<string, string> = {
     border-color: var(--term-bright-magenta);
   }
 
-  .tag:hover {
-    opacity: 0.8;
-    transform: translateY(-1px);
-  }
-
+  /* Tutorial action / call-to-action */
   .tutorial-action {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border-color);
     color: var(--accent-primary);
     font-family: DepartureMono, monospace;
     font-size: 0.875rem;
@@ -241,15 +220,32 @@ const difficultyColors: Record<string, string> = {
     transition: transform 0.2s ease;
   }
 
-  .tutorial-card:hover .action-arrow {
-    transform: translateX(4px);
-  }
-
-  @media (max-width: 640px) {
-    .tutorial-card {
-      padding: 0.75rem;
+  /* Terminal cursor, CRT glitch, and hover animations (component-specific targeting) */
+  @media (hover: hover) {
+    .card-base-hoverable:hover .tutorial-description::after {
+      content: "▊";
+      animation: cursor-blink 1s infinite;
+      color: var(--accent-primary);
+      font-weight: bold;
+      margin-left: 2px;
     }
 
+    .card-base-hoverable:hover .tutorial-content {
+      animation: crt-text-glitch 0.5s ease-in-out;
+    }
+
+    .card-base-hoverable:hover .action-arrow {
+      transform: translateX(4px);
+    }
+
+    .tag:hover {
+      opacity: 0.8;
+      transform: translateY(-1px);
+    }
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 640px) {
     .tutorial-title {
       font-size: 0.875rem;
     }
@@ -261,13 +257,23 @@ const difficultyColors: Record<string, string> = {
     .tutorial-number {
       font-size: 1rem;
     }
+
+    .difficulty-badge {
+      font-size: 0.625rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .tag {
+      font-size: 0.625rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .tutorial-action {
+      font-size: 0.75rem;
+    }
   }
 
   @media (max-width: 375px) {
-    .tutorial-card {
-      padding: 0.5rem;
-    }
-
     .tutorial-title {
       font-size: 0.8rem;
     }
@@ -278,22 +284,6 @@ const difficultyColors: Record<string, string> = {
 
     .tutorial-number {
       font-size: 0.875rem;
-    }
-
-    .difficulty-badge {
-      font-size: 0.6rem;
-      padding-left: 0.25rem;
-      padding-right: 0.25rem;
-    }
-
-    .tag {
-      font-size: 0.6rem;
-      padding-left: 0.25rem;
-      padding-right: 0.25rem;
-    }
-
-    .tutorial-action {
-      font-size: 0.75rem;
     }
   }
 </style>

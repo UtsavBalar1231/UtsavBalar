@@ -1,280 +1,258 @@
 ---
-const proficientSkills = [
-  "C",
-  "Rust",
-  "Bash",
-  "AWK",
-  "Python",
-  "Embedded Linux",
-  "Linux Kernel Dev",
-  "BSP Engineering",
-  "Device Drivers",
-  "Git",
-  "AOSP",
-  "Custom ROM Development",
+// Skill data with proficiency levels
+const skills = [
+  // Proficient
+  { name: "C", level: "proficient" },
+  { name: "Rust", level: "proficient" },
+  { name: "Bash", level: "proficient" },
+  { name: "AWK", level: "proficient" },
+  { name: "Python", level: "proficient" },
+  { name: "Embedded Linux", level: "proficient" },
+  { name: "Linux Kernel Dev", level: "proficient" },
+  { name: "BSP Engineering", level: "proficient" },
+  { name: "Device Drivers", level: "proficient" },
+  { name: "Git", level: "proficient" },
+  { name: "AOSP", level: "proficient" },
+  { name: "Custom ROM Development", level: "proficient" },
+
+  // Semi-Proficient
+  { name: "Yocto/Buildroot Project", level: "semi-proficient" },
+  { name: "Git Actions", level: "semi-proficient" },
+  { name: "U-Boot", level: "semi-proficient" },
+  { name: "Apt/Rpm/Arch Package Management", level: "semi-proficient" },
+  { name: "ARM Architecture", level: "semi-proficient" },
+
+  // Familiar
+  { name: "C++", level: "familiar" },
+  { name: "Modern Web Stack", level: "familiar" },
+  { name: "MongoDB", level: "familiar" },
+  { name: "Figma", level: "familiar" },
+  { name: "Qt QML", level: "familiar" },
+  { name: "MicroPython", level: "familiar" },
 ];
 
-const semiProficientSkills = [
-  "Yocto/Buildroot Project",
-  "Git Actions",
-  "U-Boot",
-  "Apt/Rpm/Arch Package Management",
-  "ARM Architecture",
+// Development tools
+const tools = [
+  "GCC/Clang Cross-Compiler",
+  "GDB",
+  "QEMU",
+  "Docker",
+  "Travis CI",
+  "Drone CI",
+  "Jenkins",
 ];
 
-const familiarSkills = ["C++", "Modern Web Stack", "MongoDB", "Figma", "Qt QML", "MicroPython"];
+// Helper: Generate deterministic hash from string
+const hashString = (str: string): number => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+};
 
-const tools = {
-  compilers: ["GCC/Clang Cross-Compiler", "GDB"],
-  virtualization: ["QEMU", "Docker"],
-  cicd: ["Travis CI", "Drone CI", "Jenkins"],
+// Helper: Generate deterministic CPU % based on proficiency
+const getCPU = (level: string, skillName: string): string => {
+  const ranges = {
+    proficient: [85, 95],
+    "semi-proficient": [55, 70],
+    familiar: [20, 40],
+  };
+  const [min, max] = ranges[level as keyof typeof ranges] || [50, 60];
+  const range = max - min;
+  const hash = hashString(skillName);
+  const value = min + (hash % (range * 10)) / 10;
+  return value.toFixed(1);
+};
+
+// Helper: Generate deterministic MEM % based on proficiency
+const getMEM = (level: string, skillName: string): string => {
+  const ranges = {
+    proficient: [2.0, 5.0],
+    "semi-proficient": [1.0, 3.0],
+    familiar: [0.5, 1.5],
+  };
+  const [min, max] = ranges[level as keyof typeof ranges] || [1, 2];
+  const range = max - min;
+  const hash = hashString(skillName);
+  const value = min + (hash % (range * 10)) / 10;
+  return value.toFixed(1);
 };
 ---
 
-<div class="skills-container">
-  <section class="skill-section">
-    <h2 class="section-title">Proficient</h2>
-    <div class="skill-grid">
-      {
-        proficientSkills.map((skill) => (
-          <div class="skill-card proficient">
-            <span class="skill-name">{skill}</span>
-          </div>
-        ))
-      }
+<div class="terminal-output">
+  <!-- Skills process listing -->
+  <div class="terminal-command">
+    <span class="prompt">$</span>
+    <span class="command">ps aux | grep -i skill</span>
+  </div>
+  <div class="process-list">
+    <div class="ps-header">
+      <span class="col-user">USER</span>
+      <span class="col-pid">PID</span>
+      <span class="col-cpu">%CPU</span>
+      <span class="col-mem">%MEM</span>
+      <span class="col-command">COMMAND</span>
     </div>
-  </section>
-
-  <section class="skill-section">
-    <h2 class="section-title">Semi-Proficient</h2>
-    <div class="skill-grid">
-      {
-        semiProficientSkills.map((skill) => (
-          <div class="skill-card semi-proficient">
-            <span class="skill-name">{skill}</span>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="skill-section">
-    <h2 class="section-title">Familiar With</h2>
-    <div class="skill-grid">
-      {
-        familiarSkills.map((skill) => (
-          <div class="skill-card familiar">
-            <span class="skill-name">{skill}</span>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="skill-section">
-    <h2 class="section-title">Development Tools</h2>
-    <div class="tools-container">
-      <div class="tool-category">
-        <h3 class="tool-title">Compilers & Debugging</h3>
-        <div class="skill-grid">
-          {
-            tools.compilers.map((tool) => (
-              <div class="skill-card tool">
-                <span class="skill-name">{tool}</span>
-              </div>
-            ))
-          }
+    {
+      skills.map((skill, index) => (
+        <div class="ps-line">
+          <span class="col-user">utsav</span>
+          <span class="col-pid">{1337 + index}</span>
+          <span class="col-cpu">{getCPU(skill.level, skill.name)}</span>
+          <span class="col-mem">{getMEM(skill.level, skill.name)}</span>
+          <span class="col-command">{skill.name}</span>
+          <span class="col-comment"># {skill.level}</span>
         </div>
-      </div>
-      <div class="tool-category">
-        <h3 class="tool-title">Virtualization</h3>
-        <div class="skill-grid">
-          {
-            tools.virtualization.map((tool) => (
-              <div class="skill-card tool">
-                <span class="skill-name">{tool}</span>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-      <div class="tool-category">
-        <h3 class="tool-title">CI/CD</h3>
-        <div class="skill-grid">
-          {
-            tools.cicd.map((tool) => (
-              <div class="skill-card tool">
-                <span class="skill-name">{tool}</span>
-              </div>
-            ))
-          }
-        </div>
-      </div>
+      ))
+    }
+  </div>
+
+  <!-- Tools process listing -->
+  <div class="terminal-command">
+    <span class="prompt">$</span>
+    <span class="command">ps aux | grep -i tool</span>
+  </div>
+  <div class="process-list">
+    <div class="ps-header">
+      <span class="col-user">USER</span>
+      <span class="col-pid">PID</span>
+      <span class="col-cpu">%CPU</span>
+      <span class="col-mem">%MEM</span>
+      <span class="col-command">COMMAND</span>
     </div>
-  </section>
+    {
+      tools.map((tool, index) => {
+        const hash = hashString(tool);
+        const cpu = 85 + (hash % 150) / 10; // 85-100%
+        const mem = 3.0 + (hash % 60) / 10; // 3.0-9.0%
+        return (
+          <div class="ps-line">
+            <span class="col-user">utsav</span>
+            <span class="col-pid">{2001 + index}</span>
+            <span class="col-cpu">{cpu.toFixed(1)}</span>
+            <span class="col-mem">{mem.toFixed(1)}</span>
+            <span class="col-command">{tool}</span>
+          </div>
+        );
+      })
+    }
+  </div>
 </div>
 
 <style>
-  .skills-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .skill-section {
-    margin-bottom: 2rem;
-  }
-
-  .section-title {
-    margin-bottom: 1rem;
-    font-size: 1.25rem;
-    font-weight: bold;
-    font-family: DepartureMono, monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .skill-section:nth-child(1) .section-title {
-    color: var(--term-bright-green);
-  }
-
-  .skill-section:nth-child(2) .section-title {
-    color: var(--term-bright-yellow);
-  }
-
-  .skill-section:nth-child(3) .section-title {
-    color: var(--term-bright-cyan);
-  }
-
-  .skill-section:nth-child(4) .section-title {
-    color: var(--term-bright-magenta);
-  }
-
-  .skill-grid {
-    display: grid;
-    gap: 0.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-
-  @media (min-width: 375px) {
-    .skill-grid {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-  }
-
-  @media (min-width: 640px) {
-    .skill-grid {
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .skill-grid {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-  }
-
-  .skill-card {
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    background: rgba(var(--bg-color-rgb), 0.05);
-    backdrop-filter: blur(6px) saturate(1.1);
-    -webkit-backdrop-filter: blur(6px) saturate(1.1);
-    border: 1px solid rgba(var(--border-color-rgb), 0.4);
-    font-family: DepartureMono, monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.2s ease;
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.03),
-      inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  }
-
-  .skill-card:hover {
-    background: rgba(var(--bg-color-rgb), 0.12);
-    backdrop-filter: blur(8px) saturate(1.2);
-    -webkit-backdrop-filter: blur(8px) saturate(1.2);
-    transform: translateY(-2px);
-    box-shadow:
-      0 4px 12px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  .skill-card.proficient {
-    border-left: 3px solid var(--term-bright-green);
-    border-color: var(--term-bright-green);
-  }
-
-  .skill-card.proficient:hover {
-    box-shadow: 0 0 15px rgba(var(--glow-bright-green-rgb), 0.3);
-  }
-
-  .skill-card.semi-proficient {
-    border-left: 3px solid var(--term-bright-yellow);
-    border-color: var(--term-bright-yellow);
-  }
-
-  .skill-card.semi-proficient:hover {
-    box-shadow: 0 0 15px rgba(var(--glow-bright-yellow-rgb), 0.3);
-  }
-
-  .skill-card.familiar {
-    border-left: 3px solid var(--term-bright-cyan);
-    border-color: var(--term-bright-cyan);
-    opacity: 0.9;
-  }
-
-  .skill-card.familiar:hover {
-    opacity: 1;
-    box-shadow: 0 0 15px rgba(var(--glow-bright-cyan-rgb), 0.3);
-  }
-
-  .skill-card.tool {
-    border-left: 3px solid var(--term-bright-magenta);
-    border-color: var(--term-bright-magenta);
-  }
-
-  .skill-card.tool:hover {
-    box-shadow: 0 0 15px rgba(var(--glow-bright-magenta-rgb), 0.3);
-  }
-
-  .skill-name {
+  .terminal-output {
     font-family: monospace;
-    font-size: 0.875rem;
     color: var(--text-primary);
-    display: block;
-    text-align: center;
   }
 
-  .tools-container {
+  .terminal-command {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
   }
 
-  .tool-category {
-    margin-bottom: 1rem;
+  .terminal-command:first-child {
+    margin-top: 0;
   }
 
-  .tool-title {
-    margin-bottom: 0.75rem;
+  .prompt {
+    color: var(--accent-primary);
+    font-weight: bold;
+  }
+
+  .command {
+    color: var(--text-primary);
+  }
+
+  .process-list {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .ps-header,
+  .ps-line {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
     font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--term-bright-magenta);
-    font-family: DepartureMono, monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
-  .tool-category:nth-child(1) .tool-title {
-    color: var(--term-bright-red);
+  .ps-header {
+    color: var(--text-secondary);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
   }
 
-  .tool-category:nth-child(2) .tool-title {
-    color: var(--term-bright-blue);
+  .ps-line {
+    color: var(--text-primary);
   }
 
-  .tool-category:nth-child(3) .tool-title {
-    color: var(--term-bright-green);
+  /* Column widths and alignment */
+  .col-user {
+    min-width: 60px;
+  }
+
+  .col-pid {
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .col-cpu {
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .col-mem {
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .col-command {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .col-comment {
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-left: 0.5rem;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 640px) {
+    .ps-header,
+    .ps-line {
+      font-size: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .col-user {
+      min-width: 50px;
+    }
+
+    .col-pid {
+      min-width: 40px;
+    }
+
+    .col-cpu {
+      min-width: 45px;
+    }
+
+    .col-mem {
+      min-width: 45px;
+    }
+
+    .col-command {
+      min-width: 120px;
+    }
+
+    .col-comment {
+      display: none;
+    }
   }
 </style>
