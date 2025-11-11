@@ -1,36 +1,4 @@
-/* Terminal glow for headers with phosphor persistence - limited to h1/h2 for performance */
-h1,
-h2 {
-  animation: phosphor-glow 2s ease-in-out infinite alternate;
-}
-
-/* Smaller headers get static glow without animation */
-h3,
-h4,
-h5,
-h6 {
-  text-shadow:
-    0 0 8px currentColor,
-    0 0 12px currentColor;
-}
-
 /* Keyframe Animations */
-
-@keyframes phosphor-glow {
-  0% {
-    text-shadow:
-      0 0 1px currentColor,
-      0 0 1.5px currentColor;
-    filter: brightness(1);
-  }
-  100% {
-    text-shadow:
-      0 0 1.5px currentColor,
-      0 0 2px currentColor,
-      0 0 2.5px currentColor;
-    filter: brightness(1.025);
-  }
-}
 
 @keyframes rgb-shift {
   0%,
@@ -42,16 +10,6 @@ h6 {
   }
   66% {
     transform: translate(-0.5px, 0.5px);
-  }
-}
-
-@keyframes phosphor-pulse {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.1);
   }
 }
 
@@ -76,44 +34,162 @@ h6 {
   }
 }
 
-/* Dedicated Link RGB Shift Animation */
-@keyframes link-rgb-shift {
+/* ===== CRT Chromatic Aberration Effects ===== */
+/* Consolidated RGB separation effects using theme colors */
+
+/* CRT Text Glitch - For text content hover effects */
+@keyframes crt-text-glitch {
+  0%,
+  100% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow:
+      -1px 0 var(--term-bright-red),
+      1px 0 var(--term-bright-cyan);
+  }
+  50% {
+    text-shadow:
+      1px 0 var(--term-bright-green),
+      -1px 0 var(--term-bright-magenta);
+  }
+  75% {
+    text-shadow:
+      -1px 0 var(--term-bright-yellow),
+      1px 0 var(--term-bright-blue);
+  }
+}
+
+/* CRT Link Glitch - For hyperlink hover effects */
+@keyframes crt-link-glitch {
   0%,
   100% {
     text-shadow:
-      0.1em 0 0 rgba(255, 0, 0, 0.9),
-      -0.1em 0 0 rgba(0, 255, 255, 0.9);
+      0.1em 0 0 var(--term-bright-red),
+      -0.1em 0 0 var(--term-bright-cyan);
     transform: translate(0);
   }
   20% {
     text-shadow:
-      -0.1em 0.05em 0 rgba(255, 0, 0, 0.9),
-      0.1em -0.05em 0 rgba(0, 255, 255, 0.9);
+      -0.1em 0.05em 0 var(--term-bright-red),
+      0.1em -0.05em 0 var(--term-bright-cyan);
     transform: translate(0.5px, 0);
   }
   40% {
     text-shadow:
-      0.05em -0.1em 0 rgba(0, 255, 0, 0.9),
-      -0.05em 0.1em 0 rgba(255, 0, 255, 0.9);
+      0.05em -0.1em 0 var(--term-bright-green),
+      -0.05em 0.1em 0 var(--term-bright-magenta);
     transform: translate(-0.5px, 0.5px);
   }
   60% {
     text-shadow:
-      -0.1em 0 0 rgba(0, 0, 255, 0.9),
-      0.1em 0 0 rgba(255, 255, 0, 0.9);
+      -0.1em 0 0 var(--term-bright-blue),
+      0.1em 0 0 var(--term-bright-yellow);
     transform: translate(0, -0.5px);
   }
   80% {
     text-shadow:
-      0.1em 0.1em 0 rgba(255, 0, 0, 0.9),
-      -0.1em -0.1em 0 rgba(0, 255, 255, 0.9);
+      0.1em 0.1em 0 var(--term-bright-red),
+      -0.1em -0.1em 0 var(--term-bright-cyan);
     transform: translate(-0.5px, 0);
   }
 }
 
-/* Legacy class mappings for compatibility */
-.fade-in {
-  animation: fade-in 0.5s ease-out;
+/* CRT Icon Glitch - For icon/SVG hover effects */
+@keyframes crt-icon-glitch {
+  0%,
+  100% {
+    filter: none;
+    transform: translate(0);
+  }
+  25% {
+    filter: drop-shadow(2px 0 0 var(--term-bright-red))
+      drop-shadow(-2px 0 0 var(--term-bright-cyan));
+    transform: translate(-1px, 0);
+  }
+  50% {
+    filter: drop-shadow(1px 0 0 var(--term-bright-green))
+      drop-shadow(-1px 0 0 var(--term-bright-magenta));
+    transform: translate(1px, 0);
+  }
+  75% {
+    filter: drop-shadow(-1px 1px 0 var(--term-bright-yellow))
+      drop-shadow(1px -1px 0 var(--term-bright-blue));
+    transform: translate(0, -1px);
+  }
+}
+
+/* CRT Border Glitch - For card border hover effects */
+@keyframes crt-border-glitch {
+  0%,
+  100% {
+    border-color: var(--border-color);
+    box-shadow: none;
+  }
+  25% {
+    border-color: var(--term-bright-red);
+    box-shadow:
+      0 0 5px var(--term-bright-red),
+      inset 0 0 5px var(--term-bright-cyan);
+  }
+  50% {
+    border-color: var(--term-bright-green);
+    box-shadow:
+      0 0 5px var(--term-bright-green),
+      inset 0 0 5px var(--term-bright-magenta);
+  }
+  75% {
+    border-color: var(--term-bright-blue);
+    box-shadow:
+      0 0 5px var(--term-bright-blue),
+      inset 0 0 5px var(--term-bright-yellow);
+  }
+}
+
+/* ===== Card Entrance & Hover Effects ===== */
+
+/* Slide-in from left - Card entrance animation */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scan line sweep - Horizontal line effect on hover */
+@keyframes scan-line {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Terminal cursor blink - Block cursor for text */
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Typing animation - reveals text character by character */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 .glitch-text:hover {
@@ -125,7 +201,7 @@ h6 {
   overflow: hidden;
   white-space: nowrap;
   border-right: 3px solid;
-  border-color: var(--primary);
+  border-color: var(--accent-primary);
 }
 
 /* Reusable glitch hover classes - works on mobile with :active */
@@ -139,14 +215,14 @@ h6 {
 .glitch-icon-hover:hover,
 .glitch-icon-hover:active,
 .glitch-icon-hover:focus {
-  animation: icon-glitch 0.5s ease-in-out;
+  animation: crt-icon-glitch 0.5s ease-in-out;
 }
 
 /* Border glitch for cards and containers */
 .glitch-border-hover:hover,
 .glitch-border-hover:active,
 .glitch-border-hover:focus {
-  animation: border-glitch 0.5s ease-in-out;
+  animation: crt-border-glitch 0.5s ease-in-out;
 }
 
 /* Subtle glitch for smaller elements */
@@ -154,59 +230,6 @@ h6 {
 .glitch-subtle-hover:active,
 .glitch-subtle-hover:focus {
   animation: glitch-subtle 0.4s ease-in-out;
-}
-
-/* Icon glitch animation using filters */
-@keyframes icon-glitch {
-  0%,
-  100% {
-    filter: none;
-    transform: translate(0);
-  }
-  20% {
-    filter: drop-shadow(2px 0 0 rgba(255, 0, 0, 0.8)) drop-shadow(-2px 0 0 rgba(0, 255, 255, 0.8));
-    transform: translate(-1px, 0);
-  }
-  40% {
-    filter: drop-shadow(-1px 0 0 rgba(0, 0, 255, 0.8)) drop-shadow(1px 0 0 rgba(255, 0, 0, 0.8));
-    transform: translate(1px, 0);
-  }
-  60% {
-    filter: drop-shadow(0 1px 0 rgba(0, 255, 0, 0.8)) drop-shadow(0 -1px 0 rgba(255, 0, 255, 0.8));
-    transform: translate(0, -1px);
-  }
-  80% {
-    filter: drop-shadow(1px 1px 0 rgba(255, 255, 0, 0.8))
-      drop-shadow(-1px -1px 0 rgba(0, 255, 255, 0.8));
-    transform: translate(-0.5px, 0.5px);
-  }
-}
-
-/* Border glitch animation */
-@keyframes border-glitch {
-  0%,
-  100% {
-    border-color: var(--border-color);
-    box-shadow: none;
-  }
-  25% {
-    border-color: rgba(255, 0, 0, 0.8);
-    box-shadow:
-      0 0 5px rgba(255, 0, 0, 0.5),
-      inset 0 0 5px rgba(0, 255, 255, 0.2);
-  }
-  50% {
-    border-color: rgba(0, 255, 0, 0.8);
-    box-shadow:
-      0 0 5px rgba(0, 255, 0, 0.5),
-      inset 0 0 5px rgba(255, 0, 255, 0.2);
-  }
-  75% {
-    border-color: rgba(0, 0, 255, 0.8);
-    box-shadow:
-      0 0 5px rgba(0, 0, 255, 0.5),
-      inset 0 0 5px rgba(255, 255, 0, 0.2);
-  }
 }
 
 /* Subtle glitch for smaller elements */
@@ -226,7 +249,18 @@ h6 {
   }
 }
 
-/* Accessibility: Disable glitch animations and header effects for users who prefer reduced motion */
+/* Mobile optimizations - slower animations to reduce GPU load */
+@media (max-width: 767px) {
+  .glitch-text {
+    animation-duration: 6s; /* Slower from 3s */
+  }
+
+  a[class*="glitch"] {
+    animation-duration: 6s; /* Slower from 3s */
+  }
+}
+
+/* Accessibility: Disable glitch animations for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   /* Disable interactive glitch effects */
   .glitch-hover:hover,
@@ -241,12 +275,6 @@ h6 {
   .glitch-subtle-hover:hover,
   .glitch-subtle-hover:active,
   .glitch-subtle-hover:focus {
-    animation: none;
-  }
-
-  /* Disable header phosphor glow animation */
-  h1,
-  h2 {
     animation: none;
   }
 
@@ -280,4 +308,13 @@ h6 {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Performance Mode: Disable animations and ensure visibility */
+/* Must come AFTER media queries to override them */
+[data-performance="true"] .animate-ready,
+[data-performance="true"] .animate-in {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
 }
