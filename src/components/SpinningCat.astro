@@ -21,7 +21,7 @@
     height: 100vh;
     top: 0;
     left: 0;
-    z-index: var(--z-max, 999);
+    z-index: var(--z-max);
     -webkit-user-select: none;
     user-select: none;
     animation: bgFlicker 1s forwards;
@@ -42,7 +42,7 @@
     height: 100%;
     object-fit: cover;
     position: absolute;
-    z-index: calc(var(--z-max, 999) + 1);
+    z-index: calc(var(--z-max) + 1);
     opacity: 0;
     animation: videoAppear 1s ease-in-out forwards;
     animation-delay: 8s;
@@ -55,7 +55,7 @@
     max-width: 90vw;
     object-fit: cover;
     position: absolute;
-    z-index: calc(var(--z-max, 999) + 2);
+    z-index: calc(var(--z-max) + 2);
     animation: catAppear 6s ease forwards;
   }
 
@@ -65,7 +65,7 @@
     width: 52px;
     height: 45px;
     border: 2px solid rgba(0, 0, 0, 0.38);
-    z-index: calc(var(--z-max, 999) + 3);
+    z-index: calc(var(--z-max) + 3);
     cursor: pointer;
     text-align: center;
     place-items: center;
