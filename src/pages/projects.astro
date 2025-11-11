@@ -82,7 +82,7 @@ const otherProjects = projectsList.filter((p) => !p.featured);
           <span class="prompt font-ui-prompt">&gt;</span> Featured Projects
         </h2>
         <div class="projects-grid">
-          {featuredProjects.map((project) => <ProjectCard {...project} />)}
+          {featuredProjects.map((project, index) => <ProjectCard {...project} index={index} />)}
         </div>
       </section>
 
@@ -91,7 +91,7 @@ const otherProjects = projectsList.filter((p) => !p.featured);
           <span class="prompt font-ui-prompt">#</span> Other Projects
         </h2>
         <div class="projects-grid">
-          {otherProjects.map((project) => <ProjectCard {...project} />)}
+          {otherProjects.map((project, index) => <ProjectCard {...project} index={index} />)}
         </div>
       </section>
     </div>

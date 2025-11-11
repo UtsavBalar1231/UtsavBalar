@@ -66,8 +66,8 @@ const professionalTutorials = tutorialsList.filter(
               <span class="prompt font-ui-prompt">&gt;</span> Beginner
             </h2>
             <div class="tutorials-grid">
-              {beginnerTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
-                <TutorialCard {...tutorial} />
+              {beginnerTutorials.map((tutorial: (typeof tutorialsList)[0], index: number) => (
+                <TutorialCard {...tutorial} index={index} />
               ))}
             </div>
           </section>
@@ -81,8 +81,8 @@ const professionalTutorials = tutorialsList.filter(
               <span class="prompt font-ui-prompt">#</span> Intermediate
             </h2>
             <div class="tutorials-grid">
-              {intermediateTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
-                <TutorialCard {...tutorial} />
+              {intermediateTutorials.map((tutorial: (typeof tutorialsList)[0], index: number) => (
+                <TutorialCard {...tutorial} index={index} />
               ))}
             </div>
           </section>
@@ -96,8 +96,8 @@ const professionalTutorials = tutorialsList.filter(
               <span class="prompt font-ui-prompt">~</span> Advanced
             </h2>
             <div class="tutorials-grid">
-              {advancedTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
-                <TutorialCard {...tutorial} />
+              {advancedTutorials.map((tutorial: (typeof tutorialsList)[0], index: number) => (
+                <TutorialCard {...tutorial} index={index} />
               ))}
             </div>
           </section>
@@ -111,8 +111,8 @@ const professionalTutorials = tutorialsList.filter(
               <span class="prompt">!</span> Professional
             </h2>
             <div class="tutorials-grid">
-              {professionalTutorials.map((tutorial: (typeof tutorialsList)[0]) => (
-                <TutorialCard {...tutorial} />
+              {professionalTutorials.map((tutorial: (typeof tutorialsList)[0], index: number) => (
+                <TutorialCard {...tutorial} index={index} />
               ))}
             </div>
           </section>

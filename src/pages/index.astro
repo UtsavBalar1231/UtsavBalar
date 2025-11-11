@@ -35,12 +35,12 @@ import Footer from "../components/Footer.astro";
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100dvh - 120px);
   }
 
   @media (max-width: 767px) {
     .container {
-      min-height: calc(100vh - 180px);
+      min-height: calc(100dvh - 180px);
       padding-top: 1rem;
       padding-bottom: calc(60px + 1rem); /* Account for mobile nav + padding */
       align-items: flex-start;
@@ -51,6 +51,22 @@ import Footer from "../components/Footer.astro";
     .container {
       min-height: auto;
       padding: 2rem 1rem;
+    }
+  }
+
+  /* Enhanced landscape mode handling for mobile */
+  @media (max-width: 767px) and (orientation: landscape) and (max-height: 600px) {
+    .container {
+      min-height: auto;
+      padding: 1rem;
+    }
+
+    .terminal-card {
+      padding: 1rem !important;
+    }
+
+    .grid {
+      gap: 1rem !important;
     }
   }
 </style>

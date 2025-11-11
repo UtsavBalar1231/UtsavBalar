@@ -31,6 +31,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
   }
 
   .cat-container.hidden {
@@ -51,7 +53,8 @@
   .cat-gif {
     will-change: opacity, transform;
     width: 20%;
-    min-width: 400px;
+    min-width: min(400px, 90vw);
+    max-width: 90vw;
     object-fit: cover;
     position: absolute;
     z-index: calc(var(--z-max, 999) + 2);
@@ -77,7 +80,7 @@
     animation: btnAppear 0.4s ease-in-out forwards;
     animation-delay: 1s;
     transition: ease-in-out 0.3s;
-    top: 1rem;
+    top: calc(1rem + env(safe-area-inset-top));
   }
 
   .exit-btn span {
@@ -262,6 +265,9 @@
       this.isRunning = true;
       this.container?.classList.remove("hidden");
 
+      // Add inert attribute to body for focus trap
+      document.body.setAttribute("inert", "");
+
       const img = new Image();
       img.src = "/media/cat.gif";
     }
@@ -289,6 +295,9 @@
         this.catVideo.pause();
         this.catVideo.currentTime = 0;
       }
+
+      // Remove inert attribute from body
+      document.body.removeAttribute("inert");
 
       this.container?.classList.add("hidden");
       this.isRunning = false;

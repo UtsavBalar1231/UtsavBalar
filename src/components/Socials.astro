@@ -30,6 +30,13 @@ import { socials } from "../data/socials";
     }
   }
 
+  @media (max-width: 320px) {
+    .social-links-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 1rem;
+    }
+  }
+
   .social-link {
     background: rgba(var(--bg-color-rgb), 0.08);
     backdrop-filter: blur(8px) saturate(1.1);

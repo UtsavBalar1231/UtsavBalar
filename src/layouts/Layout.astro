@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from "astro:transitions";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import StatusLine from "../components/StatusLine.astro";
 import MobileNav from "../components/MobileNav.astro";
@@ -50,7 +49,7 @@ const { title } = Astro.props;
       }
 
       // Theme initialization function
-      function initializeTheme() {
+      async function initializeTheme() {
         const theme = localStorage.getItem("selectedTheme") || "monochrome";
         document.documentElement.setAttribute("data-theme", theme);
         if (document.body) {
@@ -60,20 +59,58 @@ const { title } = Astro.props;
         // Update browser theme color
         updateThemeColor(theme);
 
-        // Performance mode initialization
+        // Performance mode initialization with device detection
         const performanceStored = localStorage.getItem("performanceMode");
-        const performanceMode =
-          performanceStored !== null ? performanceStored === "true" : window.innerWidth < 768;
+        let performanceMode = false;
+
+        if (performanceStored !== null) {
+          // User has explicitly set preference
+          performanceMode = performanceStored === "true";
+        } else {
+          // Auto-detect based on device capabilities
+          performanceMode = await shouldEnablePerformanceMode();
+        }
 
         if (document.body) {
           document.body.setAttribute("data-performance", performanceMode.toString());
         }
       }
 
+      // Device detection utilities (inlined for performance)
+      async function shouldEnablePerformanceMode() {
+        // Auto-enable for mobile viewport
+        if (window.innerWidth < 768) {
+          return true;
+        }
+
+        // Auto-enable for low-end devices
+        const cores = navigator.hardwareConcurrency || 4;
+        const memory = navigator.deviceMemory;
+
+        if (cores < 4 || (memory !== undefined && memory < 4)) {
+          return true;
+        }
+
+        // Check battery level
+        try {
+          if ("getBattery" in navigator) {
+            const battery = await navigator.getBattery();
+            const batteryLevel = Math.round(battery.level * 100);
+            if (batteryLevel < 15) {
+              return true;
+            }
+          }
+        } catch (e) {
+          console.warn("Battery API unavailable:", e);
+        }
+
+        return false;
+      }
+
       // Run on initial page load
       initializeTheme();
 
-      // Re-run after ViewTransitions navigation
+      // Re-run after view transition navigation
       document.addEventListener("astro:page-load", initializeTheme);
 
       // Listen for theme changes
@@ -89,8 +126,6 @@ const { title } = Astro.props;
     <link rel="dns-prefetch" href="https://cataas.com" />
     <link rel="preconnect" href="https://api.github.com" crossorigin />
     <link rel="preconnect" href="https://cataas.com" crossorigin />
-
-    <ViewTransitions />
   </head>
   <body>
     <div class="noise-overlay" style="z-index: var(--z-noise);" transition:persist="noise"></div>
@@ -174,7 +209,7 @@ const { title } = Astro.props;
   });
 
   // Lazy animations for desktop only
-  document.addEventListener("DOMContentLoaded", () => {
+  function setupLazyAnimations() {
     if (window.innerWidth >= 768) {
       const observerOptions = {
         threshold: 0.1,
@@ -191,11 +226,31 @@ const { title } = Astro.props;
       }, observerOptions);
 
       document.querySelectorAll(".terminal-card, .content-section, .project-card").forEach((el) => {
-        el.classList.add("animate-ready");
-        animationObserver.observe(el);
+        // Only add animate-ready if not already present (prevents duplication on view transitions)
+        if (!el.classList.contains("animate-ready")) {
+          el.classList.add("animate-ready");
+        }
+
+        // Check if element is already in viewport
+        const rect = el.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
+        if (isInViewport) {
+          // Element is already visible, add animate-in immediately
+          el.classList.add("animate-in");
+        } else {
+          // Element is below the fold, observe it
+          animationObserver.observe(el);
+        }
       });
     }
-  });
+  }
+
+  // Run on initial load
+  document.addEventListener("DOMContentLoaded", setupLazyAnimations);
+
+  // Run on Astro view transitions
+  document.addEventListener("astro:page-load", setupLazyAnimations);
 </script>
 
 <style is:global>

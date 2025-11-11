@@ -84,15 +84,19 @@ const currentPath = Astro.url.pathname;
     justify-content: center;
     text-decoration: none;
     color: var(--text-secondary);
-    padding: 0.25rem;
+    padding: 0.5rem 0.25rem;
+    min-height: 44px;
+    min-width: 44px;
     transition: color 0.1s ease;
     position: relative;
     will-change: auto;
   }
 
-  a:hover {
-    color: var(--accent-primary);
-    animation: link-rgb-shift 3s ease-in-out infinite;
+  @media (hover: hover) {
+    a:hover {
+      color: var(--accent-primary);
+      animation: crt-link-glitch 3s ease-in-out infinite;
+    }
   }
 
   a.active {
@@ -121,7 +125,7 @@ const currentPath = Astro.url.pathname;
 
   .label {
     font-family: DepartureMono, monospace;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     font-weight: 700;
@@ -139,15 +143,16 @@ const currentPath = Astro.url.pathname;
 
   @media (max-width: 320px) {
     .icon {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
     }
 
     .label {
-      font-size: 0.5rem;
+      font-size: 0.75rem;
     }
 
     a {
-      padding: 0.125rem;
+      padding: 0.375rem 0.25rem;
+      min-height: 44px;
     }
   }
 </style>

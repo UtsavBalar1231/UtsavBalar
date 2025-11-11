@@ -31,7 +31,7 @@ if (useGithub) {
       name = userData.name || username;
     }
   } catch (error) {
-    // Silently fallback to default avatar
+    console.warn("Failed to fetch GitHub avatar:", error);
   }
 } else {
   avatarUrl = `https://cataas.com/cat/funny?width=${width}&height=${height}&s=${randomSeed}`;
@@ -118,11 +118,7 @@ const defaultAvatar = "/img/default-avatar.svg";
         e.preventDefault();
         e.stopPropagation();
 
-        if (!sessionStorage.getItem("catPlayed")) {
-          sessionStorage.setItem("catPlayed", "true");
-
-          window.dispatchEvent(new CustomEvent("startSpinningCat"));
-        }
+        window.dispatchEvent(new CustomEvent("startSpinningCat"));
       });
     }
   });
