@@ -34,21 +34,7 @@
   border-left-color: var(--accent-primary);
 }
 
-/* Card Section Layouts */
-.card-section-header {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px dashed rgba(var(--border-color-rgb), 0.3);
-}
-
-.card-section-content {
-  margin-bottom: 1rem;
-}
-
-.card-section-footer {
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(var(--border-color-rgb), 0.3);
-}
+/* Card Section Layouts - Components use BaseCard.astro slots instead of these classes */
 
 /* Hover Effects - Only apply if .card-base-hoverable */
 @media (hover: hover) {

@@ -1,5 +1,7 @@
 ---
 import { getDifficultyConfig, type DifficultyLevel } from "@data/difficultyLevels";
+import BaseCard from "@components/BaseCard.astro";
+import { getStaggerDelay } from "@utils/animations";
 
 export interface Props {
   number: number;
@@ -14,24 +16,29 @@ export interface Props {
 
 const { number, title, description, difficulty, duration, tags, url, index = 0 } = Astro.props;
 
-const animationDelay = `${index * 0.1}s`;
+const animationDelay = getStaggerDelay(index, 0.1);
 
 const difficultyConfig = getDifficultyConfig(difficulty as DifficultyLevel);
 ---
 
 <a href={url} class="tutorial-card-link">
-  <div
-    class:list={["card-base", "card-base-pointer", "card-base-hoverable", "glitch-border-hover"]}
-    style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`}
+  <BaseCard
+    class="tutorial-card card-base-pointer"
+    animated={true}
+    animationDelay={animationDelay}
+    hoverable={true}
+    featured={false}
   >
-    <div class="card-section-header tutorial-header">
-      <span class="tutorial-number">#{number.toString().padStart(2, "0")}</span>
-      <span class:list={`difficulty-badge ${difficultyConfig.cssClass}`}>
-        {difficultyConfig.label}
-      </span>
-    </div>
+    <Fragment slot="header">
+      <div class="tutorial-header">
+        <span class="tutorial-number">#{number.toString().padStart(2, "0")}</span>
+        <span class:list={`difficulty-badge ${difficultyConfig.cssClass}`}>
+          {difficultyConfig.label}
+        </span>
+      </div>
+    </Fragment>
 
-    <div class="card-section-content tutorial-content">
+    <Fragment slot="content">
       <h3 class="tutorial-title">{title}</h3>
 
       <p class="tutorial-description">{description}</p>
@@ -46,20 +53,20 @@ const difficultyConfig = getDifficultyConfig(difficulty as DifficultyLevel);
       <div class="tutorial-tags">
         {tags.map((tag) => <span class="tag">{tag}</span>)}
       </div>
-    </div>
+    </Fragment>
 
-    <div class="card-section-footer tutorial-footer">
+    <Fragment slot="footer">
       <div class="tutorial-action">
         <span class="action-text">Read Tutorial</span>
         <span class="action-arrow">→</span>
       </div>
-    </div>
-  </div>
+    </Fragment>
+  </BaseCard>
 </a>
 
 <style>
-  .card-base {
-    container-type: inline-size;
+  /* Override container name for tutorial-specific queries */
+  .tutorial-card {
     container-name: tutorial-card;
   }
 
@@ -218,21 +225,9 @@ const difficultyConfig = getDifficultyConfig(difficulty as DifficultyLevel);
     transition: transform 0.2s ease;
   }
 
-  /* Terminal cursor, CRT glitch, and hover animations (component-specific targeting) */
+  /* TutorialCard-specific hover effects */
   @media (hover: hover) {
-    .card-base-hoverable:hover .tutorial-description::after {
-      content: "▊";
-      animation: cursor-blink 1s infinite;
-      color: var(--accent-primary);
-      font-weight: bold;
-      margin-left: 2px;
-    }
-
-    .card-base-hoverable:hover .tutorial-content {
-      animation: crt-text-glitch 0.5s ease-in-out;
-    }
-
-    .card-base-hoverable:hover .action-arrow {
+    :global(.card-base-hoverable:hover) .action-arrow {
       transform: translateX(4px);
     }
 

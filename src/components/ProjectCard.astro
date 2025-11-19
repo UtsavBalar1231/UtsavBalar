@@ -1,5 +1,7 @@
 ---
 import { getTagColor } from "@data/tagCategories";
+import BaseCard from "@components/BaseCard.astro";
+import { getStaggerDelay } from "@utils/animations";
 
 export interface Props {
   title: string;
@@ -13,36 +15,35 @@ export interface Props {
 
 const { title, description, tags, githubUrl, demoUrl, featured = false, index = 0 } = Astro.props;
 
-const animationDelay = `${index * 0.1}s`;
+const animationDelay = getStaggerDelay(index, 0.1);
 ---
 
-<div
-  class:list={[
-    "card-base",
-    "card-base-default",
-    "card-base-hoverable",
-    "glitch-border-hover",
-    featured && "card-base-featured",
-  ]}
-  style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${animationDelay}; opacity: 0;`}
+<BaseCard
+  class="project-card"
+  animated={true}
+  animationDelay={animationDelay}
+  hoverable={true}
+  featured={featured}
 >
-  <div class="card-section-header project-header">
-    <h3 class="project-title">
-      <span class="title-prompt">&gt;</span>
-      {title}
-    </h3>
-    {featured && <span class="featured-badge">Featured</span>}
-  </div>
+  <Fragment slot="header">
+    <div class="project-header">
+      <h3 class="project-title">
+        <span class="title-prompt">&gt;</span>
+        {title}
+      </h3>
+      {featured && <span class="featured-badge">Featured</span>}
+    </div>
+  </Fragment>
 
-  <div class="card-section-content project-content">
+  <Fragment slot="content">
     <p class="project-description">{description}</p>
 
     <div class="project-tags">
       {tags.map((tag) => <span class:list={`tag ${getTagColor(tag)}`}>{tag}</span>)}
     </div>
-  </div>
+  </Fragment>
 
-  <div class="card-section-footer project-footer">
+  <Fragment slot="footer">
     <div class="project-links">
       {
         githubUrl && (
@@ -63,12 +64,12 @@ const animationDelay = `${index * 0.1}s`;
         )
       }
     </div>
-  </div>
-</div>
+  </Fragment>
+</BaseCard>
 
 <style>
-  .card-base {
-    container-type: inline-size;
+  /* Override container name for project-specific queries */
+  .project-card {
     container-name: project-card;
   }
 
@@ -190,20 +191,8 @@ const animationDelay = `${index * 0.1}s`;
     opacity: 0.7;
   }
 
-  /* Terminal cursor and CRT glitch effects (component-specific targeting) */
+  /* ProjectCard-specific hover effects */
   @media (hover: hover) {
-    .card-base-hoverable:hover .project-description::after {
-      content: "▊";
-      animation: cursor-blink 1s infinite;
-      color: var(--accent-primary);
-      font-weight: bold;
-      margin-left: 2px;
-    }
-
-    .card-base-hoverable:hover .project-content {
-      animation: crt-text-glitch 0.5s ease-in-out;
-    }
-
     .tag:hover {
       transform: scale(1.05);
     }

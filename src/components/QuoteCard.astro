@@ -1,4 +1,7 @@
 ---
+import BaseCard from "@components/BaseCard.astro";
+import { getStaggerDelay } from "@utils/animations";
+
 export interface Props {
   id: number;
   text: string;
@@ -8,39 +11,35 @@ export interface Props {
 
 const { id, text, author, featured = false } = Astro.props;
 
-const typingDelay = `${id * 0.1}s`;
+const typingDelay = getStaggerDelay(id, 0.1);
 ---
 
-<div
-  class:list={[
-    "card-base",
-    "card-base-default",
-    "card-base-hoverable",
-    "glitch-border-hover",
-    featured && "card-base-featured",
-    featured && "quote-featured",
-  ]}
-  style={`animation: slide-in 0.6s ease-out forwards; animation-delay: ${typingDelay}; opacity: 0;`}
+<BaseCard
+  class:list={["quote-card", featured && "quote-featured"]}
+  animated={true}
+  animationDelay={typingDelay}
+  hoverable={true}
+  featured={featured}
 >
-  <div class="card-section-header quote-header">
+  <Fragment slot="header">
     <div class="quote-number">
       <span class="number-prefix">#</span>{id.toString().padStart(2, "0")}
     </div>
-  </div>
+  </Fragment>
 
-  <blockquote class="card-section-content quote-content">
+  <blockquote slot="content" class="quote-content">
     <span class="quote-mark quote-mark-open">"</span>
     <span class="quote-text">{text}</span>
     <span class="quote-mark quote-mark-close">"</span>
   </blockquote>
 
-  <div class="card-section-footer quote-footer">
+  <Fragment slot="footer">
     <div class="quote-author">
       <span class="author-prefix">—</span>
       <span class="author-name">{author}</span>
     </div>
-  </div>
-</div>
+  </Fragment>
+</BaseCard>
 
 <style>
   /* QuoteCard-specific content styling */
@@ -64,9 +63,7 @@ const typingDelay = `${id * 0.1}s`;
     opacity: 0.7;
   }
 
-  .quote-featured .quote-number {
-    color: var(--accent-primary);
-  }
+  /* Featured quote styling removed - BaseCard handles featured state */
 
   .number-prefix {
     color: var(--accent-primary);
@@ -115,20 +112,7 @@ const typingDelay = `${id * 0.1}s`;
     font-weight: 500;
   }
 
-  /* Terminal cursor and CRT glitch effects (component-specific targeting) */
-  @media (hover: hover) {
-    .card-base-hoverable:hover .quote-text::after {
-      content: "▊";
-      animation: cursor-blink 1s infinite;
-      color: var(--accent-primary);
-      font-weight: bold;
-      margin-left: 2px;
-    }
-
-    .card-base-hoverable:hover .quote-content {
-      animation: crt-text-glitch 0.5s ease-in-out;
-    }
-  }
+  /* QuoteCard uses BaseCard's default hover effects */
 
   /* Mobile responsive adjustments */
   @media (max-width: 640px) {
