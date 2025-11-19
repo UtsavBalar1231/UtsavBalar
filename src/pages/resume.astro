@@ -1,59 +1,50 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getEntry } from "astro:content";
+import MDXContent from "../components/MDXContent.astro";
 import Footer from "../components/Footer.astro";
-
-const resume = await getEntry("resume", "resume");
-const { Content } = await resume.render();
 ---
 
 <Layout title="Resume">
   <main class="container mx-auto px-2 sm:px-4 md:max-w-6xl lg:px-8">
     <div class="terminal-card p-4 sm:p-6 md:p-8">
-      <div class="prose">
-        <Content />
-        <p>
-          <a href="/downloads/resume.pdf" download>Download PDF</a>
-          <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
-        </p>
-      </div>
+      <MDXContent collection="resume" slug="resume" class="resume-prose" />
+      <p class="download-links">
+        <a href="/downloads/resume.pdf" download>Download PDF</a>
+        <a href="/downloads/resume.txt" download style="margin-left: 1rem;">Download TXT</a>
+      </p>
     </div>
   </main>
   <Footer />
 </Layout>
 
 <style is:global>
-  .prose {
+  /* Resume-specific prose overrides for terminal theme */
+  .resume-prose {
     color: var(--term-text);
     font-family: monospace;
   }
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    color: var(--term-text);
+  .resume-prose h1,
+  .resume-prose h2,
+  .resume-prose h3 {
     font-family: DepartureMono, monospace;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     text-shadow: 0 0 2px currentColor;
-    margin-bottom: 1rem;
   }
-  .prose a {
+  .resume-prose a {
+    font-family: DepartureMono, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .download-links {
+    margin-top: 2rem;
+  }
+  .download-links a {
     color: var(--term-text);
     font-family: DepartureMono, monospace;
     text-decoration: underline;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-  }
-  .prose p,
-  .prose li {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-  .prose ul,
-  .prose ol {
-    padding-left: 2rem;
   }
 </style>

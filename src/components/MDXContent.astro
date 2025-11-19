@@ -1,15 +1,16 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 
-type CollectionName = "about" | "projects" | "bookBits" | "quotes" | "resume";
+type CollectionName = "about" | "projects" | "bookBits" | "quotes" | "resume" | "tutorials";
 
 interface Props {
   collection: CollectionName;
   slug?: string;
   class?: string;
+  components?: Record<string, any>;
 }
 
-const { collection, slug, class: className = "" } = Astro.props;
+const { collection, slug, class: className = "", components } = Astro.props;
 
 let entry;
 let Content;
@@ -38,7 +39,7 @@ try {
 {
   Content ? (
     <div class:list={`mdx-collection ${className}`}>
-      <Content />
+      {components ? <Content components={components} /> : <Content />}
     </div>
   ) : (
     <div class="mdx-error">

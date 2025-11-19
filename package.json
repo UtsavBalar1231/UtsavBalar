@@ -22,13 +22,11 @@
     "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.15.5",
     "astro-compress": "^2.3.8",
-    "jiti": "^2.4.2",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@lhci/cli": "^0.15.1",
     "@tailwindcss/vite": "^4.1.17",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
@@ -38,15 +36,8 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17"
   },
-  "browserslist": [
-    "Chrome >= 90",
-    "Firefox >= 88",
-    "Safari >= 16",
-    "Edge >= 90"
-  ],
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",

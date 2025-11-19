@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import MDXContent from "../../components/MDXContent.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
 import Note from "../../components/mdx/Note.astro";
 import Warning from "../../components/mdx/Warning.astro";
@@ -15,7 +16,6 @@ export async function getStaticPaths() {
 }
 
 const { tutorial } = Astro.props as { tutorial: CollectionEntry<"tutorials"> };
-const { Content } = await tutorial.render();
 
 const components = {
   CodeBlock,
@@ -26,51 +26,24 @@ const components = {
 ---
 
 <Layout title={tutorial.data.title}>
-  <main class="prose">
-    <Content components={components} />
+  <main>
+    <MDXContent
+      collection="tutorials"
+      slug={tutorial.slug}
+      components={components}
+      class="tutorial-prose"
+    />
   </main>
 </Layout>
 
 <style is:global>
-  .prose {
+  /* Tutorial-specific prose overrides for terminal theme */
+  .tutorial-prose {
     color: var(--term-text);
   }
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    color: var(--term-text);
+  .tutorial-prose h1,
+  .tutorial-prose h2,
+  .tutorial-prose h3 {
     text-shadow: 0 0 2px currentColor;
-    margin-bottom: 1rem;
-  }
-  .prose a {
-    color: var(--term-text);
-    text-decoration: underline;
-  }
-  .prose p,
-  .prose li {
-    margin-bottom: 1rem;
-  }
-  .prose ul,
-  .prose ol {
-    padding-left: 2rem;
-  }
-  .prose pre {
-    background-color: #000;
-    border: 1px solid var(--term-text);
-    padding: 1rem;
-    overflow-x: auto;
-    text-shadow: none;
-  }
-  .prose code {
-    text-shadow: none;
-  }
-  .prose blockquote {
-    border-left: 4px solid var(--term-text);
-    padding-left: 1rem;
-    margin-left: 0;
-    font-style: italic;
   }
 </style>
