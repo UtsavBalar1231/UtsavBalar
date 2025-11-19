@@ -113,6 +113,24 @@ export abstract class WebGLEffect {
     this.boundPageLoad = () => this.updateVisibility();
   }
 
+  /**
+   * Check if effect is currently running (animating)
+   */
+  public get isRunning(): boolean {
+    return this.animationId !== 0;
+  }
+
+  /**
+   * Get/set target FPS for the effect
+   */
+  public get targetFPS(): number {
+    return 1000 / this.frameInterval;
+  }
+
+  public set targetFPS(fps: number) {
+    this.frameInterval = 1000 / fps;
+  }
+
   protected abstract getShaders(): ShaderSource;
   protected abstract setupGeometry(): void;
   protected abstract draw(time: number): void;
@@ -508,7 +526,7 @@ export abstract class WebGLEffect {
     }
   }
 
-  protected start(): void {
+  public start(): void {
     if (!this.animationId && this.gl) {
       this.handleResize();
       this.startTime = performance.now();
@@ -522,7 +540,7 @@ export abstract class WebGLEffect {
     }
   }
 
-  protected stop(): void {
+  public stop(): void {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
       this.animationId = 0;

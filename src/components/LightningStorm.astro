@@ -64,16 +64,12 @@ import WebGLFallback from "@components/WebGLFallback.astro";
 
 <script>
   import { WebGLLightningStorm } from "@/utils/webglLightning";
-  import { getRecommendedFPS, getBatteryLevel } from "@/utils/deviceDetection";
+  import { getRecommendedFPS } from "@/utils/deviceDetection";
   import { hasTargetFPS, hasIsRunning, hasStartMethod, hasStopMethod } from "@/types/webglEffect";
+  import { setupEffectLifecycle } from "@/utils/visualEffectLifecycle";
 
-  let lightningEffect: WebGLLightningStorm | null = null;
-  let themeObserver: MutationObserver | null = null;
+  const effectRef = { current: null as WebGLLightningStorm | null };
   let flashHandler: ((event: Event) => void) | null = null;
-  let isInitializing = false;
-  let debounceTimer: number | null = null;
-  let intersectionObserver: IntersectionObserver | null = null;
-  let batteryCheckInterval: number | null = null;
   let webgl2Unsupported = false;
 
   function shouldInitialize(): boolean {
@@ -81,152 +77,58 @@ import WebGLFallback from "@components/WebGLFallback.astro";
     return theme === "amber-phosphor";
   }
 
-  async function initLightningStorm() {
-    // Prevent concurrent initialization/cleanup
-    if (isInitializing) {
-      return;
-    }
+  function initLightningStorm() {
+    if (shouldInitialize() && !effectRef.current && !webgl2Unsupported) {
+      const recommendedFPS = getRecommendedFPS();
 
-    isInitializing = true;
-
-    try {
-      if (shouldInitialize() && !lightningEffect && !webgl2Unsupported) {
-        const recommendedFPS = getRecommendedFPS();
-        lightningEffect = new WebGLLightningStorm();
-        try {
-          lightningEffect.initialize();
-        } catch (error) {
-          console.error("WebGL 2.0 initialization failed:", error);
-          webgl2Unsupported = true;
-          const canvas = document.getElementById("lightning-storm-canvas");
-          const fallback = document.querySelector(".webgl-fallback");
-          if (canvas) canvas.style.display = "none";
-          if (fallback) (fallback as HTMLElement).style.display = "block";
-          lightningEffect = null;
-          return;
-        }
-        if (hasTargetFPS(lightningEffect)) {
-          lightningEffect.targetFPS = recommendedFPS;
-        }
-        setupIntersectionObserver();
-        setupBatteryMonitoring();
-
-        // Handle flash overlay for WebGL lightning
-        const flashOverlay = document.getElementById("lightning-flash");
-        if (flashOverlay && !flashHandler) {
-          flashHandler = () => {
-            flashOverlay.classList.add("active");
-            setTimeout(() => {
-              flashOverlay.classList.remove("active");
-            }, 150);
-          };
-          document.addEventListener("lightning-flash", flashHandler);
-        }
-      } else if (!shouldInitialize() && lightningEffect) {
-        cleanupObservers();
-        lightningEffect.cleanup();
-        lightningEffect = null;
-        if (flashHandler) {
-          document.removeEventListener("lightning-flash", flashHandler);
-          flashHandler = null;
-        }
+      effectRef.current = new WebGLLightningStorm();
+      try {
+        effectRef.current.initialize();
+      } catch (error) {
+        console.error("WebGL 2.0 initialization failed:", error);
+        webgl2Unsupported = true;
+        const canvas = document.getElementById("lightning-storm-canvas");
+        const fallback = document.querySelector(".webgl-fallback");
+        if (canvas) canvas.style.display = "none";
+        if (fallback) (fallback as HTMLElement).style.display = "block";
+        effectRef.current = null;
+        return;
       }
-    } finally {
-      isInitializing = false;
-    }
-  }
 
-  function setupIntersectionObserver() {
-    const canvas = document.getElementById("lightning-storm-canvas");
-    if (!canvas || !lightningEffect) return;
-    intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (hasIsRunning(lightningEffect)) {
-            if (entry.isIntersecting) {
-              if (hasStartMethod(lightningEffect)) {
-                lightningEffect.start();
-              }
-            } else {
-              if (hasStopMethod(lightningEffect)) {
-                lightningEffect.stop();
-              }
-            }
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    intersectionObserver.observe(canvas);
-  }
-
-  async function setupBatteryMonitoring() {
-    batteryCheckInterval = window.setInterval(async () => {
-      const batteryLevel = await getBatteryLevel();
-      if (batteryLevel !== null && batteryLevel < 15) {
-        if (hasStopMethod(lightningEffect)) {
-          lightningEffect.stop();
-        }
+      if (hasTargetFPS(effectRef.current)) {
+        effectRef.current.targetFPS = recommendedFPS;
       }
-    }, 30000);
+
+      // Setup flash overlay for WebGL lightning
+      const flashOverlay = document.getElementById("lightning-flash");
+      if (flashOverlay && !flashHandler) {
+        flashHandler = () => {
+          flashOverlay.classList.add("active");
+          setTimeout(() => {
+            flashOverlay.classList.remove("active");
+          }, 150);
+        };
+        document.addEventListener("lightning-flash", flashHandler);
+      }
+    } else if (!shouldInitialize() && effectRef.current) {
+      effectRef.current.cleanup();
+      effectRef.current = null;
+      if (flashHandler) {
+        document.removeEventListener("lightning-flash", flashHandler);
+        flashHandler = null;
+      }
+    }
   }
 
-  function cleanupObservers() {
-    if (intersectionObserver) {
-      intersectionObserver.disconnect();
-      intersectionObserver = null;
-    }
-    if (batteryCheckInterval !== null) {
-      clearInterval(batteryCheckInterval);
-      batteryCheckInterval = null;
-    }
-  }
-
-  function debouncedInitLightningStorm() {
-    if (debounceTimer !== null) {
-      clearTimeout(debounceTimer);
-    }
-
-    debounceTimer = window.setTimeout(() => {
-      initLightningStorm();
-      debounceTimer = null;
-    }, 150); // 150ms debounce to match base class
-  }
-
-  function setupThemeObserver() {
-    themeObserver = new MutationObserver(debouncedInitLightningStorm);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      initLightningStorm();
-      setupThemeObserver();
-    });
-  } else {
-    initLightningStorm();
-    setupThemeObserver();
-  }
-
-  document.addEventListener("astro:page-load", initLightningStorm);
-
-  document.addEventListener("astro:before-preparation", () => {
-    if (debounceTimer !== null) {
-      clearTimeout(debounceTimer);
-      debounceTimer = null;
-    }
-
-    cleanupObservers();
-    lightningEffect?.cleanup();
-    lightningEffect = null;
-    if (flashHandler) {
-      document.removeEventListener("lightning-flash", flashHandler);
-      flashHandler = null;
-    }
-    themeObserver?.disconnect();
-    themeObserver = null;
+  // Setup effect lifecycle with shared utility
+  setupEffectLifecycle({
+    canvasId: "lightning-storm-canvas",
+    initEffect: initLightningStorm,
+    effectRef,
+    typeGuards: {
+      hasIsRunning,
+      hasStartMethod,
+      hasStopMethod,
+    },
   });
 </script>
