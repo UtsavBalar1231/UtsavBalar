@@ -1,5 +1,4 @@
 ---
-import { themes } from "../data/themes";
 import { getFilePathForRoute } from "@data/navigation";
 
 const currentPath = Astro.url.pathname;
@@ -25,26 +24,16 @@ const currentFile = getFilePathForRoute(currentPath);
   </div>
 
   <div class="status-center">
-    <button
-      id="theme-toggle"
-      class="theme-toggle"
-      aria-label="Change theme"
+    <span
+      id="vim-theme-indicator"
+      class="vim-theme-indicator"
+      role="button"
+      tabindex="0"
+      aria-label="Cycle theme (click or Alt+T)"
       title="Click to cycle themes"
     >
-      <span class="theme-label"
-        >[THEME: <span class="theme-name" id="current-theme-name">MONO</span>]</span
-      >
-    </button>
-
-    <div id="theme-menu" class="theme-menu hidden">
-      {
-        themes.map((theme) => (
-          <button class="theme-option" data-theme={theme.value} data-theme-label={theme.label}>
-            <span class="theme-option-name">{theme.label}</span>
-          </button>
-        ))
-      }
-    </div>
+      -- <span id="theme-name">MONO</span> --
+    </span>
   </div>
 
   <div class="status-right">
@@ -85,10 +74,6 @@ const currentFile = getFilePathForRoute(currentPath);
 
 <style>
   @layer overlays {
-    .hidden {
-      display: none !important;
-    }
-
     .status-line {
       position: fixed;
       bottom: 0;
@@ -199,40 +184,26 @@ const currentFile = getFilePathForRoute(currentPath);
       margin-right: 0.25rem;
     }
 
-    /* Theme Toggle */
-    .theme-toggle {
-      background: rgba(var(--bg-color-rgb), 0.1);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(var(--bg-color-rgb), 0.2);
-      border-radius: 2px;
-      color: var(--color-text-secondary);
-      padding: 0 0.5rem !important;
-      cursor: pointer;
+    /* Vim Theme Indicator */
+    .vim-theme-indicator {
       font-family: inherit;
-      font-size: 0.78rem;
-      line-height: 26px; /* 28px container - 2px for borders */
-      height: 26px;
-      transition: all 0.15s ease;
-      text-transform: uppercase;
-      box-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.02);
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .theme-toggle:hover {
-      background: rgba(var(--accent-primary-rgb), 0.2);
-      color: var(--color-accent-primary);
-      border-color: rgba(var(--accent-primary-rgb), 0.4);
-      box-shadow:
-        0 0 8px rgba(var(--accent-primary-rgb), 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    }
-
-    .theme-label {
-      font-weight: 600;
+      font-size: inherit;
+      font-weight: 400;
       letter-spacing: 0.05em;
+      color: var(--color-accent-primary);
+      cursor: pointer;
+      user-select: none;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      outline: none;
+    }
+
+    .vim-theme-indicator:focus-visible {
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-primary);
+      text-underline-offset: 2px;
     }
 
     /* Filetype Section */
@@ -317,73 +288,6 @@ const currentFile = getFilePathForRoute(currentPath);
       font-size: 0.84rem;
     }
 
-    /* Theme Menu - Terminal Style */
-    .theme-menu {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #000000;
-      border: 1px solid var(--color-accent-primary);
-      border-radius: 0;
-      padding: 0;
-      min-width: 180px;
-      box-shadow: none;
-    }
-
-    /* Add terminal-style border effect */
-    .theme-menu::before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      right: -1px;
-      bottom: -1px;
-      border: 1px solid rgba(var(--accent-primary-rgb), 0.3);
-      pointer-events: none;
-    }
-
-    /* Tablet-specific theme menu positioning */
-    @media (min-width: 641px) and (max-width: 1024px) {
-      .theme-menu {
-        position: fixed;
-        bottom: 28px; /* Position at statusline height */
-        left: auto;
-        right: 50%;
-        transform: translateX(50%);
-        max-height: 200px;
-        overflow-y: auto;
-        border-radius: 0;
-        box-shadow: none;
-      }
-    }
-
-    .theme-option {
-      display: block;
-      width: 100%;
-      padding: 0.375rem 0.75rem;
-      background: #000000;
-      border: none;
-      border-bottom: 1px solid rgba(var(--accent-primary-rgb), 0.2);
-      color: var(--color-text-secondary);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.84rem;
-      text-align: left;
-      transition: all 0.15s ease;
-      text-transform: uppercase;
-    }
-
-    .theme-option:last-child {
-      border-bottom: none;
-    }
-
-    .theme-option:hover {
-      background: rgba(var(--accent-primary-rgb), 0.1);
-      color: var(--color-accent-primary);
-      text-shadow: 0 0 2px var(--color-accent-primary);
-    }
-
     /* Mobile adjustments */
     @media (max-width: 640px) {
       .status-line {
@@ -396,11 +300,6 @@ const currentFile = getFilePathForRoute(currentPath);
       .status-filetype,
       .status-year {
         display: none;
-      }
-
-      .theme-toggle {
-        font-size: 0.75rem;
-        padding: 0.1rem 0.3rem !important;
       }
 
       .year-text {
@@ -439,34 +338,36 @@ const currentFile = getFilePathForRoute(currentPath);
   import { themeManager } from "../utils/themeManager";
 
   interface StatusLineElements {
-    themeToggle: HTMLElement;
-    themeMenu: HTMLElement;
-    currentThemeName: HTMLElement;
-    themeOptions: NodeListOf<Element>;
+    vimThemeIndicator: HTMLElement;
+    themeNameSpan: HTMLElement;
     performanceToggle?: HTMLElement | null;
     performanceIcon?: HTMLElement | null;
   }
+
+  // Theme name mapping for short display
+  const THEME_SHORT_NAMES: Record<string, string> = {
+    monochrome: "MONO",
+    "doom-red": "DOOM",
+    "green-phosphor": "GREEN",
+    "amber-phosphor": "AMBER",
+  };
 
   let cachedElements: StatusLineElements | null = null;
 
   function getCachedElements(): StatusLineElements | null {
     if (!cachedElements) {
-      const themeToggle = document.getElementById("theme-toggle");
-      const themeMenu = document.getElementById("theme-menu");
-      const currentThemeName = document.getElementById("current-theme-name");
-      const themeOptions = document.querySelectorAll(".theme-option");
+      const vimThemeIndicator = document.getElementById("vim-theme-indicator");
+      const themeNameSpan = document.getElementById("theme-name");
       const performanceToggle = document.getElementById("performance-toggle");
       const performanceIcon = document.getElementById("performance-icon");
 
-      if (!themeToggle || !themeMenu || !currentThemeName) {
+      if (!vimThemeIndicator || !themeNameSpan) {
         return null;
       }
 
       cachedElements = {
-        themeToggle,
-        themeMenu,
-        currentThemeName,
-        themeOptions,
+        vimThemeIndicator,
+        themeNameSpan,
         performanceToggle,
         performanceIcon,
       };
@@ -478,47 +379,13 @@ const currentFile = getFilePathForRoute(currentPath);
     const elements = getCachedElements();
     if (!elements) return;
 
-    const { themeToggle } = elements;
+    const { vimThemeIndicator, themeNameSpan } = elements;
 
-    // Remove old event listeners by cloning and replacing the elements
-    // This ensures clean state after view transitions
-    const cleanElement = (element: HTMLElement): HTMLElement => {
-      const clone = element.cloneNode(true) as HTMLElement;
-      element.parentNode?.replaceChild(clone, element);
-      return clone;
-    };
-
-    // Only clean and re-create event listeners if already initialized
-    if (themeToggle.dataset.initialized === "true") {
-      // Clean the theme toggle button
-      const newThemeToggle = cleanElement(themeToggle);
-      cachedElements!.themeToggle = newThemeToggle;
-
-      // Clean all theme option buttons
-      cachedElements!.themeOptions = document.querySelectorAll(".theme-option");
-    }
-
-    // Get fresh references after cleaning
-    const currentElements = getCachedElements();
-    if (!currentElements) return;
-
-    const {
-      themeToggle: freshThemeToggle,
-      themeMenu: freshThemeMenu,
-      currentThemeName: freshCurrentThemeName,
-      themeOptions: freshThemeOptions,
-    } = currentElements;
-
-    freshThemeToggle.dataset.initialized = "true";
-
+    // Update theme name display
     const syncThemeDisplay = () => {
       const currentTheme = themeManager.getCurrentTheme();
-      freshCurrentThemeName.textContent = currentTheme.shortLabel || currentTheme.label;
-
-      freshThemeOptions.forEach((option) => {
-        const isActive = option.getAttribute("data-theme") === currentTheme.value;
-        option.classList.toggle("active", isActive);
-      });
+      const shortName = THEME_SHORT_NAMES[currentTheme.value] || currentTheme.shortLabel || "MONO";
+      themeNameSpan.textContent = shortName;
     };
 
     // Initialize UI with current theme
@@ -527,69 +394,28 @@ const currentFile = getFilePathForRoute(currentPath);
     // Subscribe to theme changes
     themeManager.subscribe(syncThemeDisplay);
 
-    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-    const toggleThemeMenu = (e: Event) => {
+    // Cycle theme on click
+    const cycleTheme = (e: Event) => {
       e.preventDefault();
-      e.stopPropagation();
-      freshThemeMenu.classList.toggle("hidden");
-    };
-
-    const cycleThemeHandler = (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
       themeManager.cycleTheme();
     };
 
-    if (isTouchDevice) {
-      // For touch devices, use both click and touchend for better compatibility
-      freshThemeToggle.addEventListener("click", toggleThemeMenu);
-      freshThemeToggle.addEventListener("touchend", toggleThemeMenu, { passive: false });
-    } else {
-      freshThemeToggle.addEventListener("click", cycleThemeHandler);
+    // Click handler
+    vimThemeIndicator.addEventListener("click", cycleTheme);
 
-      freshThemeToggle.addEventListener("contextmenu", (e) => {
+    // Keyboard handler (Enter or Space)
+    vimThemeIndicator.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        e.stopPropagation();
-        freshThemeMenu.classList.toggle("hidden");
-      });
-    }
-
-    freshThemeOptions.forEach((option) => {
-      const selectTheme = (e: Event) => {
-        e.stopPropagation();
-        const themeValue = option.getAttribute("data-theme");
-        if (themeValue) {
-          themeManager.setTheme(themeValue);
-          freshThemeMenu.classList.add("hidden");
-        }
-      };
-
-      option.addEventListener("click", selectTheme);
-      // Add touch event for better mobile support
-      if (isTouchDevice) {
-        option.addEventListener("touchend", selectTheme, { passive: false });
+        cycleTheme(e);
       }
     });
 
-    document.addEventListener("click", (e) => {
-      if (
-        e.target instanceof Node &&
-        !freshThemeToggle.contains(e.target) &&
-        !freshThemeMenu.contains(e.target)
-      ) {
-        freshThemeMenu.classList.add("hidden");
-      }
-    });
-
+    // Global keyboard shortcut Alt+T
     document.addEventListener("keydown", (e) => {
       if (e.altKey && e.key === "t") {
         e.preventDefault();
         themeManager.cycleTheme();
-      }
-
-      if (e.key === "Escape") {
-        freshThemeMenu.classList.add("hidden");
       }
     });
 
