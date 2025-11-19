@@ -245,7 +245,8 @@ footer,
   .project-card,
   .tutorial-card,
   .content-card,
-  .tabs {
+  .tabs,
+  .card-base {
     backdrop-filter: blur(2px);
   }
 
@@ -285,6 +286,7 @@ footer,
 [data-performance="true"] .tutorial-card,
 [data-performance="true"] .content-card,
 [data-performance="true"] .tabs,
+[data-performance="true"] .card-base,
 [data-performance="true"] pre,
 [data-performance="true"] code,
 [data-performance="true"] .code-block {
@@ -295,7 +297,8 @@ footer,
 [data-performance="true"] .terminal-card,
 [data-performance="true"] .project-card,
 [data-performance="true"] .tutorial-card,
-[data-performance="true"] .content-card {
+[data-performance="true"] .content-card,
+[data-performance="true"] .card-base {
   background: rgba(0, 0, 0, 0.8) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
@@ -303,7 +306,8 @@ footer,
 /* Disable hover effects in performance mode */
 [data-performance="true"] .terminal-card:hover,
 [data-performance="true"] .project-card:hover,
-[data-performance="true"] .tutorial-card:hover {
+[data-performance="true"] .tutorial-card:hover,
+[data-performance="true"] .card-base-hoverable:hover {
   transform: none !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
