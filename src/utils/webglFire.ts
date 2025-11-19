@@ -122,20 +122,21 @@ void main() {
 
   float fireValue = texture(u_fireTexture, uv).r;
 
-  // Height-based fadeout for top edge (subtle fade at very top)
-  float heightFade = 1.0 - smoothstep(0.85, 1.0, uv.y);
+  // Minimal height fade - let jagged mountain peaks show naturally
+  float heightFade = 1.0 - smoothstep(0.95, 1.0, uv.y);
   fireValue *= heightFade;
 
-  // Map fire intensity to palette with discrete steps for pixelation
-  float paletteIndex = floor(fireValue * 36.0) / 37.0;
+  // Quantize to discrete color levels for authentic DOOM aesthetic (37 colors: 0-36)
+  fireValue = clamp(fireValue, 0.0, 1.0);
+  float paletteIndex = floor(fireValue * 37.0) / 36.0;
   vec4 fireColor = texture(u_paletteTexture, vec2(paletteIndex, 0.5));
 
-  // No smooth glow - keep it pixelated
+  // Boost hot pixels for dramatic mountain peaks
   if (fireValue > 0.7) {
-    fireColor.rgb *= 1.2;
+    fireColor.rgb *= 1.5;
   }
 
-  float finalAlpha = fireValue > 0.05 ? 0.9 * heightFade : 0.0;
+  float finalAlpha = fireValue > 0.05 ? 1.0 : 0.0;
   fragColor = vec4(fireColor.rgb, finalAlpha);
 }
 `;
@@ -201,26 +202,27 @@ void main() {
   if (uv.y > 1.0 - pixelSize.y * 1.5) {
     fireValue = 1.0;
   } else {
-    vec2 belowPos = uv + vec2(0.0, pixelSize.y * 2.0);
+    // Authentic PSX DOOM fire algorithm
+    // Single random value (0-3) controls both decay and spread
+    float randFloat = hash(uv * u_resolution + u_time * 0.1);
+    float rand = floor(randFloat * 4.0);  // 0.0, 1.0, 2.0, or 3.0
 
-    float wind = sin(u_time * 3.0 + uv.y * 10.0) * pixelSize.x * 2.0;
-    belowPos.x += wind;
+    // Asymmetric horizontal spread: -2, -1, 0, +1
+    // Formula: from - WIDTH - rand + 1
+    // In UV space: shift by (-rand + 1) pixels horizontally
+    float horizontalShift = (-rand + 1.0) * pixelSize.x;
 
-    fireValue = texture(u_prevState, belowPos).r;
+    // Sample from pixel below with horizontal offset
+    vec2 sourcePos = uv + vec2(horizontalShift, pixelSize.y);
+    fireValue = texture(u_prevState, sourcePos).r;
 
-    float randSeed = hash(uv * u_resolution + u_time * 0.1);
-    float decay = randSeed * 0.02;
+    // Binary decay: 0 or 1 only (simulate rand & 1)
+    // rand & 1 gives: 0&1=0, 1&1=1, 2&1=0, 3&1=1
+    float decayBit = mod(rand, 2.0);  // 0.0 or 1.0
+    float decay = decayBit / 36.0;    // Normalize to palette range (0 or 1/36)
 
-    // Height-based decay (more decay at top)
-    decay += (1.0 - uv.y) * 0.01;
-
+    // Direct assignment (no blending, no smooth transitions)
     fireValue = max(0.0, fireValue - decay);
-
-    float spreadRand = hash(uv * u_resolution * 2.0 + u_time * 0.2);
-    float spread = (spreadRand - 0.5) * pixelSize.x;
-    vec2 spreadPos = uv + vec2(spread, pixelSize.y);
-    float spreadValue = texture(u_prevState, spreadPos).r;
-    fireValue = mix(fireValue, spreadValue, 0.3);
   }
 
   fragColor = vec4(fireValue, 0.0, 0.0, 1.0);
@@ -309,12 +311,24 @@ void main() {
     // This will be uploaded to both framebuffer textures
     const fireData = new Uint8Array(this.fireWidth * this.fireHeight * 4);
 
+    // Create mountain slope pattern: each column has random height
     for (let x = 0; x < this.fireWidth; x++) {
-      const bufferIndex = ((this.fireHeight - 1) * this.fireWidth + x) * 4;
-      fireData[bufferIndex] = 255;
-      fireData[bufferIndex + 1] = 0;
-      fireData[bufferIndex + 2] = 0;
-      fireData[bufferIndex + 3] = 255;
+      // Random column height (0 to ~30% of total height for initial spread)
+      const columnHeight = Math.floor(Math.random() * (this.fireHeight * 0.3));
+
+      // Fill this column from bottom up to columnHeight
+      for (let y = this.fireHeight - columnHeight; y < this.fireHeight; y++) {
+        const bufferIndex = (y * this.fireWidth + x) * 4;
+
+        // Intensity decreases with height (hottest at bottom)
+        const heightRatio = (this.fireHeight - y) / Math.max(columnHeight, 1);
+        const intensity = Math.floor(heightRatio * 255);
+
+        fireData[bufferIndex] = intensity;
+        fireData[bufferIndex + 1] = 0;
+        fireData[bufferIndex + 2] = 0;
+        fireData[bufferIndex + 3] = 255;
+      }
     }
 
     // Upload initial state to both ping-pong textures (will be created in setupFramebuffers)
