@@ -81,6 +81,7 @@
 [data-performance="true"] .card-base-hoverable {
   animation: none !important;
   transition: none !important;
+  opacity: 1 !important;
 }
 
 [data-performance="true"] .card-base-hoverable:hover {
@@ -101,6 +102,7 @@
   .card-base-hoverable {
     animation: none !important;
     transition: none !important;
+    opacity: 1 !important;
   }
 
   .card-base-hoverable:hover {
