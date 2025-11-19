@@ -28,3 +28,6 @@ pnpm-debug.log*
 .gemini/
 .serena/
 CLAUDE.md
+
+# Lighthouse CI
+.lighthouseci/

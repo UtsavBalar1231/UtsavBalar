@@ -1,0 +1,40 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.1
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build site
+        run: bun run build
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.15.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v5.0.0
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
