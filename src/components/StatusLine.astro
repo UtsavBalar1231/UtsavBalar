@@ -478,19 +478,44 @@ const currentFile = getFilePathForRoute(currentPath);
     const elements = getCachedElements();
     if (!elements) return;
 
-    const { themeToggle, themeMenu, currentThemeName, themeOptions } = elements;
+    const { themeToggle } = elements;
 
-    // Check if already initialized to prevent duplicate event listeners
+    // Remove old event listeners by cloning and replacing the elements
+    // This ensures clean state after view transitions
+    const cleanElement = (element: HTMLElement): HTMLElement => {
+      const clone = element.cloneNode(true) as HTMLElement;
+      element.parentNode?.replaceChild(clone, element);
+      return clone;
+    };
+
+    // Only clean and re-create event listeners if already initialized
     if (themeToggle.dataset.initialized === "true") {
-      return;
+      // Clean the theme toggle button
+      const newThemeToggle = cleanElement(themeToggle);
+      cachedElements!.themeToggle = newThemeToggle;
+
+      // Clean all theme option buttons
+      cachedElements!.themeOptions = document.querySelectorAll(".theme-option");
     }
-    themeToggle.dataset.initialized = "true";
+
+    // Get fresh references after cleaning
+    const currentElements = getCachedElements();
+    if (!currentElements) return;
+
+    const {
+      themeToggle: freshThemeToggle,
+      themeMenu: freshThemeMenu,
+      currentThemeName: freshCurrentThemeName,
+      themeOptions: freshThemeOptions,
+    } = currentElements;
+
+    freshThemeToggle.dataset.initialized = "true";
 
     const syncThemeDisplay = () => {
       const currentTheme = themeManager.getCurrentTheme();
-      currentThemeName.textContent = currentTheme.shortLabel || currentTheme.label;
+      freshCurrentThemeName.textContent = currentTheme.shortLabel || currentTheme.label;
 
-      themeOptions.forEach((option) => {
+      freshThemeOptions.forEach((option) => {
         const isActive = option.getAttribute("data-theme") === currentTheme.value;
         option.classList.toggle("active", isActive);
       });
@@ -504,44 +529,56 @@ const currentFile = getFilePathForRoute(currentPath);
 
     const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-    if (isTouchDevice) {
-      themeToggle.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        themeMenu.classList.toggle("hidden");
-      });
-    } else {
-      themeToggle.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        themeManager.cycleTheme();
-      });
+    const toggleThemeMenu = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      freshThemeMenu.classList.toggle("hidden");
+    };
 
-      themeToggle.addEventListener("contextmenu", (e) => {
+    const cycleThemeHandler = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      themeManager.cycleTheme();
+    };
+
+    if (isTouchDevice) {
+      // For touch devices, use both click and touchend for better compatibility
+      freshThemeToggle.addEventListener("click", toggleThemeMenu);
+      freshThemeToggle.addEventListener("touchend", toggleThemeMenu, { passive: false });
+    } else {
+      freshThemeToggle.addEventListener("click", cycleThemeHandler);
+
+      freshThemeToggle.addEventListener("contextmenu", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        themeMenu.classList.toggle("hidden");
+        freshThemeMenu.classList.toggle("hidden");
       });
     }
 
-    themeOptions.forEach((option) => {
-      option.addEventListener("click", (e) => {
+    freshThemeOptions.forEach((option) => {
+      const selectTheme = (e: Event) => {
         e.stopPropagation();
         const themeValue = option.getAttribute("data-theme");
         if (themeValue) {
           themeManager.setTheme(themeValue);
-          themeMenu.classList.add("hidden");
+          freshThemeMenu.classList.add("hidden");
         }
-      });
+      };
+
+      option.addEventListener("click", selectTheme);
+      // Add touch event for better mobile support
+      if (isTouchDevice) {
+        option.addEventListener("touchend", selectTheme, { passive: false });
+      }
     });
 
     document.addEventListener("click", (e) => {
       if (
         e.target instanceof Node &&
-        !themeToggle.contains(e.target) &&
-        !themeMenu.contains(e.target)
+        !freshThemeToggle.contains(e.target) &&
+        !freshThemeMenu.contains(e.target)
       ) {
-        themeMenu.classList.add("hidden");
+        freshThemeMenu.classList.add("hidden");
       }
     });
 
@@ -552,7 +589,7 @@ const currentFile = getFilePathForRoute(currentPath);
       }
 
       if (e.key === "Escape") {
-        themeMenu.classList.add("hidden");
+        freshThemeMenu.classList.add("hidden");
       }
     });
 
