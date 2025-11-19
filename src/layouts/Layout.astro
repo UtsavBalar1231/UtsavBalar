@@ -60,7 +60,12 @@ const { title } = Astro.props;
     />
 
     <!-- Non-critical texture preloads with low priority -->
-    <link rel="preload" href="/noise-textures/noisy-texture-200x200-1.png" as="image" fetchpriority="low" />
+    <link
+      rel="preload"
+      href="/noise-textures/noisy-texture-200x200-1.png"
+      as="image"
+      fetchpriority="low"
+    />
     <link rel="preload" href="/grunge.webp" as="image" fetchpriority="low" />
 
     <!-- Theme initialization (must run before body renders) -->
